@@ -20,6 +20,7 @@
   height: 231px;
   border-radius: 0 0 40px 40px;
   overflow: hidden;
+  view-transition-name: pack-hero;   /* 평소 hero shrinks into this band */
 }
 /* The hero photo lives in its own layer so it can be heavily blurred (Figma 올릴때).
    Bleed + scale hide the soft blurred edges; the tan ::after tints it; the profile

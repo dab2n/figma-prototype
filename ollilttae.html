@@ -142,12 +142,12 @@
 window.addEventListener('pageswap', function (e) {
   if (!e.viewTransition) return;
   var to = (e.activation && e.activation.entry && e.activation.entry.url) || '';
-  if (to.indexOf('pyeongso.html') !== -1) e.viewTransition.types.add('slide-down');
+  if (to.indexOf('pyeongso.html') !== -1) e.viewTransition.types.add('detail-out');
 });
 window.addEventListener('pagereveal', function (e) {
   if (!e.viewTransition) return;
   var from = (e.activation && e.activation.from && e.activation.from.url) || '';
-  if (from.indexOf('pyeongso.html') !== -1) e.viewTransition.types.add('slide-up');
+  if (from.indexOf('pyeongso.html') !== -1) e.viewTransition.types.add('detail-in');
 });
 </script>
 </body>

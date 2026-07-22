@@ -15,6 +15,20 @@ html:active-view-transition-type(slide-up)::view-transition-new(root)   { animat
 html:active-view-transition-type(slide-down)::view-transition-old(root) { animation: vt-down-out .45s cubic-bezier(.4,0,.2,1) both; }
 html:active-view-transition-type(slide-down)::view-transition-new(root) { animation: vt-down-in  .45s cubic-bezier(.4,0,.2,1) both; }
 
+/* Explore Packs (1회진입) ⇆ 올릴때 detail: the Sean hero is a shared element
+   (view-transition-name: pack-hero) so it shrinks from full-screen into the
+   231px profile band as the black frame expands to the top; everything else
+   (root) rises up from below. Reverse plays in mirror. */
+::view-transition-group(pack-hero) { animation-duration: .5s; animation-timing-function: cubic-bezier(.4,0,.2,1); }
+@keyframes vt-rise-in  { from { transform: translateY(64px); opacity: 0; } }
+@keyframes vt-sink-out { to   { transform: translateY(64px); opacity: 0; } }
+@keyframes vt-fade-in  { from { opacity: 0; } }
+@keyframes vt-fade-out { to   { opacity: 0; } }
+html:active-view-transition-type(detail-in)::view-transition-new(root)  { animation: vt-rise-in  .5s cubic-bezier(.4,0,.2,1) both; }
+html:active-view-transition-type(detail-in)::view-transition-old(root)  { animation: vt-fade-out .3s ease both; }
+html:active-view-transition-type(detail-out)::view-transition-new(root) { animation: vt-fade-in  .4s ease both; }
+html:active-view-transition-type(detail-out)::view-transition-old(root) { animation: vt-sink-out .5s cubic-bezier(.4,0,.2,1) both; }
+
 body {
   display: flex;
   justify-content: center;

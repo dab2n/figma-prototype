@@ -112,10 +112,20 @@
 // Tap the title/description to expand the clamped description (tap again to collapse).
 (function () {
   var text = document.querySelector('.detail-text');
-  if (!text) return;
+  var desc = text && text.querySelector('.detail-desc');
+  if (!desc) return;
   text.addEventListener('click', function (e) {
     if (e.target.closest('.author')) return;   // let the author avatar/link navigate
-    text.classList.toggle('desc-open');
+    if (text.classList.contains('desc-open')) {
+      desc.style.maxHeight = desc.scrollHeight + 'px';   // concrete start, then spring down
+      requestAnimationFrame(function () {
+        text.classList.remove('desc-open');
+        desc.style.maxHeight = '';
+      });
+    } else {
+      text.classList.add('desc-open');                   // unclamp, then spring up to full
+      desc.style.maxHeight = desc.scrollHeight + 'px';
+    }
   });
 })();
 
@@ -124,12 +134,12 @@
 window.addEventListener('pageswap', function (e) {
   if (!e.viewTransition) return;
   var to = (e.activation && e.activation.entry && e.activation.entry.url) || '';
-  if (to.indexOf('ollilttae.html') !== -1) e.viewTransition.types.add('slide-up');
+  if (to.indexOf('ollilttae.html') !== -1) e.viewTransition.types.add('detail-in');
 });
 window.addEventListener('pagereveal', function (e) {
   if (!e.viewTransition) return;
   var from = (e.activation && e.activation.from && e.activation.from.url) || '';
-  if (from.indexOf('ollilttae.html') !== -1) e.viewTransition.types.add('slide-down');
+  if (from.indexOf('ollilttae.html') !== -1) e.viewTransition.types.add('detail-out');
 });
 </script>
 </body>

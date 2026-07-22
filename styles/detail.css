@@ -154,6 +154,7 @@
   height: 780px;
   border-radius: 0;
   flex: none;
+  view-transition-name: pack-hero;   /* morphs into 올릴때's profile band */
 }
 /* Warm tan blur the title/desc sit over (Figma: 64px blur, 108,94,67 → 210,183,130).
    backdrop-filter heavily blurs the photo behind the text; the mask feathers the
@@ -208,10 +209,13 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  max-height: 42px;                                     /* ~2 lines (1.4 × 15px) */
+  transition: max-height .5s cubic-bezier(.22,1.2,.36,1);  /* springy overshoot */
 }
-/* Tapping the text expands the description in place: the block is anchored at its
-   bottom, so it grows upward while spacing/layout stay put. Tap again collapses. */
-.detail-text.desc-open .detail-desc { -webkit-line-clamp: unset; overflow: visible; }
+/* Tapping the text expands the description in place: the block is bottom-anchored,
+   so it springs upward while spacing/layout stay put. JS drives max-height to the
+   measured full height so the reveal has tension; tap again springs it closed. */
+.detail-text.desc-open .detail-desc { -webkit-line-clamp: unset; }
 .detail-actions { display: flex; flex-direction: column; gap: 11px; padding-bottom: 8px; flex-shrink: 0; }
 .action-pill {
   width: 48px; height: 48px;
@@ -277,7 +281,7 @@
 
 /* 평소 "more" button — warm translucent rounded square with horizontal dots */
 .kebab-tan {
-  background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)), rgba(115,101,73,0.8);
+  background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), #736549;
   border: none;
   border-radius: 10px;
   width: 41.5px;
@@ -288,4 +292,4 @@
   justify-content: center;
   cursor: pointer;
 }
-.kebab-tan img { width: 3.5px; height: 17.5px; transform: rotate(90deg); display: block; }
+.kebab-tan img { width: 3.5px; height: 17.5px; transform: rotate(90deg); display: block; filter: brightness(0) invert(1); }
