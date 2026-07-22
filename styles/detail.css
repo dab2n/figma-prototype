@@ -250,9 +250,10 @@
   content: "";
   position: absolute; inset: 0;
   background: inherit;
-  filter: blur(2.5px);
-  -webkit-mask-image: linear-gradient(180deg, transparent 58%, #000 100%);
-  mask-image: linear-gradient(180deg, transparent 58%, #000 100%);
+  filter: blur(1.4px);
+  /* Only the very bottom edge gets a soft blur; the whole silhouette stays sharp. */
+  -webkit-mask-image: linear-gradient(180deg, transparent 80%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 80%, #000 100%);
 }
 .fire-icons .fire1 { width: 24px; height: 24px; bottom: 0; left: 16px; }
 .fire-icons .fire2 { width: 19px; height: 19px; bottom: 24px; left: 33px; rotate: 13deg; animation-delay: 1.1s; }
@@ -274,6 +275,34 @@
   transition: height .38s cubic-bezier(.4,0,.2,1);
 }
 .swipe-detail.expanded .detail-sheet { height: 116px; }
+/* Inverted (concave) radius where the black sheet meets the photo above — the
+   design-system junction. Two 40×40 black fillets ride just above the sheet's top
+   edge (and move with it when the sheet grows), so the photo reads as a rounded
+   r40 bottom-corner frame sitting on the sheet. Matches the home/packs navbar. */
+.swipe-detail::before,
+.swipe-detail::after {
+  content: "";
+  position: absolute;
+  bottom: 80px;
+  width: 40px;
+  height: 40px;
+  background: var(--color-black);
+  z-index: 3;
+  pointer-events: none;
+  transition: bottom .38s cubic-bezier(.4,0,.2,1);
+}
+.swipe-detail::before {
+  left: 0;
+  -webkit-mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%);
+          mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%);
+}
+.swipe-detail::after {
+  right: 0;
+  -webkit-mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);
+          mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);
+}
+.swipe-detail.expanded::before,
+.swipe-detail.expanded::after { bottom: 116px; }
 .detail-sheet .sheet-joined,
 .detail-sheet .sheet-explore {
   position: absolute;

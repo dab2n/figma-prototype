@@ -137,6 +137,26 @@
   }, { passive: true });
 })();
 
+// First entry: expand the Process graph (bars grow left→right, staggered top→bottom)
+// and rapidly count the "18" up. Delayed slightly so it plays after the modal settles.
+(function () {
+  var graph = document.querySelector('.process-graph');
+  if (!graph) return;
+  setTimeout(function () {
+    graph.classList.add('animate');
+    var numEl = graph.querySelector('.big-number .num');
+    if (numEl) {
+      var target = parseInt(numEl.textContent, 10) || 0, dur = 620, s = null;
+      requestAnimationFrame(function step(t) {
+        if (s === null) s = t;
+        var p = Math.min((t - s) / dur, 1);
+        numEl.textContent = Math.round(p * target);
+        if (p < 1) requestAnimationFrame(step);
+      });
+    }
+  }, 450);
+})();
+
 // Match pyeongso's slide types: arriving from 1회진입 slides up, leaving back to
 // it slides down — keeping the warm blur continuous across the page swap.
 window.addEventListener('pageswap', function (e) {
