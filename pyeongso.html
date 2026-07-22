@@ -11,37 +11,42 @@
 <div class="phone">
   <div class="screen detail-screen swipe-detail" id="swipeScreen">
     <div class="hero-photo" style="background-image:url('assets/photos/hero-sean-running.png');">
-      <div class="status-bar on-dark"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
-      <div class="app-bar-transparent">
+      <div class="status-bar on-dark" style="position:absolute; top:0; left:0; z-index:6;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
+      <div class="app-bar-transparent" style="top:44px;">
         <button class="icon-btn" onclick="history.back()"><img src="assets/icons/appbar-back.svg" alt="뒤로"></button>
-        <button class="handle-btn"><img src="assets/icons/appbar-handle.svg" alt="더보기"></button>
+        <button class="kebab-tan"><img src="assets/icons/kebab-dots.svg" alt="더보기"></button>
       </div>
 
-      <div class="side-actions">
-        <div class="pill"><img src="assets/icons/icon-bookmark-count.svg" alt="북마크"><span>124</span></div>
-        <div class="pill"><img src="assets/icons/icon-bookmark.svg" alt="공유"><span>888+</span></div>
+      <div class="detail-info">
+        <div class="detail-text">
+          <a class="author" href="ollilttae.html">
+            <img src="assets/icons/avatar-ellipse-sean.png" alt="">
+            <span class="author-name">Sean</span>
+          </a>
+          <p class="detail-title">Sean's Final 1km Pace</p>
+          <p class="detail-desc">How to hold your pace when it falls apart in the last 1km of a run. Learn Sean's breathing rhythm and footfall tempo, then apply them to real runs with SAFE and BOOST modes.</p>
+        </div>
+        <div class="detail-actions">
+          <div class="action-pill"><img src="assets/icons/detail-bookmark.svg" alt="북마크"><span>124</span></div>
+          <div class="action-pill"><img src="assets/icons/detail-share.svg" alt="공유"><span>888+</span></div>
+        </div>
       </div>
 
-      <div class="hero-content">
-        <a class="author" href="ollilttae.html">
-          <img src="assets/icons/avatar-ellipse-sean.png" alt="">
-          <span class="t-body-bold">Sean</span>
-        </a>
-        <p class="title t-display-d1">Sean's Final 1km Pace</p>
-        <p class="desc">How to hold your pace when it falls apart in the last 1km of a run. Learn Sean's breathing rhythm and footfall tempo, then apply them to real runs with SAFE and BOOST modes.</p>
+      <div class="fire-icons">
+        <img class="fire fire2" src="assets/icons/fire.svg" alt="">
+        <img class="fire fire1" src="assets/icons/fire.svg" alt="">
       </div>
     </div>
 
     <!-- Bottom sheet: swipe up morphs 평소 → 1회 진입, swipe up again → 올릴때 -->
     <div class="detail-sheet" id="detailSheet">
-      <span class="sheet-grabber"></span>
-
       <div class="sheet-joined">
         <div class="joined-row">
           <div class="joined-people">
             <div class="joined-avatars">
               <img src="assets/photos/packs-avatar1.png" alt="">
               <img src="assets/photos/packs-avatar2.png" alt="">
+              <span class="joined-more"></span>
             </div>
             <p>877 joined this week</p>
           </div>
@@ -64,49 +69,36 @@
 <script>
 (function () {
   var screen = document.getElementById('swipeScreen');
-  var busy = false;                 // debounce during navigation
+  var busy = false;
 
-  // Arriving back from 올릴때 (swipe down) lands in the 1회 진입 state
   if (new URLSearchParams(location.search).get('state') === 'expanded') {
     screen.classList.add('expanded');
   }
 
-  // state 0 = 평소, state 1 = 1회 진입.  A further swipe up → 올릴때 (ollilttae.html)
   function isExpanded() { return screen.classList.contains('expanded'); }
-
   function up() {
     if (busy) return;
-    if (!isExpanded()) {
-      screen.classList.add('expanded');          // 평소 → 1회 진입 (in place)
-    } else {
-      busy = true;
-      window.location.href = 'ollilttae.html';    // 1회 진입 → 올릴때
-    }
+    if (!isExpanded()) { screen.classList.add('expanded'); }
+    else { busy = true; window.location.href = 'ollilttae.html'; }
   }
   function down() {
     if (busy) return;
-    if (isExpanded()) screen.classList.remove('expanded');  // 1회 진입 → 평소
+    if (isExpanded()) screen.classList.remove('expanded');
   }
 
-  // Pointer drag (works for touch + mouse)
   var startY = null, lastSwipe = 0;
   screen.addEventListener('pointerdown', function (e) { startY = e.clientY; });
   screen.addEventListener('pointerup', function (e) {
     if (startY === null) return;
-    var dy = e.clientY - startY;
-    startY = null;
+    var dy = e.clientY - startY; startY = null;
     if (dy < -45) { lastSwipe = Date.now(); up(); }
     else if (dy > 45) { lastSwipe = Date.now(); down(); }
   });
   screen.addEventListener('pointercancel', function () { startY = null; });
-
-  // Swallow the synthetic click that trails a drag, so one swipe = one step
-  // (without this the trailing click can hit the Explore Packs link mid-swipe)
   screen.addEventListener('click', function (e) {
     if (Date.now() - lastSwipe < 400) { e.preventDefault(); e.stopPropagation(); }
   }, true);
 
-  // Wheel / trackpad (desktop preview convenience)
   var wheelLock = false;
   screen.addEventListener('wheel', function (e) {
     if (wheelLock) return;

@@ -11,10 +11,10 @@
 <div class="phone">
   <div class="screen creator-screen" id="creatorScreen">
     <div class="creator-hero" style="background-image:url('assets/photos/creator-hero-bg.png');">
-      <div class="status-bar on-dark" style="position:relative;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
-      <div class="app-bar-transparent" style="position:absolute; top:0;">
-        <button class="icon-btn" onclick="history.back()"><img src="assets/icons/icon-back2.svg" alt="뒤로"></button>
-        <button class="handle-btn" style="background:#fafafa; border-radius:10px;"><img src="assets/icons/icon-handle2.svg" alt="더보기"></button>
+      <div class="status-bar on-dark" style="position:absolute; top:0; left:0; z-index:6;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
+      <div class="app-bar-transparent" style="position:absolute; top:44px; z-index:6;">
+        <button class="icon-btn" onclick="history.back()"><img src="assets/icons/appbar-back.svg" alt="뒤로"></button>
+        <button class="kebab-btn"><img src="assets/icons/kebab-dots.svg" alt="더보기"></button>
       </div>
       <div class="creator-profile">
         <img class="avatar" src="assets/photos/creator-profile-sean.png" alt="Sean">
@@ -22,14 +22,12 @@
         <span class="tag-pill">Sean</span>
       </div>
     </div>
-    <div class="creator-nav-indicator"><span></span></div>
-
     <div class="creator-content">
       <div class="top-row">
         <span class="tag-pill">Creator Pack</span>
         <div class="top-actions">
-          <div class="icon-circle"><img src="assets/icons/icon-bookmark2.svg" alt="북마크"></div>
-          <div class="icon-circle"><img src="assets/icons/icon-share2.svg" alt="공유"></div>
+          <img class="save-icon" src="assets/icons/creator-bookmark.svg" alt="저장">
+          <div class="icon-circle"><img src="assets/icons/creator-share.svg" alt="공유"></div>
         </div>
       </div>
 
@@ -115,6 +113,7 @@
       <a class="btn-pill creator-start" href="#">Start <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></a>
     </div>
   </div>
+  <div class="creator-nav-indicator"><span></span></div>
 </div>
 <script>
 // Swipe DOWN while at the top of 올릴때 → back to 1회 진입 (pyeongso expanded)

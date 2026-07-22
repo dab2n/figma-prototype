@@ -1,5 +1,18 @@
 .creator-screen { background: var(--color-black); min-height: 780px; }
 
+/* White rounded "more" button with horizontal dots (Figma app bar) */
+.kebab-btn {
+  background: #fafafa;
+  border: none;
+  border-radius: 10px;
+  padding: 7px 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.kebab-btn img { width: 3.5px; height: 17.5px; transform: rotate(90deg); display: block; }
+
 .creator-hero {
   position: relative;
   height: 231px;
@@ -10,8 +23,11 @@
 }
 .creator-hero::after {
   content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(108,94,67,0.55) 100%);
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 70%;
+  background: linear-gradient(180deg, rgba(108,94,67,0) 0%, rgba(108,94,67,0.7) 55%, rgba(210,183,130,0.75) 100%);
+  filter: blur(6px);
+  pointer-events: none;
 }
 .creator-profile {
   position: relative;
@@ -46,22 +62,28 @@
   letter-spacing: -0.5px;
 }
 .creator-nav-indicator {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 360px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 10px;
+  z-index: 20;
+  pointer-events: none;
 }
 .creator-nav-indicator span { width: 144px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.9); }
 
-.creator-content { padding: 20px 16px; display: flex; flex-direction: column; gap: 24px; }
+.creator-content { padding: 20px 16px 56px; display: flex; flex-direction: column; gap: 24px; }
 .creator-content .top-row { display: flex; align-items: center; justify-content: space-between; }
 .creator-content .top-actions { display: flex; align-items: center; gap: 8px; }
+.creator-content .top-actions .save-icon { width: 36px; height: 36px; display: block; }
 .creator-content .top-actions .icon-circle {
   width: 36px; height: 36px; border-radius: 999px;
   background: rgba(243,243,243,0.2);
   display: flex; align-items: center; justify-content: center;
 }
-.creator-content .top-actions .icon-circle img { width: 16px; height: 16px; }
+.creator-content .top-actions .icon-circle img { width: 14px; height: 14px; }
 
 .creator-heading { color: #fff; }
 .creator-heading .title { margin: 0 0 8px; font-family: var(--font-supreme-bold); font-size: 26px; line-height: 1.2; letter-spacing: -1.5px; }
@@ -85,16 +107,16 @@
    RUN full width at the bottom (matches Figma 올릴때 process graph) */
 .process-graph {
   position: relative;
-  background: #1a1a1a;
+  background: var(--color-neutral-900);   /* #141A1A — distinct from page #050A0A */
   border-radius: 20px;
-  padding: 8px;
+  padding: 4px;
   height: 156px;
   box-sizing: border-box;
 }
 .process-graph .big-number {
   position: absolute;
-  left: 18px;
-  top: 14px;
+  left: 14px;
+  top: 8px;
   z-index: 2;
   color: #fff;
   display: flex;
@@ -117,9 +139,9 @@
   box-sizing: border-box;
 }
 .process-graph .bar .label { font-family: var(--font-supreme-bold); font-size: 13px; opacity: 0.75; }
-.bar-stretch { flex: 1; width: 56%; margin-left: auto; background: linear-gradient(90deg, #FF9147 0%, #FA3030 100%); }
-.bar-learn   { flex: 1; width: 64%; margin-left: auto; background: linear-gradient(90deg, #FB5A32 0%, #FA3030 100%); }
-.bar-run     { flex: 1; width: 100%; background: #2e2e2e; }
+.bar-stretch { flex: 1; width: 54%; margin-left: auto; background: linear-gradient(270deg, #D1FEFF 0%, #FEC389 6.5%, #FE6E3C 16.8%, #FA3030 41.7%); }
+.bar-learn   { flex: 1; width: 67%; margin-left: auto; background: linear-gradient(90deg, #FA3030 58.3%, #FE6E3C 83%, #FEC389 93.5%, #D1FEFF 100%); }
+.bar-run     { flex: 1; width: 100%; background: var(--color-neutral-700); }
 
 .info-grid {
   display: grid;
@@ -135,7 +157,8 @@
 .info-grid .cell .label { margin: 0 0 4px; font-family: var(--font-supreme); font-size: 13px; color: var(--color-neutral-500); }
 .info-grid .cell .value { margin: 0; font-family: var(--font-supreme-bold); font-size: 18px; letter-spacing: -0.54px; }
 
-.also-like-list { display: flex; gap: 8px; }
+.also-like-list { display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 0 16px; }
+.also-like-list::-webkit-scrollbar { display: none; }
 .also-like-item {
   display: flex;
   align-items: center;
@@ -144,25 +167,27 @@
   border-radius: 12px;
   padding: 8px 32px 8px 8px;
   text-decoration: none;
-  flex: 1;
-  min-width: 0;
+  flex: 0 0 auto;
 }
 .also-like-item img { width: 48px; height: 48px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
 .also-like-item .txt p { margin: 0; color: #fff; }
 .also-like-item .txt .meta { display: flex; align-items: center; gap: 4px; color: var(--color-neutral-400); font-family: var(--font-supreme); font-size: 13px; margin-top: 4px; }
 .also-like-item .txt .meta .sep { width: 3px; height: 3px; }
 
-.more-scroll { display: flex; gap: 8px; overflow-x: auto; }
+/* Full-bleed so cards scroll past the frame edge instead of clipping at the margin */
+.more-scroll { display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 0 16px; scroll-snap-type: x proximity; }
 .more-scroll::-webkit-scrollbar { display: none; }
-.more-card { flex: 0 0 140px; text-decoration: none; }
+.more-card { flex: 0 0 140px; text-decoration: none; scroll-snap-align: start; }
 .more-card img { width: 140px; height: 140px; border-radius: 16px; object-fit: cover; display: block; }
 .more-card p { margin: 8px 0 0; color: #fff; }
 .more-card .meta { display: flex; align-items: center; gap: 4px; color: var(--color-neutral-400); font-family: var(--font-supreme); font-size: 13px; margin-top: 4px; }
 .more-card .meta .sep { width: 4px; height: 4px; }
 
+/* Full-width centered CTA. Override btn-pill's width:100% so the horizontal
+   margins don't push it into overflow (which read as right-aligned). */
+/* Full-width centered CTA at the end of the content (matches Figma bottom-24). */
 .creator-start {
-  position: sticky;
-  bottom: 16px;
-  margin: 0 16px;
-  z-index: 10;
+  width: calc(100% - 32px);
+  margin: 24px 16px 0;
+  box-sizing: border-box;
 }
