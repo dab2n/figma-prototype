@@ -46,6 +46,18 @@ body {
 .screen::-webkit-scrollbar { display: none; }
 .screen { scrollbar-width: none; }
 
+/* ── Frame system (common) ────────────────────────────────────────────────
+   Any page that has a bottom navbar renders as a 360×700, r40 content frame
+   sitting on the black phone background, with the 80px navbar filling the rest.
+   The content's rounded bottom corners reveal the black bg beneath, so the
+   flat-topped navbar reads with an inverted (concave) radius where the two meet
+   — one shared rule, auto-applied to every page with a .tabbar. */
+.phone:has(> .tabbar) > .screen {
+  height: calc(100% - 80px);
+  border-radius: 40px;
+  overflow: hidden auto;
+}
+
 /* Status bar — rendered from the reference Figma "Status Bar" SVG (light + dark) */
 .status-bar {
   position: sticky;
@@ -120,7 +132,7 @@ body {
   box-sizing: border-box;
   width: 360px;
   background: var(--color-black);
-  border-radius: 20px 20px 0 0;
+  border-radius: 0;              /* flat top; the phone frame rounds the bottom to 40 */
 }
 .tabbar .tabs {
   display: flex;

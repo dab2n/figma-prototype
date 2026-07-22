@@ -1,4 +1,4 @@
-.screen { background: var(--color-white); border-radius: 0 0 40px 40px; padding-bottom: 80px; }
+.screen { background: var(--color-white); padding-bottom: 8px; }
 
 /* App bar: 66px tall (logo centered with 16px above/below), sitting flush against
    the card container below it (gap 0) — Figma home 108:16691. */
