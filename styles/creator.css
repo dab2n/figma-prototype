@@ -146,23 +146,28 @@
   font-size: 15px;
   letter-spacing: -0.5px;
   box-sizing: border-box;
-  min-width: min-content;         /* never shrink below the text (number + label) */
+  overflow: hidden;
   white-space: nowrap;
 }
 .process-graph .bar .label { font-family: var(--font-supreme-bold); font-size: 13px; opacity: 0.75; }
-/* Each bar is anchored to the LEFT of its final (right-aligned) position so the
-   expand animation grows the right edge left→right. --start is the text-fit min. */
-.bar-stretch { flex: 1; width: 54%;  margin-left: 46%; --start: 44%; background: linear-gradient(270deg, #D1FEFF 0%, #FEC389 6.5%, #FE6E3C 16.8%, #FA3030 41.7%); }
-.bar-learn   { flex: 1; width: 67%;  margin-left: 33%; --start: 44%; background: linear-gradient(90deg, #FA3030 58.3%, #FE6E3C 83%, #FEC389 93.5%, #D1FEFF 100%); }
-.bar-run     { flex: 1; width: 100%; margin-left: 0;   --start: 62%; background: var(--color-neutral-700); }
+/* Bars are RIGHT-aligned. --start is the narrow width that shows only the left
+   number (8min / 10min / You Can Choose); the right label (STRETCH / LEARN / RUN)
+   is hidden. On first entry each bar EXPANDS LEFTWARD to full and the label fades
+   in, staggered top→bottom. */
+.bar-stretch { flex: 1; width: 54%;  margin-left: auto; --start: 30%; background: linear-gradient(270deg, #D1FEFF 0%, #FEC389 6.5%, #FE6E3C 16.8%, #FA3030 41.7%); }
+.bar-learn   { flex: 1; width: 67%;  margin-left: auto; --start: 30%; background: linear-gradient(90deg, #FA3030 58.3%, #FE6E3C 83%, #FEC389 93.5%, #D1FEFF 100%); }
+.bar-run     { flex: 1; width: 100%; margin-left: auto; --start: 54%; background: var(--color-neutral-700); }
 
-/* First entry: bars sit at their text-fit min width, then expand left→right to
-   full, staggered top→bottom (fast). Triggered by adding .animate (see JS). */
 .process-graph:not(.animate) .bar { width: var(--start); }
-.process-graph.animate .bar         { animation: bar-grow .42s cubic-bezier(.2,.85,.25,1) both; }
-.process-graph.animate .bar-learn   { animation-delay: .1s; }
-.process-graph.animate .bar-run     { animation-delay: .2s; }
-@keyframes bar-grow { from { width: var(--start); } }
+.process-graph:not(.animate) .bar .label { opacity: 0; }
+.process-graph.animate .bar        { animation: bar-grow .5s cubic-bezier(.2,.8,.25,1) both; }
+.process-graph.animate .bar .label { animation: label-in .3s ease both; animation-delay: .3s; }
+.process-graph.animate .bar-learn        { animation-delay: .1s; }
+.process-graph.animate .bar-learn .label { animation-delay: .4s; }
+.process-graph.animate .bar-run          { animation-delay: .2s; }
+.process-graph.animate .bar-run .label   { animation-delay: .5s; }
+@keyframes bar-grow  { from { width: var(--start); } }
+@keyframes label-in  { from { opacity: 0; } }
 
 .info-grid {
   display: grid;
