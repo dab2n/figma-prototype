@@ -1,0 +1,180 @@
+@import url('./tokens.css');
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 0;
+  min-height: 100vh;
+}
+
+/* The 360x780 mobile viewport every screen renders inside (fixed size) */
+.phone {
+  position: relative;
+  width: 360px;
+  height: 780px;
+  background: var(--color-black);
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+
+/* Content scrolls inside the fixed viewport; taller (expanded) screens scroll */
+.screen {
+  position: relative;
+  width: 360px;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.screen::-webkit-scrollbar { display: none; }
+.screen { scrollbar-width: none; }
+
+/* Status bar */
+.status-bar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 44px;
+  padding: 16px 20px;
+  background: var(--color-white);
+}
+.status-bar.on-dark { background: transparent; }
+.status-bar .clock {
+  font-family: var(--font-fallback);
+  font-weight: 700;
+  font-size: 15px;
+  color: rgba(0,0,0,0.8);
+}
+.status-bar.on-dark .clock { color: rgba(255,255,255,0.8); }
+.status-bar .icons { display: flex; align-items: center; gap: 4px; }
+.status-bar .icons img { display: block; height: 18px; }
+.status-bar .icons img.battery { height: 16.5px; }
+
+/* App bar (title + actions) */
+.app-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+}
+.app-bar .logo { height: 21px; display: block; }
+.app-bar .actions { display: flex; align-items: center; gap: 16px; }
+.app-bar .actions img, .app-bar .actions a img { width: 24px; height: 24px; display: block; }
+.app-bar a { text-decoration: none; }
+
+/* Transparent app bar over a hero image (back + kebab) */
+.app-bar-transparent {
+  position: absolute;
+  top: 44px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  z-index: 20;
+  box-sizing: border-box;
+}
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+.icon-btn img { width: 24px; height: 24px; display: block; }
+.handle-btn {
+  width: 41.5px;
+  height: 27.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+}
+.handle-btn img { display: block; width: 4px; height: 20px; }
+
+/* Bottom tab bar */
+.tabbar {
+  position: sticky;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 360px;
+  background: var(--color-black);
+}
+.tabbar .tabs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px 0;
+}
+.tabbar .tabs a {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 12px;
+  border-radius: 80px;
+  text-decoration: none;
+  box-sizing: content-box;
+}
+.tabbar .tabs a img { width: 22px; height: 22px; display: block; }
+.tabbar .tabs a .dot {
+  width: 7px;
+  height: 2px;
+  border-radius: 41px;
+  background: var(--color-white);
+}
+.tabbar .home-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 134px;
+}
+.tabbar .home-indicator span {
+  width: 144px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.6);
+  mix-blend-mode: plus-lighter;
+}
+
+/* Buttons */
+.btn-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-supreme-bold);
+  font-size: 18px;
+  letter-spacing: -0.54px;
+  color: var(--color-white);
+  background: var(--color-red);
+  text-decoration: none;
+  box-sizing: border-box;
+}
+.btn-pill img { width: 20px; height: 20px; }
+
+a { color: inherit; }
+button { font-family: inherit; }
