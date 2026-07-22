@@ -19,9 +19,12 @@ html:active-view-transition-type(slide-down)::view-transition-new(root) { animat
    (view-transition-name: pack-hero) so it shrinks from full-screen into the
    231px profile band as the black frame expands to the top; everything else
    (root) rises up from below. Reverse plays in mirror. */
-::view-transition-group(pack-hero) { animation-duration: .5s; animation-timing-function: cubic-bezier(.4,0,.2,1); }
-@keyframes vt-rise-in  { from { transform: translateY(64px); opacity: 0; } }
-@keyframes vt-sink-out { to   { transform: translateY(64px); opacity: 0; } }
+::view-transition-group(pack-hero),
+::view-transition-group(pack-avatar) { animation-duration: .5s; animation-timing-function: cubic-bezier(.4,0,.2,1); }
+/* The bottom info emerges from the hidden area below the fold (not a plain scroll):
+   it rises a long way up while fading in. */
+@keyframes vt-rise-in  { from { transform: translateY(180px); opacity: 0; } }
+@keyframes vt-sink-out { to   { transform: translateY(180px); opacity: 0; } }
 @keyframes vt-fade-in  { from { opacity: 0; } }
 @keyframes vt-fade-out { to   { opacity: 0; } }
 html:active-view-transition-type(detail-in)::view-transition-new(root)  { animation: vt-rise-in  .5s cubic-bezier(.4,0,.2,1) both; }
@@ -128,7 +131,9 @@ body {
   z-index: 30;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  justify-content: space-between;
+  height: 80px;                 /* Figma nav bar height */
+  box-sizing: border-box;
   width: 360px;
   background: var(--color-black);
   border-radius: 20px 20px 0 0;
@@ -137,7 +142,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px 0;
+  padding: 10px 20px 0;
 }
 .tabbar .tabs a {
   display: flex;
@@ -145,12 +150,12 @@ body {
   gap: 8px;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
-  padding: 12px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
   border-radius: 80px;
   text-decoration: none;
-  box-sizing: content-box;
+  box-sizing: border-box;
 }
 /* Inactive tab icons render gray (#A3A3A3); active renders white.
    brightness(0)+invert normalizes every icon's baked fill to one color. */
@@ -166,7 +171,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 134px;
+  padding: 6px 134px;
 }
 .tabbar .home-indicator span {
   width: 144px;

@@ -114,15 +114,29 @@
   var text = document.querySelector('.detail-text');
   var desc = text && text.querySelector('.detail-desc');
   if (!desc) return;
+  var collapsing = false;
+  function onEnd(e) {
+    if (e.propertyName !== 'max-height') return;
+    desc.removeEventListener('transitionend', onEnd);
+    if (collapsing) {
+      // Reapply the 2-line clamp/ellipsis only AFTER the shrink finishes, so the
+      // box is already at 42px — no reflow jump ("둠칫") mid-animation.
+      text.classList.remove('desc-open');
+      desc.style.maxHeight = '';
+      collapsing = false;
+    }
+  }
   text.addEventListener('click', function (e) {
     if (e.target.closest('.author')) return;   // let the author avatar/link navigate
+    desc.removeEventListener('transitionend', onEnd);
     if (text.classList.contains('desc-open')) {
-      desc.style.maxHeight = desc.scrollHeight + 'px';   // concrete start, then spring down
-      requestAnimationFrame(function () {
-        text.classList.remove('desc-open');
-        desc.style.maxHeight = '';
-      });
+      collapsing = true;                                 // stays unclamped while shrinking
+      desc.style.maxHeight = desc.scrollHeight + 'px';
+      void desc.offsetHeight;                            // lock the start height
+      desc.style.maxHeight = '42px';                     // spring down to 2 lines
+      desc.addEventListener('transitionend', onEnd);
     } else {
+      collapsing = false;
       text.classList.add('desc-open');                   // unclamp, then spring up to full
       desc.style.maxHeight = desc.scrollHeight + 'px';
     }

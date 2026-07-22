@@ -1,4 +1,8 @@
-.screen { background: var(--color-white); border-radius: 0 0 40px 40px; padding-bottom: 110px; }
+.screen { background: var(--color-white); border-radius: 0 0 40px 40px; padding-bottom: 80px; }
+
+/* App bar: 66px tall (logo centered with 16px above/below), sitting flush against
+   the card container below it (gap 0) — Figma home 108:16691. */
+.app-bar { height: 66px; box-sizing: border-box; padding: 16px; }
 
 /* Carousel + a static coral shadow layer behind it (Figma 108:16695): a blurred
    colored rect that stays centered under the cards and does NOT move when the
@@ -7,7 +11,7 @@
 .hero-shadow {
   position: absolute;
   left: 50%;
-  top: 62px;
+  top: 38px;
   transform: translateX(-50%);
   width: 271px;
   height: 283px;
@@ -23,8 +27,9 @@
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  /* 20px sides so the first (Akiyama) card sits centered in the 360 viewport on load */
-  padding: 24px 20px 0;
+  /* 20px sides so the first (Akiyama) card sits centered in the 360 viewport on load;
+     top 0 so the card container is flush against the app bar (Figma gap 0) */
+  padding: 0 20px 0;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
 }

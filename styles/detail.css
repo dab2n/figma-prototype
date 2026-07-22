@@ -186,7 +186,7 @@
 .swipe-detail.expanded .detail-info { bottom: 140px; }
 .detail-text { flex: 1; min-width: 0; color: #fff; cursor: pointer; }
 .detail-text .author { display: flex; align-items: center; gap: 4px; text-decoration: none; margin-bottom: 8px; }
-.detail-text .author img { width: 24px; height: 24px; border-radius: 999px; }
+.detail-text .author img { width: 24px; height: 24px; border-radius: 999px; view-transition-name: pack-avatar; }
 .detail-text .author-name { font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; color: #fff; }
 .detail-title {
   margin: 0 0 12px;

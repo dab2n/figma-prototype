@@ -53,6 +53,7 @@
   border-radius: 999px;
   object-fit: cover;
   border: 2px solid #fff;
+  view-transition-name: pack-avatar;   /* grows + moves up from 평소's small Sean avatar */
 }
 .creator-profile .sub {
   margin: 0;
