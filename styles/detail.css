@@ -135,3 +135,65 @@
   height: 24px;
 }
 .home-indicator-row span { width: 144px; height: 4px; border-radius: 2px; background: var(--color-neutral-400); mix-blend-mode: plus-lighter; }
+
+/* ── Swipe-morph detail (평소 → 1회 진입 → 올릴때) ───────────────── */
+.swipe-detail {
+  position: relative;
+  height: 780px;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--color-black);
+  touch-action: none;          /* let the swipe handler own vertical gestures */
+  user-select: none;           /* don't select text while swiping */
+  -webkit-user-select: none;
+}
+.swipe-detail .hero-photo {
+  position: absolute;
+  inset: 0;
+  width: 360px;
+  height: 780px;
+  border-radius: 0;
+  flex: none;
+}
+.swipe-detail .side-actions { bottom: 250px; }
+.swipe-detail .hero-content { bottom: 150px; transition: bottom .38s cubic-bezier(.4,0,.2,1); }
+.swipe-detail.expanded .hero-content { bottom: 196px; }
+
+/* The black bottom sheet that grows on swipe up */
+.detail-sheet {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  z-index: 6;
+  height: 108px;
+  background: var(--color-black);
+  border-radius: 24px 24px 0 0;
+  overflow: hidden;
+  transition: height .38s cubic-bezier(.4,0,.2,1);
+}
+.swipe-detail.expanded .detail-sheet { height: 168px; }
+
+/* Grab affordance at the very top of the sheet */
+.sheet-grabber {
+  position: absolute;
+  top: 8px; left: 50%;
+  transform: translateX(-50%);
+  width: 40px; height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.35);
+}
+
+.detail-sheet .sheet-joined,
+.detail-sheet .sheet-explore {
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  padding-top: 20px;
+  transition: opacity .28s ease;
+}
+.detail-sheet .sheet-explore { opacity: 0; pointer-events: none; }
+.swipe-detail.expanded .sheet-joined { opacity: 0; pointer-events: none; }
+.swipe-detail.expanded .sheet-explore { opacity: 1; pointer-events: auto; }
+
+.detail-sheet .home-indicator-row {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+}

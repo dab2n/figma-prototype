@@ -1,5 +1,8 @@
 @import url('./tokens.css');
 
+/* Smooth cross-document crossfade between screens (Chrome; ignored elsewhere) */
+@view-transition { navigation: auto; }
+
 body {
   display: flex;
   justify-content: center;
@@ -61,7 +64,7 @@ body {
   justify-content: space-between;
   padding: 16px;
 }
-.app-bar .logo { height: 21px; display: block; }
+.app-bar .logo { height: 30px; display: block; }
 .app-bar .actions { display: flex; align-items: center; gap: 16px; }
 .app-bar .actions img, .app-bar .actions a img { width: 24px; height: 24px; display: block; }
 .app-bar a { text-decoration: none; }
@@ -104,9 +107,11 @@ body {
 }
 .handle-btn img { display: block; width: 4px; height: 20px; }
 
-/* Bottom tab bar */
+/* Bottom tab bar — pinned to the very bottom of the 360x780 viewport,
+   overlaying the scrollable content, with rounded top corners */
 .tabbar {
-  position: sticky;
+  position: absolute;
+  left: 0;
   bottom: 0;
   z-index: 30;
   display: flex;
@@ -114,6 +119,7 @@ body {
   gap: 2px;
   width: 360px;
   background: var(--color-black);
+  border-radius: 20px 20px 0 0;
 }
 .tabbar .tabs {
   display: flex;

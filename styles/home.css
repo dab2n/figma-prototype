@@ -1,4 +1,4 @@
-.screen { background: var(--color-white); border-radius: 0 0 40px 40px; padding-bottom: 24px; }
+.screen { background: var(--color-white); border-radius: 0 0 40px 40px; padding-bottom: 110px; }
 
 .hero-scroll {
   display: flex;
