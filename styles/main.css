@@ -173,3 +173,11 @@ body {
 
 a { color: inherit; }
 button { font-family: inherit; }
+
+/* Mobile: the viewport meta (width=360) makes phones scale the 360-wide canvas
+   to fill the screen, so here we just drop the desktop framing (padding, rounded
+   bezel, shadow) and let the phone go edge-to-edge. */
+@media (max-width: 400px) {
+  body { padding: 0; align-items: stretch; min-height: 100dvh; }
+  .phone { border-radius: 0; box-shadow: none; }
+}
