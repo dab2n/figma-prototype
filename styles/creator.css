@@ -81,41 +81,45 @@
 .stats-row .divider { width: 1px; height: 33px; background: rgba(255,255,255,0.3); }
 
 .process-title { margin: 0 0 8px; color: var(--color-neutral-50); }
+/* Staircase bar chart: 18min nested top-left, bars widen top→bottom,
+   RUN full width at the bottom (matches Figma 올릴때 process graph) */
 .process-graph {
-  background: var(--color-neutral-900);
+  position: relative;
+  background: #1a1a1a;
   border-radius: 20px;
-  padding: 4px;
-  display: flex;
-  gap: 10px;
+  padding: 8px;
   height: 156px;
   box-sizing: border-box;
 }
 .process-graph .big-number {
-  width: 100px;
-  padding: 10px;
+  position: absolute;
+  left: 18px;
+  top: 14px;
+  z-index: 2;
+  color: #fff;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  color: #fff;
+  align-items: flex-start;
 }
-.process-graph .big-number .num { font-family: var(--font-fallback); font-weight: 800; font-size: 60px; line-height: 1; }
-.process-graph .big-number .unit { font-family: var(--font-supreme-bold); font-size: 18px; opacity: 0.6; letter-spacing: -0.54px; text-align: center; }
-.process-graph .bars { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.process-graph .big-number .num { font-family: var(--font-supreme-bold); font-size: 60px; line-height: 0.95; letter-spacing: -2px; }
+.process-graph .big-number .unit { font-family: var(--font-supreme-bold); font-size: 18px; opacity: 0.6; letter-spacing: -0.54px; margin-left: 2px; }
+.process-graph .bars { display: flex; flex-direction: column; gap: 4px; height: 100%; }
 .process-graph .bar {
-  flex: 1;
   border-radius: 12px;
   display: flex;
   align-items: center;
-  padding: 0 10px;
+  justify-content: space-between;
+  padding: 0 14px;
   color: #fff;
   font-family: var(--font-supreme);
   font-size: 15px;
   letter-spacing: -0.5px;
+  box-sizing: border-box;
 }
-.process-graph .bar .label { font-family: var(--font-supreme-bold); font-size: 13px; opacity: 0.7; margin-left: auto; }
-.bar-stretch { background: linear-gradient(-90deg, #D1FEFF 0%, #FEC389 6.5%, #FE6E3C 17%, #FA3030 42%); }
-.bar-learn { background: linear-gradient(90deg, #FA3030 58%, #FE6E3C 83%, #FEC389 94%, #D1FEFF 100%); }
-.bar-run { background: var(--color-neutral-700); }
+.process-graph .bar .label { font-family: var(--font-supreme-bold); font-size: 13px; opacity: 0.75; }
+.bar-stretch { flex: 1; width: 56%; margin-left: auto; background: linear-gradient(90deg, #FF9147 0%, #FA3030 100%); }
+.bar-learn   { flex: 1; width: 64%; margin-left: auto; background: linear-gradient(90deg, #FB5A32 0%, #FA3030 100%); }
+.bar-run     { flex: 1; width: 100%; background: #2e2e2e; }
 
 .info-grid {
   display: grid;

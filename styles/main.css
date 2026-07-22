@@ -64,7 +64,7 @@ body {
   justify-content: space-between;
   padding: 16px;
 }
-.app-bar .logo { height: 30px; display: block; }
+.app-bar .logo { width: 140px; height: auto; display: block; }
 .app-bar .actions { display: flex; align-items: center; gap: 16px; }
 .app-bar .actions img, .app-bar .actions a img { width: 24px; height: 24px; display: block; }
 .app-bar a { text-decoration: none; }
@@ -140,7 +140,10 @@ body {
   text-decoration: none;
   box-sizing: content-box;
 }
-.tabbar .tabs a img { width: 22px; height: 22px; display: block; }
+/* Inactive tab icons render gray (#A3A3A3); active renders white.
+   brightness(0)+invert normalizes every icon's baked fill to one color. */
+.tabbar .tabs a img { width: 22px; height: 22px; display: block; filter: brightness(0) invert(0.64); }
+.tabbar .tabs a.active img { filter: brightness(0) invert(1); }
 .tabbar .tabs a .dot {
   width: 7px;
   height: 2px;

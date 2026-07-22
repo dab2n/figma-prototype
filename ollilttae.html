@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="phone">
-  <div class="screen creator-screen">
+  <div class="screen creator-screen" id="creatorScreen">
     <div class="creator-hero" style="background-image:url('assets/photos/creator-hero-bg.png');">
       <div class="status-bar on-dark" style="position:relative;">
         <span class="clock">9:41</span>
@@ -123,5 +123,26 @@
     </div>
   </div>
 </div>
+<script>
+// Swipe DOWN while at the top of 올릴때 → back to 1회 진입 (pyeongso expanded)
+(function () {
+  var sc = document.getElementById('creatorScreen');
+  var startY = null, atTop = false, busy = false;
+  function back() { if (busy) return; busy = true; location.href = 'pyeongso.html?state=expanded'; }
+  sc.addEventListener('pointerdown', function (e) { startY = e.clientY; atTop = sc.scrollTop <= 0; });
+  sc.addEventListener('pointerup', function (e) {
+    if (startY === null) return;
+    var dy = e.clientY - startY; startY = null;
+    if (atTop && dy > 60) back();
+  });
+  sc.addEventListener('pointercancel', function () { startY = null; });
+  var wheelLock = false;
+  sc.addEventListener('wheel', function (e) {
+    if (wheelLock || sc.scrollTop > 0 || e.deltaY >= -12) return;   // only when at top, scrolling up
+    wheelLock = true; setTimeout(function () { wheelLock = false; }, 500);
+    back();
+  }, { passive: true });
+})();
+</script>
 </body>
 </html>

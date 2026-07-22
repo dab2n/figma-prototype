@@ -73,6 +73,11 @@
   var screen = document.getElementById('swipeScreen');
   var busy = false;                 // debounce during navigation
 
+  // Arriving back from 올릴때 (swipe down) lands in the 1회 진입 state
+  if (new URLSearchParams(location.search).get('state') === 'expanded') {
+    screen.classList.add('expanded');
+  }
+
   // state 0 = 평소, state 1 = 1회 진입.  A further swipe up → 올릴때 (ollilttae.html)
   function isExpanded() { return screen.classList.contains('expanded'); }
 
