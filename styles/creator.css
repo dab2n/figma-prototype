@@ -83,7 +83,7 @@
 }
 .creator-nav-indicator span { width: 144px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.9); }
 
-.creator-content { padding: 20px 16px 56px; display: flex; flex-direction: column; gap: 24px; }
+.creator-content { padding: 20px 16px 56px; display: flex; flex-direction: column; gap: 48px; }
 .creator-content .top-row { display: flex; align-items: center; justify-content: space-between; }
 .creator-content .top-actions { display: flex; align-items: center; gap: 8px; }
 .creator-content .top-actions .save-icon { width: 36px; height: 36px; display: block; }
@@ -183,8 +183,10 @@
 .also-like-item .txt .meta { display: flex; align-items: center; gap: 4px; color: var(--color-neutral-400); font-family: var(--font-supreme); font-size: 13px; margin-top: 4px; }
 .also-like-item .txt .meta .sep { width: 3px; height: 3px; }
 
-/* Scrolls within the 16px content margins (cards align to the section heading) */
-.more-scroll { display: flex; gap: 8px; overflow-x: auto; margin: 0; padding: 0; scroll-snap-type: x proximity; }
+/* First card aligns to the 16px content margin (left); the list bleeds to the
+   screen's right edge with a 16px trailing gap, so the last card scrolls fully
+   into view instead of being clipped at the right margin. */
+.more-scroll { display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px 0 0; padding: 0 16px 0 0; scroll-snap-type: x proximity; }
 .more-scroll::-webkit-scrollbar { display: none; }
 .more-card { flex: 0 0 140px; text-decoration: none; scroll-snap-align: start; }
 .more-card img { width: 140px; height: 140px; border-radius: 16px; object-fit: cover; display: block; }
@@ -196,7 +198,7 @@
    margins don't push it into overflow (which read as right-aligned). */
 /* Full-width centered CTA at the end of the content (matches Figma bottom-24). */
 .creator-start {
-  width: calc(100% - 32px);
-  margin: 24px 16px 0;
+  width: 100%;
+  margin: 0;
   box-sizing: border-box;
 }

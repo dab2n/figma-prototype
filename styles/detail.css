@@ -159,13 +159,15 @@
    backdrop-filter heavily blurs the photo behind the text; the mask feathers the
    top edge so the blur fades in instead of showing a hard cutoff line. */
 .swipe-detail .hero-photo::after {
-  height: 56%;
-  background: linear-gradient(180deg, rgba(108,94,67,0) 0%, rgba(108,94,67,0.78) 38%, rgba(210,183,130,0.82) 100%);
+  height: 58%;
+  background: linear-gradient(180deg, rgba(108,94,67,0.7) 0%, rgba(210,183,130,0.7) 100%);
   filter: none;
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%);
-  mask-image: linear-gradient(180deg, transparent 0%, #000 22%);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  /* Feather the top edge over a long ramp so the blur strength fades out as it
+     rises (Figma: the blur rect itself is blur-32, softening its top edge). */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 34%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 34%);
 }
 
 /* Title / desc (left) + side action pills (right), above the bottom sheet */
@@ -181,7 +183,7 @@
   transition: bottom .38s cubic-bezier(.4,0,.2,1);
 }
 .swipe-detail.expanded .detail-info { bottom: 140px; }
-.detail-text { flex: 1; min-width: 0; color: #fff; }
+.detail-text { flex: 1; min-width: 0; color: #fff; cursor: pointer; }
 .detail-text .author { display: flex; align-items: center; gap: 4px; text-decoration: none; margin-bottom: 8px; }
 .detail-text .author img { width: 24px; height: 24px; border-radius: 999px; }
 .detail-text .author-name { font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; color: #fff; }
@@ -207,6 +209,9 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+/* Tapping the text expands the description in place: the block is anchored at its
+   bottom, so it grows upward while spacing/layout stay put. Tap again collapses. */
+.detail-text.desc-open .detail-desc { -webkit-line-clamp: unset; overflow: visible; }
 .detail-actions { display: flex; flex-direction: column; gap: 11px; padding-bottom: 8px; flex-shrink: 0; }
 .action-pill {
   width: 48px; height: 48px;
@@ -219,12 +224,33 @@
 .action-pill img { width: auto; height: 16px; display: block; }
 .action-pill span { font-family: var(--font-supreme); font-size: 11px; }
 
-/* decorative flames above the joined avatars */
-.fire-icons { position: absolute; left: 44px; bottom: 92px; z-index: 4; transition: opacity .28s ease; }
+/* Embers rising from the joined-avatar profiles: each flame floats up and fades,
+   looping. Only the flame's base is softly blurred (::after masked to the bottom);
+   the silhouette itself stays sharp. */
+.fire-icons { position: absolute; left: 46px; bottom: 80px; z-index: 4; transition: opacity .28s ease; }
 .swipe-detail.expanded .fire-icons { opacity: 0; }
-.fire-icons .fire { position: absolute; display: block; }
-.fire-icons .fire1 { width: 24px; bottom: 0; left: 16px; }
-.fire-icons .fire2 { width: 19px; bottom: 24px; left: 33px; transform: rotate(14deg); }
+.fire-icons .fire {
+  position: absolute;
+  display: block;
+  background: url('../assets/icons/fire.svg') no-repeat center / contain;
+  animation: fire-rise 2.6s ease-in-out infinite;
+}
+.fire-icons .fire::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: inherit;
+  filter: blur(2.5px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 58%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 58%, #000 100%);
+}
+.fire-icons .fire1 { width: 24px; height: 24px; bottom: 0; left: 16px; }
+.fire-icons .fire2 { width: 19px; height: 19px; bottom: 24px; left: 33px; rotate: 13deg; animation-delay: 1.1s; }
+@keyframes fire-rise {
+  0%   { transform: translateY(6px) scale(0.8);   opacity: 0; }
+  20%  { opacity: 0.95; }
+  75%  { opacity: 0.5; }
+  100% { transform: translateY(-42px) scale(1.15); opacity: 0; }
+}
 
 /* Bottom sheet (flat black strip; grows on swipe up) */
 .detail-sheet {
