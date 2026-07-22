@@ -18,7 +18,9 @@
 .creator-hero {
   position: relative;
   height: 231px;
-  border-radius: 0 0 40px 40px;
+  /* Bottom 40 = the visible rounded band; top 40 keeps the corners round while
+     this element rides the view-transition top layer (phone clip doesn't apply). */
+  border-radius: 40px;
   overflow: hidden;
   view-transition-name: pack-hero;   /* 평소 hero shrinks into this band */
 }

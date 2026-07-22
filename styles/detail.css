@@ -152,7 +152,9 @@
   inset: 0;
   width: 360px;
   height: 780px;
-  border-radius: 0;
+  /* Top corners match the 40px phone frame so they stay round while this element
+     is lifted onto the view-transition top layer (which ignores .phone's clip). */
+  border-radius: 40px 40px 0 0;
   flex: none;
   view-transition-name: pack-hero;   /* morphs into 올릴때's profile band */
 }
