@@ -82,19 +82,21 @@
 .badge {
   padding: 4px 8px;
   border-radius: 80px;
-  background: rgba(207,224,234,0.9);
+  /* base fill + a #000000 20% layer on top (Figma badge component) */
+  background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), rgba(207,224,234,0.9);
   color: var(--color-white);
   font-family: var(--font-supreme);
   font-size: 12px;
   letter-spacing: -0.5px;
 }
-.badge-dark { background: rgba(90,76,50,0.74); }
+.badge-dark { background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), rgba(90,76,50,0.74); }
 .pack-stack { position: relative; z-index: 1; display: flex; }
 .pack-stack img { width: 32px; height: 32px; border-radius: 999px; border: 1px solid #fff; object-fit: cover; margin-right: -16px; }
 .pack-stack img:last-child { margin-right: 0; }
 .pack-dots { position: absolute; right: 16px; bottom: 16px; z-index: 1; }
 .pack-dots img { width: 10px; }
-.pack-info { padding: 16px 16px 20px; }
+/* Info container: fixed 78px tall, 16 top / 20 bottom margins, 4px title→meta gap */
+.pack-info { height: 78px; box-sizing: border-box; padding: 16px 16px 20px; }
 .pack-info p { margin: 0 0 4px; color: var(--color-black); }
 .pack-meta { display: flex; align-items: center; gap: 4px; color: var(--color-neutral-500); }
 .pack-meta .sep { width: 2px; height: 2px; }

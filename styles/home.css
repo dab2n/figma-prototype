@@ -1,6 +1,25 @@
 .screen { background: var(--color-white); border-radius: 0 0 40px 40px; padding-bottom: 110px; }
 
+/* Carousel + a static coral shadow layer behind it (Figma 108:16695): a blurred
+   colored rect that stays centered under the cards and does NOT move when the
+   cards are swiped horizontally. */
+.hero-section { position: relative; }
+.hero-shadow {
+  position: absolute;
+  left: 50%;
+  top: 62px;
+  transform: translateX(-50%);
+  width: 271px;
+  height: 283px;
+  border-radius: 40px;
+  background: linear-gradient(rgba(0,0,0,0.26), rgba(0,0,0,0.26)), rgba(252,114,88,0.7);
+  filter: blur(27px);
+  z-index: 0;
+  pointer-events: none;
+}
 .hero-scroll {
+  position: relative;
+  z-index: 1;
   display: flex;
   gap: 8px;
   overflow-x: auto;
@@ -53,7 +72,7 @@
   letter-spacing: -0.5px;
   color: #fafafa;
 }
-.hero-meta .dim { opacity: 0.7; }
+.hero-meta .dim { color: #fff; opacity: 0.9; }
 .hero-btn {
   position: absolute;
   bottom: 16px;

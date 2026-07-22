@@ -3,6 +3,18 @@
 /* Smooth cross-document crossfade between screens (Chrome; ignored elsewhere) */
 @view-transition { navigation: auto; }
 
+/* Vertical page slide used only between 1회진입(pyeongso) ⇆ 올릴때(ollilttae),
+   activated by view-transition types set in pageswap/pagereveal. The warm blur
+   at the seam stays visually continuous as one page slides up over the other. */
+@keyframes vt-up-out   { to   { transform: translateY(-100%); } }
+@keyframes vt-up-in    { from { transform: translateY(100%); } }
+@keyframes vt-down-out { to   { transform: translateY(100%); } }
+@keyframes vt-down-in  { from { transform: translateY(-100%); } }
+html:active-view-transition-type(slide-up)::view-transition-old(root)   { animation: vt-up-out   .45s cubic-bezier(.4,0,.2,1) both; }
+html:active-view-transition-type(slide-up)::view-transition-new(root)   { animation: vt-up-in    .45s cubic-bezier(.4,0,.2,1) both; }
+html:active-view-transition-type(slide-down)::view-transition-old(root) { animation: vt-down-out .45s cubic-bezier(.4,0,.2,1) both; }
+html:active-view-transition-type(slide-down)::view-transition-new(root) { animation: vt-down-in  .45s cubic-bezier(.4,0,.2,1) both; }
+
 body {
   display: flex;
   justify-content: center;

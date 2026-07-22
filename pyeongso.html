@@ -13,7 +13,7 @@
     <div class="hero-photo" style="background-image:url('assets/photos/hero-sean-running.png');">
       <div class="status-bar on-dark" style="position:absolute; top:0; left:0; z-index:6;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
       <div class="app-bar-transparent" style="top:44px;">
-        <button class="icon-btn" onclick="history.back()"><img src="assets/icons/appbar-back.svg" alt="뒤로"></button>
+        <button class="icon-btn" onclick="location.href='packs.html'"><img src="assets/icons/appbar-back.svg" alt="뒤로"></button>
         <button class="kebab-tan"><img src="assets/icons/kebab-dots.svg" alt="더보기"></button>
       </div>
 
@@ -108,6 +108,19 @@
     if (e.deltaY > 0) up(); else down();
   }, { passive: true });
 })();
+
+// Tag the cross-document view transition so 1회진입 → 올릴때 slides up,
+// and 올릴때 → 1회진입 (back) slides down (see main.css slide-* keyframes).
+window.addEventListener('pageswap', function (e) {
+  if (!e.viewTransition) return;
+  var to = (e.activation && e.activation.entry && e.activation.entry.url) || '';
+  if (to.indexOf('ollilttae.html') !== -1) e.viewTransition.types.add('slide-up');
+});
+window.addEventListener('pagereveal', function (e) {
+  if (!e.viewTransition) return;
+  var from = (e.activation && e.activation.from && e.activation.from.url) || '';
+  if (from.indexOf('ollilttae.html') !== -1) e.viewTransition.types.add('slide-down');
+});
 </script>
 </body>
 </html>

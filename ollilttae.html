@@ -10,7 +10,8 @@
 <body>
 <div class="phone">
   <div class="screen creator-screen" id="creatorScreen">
-    <div class="creator-hero" style="background-image:url('assets/photos/creator-hero-bg.png');">
+    <div class="creator-hero">
+      <div class="creator-hero-bg" style="background-image:url('assets/photos/creator-hero-bg.png');"></div>
       <div class="status-bar on-dark" style="position:absolute; top:0; left:0; z-index:6;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
       <div class="app-bar-transparent" style="position:absolute; top:44px; z-index:6;">
         <button class="icon-btn" onclick="history.back()"><img src="assets/icons/appbar-back.svg" alt="뒤로"></button>
@@ -135,6 +136,19 @@
     back();
   }, { passive: true });
 })();
+
+// Match pyeongso's slide types: arriving from 1회진입 slides up, leaving back to
+// it slides down — keeping the warm blur continuous across the page swap.
+window.addEventListener('pageswap', function (e) {
+  if (!e.viewTransition) return;
+  var to = (e.activation && e.activation.entry && e.activation.entry.url) || '';
+  if (to.indexOf('pyeongso.html') !== -1) e.viewTransition.types.add('slide-down');
+});
+window.addEventListener('pagereveal', function (e) {
+  if (!e.viewTransition) return;
+  var from = (e.activation && e.activation.from && e.activation.from.url) || '';
+  if (from.indexOf('pyeongso.html') !== -1) e.viewTransition.types.add('slide-up');
+});
 </script>
 </body>
 </html>

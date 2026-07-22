@@ -5,7 +5,9 @@
   background: #fafafa;
   border: none;
   border-radius: 10px;
-  padding: 7px 11px;
+  width: 41.5px;
+  height: 27.5px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,17 +18,24 @@
 .creator-hero {
   position: relative;
   height: 231px;
-  background-size: cover;
-  background-position: center 20%;
   border-radius: 0 0 40px 40px;
   overflow: hidden;
 }
+/* The hero photo lives in its own layer so it can be heavily blurred (Figma 올릴때).
+   Bleed + scale hide the soft blurred edges; the tan ::after tints it; the profile
+   avatar sits above both (z-index 2) so it stays sharp. */
+.creator-hero-bg {
+  position: absolute;
+  inset: -30px;
+  background-size: cover;
+  background-position: center 20%;
+  filter: blur(22px);
+  transform: scale(1.06);
+}
 .creator-hero::after {
   content: "";
-  position: absolute; left: 0; right: 0; bottom: 0;
-  height: 70%;
-  background: linear-gradient(180deg, rgba(108,94,67,0) 0%, rgba(108,94,67,0.7) 55%, rgba(210,183,130,0.75) 100%);
-  filter: blur(6px);
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(120,105,72,0.5) 0%, rgba(168,147,101,0.56) 55%, rgba(214,188,138,0.72) 100%);
   pointer-events: none;
 }
 .creator-profile {
@@ -174,8 +183,8 @@
 .also-like-item .txt .meta { display: flex; align-items: center; gap: 4px; color: var(--color-neutral-400); font-family: var(--font-supreme); font-size: 13px; margin-top: 4px; }
 .also-like-item .txt .meta .sep { width: 3px; height: 3px; }
 
-/* Full-bleed so cards scroll past the frame edge instead of clipping at the margin */
-.more-scroll { display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 0 16px; scroll-snap-type: x proximity; }
+/* Scrolls within the 16px content margins (cards align to the section heading) */
+.more-scroll { display: flex; gap: 8px; overflow-x: auto; margin: 0; padding: 0; scroll-snap-type: x proximity; }
 .more-scroll::-webkit-scrollbar { display: none; }
 .more-card { flex: 0 0 140px; text-decoration: none; scroll-snap-align: start; }
 .more-card img { width: 140px; height: 140px; border-radius: 16px; object-fit: cover; display: block; }
