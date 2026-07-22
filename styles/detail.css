@@ -152,25 +152,30 @@
   inset: 0;
   width: 360px;
   height: 780px;
-  /* Top corners match the 40px phone frame so they stay round while this element
-     is lifted onto the view-transition top layer (which ignores .phone's clip). */
-  border-radius: 40px 40px 0 0;
+  border-radius: 0;                  /* the .phone frame provides the 40px top clip */
   flex: none;
-  view-transition-name: pack-hero;   /* morphs into 올릴때's profile band */
 }
-/* Warm tan blur the title/desc sit over (Figma: 64px blur, 108,94,67 → 210,183,130).
-   backdrop-filter heavily blurs the photo behind the text; the mask feathers the
-   top edge so the blur fades in instead of showing a hard cutoff line. */
+/* Default (평소): a GRADUAL warm blur — the photo stays sharp up top and the blur
+   fades in only toward the bottom where the text sits (feathered over a long ramp). */
 .swipe-detail .hero-photo::after {
-  height: 58%;
-  background: linear-gradient(180deg, rgba(108,94,67,0.7) 0%, rgba(210,183,130,0.7) 100%);
+  height: 50%;
+  background: linear-gradient(180deg, rgba(108,94,67,0.3) 0%, rgba(210,183,130,0.72) 100%);
   filter: none;
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
-  /* Feather the top edge over a long ramp so the blur strength fades out as it
-     rises (Figma: the blur rect itself is blur-32, softening its top edge). */
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 34%);
-  mask-image: linear-gradient(180deg, transparent 0%, #000 34%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 70%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 70%);
+  transition: height .38s cubic-bezier(.4,0,.2,1);
+}
+/* Scrolled up (1회진입): the whole profile background becomes fully blurry — a larger
+   region, stronger blur, and a short feather so most of it is uniformly blurred. */
+.swipe-detail.expanded .hero-photo::after {
+  height: 62%;
+  background: linear-gradient(180deg, rgba(108,94,67,0.5) 0%, rgba(210,183,130,0.78) 100%);
+  backdrop-filter: blur(34px);
+  -webkit-backdrop-filter: blur(34px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 28%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 28%);
 }
 
 /* Title / desc (left) + side action pills (right), above the bottom sheet */
@@ -188,7 +193,7 @@
 .swipe-detail.expanded .detail-info { bottom: 140px; }
 .detail-text { flex: 1; min-width: 0; color: #fff; cursor: pointer; }
 .detail-text .author { display: flex; align-items: center; gap: 4px; text-decoration: none; margin-bottom: 8px; }
-.detail-text .author img { width: 24px; height: 24px; border-radius: 999px; view-transition-name: pack-avatar; }
+.detail-text .author img { width: 24px; height: 24px; border-radius: 999px; }
 .detail-text .author-name { font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; color: #fff; }
 .detail-title {
   margin: 0 0 12px;

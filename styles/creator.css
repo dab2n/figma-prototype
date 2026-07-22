@@ -18,11 +18,8 @@
 .creator-hero {
   position: relative;
   height: 231px;
-  /* Bottom 40 = the visible rounded band; top 40 keeps the corners round while
-     this element rides the view-transition top layer (phone clip doesn't apply). */
-  border-radius: 40px;
+  border-radius: 0 0 40px 40px;
   overflow: hidden;
-  view-transition-name: pack-hero;   /* 평소 hero shrinks into this band */
 }
 /* The hero photo lives in its own layer so it can be heavily blurred (Figma 올릴때).
    Bleed + scale hide the soft blurred edges; the tan ::after tints it; the profile
@@ -55,7 +52,6 @@
   border-radius: 999px;
   object-fit: cover;
   border: 2px solid #fff;
-  view-transition-name: pack-avatar;   /* grows + moves up from 평소's small Sean avatar */
 }
 .creator-profile .sub {
   margin: 0;
