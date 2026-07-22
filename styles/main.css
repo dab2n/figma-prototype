@@ -33,29 +33,15 @@ body {
 .screen::-webkit-scrollbar { display: none; }
 .screen { scrollbar-width: none; }
 
-/* Status bar */
+/* Status bar — rendered from the reference Figma "Status Bar" SVG (light + dark) */
 .status-bar {
   position: sticky;
   top: 0;
   z-index: 30;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  width: 360px;
   height: 44px;
-  padding: 16px 20px;
-  background: var(--color-white);
 }
-.status-bar.on-dark { background: transparent; }
-.status-bar .clock {
-  font-family: var(--font-fallback);
-  font-weight: 700;
-  font-size: 15px;
-  color: rgba(0,0,0,0.8);
-}
-.status-bar.on-dark .clock { color: rgba(255,255,255,0.8); }
-.status-bar .icons { display: flex; align-items: center; gap: 4px; }
-.status-bar .icons img { display: block; height: 18px; }
-.status-bar .icons img.battery { height: 16.5px; }
+.status-bar .statusbar-svg { display: block; width: 360px; height: 44px; }
 
 /* App bar (title + actions) */
 .app-bar {

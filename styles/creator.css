@@ -101,7 +101,7 @@
   flex-direction: column;
   align-items: flex-start;
 }
-.process-graph .big-number .num { font-family: var(--font-supreme-bold); font-size: 60px; line-height: 0.95; letter-spacing: -2px; }
+.process-graph .big-number .num { font-family: var(--font-offbit); font-weight: 700; font-size: 60px; line-height: 0.95; letter-spacing: 0; }
 .process-graph .big-number .unit { font-family: var(--font-supreme-bold); font-size: 18px; opacity: 0.6; letter-spacing: -0.54px; margin-left: 2px; }
 .process-graph .bars { display: flex; flex-direction: column; gap: 4px; height: 100%; }
 .process-graph .bar {

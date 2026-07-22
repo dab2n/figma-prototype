@@ -45,21 +45,30 @@
   font-family: var(--font-supreme-medium);
 }
 
-.pack-list { display: flex; flex-direction: column; gap: 5px; padding: 12px; }
-.pack-card { text-decoration: none; color: inherit; display: block; }
+.pack-list { display: flex; flex-direction: column; gap: 12px; padding: 12px; }
+.pack-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  background: #fff;
+  border-radius: 40px;
+  padding: 4px;
+  box-shadow: 0 14px 40px 2px rgba(0,0,0,0.12);
+}
 .pack-thumb {
   position: relative;
   border-radius: 38px;
   background-size: cover;
   background-position: center;
-  margin: 4px;
   padding: 16px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 14px 27px rgba(0,0,0,0.15);
+  align-items: flex-end;   /* joined-avatar stack sits bottom-right (Figma) */
+  overflow: hidden;
 }
+.pack-thumb-top { width: 100%; }
 .pack-thumb-dark::before {
   content: "";
   position: absolute;
@@ -85,7 +94,7 @@
 .pack-stack img:last-child { margin-right: 0; }
 .pack-dots { position: absolute; right: 16px; bottom: 16px; z-index: 1; }
 .pack-dots img { width: 10px; }
-.pack-info { padding: 16px; }
-.pack-info p { margin: 0 0 4px; }
+.pack-info { padding: 16px 16px 20px; }
+.pack-info p { margin: 0 0 4px; color: var(--color-black); }
 .pack-meta { display: flex; align-items: center; gap: 4px; color: var(--color-neutral-500); }
 .pack-meta .sep { width: 2px; height: 2px; }

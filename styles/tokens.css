@@ -1,5 +1,13 @@
 @import url('./supreme.css');
 
+/* Pretendard — status-bar clock / system UI text (Figma design system) */
+@font-face { font-family:'Pretendard'; font-weight:400; font-style:normal; font-display:swap; src:url('../fonts/pretendard/Pretendard-Regular.woff2') format('woff2'), url('../fonts/pretendard/Pretendard-Regular.woff') format('woff'); }
+@font-face { font-family:'Pretendard'; font-weight:500; font-style:normal; font-display:swap; src:url('../fonts/pretendard/Pretendard-Medium.woff2') format('woff2'), url('../fonts/pretendard/Pretendard-Medium.woff') format('woff'); }
+@font-face { font-family:'Pretendard'; font-weight:600; font-style:normal; font-display:swap; src:url('../fonts/pretendard/Pretendard-SemiBold.woff2') format('woff2'), url('../fonts/pretendard/Pretendard-SemiBold.woff') format('woff'); }
+@font-face { font-family:'Pretendard'; font-weight:700; font-style:normal; font-display:swap; src:url('../fonts/pretendard/Pretendard-Bold.woff2') format('woff2'), url('../fonts/pretendard/Pretendard-Bold.woff') format('woff'); }
+/* OffBit — the "18 min" process-graph numeral */
+@font-face { font-family:'OffBit'; font-weight:700; font-style:normal; font-display:swap; src:url('../fonts/offbit/OffBitTrial-Bold.woff2') format('woff2'), url('../fonts/offbit/OffBitTrial-Bold.woff') format('woff'); }
+
 :root {
   /* Colors — Figma design system */
   --color-black: #050A0A;
@@ -17,9 +25,9 @@
   --font-supreme: 'Supreme-Regular', -apple-system, sans-serif;
   --font-supreme-bold: 'Supreme-Bold', -apple-system, sans-serif;
   --font-supreme-medium: 'Supreme-Medium', -apple-system, sans-serif;
-  /* Figma text used "Pretendard" (status-bar clock) and "OffBit Trial" (process-graph numeral) —
-     neither ships in the Supreme webfont pack, so both fall back to the system stack. */
-  --font-fallback: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-pretendard: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-offbit: 'OffBit', var(--font-supreme-bold);
+  --font-fallback: var(--font-pretendard);
 }
 
 * { box-sizing: border-box; }
