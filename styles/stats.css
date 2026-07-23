@@ -70,13 +70,9 @@
 .body-dot {
   position: absolute;
   z-index: 2;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255,255,255,0.95);
-  box-sizing: border-box;
-  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
   animation: dot-pop .4s cubic-bezier(.2,1.35,.4,1) var(--dot, 0s) both;
 }
-.body-dot::after { content: ""; width: 38%; height: 38%; border-radius: 50%; background: #fff; }
 @keyframes dot-pop { from { opacity: 0; transform: scale(.2); } }
 
 /* Stat labels floated over the figure (rise in on entry, staggered) */
@@ -91,7 +87,8 @@
 }
 @keyframes stat-rise { from { opacity: 0; transform: translateY(20px); } }
 .stat p { margin: 0; font-family: var(--font-supreme-bold); font-size: 16px; letter-spacing: -0.5px; }
-.stat.s-sm p { font-family: var(--font-supreme); font-size: 13px; }
+/* Secondary metrics (Rhythm/Endurance/Agility): Regular 13 label (node 319-18914). */
+.stat.s-sm p, .stat.sub p { font-family: var(--font-supreme); font-size: 13px; }
 .stat .num-row { display: flex; align-items: flex-start; gap: 3px; }
 .stat .num-row .n { font-family: var(--font-offbit); font-weight: 700; font-size: 26px; line-height: 0.95; }
 .stat.s-sm .num-row .n { font-size: 22px; }
