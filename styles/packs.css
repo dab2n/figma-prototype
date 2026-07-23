@@ -90,6 +90,9 @@
   letter-spacing: -0.5px;
 }
 .badge-dark { background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), rgba(90,76,50,0.74); }
+/* HOT badge: fire icon + HOT, same dark pill / size as the date badge it replaces */
+.badge-hot { display: inline-flex; align-items: center; gap: 4px; }
+.badge-hot img { width: 10px; height: 11px; display: block; }
 .pack-stack { position: relative; z-index: 1; display: flex; }
 .pack-stack img { width: 32px; height: 32px; border-radius: 999px; border: 1px solid #fff; object-fit: cover; margin-right: -16px; }
 .pack-stack img:last-child { margin-right: 0; }

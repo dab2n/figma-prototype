@@ -25,6 +25,19 @@ body {
   min-height: 100vh;
 }
 
+/* Kill the mobile tap flash / focus box so tapping a card or button never draws a
+   blue rectangle (breaks immersion on Galaxy/Android). Text stays unselectable on
+   interactive chrome so a double-tap doesn't highlight it either. */
+* { -webkit-tap-highlight-color: transparent; }
+a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
+.chip-sel, .mode-card, .lib-card, .pack-card, .seg, .stat-tab, .chip {
+  outline: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+:focus, :focus-visible { outline: none; }
+
 /* The 360x780 mobile viewport every screen renders inside (fixed size) */
 .phone {
   position: relative;
