@@ -4,20 +4,12 @@
   position: relative;
   height: 780px;
   overflow: hidden;
-  background: url('../assets/photos/recap-bg.png') center / cover no-repeat;
+  /* Full-bleed arrival image (runner pre-composed on the red→cream gradient);
+     text elements sit on top. No CSS gradient underneath — avoids a gray blend. */
+  background: url('../assets/photos/arrival-bg.png') center / cover no-repeat, #fff;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
-}
-
-/* Runner silhouette (pre-composed on a soft gradient), sitting over the blur bg. */
-.recap-runner {
-  position: absolute;
-  top: 120px;
-  left: 0;
-  width: 360px;
-  height: auto;
-  pointer-events: none;
 }
 
 .recap-title {
