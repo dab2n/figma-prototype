@@ -192,6 +192,9 @@
 .rec-badge {
   position: relative;
   z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 4px 8px;
   border-radius: 80px;
   background: rgba(255,255,255,0.9);
@@ -201,6 +204,7 @@
   letter-spacing: -0.5px;
   box-shadow: 0 0 12px rgba(0,0,0,0.12);
 }
+.rec-badge .badge-fire { width: 11px; height: 13px; display: block; flex: none; }
 .rec-info { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 16px 16px 20px; }
 .rec-txt { flex: 1; min-width: 0; }
 .rec-title { margin: 0 0 4px; font-family: var(--font-supreme-bold); font-size: 18px; line-height: 1.2; letter-spacing: -0.54px; color: var(--color-black); }
