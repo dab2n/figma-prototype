@@ -76,25 +76,23 @@
   z-index: 1;
   pointer-events: none;
 }
-/* The dashed line keeps redrawing top→bottom (the order the dots appear). It's drawn
-   by revealing the visible dashes with a clip stroke; the visible dashes fade out at the
-   loop boundary BEFORE the clip resets, so a second line never overlaps the first. */
+/* The dashed line traces along the path following the dots in order: it draws quickly
+   top→bottom, holds connected, then the tail slides off the end and it re-traces —
+   one continuous stroke, never two overlapping lines and never a blink.
+   dasharray "100 100" (dash = full path, gap = full path) turns the clip stroke into a
+   window that travels: offset 100 = hidden past the start, 0 = fully drawn, -100 = slid
+   off past the end (== 100 mod 200, so the loop wraps seamlessly). */
+.dashed-visible { opacity: .9; }
 .reveal-path {
-  stroke-dasharray: 100;
+  stroke-dasharray: 100 100;
   stroke-dashoffset: 100;
-  animation: line-draw 2.6s cubic-bezier(.5,0,.2,1) infinite;
+  animation: line-run 4s cubic-bezier(.5,0,.2,1) infinite;
 }
-.dashed-visible { animation: line-fade 2.6s ease infinite; }
-@keyframes line-draw {
-  0% { stroke-dashoffset: 100; }
-  36% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: 0; }
-}
-@keyframes line-fade {
-  0%, 4% { opacity: 0; }
-  12% { opacity: .9; }
-  82% { opacity: .9; }
-  100% { opacity: 0; }
+@keyframes line-run {
+  0%   { stroke-dashoffset: 100; }   /* empty */
+  30%  { stroke-dashoffset: 0; }     /* drawn dot1→dot3 (quick) */
+  72%  { stroke-dashoffset: 0; }     /* hold connected */
+  100% { stroke-dashoffset: -100; }  /* tail slides off the end, wraps to empty */
 }
 .body-dot {
   position: absolute;
@@ -139,7 +137,8 @@
 /* ── White content ─────────────────────────────────────────────────────── */
 /* Transparent so the figure's faded bottom + the white page show through with no
    seam; the cards carry their own fills. */
-.records-content { position: relative; background: transparent; padding: 0 0 40px; }
+/* z-index above the hero's white feet-fade (z3) so the section headings aren't hidden. */
+.records-content { position: relative; z-index: 5; background: transparent; padding: 0 0 40px; }
 .rec-section { padding: 0 12px; margin-top: 8px; }
 /* Sessions Summary → Recommendation for you gap = 56 (node 309:18052) */
 .rec-section + .rec-section { margin-top: 56px; }
@@ -180,16 +179,7 @@
 .bc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
 .bc-cap { margin: 0 0 4px; font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.5px; color: var(--color-neutral-500); }
 .bc-title { margin: 0; font-family: var(--font-supreme-bold); font-size: 20px; letter-spacing: -1px; color: var(--color-black); }
-.bc-ic {
-  flex-shrink: 0;
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: var(--color-neutral-400);
-  display: flex; align-items: center; justify-content: center;
-}
-.bc-ic.up { background: var(--color-red); }
-.bc-ic img { width: 16px; height: 16px; filter: brightness(0) invert(1); transform: rotate(-45deg); }
-.bc-ic:not(.up) img { transform: rotate(45deg); }
+.bc-ic { flex-shrink: 0; width: 32px; height: 32px; display: block; }
 .bc-desc { margin: 0; font-family: var(--font-supreme); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px; color: var(--color-neutral-500); }
 
 /* Recommendation cards (horizontal scroll) */

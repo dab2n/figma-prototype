@@ -51,14 +51,22 @@
 .stats-title .st-title { margin: 0 0 8px; font-family: var(--font-supreme-bold); font-size: 32px; line-height: 1.2; letter-spacing: -1.5px; }
 .stats-title .st-sub { margin: 0; font-family: var(--font-supreme); font-size: 15px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-100); }
 
-/* Body-map dots + drawn dashed line (overlaid on the figure). The dotted line can't
-   animate its own dashoffset, so a clip-path reveals it top→bottom; loop it and fade
-   the visible line at the loop boundary so the reset never flashes. */
+/* Dashed line traces the path connecting the dots top→bottom, holds, then the tail
+   slides off and it re-traces — one continuous stroke, no overlap, no blink.
+   (Same rule as the Records graphic.) */
 .body-graph { position: absolute; top: 0; left: 0; width: 360px; height: 560px; z-index: 1; pointer-events: none; }
-.reveal-path { stroke-dasharray: 100; stroke-dashoffset: 100; animation: line-draw 2.8s cubic-bezier(.45,0,.2,1) infinite; }
-.dashed-visible { animation: line-fade 2.8s ease infinite; }
-@keyframes line-draw { 0% { stroke-dashoffset: 100; } 46% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 0; } }
-@keyframes line-fade { 0%, 4% { opacity: 0; } 12% { opacity: 1; } 82% { opacity: 1; } 100% { opacity: 0; } }
+.dashed-visible { opacity: .9; }
+.reveal-path {
+  stroke-dasharray: 100 100;
+  stroke-dashoffset: 100;
+  animation: line-run 4s cubic-bezier(.5,0,.2,1) infinite;
+}
+@keyframes line-run {
+  0%   { stroke-dashoffset: 100; }
+  30%  { stroke-dashoffset: 0; }
+  72%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -100; }
+}
 .body-dot {
   position: absolute;
   z-index: 2;
