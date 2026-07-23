@@ -1,5 +1,10 @@
 /* Settings page (node 1:1469) — reached from My via the hamburger. */
 .set-screen { background: var(--color-neutral-100); }
+/* Status bar matches the gray frame: give it the frame color so scroll content
+   can't bleed through, and multiply-blend the status-bar SVG so its baked white
+   rect dissolves into the gray (leaving the dark icons). */
+.set-screen .status-bar { background: var(--color-neutral-100); }
+.set-screen .statusbar-svg { mix-blend-mode: multiply; }
 
 .set-appbar { display: flex; align-items: center; padding: 8px 16px; }
 

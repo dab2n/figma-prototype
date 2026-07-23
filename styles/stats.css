@@ -150,6 +150,10 @@
 
 /* ── Library page ──────────────────────────────────────────────────────── */
 .lib-screen { background: var(--color-neutral-50); }
+/* Status bar matches the gray frame (frame color as backdrop + multiply-blend
+   the status-bar SVG so its baked white rect dissolves into the gray). */
+.lib-screen .status-bar { background: var(--color-neutral-50); }
+.lib-screen .statusbar-svg { mix-blend-mode: multiply; }
 .lib-filter {
   position: sticky;
   top: 44px;

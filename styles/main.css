@@ -7,14 +7,15 @@
    — image + blur + profile + black info, captured as one root snapshot — slides up
    from the bottom over the static 1회진입 page, and slides back down to dismiss.
    Everything moves together (no floating profile); types set in pageswap/pagereveal. */
-@keyframes modal-up   { from { transform: translateY(100%); } }
-@keyframes modal-down { to   { transform: translateY(100%); } }
+@keyframes modal-up      { from { transform: translateY(100%); } }
+@keyframes modal-topdown { from { transform: translateY(-100%); } }
 /* Enter: 올릴때 (new) rides up over the static 1회진입 (old). */
 html:active-view-transition-type(detail-in)::view-transition-old(root)  { animation: none; }
 html:active-view-transition-type(detail-in)::view-transition-new(root)  { animation: modal-up .5s cubic-bezier(.32,.72,0,1) both; }
-/* Dismiss: 올릴때 (old) slides down over the static 1회진입 (new); keep it on top. */
-html:active-view-transition-type(detail-out)::view-transition-new(root) { animation: none; }
-html:active-view-transition-type(detail-out)::view-transition-old(root) { animation: modal-down .5s cubic-bezier(.32,.72,0,1) both; z-index: 2; }
+/* Dismiss (grab the profile frame, drag down): the 평소 (new) frame descends from
+   the TOP over the static 올릴때 (old) — reads as pulling 평소 back down into place. */
+html:active-view-transition-type(detail-out)::view-transition-old(root) { animation: none; }
+html:active-view-transition-type(detail-out)::view-transition-new(root) { animation: modal-topdown .5s cubic-bezier(.32,.72,0,1) both; z-index: 2; }
 
 body {
   display: flex;

@@ -128,13 +128,17 @@
 // Swipe DOWN while at the top of 올릴때 → back to 1회 진입 (pyeongso expanded)
 (function () {
   var sc = document.getElementById('creatorScreen');
-  var startY = null, atTop = false, busy = false;
+  var startY = null, onHero = false, busy = false;
   function back() { if (busy) return; busy = true; location.href = 'pyeongso.html'; }
-  sc.addEventListener('pointerdown', function (e) { startY = e.clientY; atTop = sc.scrollTop <= 0; });
+  // Grab the profile area (the blurred, inverted-radius header) and drag DOWN → 평소.
+  sc.addEventListener('pointerdown', function (e) {
+    startY = e.clientY;
+    onHero = sc.scrollTop <= 0 && !!e.target.closest('.creator-hero');
+  });
   sc.addEventListener('pointerup', function (e) {
     if (startY === null) return;
     var dy = e.clientY - startY; startY = null;
-    if (atTop && dy > 60) back();
+    if (onHero && dy > 60) back();   // slow or quick — any downward pull past 60px
   });
   sc.addEventListener('pointercancel', function () { startY = null; });
   var wheelLock = false;
