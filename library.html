@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<title>Newton — Library</title>
+<link rel="stylesheet" href="styles/main.css">
+<link rel="stylesheet" href="styles/stats.css">
+</head>
+<body>
+<div class="phone">
+  <div class="screen stats-screen lib-screen">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <div class="stats-tabs">
+      <a class="stat-tab" href="progress.html">Progress</a>
+      <a class="stat-tab active" href="library.html">Library</a>
+    </div>
+
+    <div class="lib-filter" id="libFilter">
+      <span class="filter-ic"><img src="assets/icons/icon-filter.svg" alt="필터"></span>
+      <button class="chip active" data-sport="all">All</button>
+      <button class="chip" data-sport="Running">Running</button>
+      <button class="chip" data-sport="Boxing">Boxing</button>
+      <button class="chip" data-sport="Basketball">Basketball</button>
+      <button class="chip" data-sport="Tennis">Tennis</button>
+    </div>
+
+    <div class="lib-list" id="libList">
+      <div class="lib-group">
+        <p class="lib-date">2026.07.07</p>
+        <div class="lib-card" data-sport="Boxing"><div class="lib-info"><p class="lib-sport">Boxing</p><p class="lib-title">Southpaw Switch Drill</p></div><div class="lib-rate"><p class="rate-label">Match Rate</p><span class="rate-pct">62<span class="u">%</span></span></div></div>
+        <div class="lib-card" data-sport="Running"><div class="lib-info"><p class="lib-sport">Running</p><p class="lib-title">Sprinter's First Step</p></div><div class="lib-rate"><p class="rate-label">Match Rate</p><span class="rate-pct">71<span class="u">%</span></span></div></div>
+      </div>
+      <div class="lib-group">
+        <p class="lib-date">2026.07.08</p>
+        <div class="lib-card" data-sport="Tennis"><div class="lib-info"><p class="lib-sport">Tennis</p><p class="lib-title">Tennis Forehand Basics</p></div><div class="lib-rate"><p class="rate-label">Match Rate</p><span class="rate-pct">69<span class="u">%</span></span></div></div>
+        <div class="lib-card" data-sport="Basketball"><div class="lib-info"><p class="lib-sport">Basketball</p><p class="lib-title">Curry's Step Back</p></div><div class="lib-rate"><p class="rate-label">Match Rate</p><span class="rate-pct">55<span class="u">%</span></span></div></div>
+        <div class="lib-card" data-sport="Boxing"><div class="lib-info"><p class="lib-sport">Boxing</p><p class="lib-title">Jab-Cross Combo</p></div><div class="lib-rate"><p class="rate-label">Match Rate</p><span class="rate-pct">60<span class="u">%</span></span></div></div>
+      </div>
+      <div class="lib-group">
+        <p class="lib-date">2026.07.12</p>
+        <div class="lib-card" data-sport="Running"><div class="lib-info"><p class="lib-sport">Running</p><p class="lib-title">Easy Interval Run</p></div><div class="lib-rate"><p class="rate-label">Match Rate</p><span class="rate-pct">74<span class="u">%</span></span></div></div>
+        <div class="lib-card" data-sport="Basketball"><div class="lib-info"><p class="lib-sport">Basketball</p><p class="lib-title">Crossover Handles</p></div><div class="lib-rate"><p class="rate-label">Match Rate</p><span class="rate-pct">58<span class="u">%</span></span></div></div>
+        <div class="lib-card" data-sport="Tennis"><div class="lib-info"><p class="lib-sport">Tennis</p><p class="lib-title">Backhand Slice Control</p></div><div class="lib-rate"><p class="rate-label">Match Rate</p><span class="rate-pct">66<span class="u">%</span></span></div></div>
+      </div>
+    </div>
+  </div>
+  <nav class="tabbar">
+    <div class="tabs">
+      <a href="index.html"><img src="assets/icons/nav-home.svg" alt="홈"></a>
+      <a href="packs.html"><img src="assets/icons/nav-packs.svg" alt="팩"></a>
+      <a href="progress.html"><img src="assets/icons/nav-stats.svg" alt="통계"></a>
+      <a href="library.html" class="active"><img src="assets/icons/nav-profile.svg" alt="프로필"><span class="dot"></span></a>
+    </div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
+</div>
+<script>
+// Sport filter: highlight the chip, show only matching cards, hide empty date groups.
+(function () {
+  var chips = document.querySelectorAll('#libFilter .chip');
+  var cards = document.querySelectorAll('#libList .lib-card');
+  var groups = document.querySelectorAll('#libList .lib-group');
+  document.getElementById('libFilter').addEventListener('click', function (e) {
+    var chip = e.target.closest('.chip');
+    if (!chip) return;
+    chips.forEach(function (c) { c.classList.toggle('active', c === chip); });
+    var sport = chip.dataset.sport;
+    cards.forEach(function (card) {
+      card.classList.toggle('hidden', sport !== 'all' && card.dataset.sport !== sport);
+    });
+    groups.forEach(function (g) {
+      var anyVisible = g.querySelector('.lib-card:not(.hidden)');
+      g.classList.toggle('hidden', !anyVisible);
+    });
+  });
+})();
+</script>
+</body>
+</html>
