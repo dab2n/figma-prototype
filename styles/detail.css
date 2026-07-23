@@ -275,34 +275,6 @@
   transition: height .38s cubic-bezier(.4,0,.2,1);
 }
 .swipe-detail.expanded .detail-sheet { height: 116px; }
-/* Inverted (concave) radius where the black sheet meets the photo above — the
-   design-system junction. Two 40×40 black fillets ride just above the sheet's top
-   edge (and move with it when the sheet grows), so the photo reads as a rounded
-   r40 bottom-corner frame sitting on the sheet. Matches the home/packs navbar. */
-.swipe-detail::before,
-.swipe-detail::after {
-  content: "";
-  position: absolute;
-  bottom: 80px;
-  width: 40px;
-  height: 40px;
-  background: var(--color-black);
-  z-index: 3;
-  pointer-events: none;
-  transition: bottom .38s cubic-bezier(.4,0,.2,1);
-}
-.swipe-detail::before {
-  left: 0;
-  -webkit-mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%);
-          mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%);
-}
-.swipe-detail::after {
-  right: 0;
-  -webkit-mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);
-          mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);
-}
-.swipe-detail.expanded::before,
-.swipe-detail.expanded::after { bottom: 116px; }
 .detail-sheet .sheet-joined,
 .detail-sheet .sheet-explore {
   position: absolute;

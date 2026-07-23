@@ -69,43 +69,64 @@
 <script>
 (function () {
   var screen = document.getElementById('swipeScreen');
-  var busy = false;
-
-  if (new URLSearchParams(location.search).get('state') === 'expanded') {
-    screen.classList.add('expanded');
-  }
+  var hero = screen.querySelector('.hero-photo');
+  var COMMIT = 150;                 // px of upward push that commits to 올릴때
+  var pushed = 0, committing = false, gestured = false;
 
   function isExpanded() { return screen.classList.contains('expanded'); }
-  function up() {
-    if (busy) return;
-    if (!isExpanded()) { screen.classList.add('expanded'); }
-    else { busy = true; window.location.href = 'ollilttae.html'; }
-  }
-  function down() {
-    if (busy) return;
-    if (isExpanded()) screen.classList.remove('expanded');
+
+  // In 1회진입, an upward scroll/drag gradually pushes the top content up (its
+  // rounded r40 bottom is revealed over black); past COMMIT it hands off to 올릴때,
+  // so the two read as one continuous page transition. Released early → snap back.
+  function setPush(px, animate) {
+    pushed = Math.max(0, Math.min(px, COMMIT + 24));
+    hero.style.transition = animate ? 'transform .32s ease, border-radius .32s ease' : 'none';
+    hero.style.transform = pushed ? 'translateY(' + (-pushed) + 'px)' : '';
+    hero.style.borderRadius = pushed ? '0 0 40px 40px' : '';
+    if (pushed >= COMMIT && !committing) { committing = true; window.location.href = 'ollilttae.html'; }
   }
 
-  var startY = null, lastSwipe = 0;
-  screen.addEventListener('pointerdown', function (e) { startY = e.clientY; });
+  // Pointer (touch / mouse drag)
+  var startY = null;
+  screen.addEventListener('pointerdown', function (e) { startY = e.clientY; gestured = false; });
+  screen.addEventListener('pointermove', function (e) {
+    if (startY === null || !isExpanded()) return;
+    var dy = e.clientY - startY;
+    if (dy < 0 || pushed > 0) { gestured = true; setPush(-dy, false); }
+  });
   screen.addEventListener('pointerup', function (e) {
     if (startY === null) return;
     var dy = e.clientY - startY; startY = null;
-    if (dy < -45) { lastSwipe = Date.now(); up(); }
-    else if (dy > 45) { lastSwipe = Date.now(); down(); }
+    if (!isExpanded()) {
+      if (dy < -45) { gestured = true; screen.classList.add('expanded'); }   // 평소 → 1회진입
+    } else if (!committing) {
+      if (pushed > 0) setPush(0, true);                                      // released early → snap back
+      else if (dy > 45) { gestured = true; screen.classList.remove('expanded'); } // 1회진입 → 평소
+    }
   });
-  screen.addEventListener('pointercancel', function () { startY = null; });
+  screen.addEventListener('pointercancel', function () {
+    startY = null; if (!committing && pushed > 0) setPush(0, true);
+  });
+  // Suppress the click that follows a real drag (so links don't fire on snap-back)
   screen.addEventListener('click', function (e) {
-    if (Date.now() - lastSwipe < 400) { e.preventDefault(); e.stopPropagation(); }
+    if (gestured) { e.preventDefault(); e.stopPropagation(); gestured = false; }
   }, true);
 
-  var wheelLock = false;
+  // Wheel (desktop): accumulate the push; snap back if it stalls below COMMIT.
+  var toggleLock = false, stall;
   screen.addEventListener('wheel', function (e) {
-    if (wheelLock) return;
-    if (Math.abs(e.deltaY) < 12) return;
-    wheelLock = true;
-    setTimeout(function () { wheelLock = false; }, 500);
-    if (e.deltaY > 0) up(); else down();
+    if (!isExpanded()) {
+      if (e.deltaY > 10 && !toggleLock) { toggleLock = true; setTimeout(function(){toggleLock=false;},420); screen.classList.add('expanded'); }
+      return;
+    }
+    if (committing) return;
+    if (e.deltaY > 0 || pushed > 0) {
+      setPush(pushed + e.deltaY, false);
+    } else if (!toggleLock) {
+      toggleLock = true; setTimeout(function(){toggleLock=false;},420); screen.classList.remove('expanded');
+    }
+    clearTimeout(stall);
+    stall = setTimeout(function () { if (!committing && pushed > 0) setPush(0, true); }, 220);
   }, { passive: true });
 })();
 

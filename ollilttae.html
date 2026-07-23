@@ -14,7 +14,7 @@
       <div class="creator-hero-bg" style="background-image:url('assets/photos/creator-hero-bg.png');"></div>
       <div class="status-bar on-dark" style="position:absolute; top:0; left:0; z-index:6;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
       <div class="app-bar-transparent" style="position:absolute; top:44px; z-index:6;">
-        <button class="icon-btn" onclick="history.back()"><img src="assets/icons/appbar-back.svg" alt="뒤로"></button>
+        <button class="icon-btn" onclick="location.href='pyeongso.html'"><img src="assets/icons/appbar-back.svg" alt="뒤로"></button>
         <button class="kebab-btn"><img src="assets/icons/kebab-dots.svg" alt="더보기"></button>
       </div>
       <div class="creator-profile">
@@ -121,7 +121,7 @@
 (function () {
   var sc = document.getElementById('creatorScreen');
   var startY = null, atTop = false, busy = false;
-  function back() { if (busy) return; busy = true; location.href = 'pyeongso.html?state=expanded'; }
+  function back() { if (busy) return; busy = true; location.href = 'pyeongso.html'; }
   sc.addEventListener('pointerdown', function (e) { startY = e.clientY; atTop = sc.scrollTop <= 0; });
   sc.addEventListener('pointerup', function (e) {
     if (startY === null) return;
