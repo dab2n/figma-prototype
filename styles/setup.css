@@ -11,7 +11,8 @@
 /* App bar: back (left) + Skip (right) */
 .setup-appbar { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; box-sizing: border-box; }
 .setup-appbar .back { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
-.setup-appbar .back img { width: 24px; height: 24px; display: block; }
+/* Back arrow ships white; tint it to the same Neutral/900 as the Skip label. */
+.setup-appbar .back img { width: 24px; height: 24px; display: block; filter: brightness(0) invert(0.09); }
 .setup-appbar .skip { font-family: var(--font-supreme); font-size: 16px; letter-spacing: -0.5px; color: var(--color-neutral-900); text-decoration: none; }
 
 /* Title (Display/D1) + optional subtitle (Body/Regular) */
@@ -96,5 +97,8 @@
 .setup-stepbar { justify-content: flex-end; gap: 14px; padding-top: 12px; }
 .setup-stepbar .steps-wrap { width: 100%; overflow: hidden; }
 .setup-stepbar .steps { display: inline-flex; align-items: center; gap: 24px; white-space: nowrap; transition: transform .35s cubic-bezier(.4,0,.2,1); padding: 0 20px; }
-.setup-stepbar .step { flex: none; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-500); text-decoration: none; }
+.setup-stepbar .step { flex: none; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-500); text-decoration: none; transition: color .35s ease, font-size .35s ease; }
 .setup-stepbar .step.active { font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: #fff; }
+/* Once every input on the page is filled, the NEXT step grows a touch and brightens
+   to invite the user forward (steps also slide left to centre the current one via JS). */
+.setup-stepbar .step.next { font-family: var(--font-supreme-medium); font-size: 18px; color: #d4d4d4; }
