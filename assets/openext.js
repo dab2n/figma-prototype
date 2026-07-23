@@ -17,10 +17,27 @@
 
   // Double-tap / double-click anywhere → native fullscreen (Android Chrome, desktop).
   // iOS Safari ignores element fullscreen — use "Add to Home Screen" (PWA) there.
-  function goFull() {
+  //
+  // Fullscreen is PER-DOCUMENT: any full-page navigation (tapping the bottom bar,
+  // following a link) drops it, and the browser won't re-grant fullscreen without a
+  // fresh user gesture. So we remember the intent in sessionStorage and silently
+  // re-enter on the first tap of each new page — the earliest moment allowed.
+  // (For zero-flicker fullscreen, install via "Add to Home Screen": the manifest's
+  //  display:fullscreen keeps every navigation inside the app fullscreen.)
+  var FS_KEY = 'nw_fs';
+  function isFull() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+  function reqFull() {
     var el = document.documentElement;
-    if (document.fullscreenElement) { (document.exitFullscreen || function(){})(); return; }
-    (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el);
+    return (el.requestFullscreen || el.webkitRequestFullscreen || function () { return null; }).call(el);
+  }
+  function goFull() {
+    if (isFull()) {
+      try { sessionStorage.removeItem(FS_KEY); } catch (e) {}
+      (document.exitFullscreen || document.webkitExitFullscreen || function () {}).call(document);
+    } else {
+      try { sessionStorage.setItem(FS_KEY, '1'); } catch (e) {}
+      reqFull();
+    }
   }
   document.addEventListener('dblclick', goFull);
   var lastTap = 0;
@@ -28,6 +45,20 @@
     var now = Date.now();
     if (now - lastTap < 320) { goFull(); lastTap = 0; } else { lastTap = now; }
   }, { passive: true });
+
+  // Restore fullscreen after a navigation: on the first user gesture of this page,
+  // re-request it (only if the user last chose fullscreen and we're not already in it).
+  (function () {
+    var want = false;
+    try { want = sessionStorage.getItem(FS_KEY) === '1'; } catch (e) {}
+    if (!want) return;
+    function restore() {
+      if (isFull()) { document.removeEventListener('pointerdown', restore, true); return; }
+      var p = reqFull();
+      if (p && p.then) p.then(function () { document.removeEventListener('pointerdown', restore, true); }, function () {});
+    }
+    document.addEventListener('pointerdown', restore, true);
+  })();
 
   var open = target();
   if (!open) return;
