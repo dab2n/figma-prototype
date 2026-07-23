@@ -15,6 +15,20 @@
     return null;
   }
 
+  // Double-tap / double-click anywhere → native fullscreen (Android Chrome, desktop).
+  // iOS Safari ignores element fullscreen — use "Add to Home Screen" (PWA) there.
+  function goFull() {
+    var el = document.documentElement;
+    if (document.fullscreenElement) { (document.exitFullscreen || function(){})(); return; }
+    (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el);
+  }
+  document.addEventListener('dblclick', goFull);
+  var lastTap = 0;
+  document.addEventListener('touchend', function () {
+    var now = Date.now();
+    if (now - lastTap < 320) { goFull(); lastTap = 0; } else { lastTap = now; }
+  }, { passive: true });
+
   var open = target();
   if (!open) return;
 
