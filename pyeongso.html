@@ -68,9 +68,10 @@
           <span>Explore Packs</span>
         </a>
       </div>
-
-      <div class="home-indicator-row"><span></span></div>
     </div>
+
+    <!-- Phone's own bottom bar — stays pinned, never rides the Explore Packs push. -->
+    <div class="home-indicator-row"><span></span></div>
   </div>
 </div>
 
@@ -95,6 +96,7 @@
     hero.style.borderRadius = pushed ? '0 0 40px 40px' : '';
     sheet.style.transition = animate ? 'transform .32s ease' : 'none';
     sheet.style.transform = t;
+    screen.style.setProperty('--push', pushed + 'px');   // concave fillets ride up too
     if (pushed >= COMMIT && !committing) { committing = true; window.location.href = 'ollilttae.html'; }
   }
 

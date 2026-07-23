@@ -275,6 +275,26 @@
   transition: height .38s cubic-bezier(.4,0,.2,1);
 }
 .swipe-detail.expanded .detail-sheet { height: 116px; }
+/* Inverted (concave) radius where the content frame meets the flat black bottom bar.
+   Two masked black fillets sit at the bar's top corners; they rise with the push
+   (via --push) so the concave junction travels with the sheet. */
+.swipe-detail::before,
+.swipe-detail::after {
+  content: "";
+  position: absolute;
+  bottom: 80px;
+  width: 40px;
+  height: 40px;
+  background: var(--color-black);
+  z-index: 5;
+  pointer-events: none;
+  transform: translateY(calc(-1 * var(--push, 0px)));
+  transition: bottom .38s cubic-bezier(.4,0,.2,1);
+}
+.swipe-detail::before { left: 0;  -webkit-mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%); mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%); }
+.swipe-detail::after  { right: 0; -webkit-mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);   mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%); }
+.swipe-detail.expanded::before,
+.swipe-detail.expanded::after { bottom: 116px; }
 .detail-sheet .sheet-joined,
 .detail-sheet .sheet-explore {
   position: absolute;
@@ -284,7 +304,9 @@
 .detail-sheet .sheet-explore { opacity: 0; pointer-events: none; padding-top: 6px; }
 .swipe-detail.expanded .sheet-joined { opacity: 0; pointer-events: none; }
 .swipe-detail.expanded .sheet-explore { opacity: 1; pointer-events: auto; }
-.detail-sheet .home-indicator-row { position: absolute; left: 0; right: 0; bottom: 0; }
+/* Pulled OUT of the sheet: it represents the phone's own bottom bar, so it stays
+   pinned to the very bottom and does NOT move up with the Explore Packs push. */
+.swipe-detail > .home-indicator-row { position: absolute; left: 0; right: 0; bottom: 0; z-index: 7; }
 .joined-avatars .joined-more { width: 32px; height: 32px; border-radius: 999px; background: var(--color-neutral-600); border: 1px solid #fff; margin-right: 0; display: inline-block; }
 
 /* 평소 "more" button — warm translucent rounded square with horizontal dots */

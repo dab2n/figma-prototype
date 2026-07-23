@@ -162,8 +162,9 @@
   // so drive it with rAF — direct height sets render fine. The CSS notif-on rule holds
   // the resting 634px once we hand the inline height back.
   function reveal() {
+    var from = screen.offsetHeight;                   // current resting height (any viewport)
     phone.classList.add('notif-on');
-    var from = 700, to = 634, dur = 450, s = null;
+    var to = from - 66, dur = 450, s = null;
     screen.style.height = from + 'px';
     requestAnimationFrame(function step(t) {
       if (s === null) s = t;
@@ -171,13 +172,13 @@
       var e = 1 - Math.pow(1 - p, 3);                 // ease-out cubic
       screen.style.height = (from - (from - to) * e) + 'px';
       if (p < 1) requestAnimationFrame(step);
-      else screen.style.height = '';                  // CSS (notif-on) holds 634
+      else screen.style.height = '';                  // CSS (notif-on) holds the shrunk height
     });
   }
 
   // Reverse the reveal: content frame grows back and the notification is dismissed.
   function restore() {
-    var from = 634, to = 700, dur = 360, s = null;
+    var from = screen.offsetHeight, to = from + 66, dur = 360, s = null;
     screen.style.height = from + 'px';
     requestAnimationFrame(function step(t) {
       if (s === null) s = t;
