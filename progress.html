@@ -27,25 +27,8 @@
       <a class="stat-tab" href="library.html">Library</a>
     </div>
 
-    <!-- Sharp overlays on top of the (softly-blurred) background image: crisp title,
-         subtitle, ring dots and a looping top→bottom dashed line. -->
-    <div class="stats-title">
-      <p class="st-title">All 5 metrics improved</p>
-      <p class="st-sub">Darker areas improved the most</p>
-    </div>
-
-    <svg class="body-graph" viewBox="0 0 360 560" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <clipPath id="lineReveal">
-          <path class="reveal-path" d="M131 288 L214 388 L131 456" fill="none" stroke="#000" stroke-width="14" pathLength="100"/>
-        </clipPath>
-      </defs>
-      <path class="dashed-visible" d="M131 288 L214 388 L131 456" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="3 5" stroke-linecap="round" clip-path="url(#lineReveal)"/>
-    </svg>
-    <div class="body-dot" style="left:118px; top:275px; width:26px; height:26px; --dot:.15s;"></div>
-    <div class="body-dot" style="left:201px; top:375px; width:26px; height:26px; --dot:.5s;"></div>
-    <div class="body-dot" style="left:118px; top:443px; width:26px; height:26px; --dot:.85s;"></div>
-
+    <!-- Title, subtitle and ring dots are baked into progress-bg.png; only the metric
+         number labels are overlaid (they're not in the image). -->
     <div class="stat s-sm" style="left:96px; top:213px; align-items:flex-end; --d:.05s;"><p>Rhythm</p><div class="num-row"><span class="n">72</span><span class="d">+24</span></div></div>
     <div class="stat s-lg" style="left:47px; top:356px; --d:.15s;"><p>Balance</p><div class="num-row"><span class="n">85</span><span class="d">+25</span></div></div>
     <div class="stat" style="left:239px; top:344px; --d:.12s;"><p>Stability</p><div class="num-row"><span class="n" style="font-size:31px;">68</span><span class="d">+13</span></div></div>

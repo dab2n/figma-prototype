@@ -26,12 +26,12 @@
   flex: 1;
   display: flex; align-items: center; justify-content: center; gap: 8px;
   border: none; background: none; border-radius: 20px; cursor: pointer;
-  font-family: var(--font-supreme-bold); font-size: 16px; letter-spacing: -0.5px;
+  font-family: var(--font-supreme-medium); font-size: 14px; letter-spacing: -0.56px;
   color: var(--color-neutral-700);
 }
 .my-tap .seg.active { background: var(--color-neutral-100); }
-/* Bookmark svg ships white; recolor to Neutral/700 and size it up (node 246:15404). */
-.my-tap .seg img { width: 15px; height: 19px; filter: brightness(0) invert(0.23); }
+/* Tight bookmark glyph, pre-coloured Neutral/700, sized to match the label (node 234:10262). */
+.my-tap .seg img { width: 11px; height: 14px; }
 
 .my-panel { display: none; padding: 12px; }
 .my-panel.active { display: block; }
@@ -52,11 +52,15 @@
    (node 246:15438). Clipped by the card's overflow so it hazes the lower edge. */
 .saved-grid .cell::after {
   content: "";
-  position: absolute; left: 50%; bottom: -34px;
-  transform: translateX(-50%);
-  width: 88%; height: 96px; border-radius: 50%;
-  filter: blur(22px);
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 58%;
   z-index: 0; pointer-events: none;
+  /* Figma uses a blurred colour blob AND a backdrop blur — frost the image behind it
+     as well as tint it. Mask fades the band's top so the frost edge stays soft. */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  -webkit-mask-image: linear-gradient(to top, #000 35%, transparent);
+  mask-image: linear-gradient(to top, #000 35%, transparent);
 }
 .saved-grid .c1::after { background: linear-gradient(rgba(127,159,174,0.7), rgba(176,190,210,0.7)); }
 .saved-grid .c2::after { display: none; }   /* dark Pro card has no glow */

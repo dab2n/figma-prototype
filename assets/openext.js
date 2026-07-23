@@ -24,6 +24,13 @@
   // re-enter on the first tap of each new page — the earliest moment allowed.
   // (For zero-flicker fullscreen, install via "Add to Home Screen": the manifest's
   //  display:fullscreen keeps every navigation inside the app fullscreen.)
+  // Fullscreen is a mobile-only affordance. On desktop web, requestFullscreen fires on
+  // every click (via the restore-on-gesture path once the flag is set), which yanks the
+  // page into fullscreen unexpectedly — so gate the whole feature to touch devices.
+  var isTouch = false;
+  try { isTouch = matchMedia('(hover: none) and (pointer: coarse)').matches; } catch (e) {}
+  if (!isTouch) { try { sessionStorage.removeItem('nw_fs'); } catch (e) {} }
+
   var FS_KEY = 'nw_fs';
   function isFull() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
   function reqFull() {
@@ -39,16 +46,18 @@
       reqFull();
     }
   }
-  document.addEventListener('dblclick', goFull);
-  var lastTap = 0;
-  document.addEventListener('touchend', function () {
-    var now = Date.now();
-    if (now - lastTap < 320) { goFull(); lastTap = 0; } else { lastTap = now; }
-  }, { passive: true });
+  if (isTouch) {
+    var lastTap = 0;
+    document.addEventListener('touchend', function () {
+      var now = Date.now();
+      if (now - lastTap < 320) { goFull(); lastTap = 0; } else { lastTap = now; }
+    }, { passive: true });
+  }
 
   // Restore fullscreen after a navigation: on the first user gesture of this page,
   // re-request it (only if the user last chose fullscreen and we're not already in it).
   (function () {
+    if (!isTouch) return;
     var want = false;
     try { want = sessionStorage.getItem(FS_KEY) === '1'; } catch (e) {}
     if (!want) return;
