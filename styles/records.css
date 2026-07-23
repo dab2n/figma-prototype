@@ -76,7 +76,8 @@
 .reveal-path {
   stroke-dasharray: 100 100;
   stroke-dashoffset: 100;
-  animation: line-run 4s cubic-bezier(.5,0,.2,1) infinite;
+  /* Wait for the ring dots to pop in first, then trace the line a beat later. */
+  animation: line-run 4s cubic-bezier(.5,0,.2,1) 1.6s infinite;
 }
 @keyframes line-run {
   0%   { stroke-dashoffset: 100; }   /* empty */
