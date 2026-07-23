@@ -56,6 +56,17 @@
   z-index: 0;
   pointer-events: none;
 }
+/* Layer white over the bottom of the figure so the feet dissolve into the page
+   (node 309:18051). Sits above the figure/dots/line but below the score labels. */
+.records-hero::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  top: 410px; height: 197px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.72) 42%, #fff 80%);
+  z-index: 3;
+  pointer-events: none;
+}
 
 /* Dashed body-map line + ring dots overlaying the figure */
 .body-graph {
@@ -65,12 +76,26 @@
   z-index: 1;
   pointer-events: none;
 }
+/* The dashed line keeps redrawing top→bottom (the order the dots appear). It's drawn
+   by revealing the visible dashes with a clip stroke; the visible dashes fade out at the
+   loop boundary BEFORE the clip resets, so a second line never overlaps the first. */
 .reveal-path {
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
-  animation: line-draw 1.15s ease .3s forwards;
+  animation: line-draw 2.6s cubic-bezier(.5,0,.2,1) infinite;
 }
-@keyframes line-draw { to { stroke-dashoffset: 0; } }
+.dashed-visible { animation: line-fade 2.6s ease infinite; }
+@keyframes line-draw {
+  0% { stroke-dashoffset: 100; }
+  36% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; }
+}
+@keyframes line-fade {
+  0%, 4% { opacity: 0; }
+  12% { opacity: .9; }
+  82% { opacity: .9; }
+  100% { opacity: 0; }
+}
 .body-dot {
   position: absolute;
   z-index: 2;
@@ -116,6 +141,8 @@
    seam; the cards carry their own fills. */
 .records-content { position: relative; background: transparent; padding: 0 0 40px; }
 .rec-section { padding: 0 12px; margin-top: 8px; }
+/* Sessions Summary → Recommendation for you gap = 56 (node 309:18052) */
+.rec-section + .rec-section { margin-top: 56px; }
 .rec-h { margin: 0 0 12px; padding: 0 8px; font-family: var(--font-supreme-bold); font-size: 18px; letter-spacing: -0.54px; color: var(--color-black); }
 
 .summary-row { display: flex; gap: 4px; margin-bottom: 12px; }
