@@ -32,6 +32,12 @@
 .notif-rich { display: none; align-items: center; justify-content: space-between; width: 100%; padding: 0 16px; box-sizing: border-box; }
 .phone.notif-open .notif-new { display: none; }
 .phone.notif-open .notif-rich { display: flex; }
+/* Tapping New Report: the avatar+title (left) and the Open button (right) spread
+   out from the centre to their resting edges — a quick, smooth outward expansion. */
+@keyframes rich-spread-left  { from { transform: translateX(92px);  opacity: 0; } }
+@keyframes rich-spread-right { from { transform: translateX(-92px); opacity: 0; } }
+.phone.notif-open .notif-left  { animation: rich-spread-left  .42s cubic-bezier(.22,.9,.3,1) both; }
+.phone.notif-open .report-open { animation: rich-spread-right .42s cubic-bezier(.22,.9,.3,1) both; }
 .notif-left { display: flex; align-items: center; gap: 8px; }
 .notif-av { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
 .notif-left span { color: #fff; font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; }

@@ -5,8 +5,12 @@
 .records-hero {
   position: relative;
   height: 560px;
-  overflow: hidden;
-  background: #fff;   /* backmost layer is pure white; the red comes from the figure image */
+  /* Backmost layer is pure white; a red gradient fills the very top (behind the
+     status bar / app bar) and fades down, so the figure image's own red joins it
+     seamlessly. No overflow:hidden — the figure's transparent bottom is left to
+     blend into the white content below (the content's white paints over the rest),
+     giving a borderless transition instead of a hard clipped edge. */
+  background: linear-gradient(180deg, #FA3030 0%, #FA3030 20%, rgba(250,48,48,0) 48%), #fff;
 }
 
 .records-appbar {
