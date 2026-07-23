@@ -305,9 +305,10 @@
 .swipe-detail.expanded .sheet-joined { opacity: 0; pointer-events: none; }
 .swipe-detail.expanded .sheet-explore { opacity: 1; pointer-events: auto; }
 /* Pulled OUT of the sheet: it represents the phone's own bottom bar, so it stays
-   pinned to the very bottom and does NOT move up with the Explore Packs push. */
-.swipe-detail > .home-indicator-row { position: absolute; left: 0; right: 0; bottom: 0; z-index: 7; }
-.joined-avatars .joined-more { width: 32px; height: 32px; border-radius: 999px; background: var(--color-neutral-600); border: 1px solid #fff; margin-right: 0; display: inline-block; }
+   pinned to the very bottom and does NOT move up with the Explore Packs push.
+   Descendant (not child) selector so it's always absolutely pinned to the bottom
+   — a stray static fallback would otherwise float up to the top of the frame. */
+.swipe-detail .home-indicator-row { position: absolute; left: 0; right: 0; bottom: 0; z-index: 7; }
 
 /* 평소 "more" button — warm translucent rounded square with horizontal dots */
 .kebab-tan {
