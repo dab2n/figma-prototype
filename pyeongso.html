@@ -78,19 +78,23 @@
 (function () {
   var screen = document.getElementById('swipeScreen');
   var hero = screen.querySelector('.hero-photo');
+  var sheet = document.getElementById('detailSheet');
   var COMMIT = 150;                 // px of upward push that commits to 올릴때
   var pushed = 0, committing = false, gestured = false;
 
   function isExpanded() { return screen.classList.contains('expanded'); }
 
-  // In 1회진입, an upward scroll/drag gradually pushes the top content up (its
-  // rounded r40 bottom is revealed over black); past COMMIT it hands off to 올릴때,
-  // so the two read as one continuous page transition. Released early → snap back.
+  // In 1회진입, an upward scroll/drag gradually pushes the WHOLE page up — the photo
+  // AND the Explore Packs container (black strip + up-arrow) move together as one,
+  // so it reads as a continuous page transition; past COMMIT it hands off to 올릴때.
   function setPush(px, animate) {
     pushed = Math.max(0, Math.min(px, COMMIT + 24));
+    var t = pushed ? 'translateY(' + (-pushed) + 'px)' : '';
     hero.style.transition = animate ? 'transform .32s ease, border-radius .32s ease' : 'none';
-    hero.style.transform = pushed ? 'translateY(' + (-pushed) + 'px)' : '';
+    hero.style.transform = t;
     hero.style.borderRadius = pushed ? '0 0 40px 40px' : '';
+    sheet.style.transition = animate ? 'transform .32s ease' : 'none';
+    sheet.style.transform = t;
     if (pushed >= COMMIT && !committing) { committing = true; window.location.href = 'ollilttae.html'; }
   }
 

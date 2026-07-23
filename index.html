@@ -175,9 +175,27 @@
     });
   }
 
+  // Reverse the reveal: content frame grows back and the notification is dismissed.
+  function restore() {
+    var from = 634, to = 700, dur = 360, s = null;
+    screen.style.height = from + 'px';
+    requestAnimationFrame(function step(t) {
+      if (s === null) s = t;
+      var p = Math.min((t - s) / dur, 1);
+      var e = 1 - Math.pow(1 - p, 3);
+      screen.style.height = (from + (to - from) * e) + 'px';
+      if (p < 1) requestAnimationFrame(step);
+      else { screen.style.height = ''; phone.classList.remove('notif-on', 'notif-open'); }
+    });
+  }
+
   setTimeout(reveal, 5000);
   document.getElementById('notifNew').addEventListener('click', function () {
     phone.classList.add('notif-open');
+  });
+  // Tap anywhere in the top content area (not the notification itself) → dismiss it.
+  screen.addEventListener('click', function () {
+    if (phone.classList.contains('notif-on')) restore();
   });
 })();
 </script>

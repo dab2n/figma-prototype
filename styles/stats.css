@@ -131,18 +131,21 @@
 .sbp-list { padding: 0 20px; }
 /* Row: title (Title/T2, 2-line) top-left + Match % (OffBit, bottom-aligned) right;
    12px top/bottom padding, Neutral/200 divider (node 276:22554). */
+/* Fixed 86px rows; title top-left, "sessions" and the % BOTTOM-aligned. */
 .sbp-row {
   display: flex;
-  align-items: stretch;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 12px;
+  height: 86px;
+  box-sizing: border-box;
   padding: 12px 0;
   border-bottom: 1px solid var(--color-neutral-200, #E5E5E5);
 }
-.sbp-row > div { display: flex; flex-direction: column; }
-.sbp-row .sbp-title { margin: 0 0 8px; max-width: 200px; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: #141A1A; }
+.sbp-row > div { align-self: stretch; display: flex; flex-direction: column; justify-content: space-between; }
+.sbp-row .sbp-title { margin: 0; max-width: 200px; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: #141A1A; }
 .sbp-row .sbp-sub { margin: 0; font-family: var(--font-supreme); font-size: 12px; line-height: 1.2; letter-spacing: -0.5px; color: #A3A3A3; }
-.sbp-row .sbp-pct { flex: none; align-self: flex-end; font-family: var(--font-offbit); font-weight: 700; font-size: 38px; line-height: 1; color: #050A0A; }
+.sbp-row .sbp-pct { flex: none; font-family: var(--font-offbit); font-weight: 700; font-size: 38px; line-height: 1; color: #050A0A; }
 .sbp-row .sbp-pct .u { font-size: 15px; }
 
 /* ── Library page ──────────────────────────────────────────────────────── */
@@ -194,10 +197,13 @@
 .lib-date { margin: 8px 0; padding: 0 8px; font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.5px; color: var(--color-neutral-500); }
 /* Card (node 151:4573): white, r20, p16, gap4; sport+kebab row, then title (left,
    bottom-aligned) vs Match Rate + % (right, bottom-aligned). */
+/* Card fixed 105px; title (biggest type) TOP-aligned with the Match Rate block. */
 .lib-card {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  height: 105px;
+  box-sizing: border-box;
   background: #fff;
   border-radius: 20px;
   padding: 16px;
@@ -209,9 +215,9 @@
 .lib-card .lib-sport { margin: 0; font-family: var(--font-supreme); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px; color: #3B3B3B; }
 .lib-card .lib-kebab { display: flex; align-items: center; gap: 3px; height: 20px; }
 .lib-card .lib-kebab i { width: 4px; height: 4px; border-radius: 50%; background: var(--color-neutral-400); }
-.lib-card .lib-body { display: flex; align-items: stretch; justify-content: space-between; gap: 12px; }
-.lib-card .lib-title { flex: 1; min-width: 0; max-width: 145px; margin: 0; align-self: flex-end; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: #141A1A; }
-.lib-card .lib-rate { flex: none; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 8px; }
+.lib-card .lib-body { flex: 1; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.lib-card .lib-title { flex: 1; min-width: 0; max-width: 145px; margin: 0; align-self: flex-start; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: #141A1A; }
+.lib-card .lib-rate { flex: none; display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-start; gap: 8px; }
 .lib-card .lib-rate .rate-label { margin: 0; font-family: var(--font-supreme); font-size: 12px; line-height: 1.2; letter-spacing: -0.5px; color: #A3A3A3; }
 .lib-card .lib-rate .rate-pct { font-family: var(--font-offbit); font-weight: 700; font-size: 38px; line-height: 1; color: #050A0A; }
 .lib-card .lib-rate .rate-pct .u { font-size: 15px; }
