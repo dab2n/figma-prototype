@@ -22,11 +22,11 @@
 
     <div class="my-appbar">
       <span class="handle">@Jiwoo</span>
-      <button class="more">···</button>
+      <a class="menu" href="settings.html" aria-label="설정"><span></span><span></span><span></span></a>
     </div>
 
     <div class="my-profile">
-      <img class="avatar" src="assets/photos/creator-profile-sean.png" alt="">
+      <img class="avatar" src="assets/photos/my-profile.png" alt="">
       <p class="name">Jiwoo Kim</p>
       <span class="tag"># Skilled User</span>
     </div>
@@ -37,14 +37,11 @@
       <div class="stat-col"><div class="num">24</div><div class="lbl">Friends</div></div>
     </div>
 
-    <div class="my-actions">
-      <a class="btn" href="#">Share</a>
-      <a class="btn" href="#">Edit Profile</a>
-    </div>
-
-    <div class="my-tabs" id="myTabs">
-      <button class="my-tab active" data-panel="saved"><img src="assets/icons/creator-bookmark.svg" alt="">Saved</button>
-      <button class="my-tab" data-panel="pack">My Pack</button>
+    <!-- Round segmented toggle (node 234:10261) — replaces the old Share/Edit
+         buttons + underline tabs. Active segment gets the gray fill. -->
+    <div class="my-tap" id="myTabs">
+      <button class="seg active" data-panel="saved"><img src="assets/icons/creator-bookmark.svg" alt="">Saved</button>
+      <button class="seg" data-panel="pack">My Pack</button>
     </div>
 
     <div class="my-panel active" data-panel="saved">
@@ -60,10 +57,10 @@
 
     <div class="my-panel" data-panel="pack">
       <div class="pack-grid">
-        <a class="pack-card" href="pyeongso.html"><div class="thumb" style="background-image:url('assets/photos/movement-boxing.png');"></div><p class="pk-title">Taekwondo Footwork</p><p class="pk-sub">18m</p></a>
-        <a class="pack-card" href="pyeongso.html"><div class="thumb" style="background-image:url('assets/photos/recent-running.png');"></div><p class="pk-title">Sprinter's First Step</p><p class="pk-sub">4m</p></a>
-        <a class="pack-card" href="pyeongso.html"><div class="thumb" style="background-image:url('assets/photos/rec-strength.png');"></div><p class="pk-title">Five-Minute Leg Burn</p><p class="pk-sub">5m</p></a>
-        <a class="pack-card" href="pyeongso.html"><div class="thumb" style="background-image:url('assets/photos/recent-basketball.png');"></div><p class="pk-title">Easy Interval Run</p><p class="pk-sub">21m</p></a>
+        <a class="pack-card" href="pyeongso.html"><div class="thumb" style="background-image:url('assets/photos/pack-taekwondo.png');"><span class="pk-hot"><img src="assets/icons/badge-fire.svg" alt="">HOT</span></div><p class="pk-title">Taekwondo Footwork</p><p class="pk-sub">18m</p></a>
+        <a class="pack-card" href="pyeongso.html"><div class="thumb" style="background-image:url('assets/photos/pack-sprinter.png');"></div><p class="pk-title">Sprinter's First Step</p><p class="pk-sub">4m</p></a>
+        <a class="pack-card" href="pyeongso.html"><div class="thumb" style="background-image:url('assets/photos/pack-legburn.png');"></div><p class="pk-title">Five-Minute Leg Burn</p><p class="pk-sub">5m</p></a>
+        <a class="pack-card" href="pyeongso.html"><div class="thumb" style="background-image:url('assets/photos/pack-interval.png');"></div><p class="pk-title">Easy Interval Run</p><p class="pk-sub">21m</p></a>
       </div>
     </div>
   </div>
@@ -83,9 +80,9 @@
   var tabs = document.getElementById('myTabs');
   var panels = document.querySelectorAll('.my-panel');
   tabs.addEventListener('click', function (e) {
-    var t = e.target.closest('.my-tab');
+    var t = e.target.closest('.seg');
     if (!t) return;
-    tabs.querySelectorAll('.my-tab').forEach(function (x) { x.classList.toggle('active', x === t); });
+    tabs.querySelectorAll('.seg').forEach(function (x) { x.classList.toggle('active', x === t); });
     panels.forEach(function (p) { p.classList.toggle('active', p.dataset.panel === t.dataset.panel); });
   });
 })();

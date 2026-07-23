@@ -65,6 +65,10 @@
   </nav>
 </div>
 <script>
+// Stagger the slide-in so the cards rise in sequence ("차라락") on open.
+document.querySelectorAll('#libList .lib-card').forEach(function (c, i) {
+  c.style.animationDelay = (i * 0.05) + 's';
+});
 // Sport filter: highlight the chip, show only matching cards, hide empty date groups.
 (function () {
   var chips = document.querySelectorAll('#libFilter .chip');

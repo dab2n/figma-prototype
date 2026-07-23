@@ -192,8 +192,12 @@
 }
 
 .lib-list { padding: 8px 16px 16px; }
-.lib-group { margin-top: 8px; }
+.lib-group { margin: 8px 0; }               /* each date section spaced 8 top & bottom */
 .lib-group.hidden { display: none; }
+
+/* "차라락" slide-in when the Library opens (staggered per card via JS animation-delay) */
+.lib-card { animation: lib-slide .42s cubic-bezier(.2,.85,.3,1) both; }
+@keyframes lib-slide { from { opacity: 0; transform: translateY(18px); } }
 .lib-date { margin: 8px 0; padding: 0 8px; font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.5px; color: var(--color-neutral-500); }
 /* Card (node 151:4573): white, r20, p16, gap4; sport+kebab row, then title (left,
    bottom-aligned) vs Match Rate + % (right, bottom-aligned). */

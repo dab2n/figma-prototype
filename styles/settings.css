@@ -1,0 +1,22 @@
+/* Settings page (node 1:1469) — reached from My via the hamburger. */
+.set-screen { background: var(--color-neutral-100); }
+
+.set-appbar { display: flex; align-items: center; padding: 8px 16px; }
+
+.set-list { display: flex; flex-direction: column; gap: 20px; padding: 6px 12px 24px; }
+
+.set-group { display: flex; flex-direction: column; gap: 8px; }
+.set-glabel { margin: 0; padding: 4px 12px; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-400); }
+
+.set-card { background: #fff; border-radius: 28px; padding: 12px 16px; }
+.set-row {
+  display: flex; align-items: center; gap: 4px;
+  padding: 4px 0 8px;
+  border-bottom: 1px solid var(--color-neutral-100);
+}
+.set-card .set-row:last-child { border-bottom: none; padding-bottom: 4px; }
+.set-k { font-family: var(--font-supreme-bold); font-size: 15px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-700); white-space: nowrap; }
+.set-v { margin-left: auto; max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-supreme); font-size: 15px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-400); }
+/* Right chevron drawn from a rotated corner (24px tap slot) */
+.chv { flex: none; width: 8px; height: 8px; margin: 0 8px 0 4px; border-top: 2px solid #c8c8c8; border-right: 2px solid #c8c8c8; transform: rotate(45deg); }
+.set-row .set-k + .chv { margin-left: auto; }
