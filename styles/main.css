@@ -221,8 +221,23 @@ button { font-family: inherit; }
   body .phone:has(> .tabbar) > .screen { height: calc(100dvh - 80px); border-radius: 0 0 40px 40px; }
   body .phone.notif-on:has(> .tabbar) > .screen { height: calc(100dvh - 80px - 66px); }
   /* Status bar: keep its 44px space but hide the 9:41 graphic on mobile — the real
-     device status bar occupies it. On the web it stays visible. */
+     device status bar normally occupies it. On the web it stays visible. */
   .status-bar .statusbar-svg { visibility: hidden; }
   /* Navbar pinned to the very bottom of the viewport on every tabbar page. */
   .tabbar { position: fixed; left: 0; bottom: 0; width: 100vw; }
+}
+
+/* Galaxy/Android in fullscreen (double-tap) or as an installed PWA hides the OS
+   status bar, so the top 44px goes blank. Reveal our own status bar there — it sits
+   on the transparent bar over the frame, so it's already filled with the main
+   background colour, exactly like the web view. In a normal browser tab the OS draws
+   the bar, so we keep ours hidden (above) to avoid a doubled bar. */
+@media (max-width: 400px) {
+  :root:fullscreen .status-bar .statusbar-svg { visibility: visible; }
+}
+@media (max-width: 400px) and (display-mode: fullscreen) {
+  .status-bar .statusbar-svg { visibility: visible; }
+}
+@media (max-width: 400px) and (display-mode: standalone) {
+  .status-bar .statusbar-svg { visibility: visible; }
 }
