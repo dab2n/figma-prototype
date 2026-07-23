@@ -206,5 +206,9 @@ button { font-family: inherit; }
    bezel, shadow) and let the phone go edge-to-edge. */
 @media (max-width: 400px) {
   body { padding: 0; align-items: stretch; min-height: 100dvh; }
-  .phone { border-radius: 0; box-shadow: none; }
+  /* Full-bleed on a phone: no frame corner radius, fill the whole viewport. */
+  .phone { width: 100vw; height: 100dvh; border-radius: 0; box-shadow: none; }
+  .phone > .screen,
+  .phone:has(> .tabbar) > .screen { border-radius: 0; }
+  .recap-screen, .records-screen, .swipe-detail, .creator-screen { height: 100dvh; }
 }

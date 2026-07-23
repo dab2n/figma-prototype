@@ -35,18 +35,23 @@
   gap: 10px;
   color: #fff;
 }
+/* Title/T2. Hidden while the % counts up; rises in from below once it hits 76. */
 .recap-match-label {
   margin: 0;
   font-family: var(--font-supreme-bold);
   font-size: 20px;
   line-height: 1.2;
   letter-spacing: -1px;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .45s ease, transform .5s cubic-bezier(.2,.8,.3,1);
 }
+.recap-match.done .recap-match-label { opacity: 1; transform: translateY(0); }
 .recap-pct { display: flex; align-items: flex-end; gap: 2px; }
 .recap-pct .num { font-family: var(--font-offbit); font-weight: 700; font-size: 60px; line-height: 0.95; }
 .recap-pct .unit { font-family: var(--font-supreme-bold); font-size: 32px; line-height: 1.2; letter-spacing: -1.5px; padding-bottom: 6px; }
 
-/* Pull-up handle at the very bottom. */
+/* Pull-up handle at the very bottom — bounces up twice on a loop, hinting "scroll up". */
 .recap-full {
   position: absolute;
   bottom: 24px;
@@ -56,6 +61,13 @@
   align-items: center;
   gap: 4px;
   text-decoration: none;
+  animation: hint-bounce 2.6s ease-in-out 1s infinite;
+}
+@keyframes hint-bounce {
+  0%, 42%, 100% { transform: translateY(0); }
+  12% { transform: translateY(-9px); }
+  24% { transform: translateY(0); }
+  33% { transform: translateY(-9px); }
 }
 .recap-full img { width: 20px; height: 20px; filter: brightness(0) invert(0.35); }
 .recap-full span { font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; color: var(--color-neutral-600); }

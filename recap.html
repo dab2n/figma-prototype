@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=360, viewport-fit=cover">
+<script src="assets/openext.js"></script>
 <title>Newton — Session Recap</title>
 <link rel="stylesheet" href="styles/main.css">
 <link rel="stylesheet" href="styles/recap.css">
@@ -35,6 +36,7 @@
     var p = Math.min((t - s) / dur, 1);
     el.textContent = Math.round((1 - Math.pow(1 - p, 2)) * target);   // ease-out
     if (p < 1) requestAnimationFrame(step);
+    else document.querySelector('.recap-match').classList.add('done');  // reveal "Outstanding Match"
   });
 })();
 
