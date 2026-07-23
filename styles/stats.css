@@ -2,14 +2,16 @@
    both sit behind a top Progress|Library toggle. */
 .stats-screen { background: var(--color-white); }
 
-/* Top segmented toggle */
+/* Top segmented toggle — sits in the 66px app-bar zone BELOW the 44px status bar */
 .stats-tabs {
-  position: relative;
+  position: absolute;
+  top: 44px; left: 0; right: 0;
+  height: 66px;
   z-index: 6;
   display: flex;
-  gap: 4px;
+  gap: 8px;
+  align-items: center;
   justify-content: center;
-  padding: 12px 0 8px;
 }
 .stat-tab {
   padding: 6px 16px;
@@ -18,9 +20,11 @@
   font-size: 16px;
   letter-spacing: -0.5px;
   text-decoration: none;
-  color: var(--color-neutral-500);
+  color: rgba(0,0,0,0.55);
 }
-.stat-tab.active { background: rgba(0,0,0,0.65); color: #fff; }
+.stat-tab.active { background: rgba(0,0,0,0.6); color: #fff; }
+.lib-screen .stat-tab { color: var(--color-neutral-500); }
+.lib-screen .stat-tab.active { background: rgba(0,0,0,0.6); color: #fff; }
 
 /* ── Progress page ─────────────────────────────────────────────────────── */
 .stats-bg {
@@ -30,15 +34,17 @@
   z-index: 0;
   pointer-events: none;
 }
+/* 설정타이틀본문: Display/D1 title + Body/Regular subtitle, centered, below the toggle */
 .stats-title {
-  position: relative;
+  position: absolute;
+  top: 110px; left: 0; right: 0;
   z-index: 5;
   text-align: center;
   color: #fff;
-  padding: 6px 16px 0;
+  padding: 0 16px;
 }
-.stats-title .st-title { margin: 0 0 6px; font-family: var(--font-supreme-bold); font-size: 26px; line-height: 1.2; letter-spacing: -1px; }
-.stats-title .st-sub { margin: 0; font-family: var(--font-supreme); font-size: 14px; letter-spacing: -0.5px; opacity: 0.85; }
+.stats-title .st-title { margin: 0 0 12px; font-family: var(--font-supreme-bold); font-size: 32px; line-height: 1.2; letter-spacing: -1.5px; }
+.stats-title .st-sub { margin: 0; font-family: var(--font-supreme); font-size: 15px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-100); }
 
 /* Body-map dots + drawn dashed line (overlaid on the figure) */
 .body-graph { position: absolute; top: 0; left: 0; width: 360px; height: 560px; z-index: 1; pointer-events: none; }
@@ -94,8 +100,9 @@
   flex-direction: column;
   justify-content: space-between;
 }
-.ov-card .ov-label { font-family: var(--font-supreme-bold); font-size: 13px; letter-spacing: -0.5px; color: var(--color-black); margin: 0 0 4px; }
-.ov-card .ov-pts { font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.5px; color: var(--color-neutral-500); margin: 0; }
+/* Caption/Bold title + Caption/Regular red pts (both 13px, line-height 1.2) */
+.ov-card .ov-label { font-family: var(--font-supreme-bold); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px; color: var(--color-black); margin: 0 0 4px; }
+.ov-card .ov-pts { font-family: var(--font-supreme); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px; color: var(--color-red); margin: 0; }
 .ov-card .ov-num { font-family: var(--font-offbit); font-weight: 700; font-size: 42px; line-height: 1; color: var(--color-black); }
 .ov-row2 { display: flex; gap: 4px; padding: 0 12px; }
 .ov-wide {

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<script src="assets/openext.js"></script>
+<title>Newton — My</title>
+<link rel="stylesheet" href="styles/main.css">
+<link rel="stylesheet" href="styles/my.css">
+</head>
+<body>
+<div class="phone">
+  <div class="screen my-screen">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <div class="my-appbar">
+      <span class="handle">@Jiwoo</span>
+      <button class="more">···</button>
+    </div>
+
+    <div class="my-profile">
+      <img class="avatar" src="assets/photos/creator-profile-sean.png" alt="">
+      <p class="name">Jiwoo Kim</p>
+      <span class="tag"># Skilled User</span>
+    </div>
+
+    <div class="my-stats">
+      <div class="stat-col"><div class="num">12</div><div class="lbl">Saved</div></div>
+      <div class="stat-col"><div class="num">3</div><div class="lbl">Created</div></div>
+      <div class="stat-col"><div class="num">24</div><div class="lbl">Friends</div></div>
+    </div>
+
+    <div class="my-actions">
+      <a class="btn" href="#">Share</a>
+      <a class="btn" href="#">Edit Profile</a>
+    </div>
+
+    <div class="my-tabs" id="myTabs">
+      <button class="my-tab active" data-panel="saved"><img src="assets/icons/creator-bookmark.svg" alt="">Saved</button>
+      <button class="my-tab" data-panel="pack">My Pack</button>
+    </div>
+
+    <div class="my-panel active" data-panel="saved">
+      <div class="saved-grid">
+        <a class="cell wide" href="pyeongso.html" style="background-image:url('assets/photos/rec-curry.png');"><span class="badge">Creator</span></a>
+        <a class="cell" href="pyeongso.html" style="background-image:url('assets/photos/movement-boxing.png');"></a>
+        <a class="cell tall" href="pyeongso.html" style="background-image:url('assets/photos/cardbg-akiyama.png');"><span class="badge">Pro</span></a>
+        <a class="cell" href="pyeongso.html" style="background-image:url('assets/photos/recent-tennis.png');"><span class="badge">Skilled</span></a>
+        <a class="cell" href="pyeongso.html" style="background-image:url('assets/photos/recent-running.png');"><span class="badge">Creator</span></a>
+        <a class="cell wide" href="pyeongso.html" style="background-image:url('assets/photos/rec-ladder.png');"></a>
+      </div>
+    </div>
+
+    <div class="my-panel" data-panel="pack">
+      <div class="pack-grid">
+        <a class="pack-card" href="pyeongso.html"><div class="thumb" style="background-image:url('assets/photos/movement-boxing.png');"></div><p class="pk-title">Taekwondo Footwork</p><p class="pk-sub">18m</p></a>
+        <a class="pack-card" href="pyeongso.html"><div class="thumb" style="background-image:url('assets/photos/recent-running.png');"></div><p class="pk-title">Sprinter's First Step</p><p class="pk-sub">4m</p></a>
+        <a class="pack-card" href="pyeongso.html"><div class="thumb" style="background-image:url('assets/photos/rec-strength.png');"></div><p class="pk-title">Five-Minute Leg Burn</p><p class="pk-sub">5m</p></a>
+        <a class="pack-card" href="pyeongso.html"><div class="thumb" style="background-image:url('assets/photos/recent-basketball.png');"></div><p class="pk-title">Easy Interval Run</p><p class="pk-sub">21m</p></a>
+      </div>
+    </div>
+  </div>
+  <nav class="tabbar">
+    <div class="tabs">
+      <a href="index.html"><img src="assets/icons/nav-home.svg" alt="홈"></a>
+      <a href="packs.html"><img src="assets/icons/nav-packs.svg" alt="팩"></a>
+      <a href="progress.html"><img src="assets/icons/nav-stats.svg" alt="통계"></a>
+      <a href="my.html" class="active"><img src="assets/icons/nav-profile.svg" alt="프로필"><span class="dot"></span></a>
+    </div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
+</div>
+<script>
+// Saved | My Pack toggle
+(function () {
+  var tabs = document.getElementById('myTabs');
+  var panels = document.querySelectorAll('.my-panel');
+  tabs.addEventListener('click', function (e) {
+    var t = e.target.closest('.my-tab');
+    if (!t) return;
+    tabs.querySelectorAll('.my-tab').forEach(function (x) { x.classList.toggle('active', x === t); });
+    panels.forEach(function (p) { p.classList.toggle('active', p.dataset.panel === t.dataset.panel); });
+  });
+})();
+</script>
+</body>
+</html>
