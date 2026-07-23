@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<script src="assets/openext.js"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NEWTON">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#ffffff">
+<title>Newton — Setup · Level/Mode</title>
+<link rel="stylesheet" href="styles/main.css">
+<link rel="stylesheet" href="styles/setup.css">
+</head>
+<body>
+<div class="phone">
+  <div class="screen setup-screen">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <div class="setup-appbar">
+      <a class="back" href="setup-injury.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
+      <a class="skip" href="recap.html">Skip</a>
+    </div>
+
+    <div class="setup-title">
+      <h1>Pick your level<br>&amp; assist mode</h1>
+    </div>
+
+    <div class="setup-body">
+      <div class="setup-sec">
+        <p class="setup-sec-label">Difficulty</p>
+        <div class="diff-row" data-single>
+          <button class="diff-seg" data-toggle>Guided</button>
+          <button class="diff-seg" data-toggle>Standard</button>
+          <button class="diff-seg" data-toggle>Near-Pro</button>
+        </div>
+      </div>
+
+      <div class="setup-sec">
+        <p class="setup-sec-label">Assist Mode</p>
+        <div class="mode-scroll" data-group>
+          <button class="mode-card" data-toggle>
+            <div class="fig" style="background-image:url('assets/photos/setup-mode-quiet.png');"></div>
+            <span class="mc-badge">Recommended</span>
+            <span class="mc-check"></span>
+            <p class="mc-title">Quiet On</p>
+            <p class="mc-desc">Reduced landing impact · minimal indoor noise</p>
+          </button>
+          <button class="mode-card" data-toggle>
+            <div class="fig" style="background-image:url('assets/photos/setup-mode-pace.png');"></div>
+            <span class="mc-check"></span>
+            <p class="mc-title">Pace On</p>
+            <p class="mc-desc">Auto-corrects knee and ankle wobble</p>
+          </button>
+          <button class="mode-card" data-toggle>
+            <div class="fig" style="background-image:url('assets/photos/setup-mode-load.png');"></div>
+            <span class="mc-check"></span>
+            <p class="mc-title">Load On</p>
+            <p class="mc-desc">Build strength with added resistance</p>
+          </button>
+          <button class="mode-card" data-toggle>
+            <div class="fig" style="background-image:url('assets/photos/setup-mode-boost.png');"></div>
+            <span class="mc-check"></span>
+            <p class="mc-title">Boost On</p>
+            <p class="mc-desc">Automatic pace support in the final stretch</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="tabbar setup-stepbar">
+    <div class="steps-wrap"><div class="steps">
+      <a class="step" href="setup-location.html">Location</a>
+      <a class="step" href="setup-condition.html">Condition</a>
+      <a class="step" href="setup-injury.html">Injury check</a>
+      <a class="step active" href="setup-level.html">Level/Mode</a>
+      <a class="step" href="recap.html">Main Workout</a>
+    </div></div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
+</div>
+<script src="assets/setup.js"></script>
+</body>
+</html>

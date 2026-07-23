@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<script src="assets/openext.js"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NEWTON">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#ffffff">
+<title>Newton — Setup · Injury check</title>
+<link rel="stylesheet" href="styles/main.css">
+<link rel="stylesheet" href="styles/setup.css">
+</head>
+<body>
+<div class="phone">
+  <div class="screen setup-screen">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <div class="setup-appbar">
+      <a class="back" href="setup-condition.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
+      <a class="skip" href="setup-level.html">Skip</a>
+    </div>
+
+    <div class="setup-title">
+      <h1>Any areas<br>bothering you?</h1>
+      <p>We’ll reduce strain on those areas.</p>
+    </div>
+
+    <div class="injury-stage">
+      <video src="assets/photos/injury-check.mp4" autoplay loop muted playsinline preload="auto"></video>
+      <div class="injury-plate"></div>
+      <div class="injury-arrow">↔</div>
+    </div>
+
+    <div class="setup-body">
+      <div class="chip-rows" data-group>
+        <div class="chip-row">
+          <button class="chip-sel" data-toggle>None</button>
+          <button class="chip-sel" data-toggle>Lower Back</button>
+          <button class="chip-sel" data-toggle>Left Arm</button>
+        </div>
+        <div class="chip-row">
+          <button class="chip-sel" data-toggle>Ankle · Sole</button>
+          <button class="chip-sel" data-toggle>Knee</button>
+          <button class="chip-sel" data-toggle>Right Arm</button>
+          <button class="chip-sel" data-toggle>Calf</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="tabbar setup-stepbar">
+    <div class="steps-wrap"><div class="steps">
+      <a class="step" href="setup-location.html">Location</a>
+      <a class="step" href="setup-condition.html">Condition</a>
+      <a class="step active" href="setup-injury.html">Injury check</a>
+      <a class="step" href="setup-level.html">Level/Mode</a>
+      <a class="step" href="recap.html">Main Workout</a>
+    </div></div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
+</div>
+<script src="assets/setup.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<script src="assets/openext.js"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NEWTON">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#ffffff">
+<title>Newton — Setup · Location</title>
+<link rel="stylesheet" href="styles/main.css">
+<link rel="stylesheet" href="styles/setup.css">
+</head>
+<body>
+<div class="phone">
+  <div class="screen setup-screen">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <div class="setup-appbar">
+      <a class="back" href="pyeongso.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
+      <a class="skip" href="setup-condition.html">Skip</a>
+    </div>
+
+    <div class="setup-title">
+      <h1>Where are you<br>working out today?</h1>
+    </div>
+
+    <div class="setup-body">
+      <div class="setup-sec">
+        <p class="setup-sec-label">Location</p>
+        <div class="toggle-row" data-single>
+          <button class="toggle-btn" data-toggle><img src="assets/photos/setup-indoor.svg" alt=""><span>Indoor</span></button>
+          <button class="toggle-btn" data-toggle><img src="assets/photos/setup-outdoor.svg" alt=""><span>Outdoor</span></button>
+        </div>
+      </div>
+
+      <div class="setup-sec">
+        <p class="setup-sec-label">Today’s Goal</p>
+        <div class="card-list" data-single>
+          <button class="card-sel" data-toggle><span class="cs-title">Beginner</span><span class="cs-desc">Following along for the first time</span></button>
+          <button class="card-sel" data-toggle><span class="cs-title">Standard</span><span class="cs-desc">Getting used to the flow</span></button>
+          <button class="card-sel" data-toggle><span class="cs-title">Near-Original</span><span class="cs-desc">Performing close to the real movement</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="tabbar setup-stepbar">
+    <div class="steps-wrap"><div class="steps">
+      <a class="step active" href="setup-location.html">Location</a>
+      <a class="step" href="setup-condition.html">Condition</a>
+      <a class="step" href="setup-injury.html">Injury check</a>
+      <a class="step" href="setup-level.html">Level/Mode</a>
+      <a class="step" href="recap.html">Main Workout</a>
+    </div></div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
+</div>
+<script src="assets/setup.js"></script>
+</body>
+</html>

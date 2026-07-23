@@ -1,0 +1,100 @@
+/* ── Setup / onboarding flow ──────────────────────────────────────────────
+   Reached from the red Start button (평소 / 올릴때). 4 steps on a gray frame with
+   a black bottom step-bar: Location → Condition → Injury check → Level/Mode →
+   Main Workout. Every option is a toggle: tap to fill (Newton gradient + inner
+   glow), tap again to clear. Fonts/effects mirror the Figma library exactly. */
+.setup-screen { background: var(--color-neutral-100); }
+/* Status bar blends into the gray frame (see settings.css for the technique). */
+.setup-screen .status-bar { background: var(--color-neutral-100); }
+.setup-screen .statusbar-svg { mix-blend-mode: multiply; }
+
+/* App bar: back (left) + Skip (right) */
+.setup-appbar { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; box-sizing: border-box; }
+.setup-appbar .back { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+.setup-appbar .back img { width: 24px; height: 24px; display: block; }
+.setup-appbar .skip { font-family: var(--font-supreme); font-size: 16px; letter-spacing: -0.5px; color: var(--color-neutral-900); text-decoration: none; }
+
+/* Title (Display/D1) + optional subtitle (Body/Regular) */
+.setup-title { padding: 8px 16px 24px; }
+.setup-title h1 { margin: 0; font-family: var(--font-supreme-bold); font-size: 32px; line-height: 1.2; letter-spacing: -1.5px; color: var(--color-black); }
+.setup-title p { margin: 8px 0 0; font-family: var(--font-supreme); font-size: 15px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-500); }
+
+.setup-body { padding: 0 12px 24px; display: flex; flex-direction: column; gap: 32px; }
+.setup-sec { display: flex; flex-direction: column; gap: 8px; }
+.setup-sec-label { margin: 0; padding: 0 12px; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-700); }
+
+/* Shared default card shadow (연한카드) + the selected fill (gradient + drop
+   shadow + white inner glow) registered in the Figma library. */
+.card-sel, .toggle-btn, .diff-seg, .mode-card { box-shadow: 0 14px 54px 10px rgba(0,0,0,0.03); }
+.card-sel.sel, .toggle-btn.sel, .diff-seg.sel, .chip-sel.sel, .mode-card.sel {
+  background: linear-gradient(180deg, #FA3030 48%, #FE6E3C 77.6%, #FEC389 100.5%, #D1FEFF 107.5%);
+  box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6);
+}
+
+/* Card-select (Today's Goal, Condition) */
+.card-list { display: flex; flex-direction: column; gap: 4px; }
+.card-sel {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+  width: 100%; box-sizing: border-box; text-align: left; cursor: pointer;
+  background: #fff; border: none; border-radius: 20px; padding: 16px 20px;
+}
+.card-sel .cs-title { margin: 0; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
+.card-sel .cs-desc { margin: 0; font-family: var(--font-supreme); font-size: 14px; line-height: 1.4; letter-spacing: -0.42px; color: var(--color-neutral-600); }
+.card-sel.sel .cs-title { color: #fff; }
+.card-sel.sel .cs-desc { color: var(--color-neutral-50); }
+
+/* Indoor/Outdoor toggle + Difficulty 3-segment */
+.toggle-row { display: flex; gap: 4px; }
+.toggle-btn { flex: 1; display: flex; align-items: center; gap: 12px; min-width: 0; box-sizing: border-box; cursor: pointer; background: #fff; border: none; border-radius: 16px; padding: 16px 20px; }
+.toggle-btn img { width: 34px; height: 34px; display: block; }
+.toggle-btn span { font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
+.toggle-btn.sel span { color: #fff; }
+.toggle-btn.sel img { filter: brightness(0) invert(1); }
+
+.diff-row { display: flex; gap: 4px; }
+.diff-seg { flex: 1; display: flex; align-items: center; justify-content: center; height: 66px; box-sizing: border-box; cursor: pointer; background: #fff; border: none; border-radius: 16px; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
+.diff-seg.sel { color: #fff; }
+
+/* Injury chips */
+.chip-rows { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.chip-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.chip-sel { display: inline-flex; align-items: center; height: 32px; box-sizing: border-box; cursor: pointer; background: #fff; border: none; border-radius: 999px; padding: 0 16px; font-family: var(--font-supreme); font-size: 14px; letter-spacing: -0.4px; color: var(--color-neutral-700); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.chip-sel.sel { color: #fff; box-shadow: 0 6px 18px 2px rgba(250,48,48,0.25), inset 0 0 16px 6px rgba(255,255,255,0.6); }
+
+/* Injury graphic (video) + platform */
+.injury-stage { position: relative; height: 380px; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+.injury-stage video { height: 360px; width: auto; object-fit: contain; display: block; }
+.injury-plate { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 300px; height: 42px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,255,255,0.9), rgba(255,255,255,0)); }
+.injury-plate::after { content: ""; position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); width: 56px; height: 12px; border-radius: 6px; background: #fff; opacity: 0.85; }
+.injury-arrow { position: absolute; left: 50%; bottom: 42px; transform: translateX(-50%); width: 24px; height: 24px; opacity: 0.9; display: flex; align-items: center; justify-content: center; color: var(--color-neutral-600); font-size: 18px; }
+
+/* Assist Mode — horizontal scroll of figure cards */
+.mode-scroll { display: flex; gap: 8px; overflow-x: auto; margin: 0 -12px; padding: 0 12px 4px; scrollbar-width: none; }
+.mode-scroll::-webkit-scrollbar { display: none; }
+.mode-card {
+  position: relative; flex: 0 0 200px; height: 200px; box-sizing: border-box;
+  display: flex; flex-direction: column; justify-content: flex-end; gap: 4px;
+  text-align: left; cursor: pointer; overflow: hidden;
+  background: #fff; border: none; border-radius: 20px; padding: 16px;
+}
+.mode-card .fig { position: absolute; top: -46px; left: -8px; right: -8px; height: 200px; background-size: cover; background-position: top center; }
+.mode-card .fig::after { content: ""; position: absolute; inset: 0; background: #FA3030; mix-blend-mode: color; opacity: 0.72; }
+.mode-card.sel .fig { mix-blend-mode: plus-lighter; opacity: 0.55; }
+.mode-card.sel .fig::after { opacity: 0; }
+.mode-card .mc-title { position: relative; margin: 0; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
+.mode-card .mc-desc { position: relative; margin: 0; font-family: var(--font-supreme); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px; color: var(--color-neutral-500); }
+.mode-card.sel .mc-title { color: #fff; }
+.mode-card.sel .mc-desc { color: var(--color-neutral-50); }
+.mode-card .mc-badge { position: absolute; top: 16px; left: 50%; transform: translateX(-50%); z-index: 2; padding: 3px 10px; border-radius: 999px; background: rgba(255,255,255,0.9); font-family: var(--font-supreme); font-size: 12px; letter-spacing: -0.4px; color: var(--color-neutral-700); white-space: nowrap; }
+.mode-card .mc-check { position: absolute; top: 14px; right: 14px; z-index: 2; width: 24px; height: 24px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.9); box-sizing: border-box; display: none; align-items: center; justify-content: center; }
+.mode-card.sel .mc-check { display: flex; background: #fff; border-color: #fff; }
+.mode-card .mc-check::after { content: ""; width: 10px; height: 6px; border-left: 2px solid #FA3030; border-bottom: 2px solid #FA3030; transform: rotate(-45deg) translate(0,-1px); }
+
+/* Bottom step bar (uses .tabbar so it inherits the black bar, frame system,
+   inverted radius and mobile bottom-pinning). Steps scroll so the active one
+   centers; active = Bold 20 white, others = Regular 16 gray. */
+.setup-stepbar { justify-content: flex-end; gap: 14px; padding-top: 12px; }
+.setup-stepbar .steps-wrap { width: 100%; overflow: hidden; }
+.setup-stepbar .steps { display: inline-flex; align-items: center; gap: 24px; white-space: nowrap; transition: transform .35s cubic-bezier(.4,0,.2,1); padding: 0 20px; }
+.setup-stepbar .step { flex: none; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-500); text-decoration: none; }
+.setup-stepbar .step.active { font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: #fff; }
