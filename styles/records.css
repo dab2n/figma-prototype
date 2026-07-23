@@ -2,15 +2,13 @@
 
 /* ── Hero: red gradient field with a blurred body figure, a radar of body-area
    scores, and the session pill/date. Fades into the white content below. ── */
+/* One continuous page: .records-screen is the white backmost layer; the figure
+   image bleeds from the very top (its own red reaches the status bar, its
+   transparent bottom fades into the white). The hero is just a transparent
+   positioning region — no background, no clip, so there's no seam. */
 .records-hero {
   position: relative;
   height: 560px;
-  /* Backmost layer is pure white; a red gradient fills the very top (behind the
-     status bar / app bar) and fades down, so the figure image's own red joins it
-     seamlessly. No overflow:hidden — the figure's transparent bottom is left to
-     blend into the white content below (the content's white paints over the rest),
-     giving a borderless transition instead of a hard clipped edge. */
-  background: linear-gradient(180deg, #FA3030 0%, #FA3030 20%, rgba(250,48,48,0) 48%), #fff;
 }
 
 .records-appbar {
@@ -49,22 +47,48 @@
   z-index: 5;
 }
 
-/* The person graphic (arms-out figure, pre-composed on its own red→white gradient). */
+/* The person graphic (pre-composed on its own red→transparent gradient), attached
+   to the top of the viewport, sitting on the white page. */
 .records-body {
   position: absolute;
-  top: 74px; left: 0;
+  top: 0; left: 0;
   width: 360px; height: auto;
+  z-index: 0;
   pointer-events: none;
 }
-.records-skeleton { position: absolute; left: 140px; top: 246px; width: 78px; height: 163px; opacity: 0.9; pointer-events: none; }
-.rec-dot {
+
+/* Dashed body-map line + ring dots overlaying the figure */
+.body-graph {
   position: absolute;
-  width: 8px; height: 8px;
+  top: 0; left: 0;
+  width: 360px; height: 560px;
+  z-index: 1;
+  pointer-events: none;
+}
+.reveal-path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: line-draw 1.15s ease .3s forwards;
+}
+@keyframes line-draw { to { stroke-dashoffset: 0; } }
+.body-dot {
+  position: absolute;
+  z-index: 2;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.95);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: dot-pop .4s cubic-bezier(.2,1.35,.4,1) var(--dot, 0s) both;
+}
+.body-dot::after {
+  content: "";
+  width: 38%; height: 38%;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 0 6px rgba(255,255,255,0.9);
-  z-index: 3;
 }
+@keyframes dot-pop { from { opacity: 0; transform: scale(.2); } }
 
 /* Body-area score labels floated over the figure. On first entry each one gently
    rises into place (once), staggered top→bottom via the inline --d delay. */
@@ -88,7 +112,9 @@
 .stat .num-row .d { font-family: var(--font-offbit); font-weight: 700; font-size: 11px; opacity: 0.9; }
 
 /* ── White content ─────────────────────────────────────────────────────── */
-.records-content { position: relative; background: #fff; padding: 0 0 40px; margin-top: -1px; }
+/* Transparent so the figure's faded bottom + the white page show through with no
+   seam; the cards carry their own fills. */
+.records-content { position: relative; background: transparent; padding: 0 0 40px; }
 .rec-section { padding: 0 12px; margin-top: 8px; }
 .rec-h { margin: 0 0 12px; padding: 0 8px; font-family: var(--font-supreme-bold); font-size: 18px; letter-spacing: -0.54px; color: var(--color-black); }
 
