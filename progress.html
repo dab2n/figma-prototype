@@ -20,23 +20,16 @@
       <a class="stat-tab" href="library.html">Library</a>
     </div>
 
-    <div class="stats-title">
-      <p class="st-title">All 5 metrics improved</p>
-      <p class="st-sub">Darker areas improved the most</p>
-    </div>
-
-    <!-- Dots + drawn line overlaying the figure (aligned to node 319:18919) -->
+    <!-- Title + ring dots are baked into the background image; overlay only the
+         animated dashed line so it draws once with no duplication. -->
     <svg class="body-graph" viewBox="0 0 360 560" preserveAspectRatio="none" aria-hidden="true">
       <defs>
         <clipPath id="lineReveal">
-          <path class="reveal-path" d="M137 286 L214 382 L137 454" fill="none" stroke="#000" stroke-width="14" pathLength="100"/>
+          <path class="reveal-path" d="M131 288 L214 388 L131 456" fill="none" stroke="#000" stroke-width="14" pathLength="100"/>
         </clipPath>
       </defs>
-      <path d="M137 286 L214 382 L137 454" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="3 5" stroke-linecap="round" opacity="1" clip-path="url(#lineReveal)"/>
+      <path d="M131 288 L214 388 L131 456" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="3 5" stroke-linecap="round" opacity="1" clip-path="url(#lineReveal)"/>
     </svg>
-    <span class="body-dot" style="left:125px; top:274px; width:23.6px; height:23.6px; --dot:.4s;"></span>
-    <span class="body-dot" style="left:203px; top:371px; width:21px; height:21px; --dot:.85s;"></span>
-    <span class="body-dot" style="left:121px; top:438px; width:31px; height:31px; --dot:1.3s;"></span>
 
     <div class="stat s-sm" style="left:96px; top:213px; align-items:flex-end; --d:.05s;"><p>Rhythm</p><div class="num-row"><span class="n">72</span><span class="d">+24</span></div></div>
     <div class="stat s-lg" style="left:47px; top:356px; --d:.15s;"><p>Balance</p><div class="num-row"><span class="n">85</span><span class="d">+25</span></div></div>
@@ -55,8 +48,8 @@
           <div class="ov-card"><div><p class="ov-label">Stability</p><p class="ov-pts">+13 pts</p></div><span class="ov-num">68</span></div>
         </div>
         <div class="ov-row2">
-          <div class="ov-card"><div><p class="ov-label">Agility</p><p class="ov-pts">+19 pts</p></div><span class="ov-num">61</span></div>
-          <div class="ov-card"><div><p class="ov-label">Endurance</p><p class="ov-pts">+22 pts</p></div><span class="ov-num">51</span></div>
+          <div class="ov-wide"><div class="ov-txt"><p class="ov-label">Agility</p><p class="ov-pts">+19 pts</p></div><span class="ov-num">61</span></div>
+          <div class="ov-wide"><div class="ov-txt"><p class="ov-label">Endurance</p><p class="ov-pts">+22 pts</p></div><span class="ov-num">51</span></div>
         </div>
       </section>
 
