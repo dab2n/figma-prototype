@@ -5,7 +5,8 @@
   var wrap   = steps && steps.parentElement;
   var next   = active && active.nextElementSibling;
   if (next && !next.classList.contains('step')) next = null;
-  var SHIFT = 72;   // active starts this far RIGHT of centre; completing slides it left to centre.
+  var SHIFT = 72;   // on load the active step sits centred; completing slides the row left
+                    // by this much so the (nudged) next step moves toward centre.
 
   // Required input groups: single-select cards/toggles, and the multi-select injury/mode groups.
   var groups = document.querySelectorAll('.setup-body [data-single], .setup-body [data-group]');
@@ -16,7 +17,7 @@
   function place(done) {
     if (!active || !wrap) return;
     var centre = wrap.clientWidth / 2 - (active.offsetLeft + active.offsetWidth / 2);
-    steps.style.transform = 'translateX(' + (done ? centre : centre + SHIFT) + 'px)';
+    steps.style.transform = 'translateX(' + (done ? centre - SHIFT : centre) + 'px)';
   }
 
   var done = null;
