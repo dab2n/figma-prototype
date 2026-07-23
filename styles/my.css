@@ -43,17 +43,45 @@
 .my-panel { display: none; padding: 12px; }
 .my-panel.active { display: block; }
 
-/* Saved: masonry grid of thumbnails */
-.saved-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-rows: 109px; gap: 4px; }
-.saved-grid .cell { border-radius: 12px; background-size: cover; background-position: center; overflow: hidden; position: relative; }
-.saved-grid .wide { grid-column: span 2; }
-.saved-grid .tall { grid-row: span 2; }
-.saved-grid .cell .badge {
-  position: absolute; top: 8px; left: 8px;
-  padding: 3px 8px; border-radius: 80px;
-  background: rgba(0,0,0,0.55); color: #fff;
-  font-family: var(--font-supreme); font-size: 11px; letter-spacing: -0.4px;
+/* Saved: masonry grid (node 1:1421) — 3 cols, 3 rows, two wide + one tall cell */
+.saved-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 108px); gap: 4px; }
+.saved-grid .cell {
+  position: relative;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  display: flex; align-items: flex-start; justify-content: flex-end;
+  padding: 8px;
 }
+.saved-grid .c1 { grid-area: 1 / 1 / 2 / 3; }
+.saved-grid .c2 { grid-area: 1 / 3 / 2 / 4; }
+.saved-grid .c3 { grid-area: 2 / 1 / 4 / 2; align-items: flex-end; }
+.saved-grid .c4 { grid-area: 2 / 2 / 3 / 3; }
+.saved-grid .c5 { grid-area: 2 / 3 / 3 / 4; }
+.saved-grid .c6 { grid-area: 3 / 2 / 4 / 4; }
+.sv-badge {
+  position: relative; z-index: 1;
+  padding: 4px 8px; border-radius: 12px;
+  font-family: var(--font-supreme); font-size: 11px; color: #fff; white-space: nowrap;
+}
+.sv-pro      { background: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), #E02321; }
+.sv-skilled  { background: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), rgba(28,70,112,0.85); }
+.sv-creator  { background: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), rgba(150,193,228,0.9); }
+.sv-creator2 { background: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), rgba(168,171,6,0.82); }
+.sv-creator3 { background: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), rgba(129,162,177,0.85); }
+.sv-prodark  { background: rgba(0,0,0,0.38); }
+
+/* "차라락" slide-in when a panel becomes active */
+.my-panel.active .cell,
+.my-panel.active .pack-card { animation: my-slide .42s cubic-bezier(.2,.85,.3,1) both; }
+.my-panel.active > *:nth-child(1) .pack-card, .my-panel.active .cell:nth-child(1) { animation-delay: .02s; }
+.my-panel.active .cell:nth-child(2), .my-panel.active .pack-card:nth-child(2) { animation-delay: .07s; }
+.my-panel.active .cell:nth-child(3), .my-panel.active .pack-card:nth-child(3) { animation-delay: .12s; }
+.my-panel.active .cell:nth-child(4), .my-panel.active .pack-card:nth-child(4) { animation-delay: .17s; }
+.my-panel.active .cell:nth-child(5) { animation-delay: .22s; }
+.my-panel.active .cell:nth-child(6) { animation-delay: .27s; }
+@keyframes my-slide { from { opacity: 0; transform: translateY(18px); } }
 
 /* My Pack: 2-col titled cards */
 .pack-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

@@ -50,13 +50,13 @@
       <section>
         <p class="sec-title">Progress Overview</p>
         <div class="ov-row3">
-          <div class="ov-card"><div><p class="ov-label">Balance</p><p class="ov-pts">+25 pts</p></div><span class="ov-num" data-n="85">0</span></div>
-          <div class="ov-card"><div><p class="ov-label">Rhythm</p><p class="ov-pts">+24 pts</p></div><span class="ov-num" data-n="72">0</span></div>
-          <div class="ov-card"><div><p class="ov-label">Stability</p><p class="ov-pts">+13 pts</p></div><span class="ov-num" data-n="68">0</span></div>
+          <div class="ov-card"><div><p class="ov-label">Balance</p><p class="ov-pts">+25 pts</p></div><span class="ov-num">85</span></div>
+          <div class="ov-card"><div><p class="ov-label">Rhythm</p><p class="ov-pts">+24 pts</p></div><span class="ov-num">72</span></div>
+          <div class="ov-card"><div><p class="ov-label">Stability</p><p class="ov-pts">+13 pts</p></div><span class="ov-num">68</span></div>
         </div>
         <div class="ov-row2">
-          <div class="ov-wide"><div class="ov-txt"><p class="ov-label">Agility</p><p class="ov-pts">+19 pts</p></div><span class="ov-num" data-n="61">0</span></div>
-          <div class="ov-wide"><div class="ov-txt"><p class="ov-label">Endurance</p><p class="ov-pts">+22 pts</p></div><span class="ov-num" data-n="51">0</span></div>
+          <div class="ov-card"><div><p class="ov-label">Agility</p><p class="ov-pts">+19 pts</p></div><span class="ov-num">61</span></div>
+          <div class="ov-card"><div><p class="ov-label">Endurance</p><p class="ov-pts">+22 pts</p></div><span class="ov-num">51</span></div>
         </div>
       </section>
 
@@ -89,18 +89,5 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script>
-// Progress Overview numbers count up once on entry. Sessions by Pack: no motion.
-(function () {
-  var els = document.querySelectorAll('.ov-num');
-  var dur = 900, s = null;
-  requestAnimationFrame(function step(t) {
-    if (s === null) s = t;
-    var p = Math.min((t - s) / dur, 1), e = 1 - Math.pow(1 - p, 2);
-    els.forEach(function (el) { el.textContent = Math.round(e * (+el.dataset.n)); });
-    if (p < 1) requestAnimationFrame(step);
-  });
-})();
-</script>
 </body>
 </html>
