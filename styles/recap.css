@@ -1,0 +1,69 @@
+/* Session Recap — full-bleed red screen. Red at top fading to warm cream at the
+   bottom where the % and the "View Full Report" pull-up handle sit. */
+.recap-screen {
+  position: relative;
+  height: 780px;
+  overflow: hidden;
+  background: url('../assets/photos/recap-bg.png') center / cover no-repeat;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Runner silhouette (pre-composed on a soft gradient), sitting over the blur bg. */
+.recap-runner {
+  position: absolute;
+  top: 120px;
+  left: 0;
+  width: 360px;
+  height: auto;
+  pointer-events: none;
+}
+
+.recap-title {
+  position: absolute;
+  top: 120px;
+  left: 0; right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-supreme-bold);
+  font-size: 32px;
+  line-height: 1.2;
+  letter-spacing: -1.5px;
+  color: #fff;
+}
+
+.recap-match {
+  position: absolute;
+  top: 470px;
+  left: 0; right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+}
+.recap-match-label {
+  margin: 0;
+  font-family: var(--font-supreme-bold);
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: -1px;
+}
+.recap-pct { display: flex; align-items: flex-end; gap: 2px; }
+.recap-pct .num { font-family: var(--font-offbit); font-weight: 700; font-size: 60px; line-height: 0.95; }
+.recap-pct .unit { font-family: var(--font-supreme-bold); font-size: 32px; line-height: 1.2; letter-spacing: -1.5px; padding-bottom: 6px; }
+
+/* Pull-up handle at the very bottom. */
+.recap-full {
+  position: absolute;
+  bottom: 24px;
+  left: 0; right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+}
+.recap-full img { width: 20px; height: 20px; filter: brightness(0) invert(0.35); }
+.recap-full span { font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; color: var(--color-neutral-600); }

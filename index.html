@@ -116,6 +116,21 @@
     </section>
 
   </div>
+
+  <!-- Notification strip: sits in the black area above the navbar, revealed when the
+       content frame shrinks up. State 1 = "New Report"; tapping morphs to state 2
+       (avatar + title + Open) which links to the Session Recap. -->
+  <div class="notif-bar" id="notifBar">
+    <button class="notif-new" id="notifNew"><span class="notif-dot"></span>New Report</button>
+    <div class="notif-rich">
+      <div class="notif-left">
+        <img class="notif-av" src="assets/icons/avatar-ellipse-sean.png" alt="">
+        <span>Sean's Final 1km Pace</span>
+      </div>
+      <a class="report-open" href="recap.html">Open <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></a>
+    </div>
+  </div>
+
   <nav class="tabbar">
     <div class="tabs">
       <a href="index.html" class="active"><img src="assets/icons/nav-home.svg" alt="홈"><span class="dot"></span></a>
@@ -126,5 +141,37 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
+<script>
+// Report notification: for now the trigger is "5s on Home". The content frame
+// shrinks up (revealing the black strip), and "New Report" fades in. Tapping it
+// morphs the strip to the avatar + Open state.
+(function () {
+  var phone = document.querySelector('.phone');
+  var screen = document.querySelector('.screen');
+
+  // Smoothly shrink the content frame up by 66px. A CSS height transition freezes
+  // on this scroll container (its sticky status-bar child blocks height interpolation),
+  // so drive it with rAF — direct height sets render fine. The CSS notif-on rule holds
+  // the resting 634px once we hand the inline height back.
+  function reveal() {
+    phone.classList.add('notif-on');
+    var from = 700, to = 634, dur = 450, s = null;
+    screen.style.height = from + 'px';
+    requestAnimationFrame(function step(t) {
+      if (s === null) s = t;
+      var p = Math.min((t - s) / dur, 1);
+      var e = 1 - Math.pow(1 - p, 3);                 // ease-out cubic
+      screen.style.height = (from - (from - to) * e) + 'px';
+      if (p < 1) requestAnimationFrame(step);
+      else screen.style.height = '';                  // CSS (notif-on) holds 634
+    });
+  }
+
+  setTimeout(reveal, 5000);
+  document.getElementById('notifNew').addEventListener('click', function () {
+    phone.classList.add('notif-open');
+  });
+})();
+</script>
 </body>
 </html>

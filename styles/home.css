@@ -1,5 +1,48 @@
 .screen { background: var(--color-white); padding-bottom: 8px; }
 
+/* ── Report notification ─────────────────────────────────────────────────
+   The 66px strip lives above the 80px navbar. When the notification arrives,
+   the content frame shrinks up by 66px (its rounded r40 bottom reveals the
+   black phone bg over the strip), and the notification fades in. */
+/* Concrete px endpoints so the shrink animates — Chrome freezes height
+   transitions between calc(%) values. The phone is a fixed 780 (700 content
+   + 80 navbar); the notification takes a 66px strip above the navbar. */
+.phone:has(> .tabbar) > .screen { height: 700px; }
+.phone.notif-on:has(> .tabbar) > .screen { height: 634px; }
+.notif-bar {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 80px;
+  height: 66px;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease .12s;
+}
+.phone.notif-on .notif-bar { opacity: 1; pointer-events: auto; }
+.notif-new {
+  display: flex; align-items: center; gap: 8px;
+  background: none; border: none; cursor: pointer;
+  color: #fff; font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px;
+}
+.notif-dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+.notif-rich { display: none; align-items: center; justify-content: space-between; width: 100%; padding: 0 16px; box-sizing: border-box; }
+.phone.notif-open .notif-new { display: none; }
+.phone.notif-open .notif-rich { display: flex; }
+.notif-left { display: flex; align-items: center; gap: 8px; }
+.notif-av { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+.notif-left span { color: #fff; font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; }
+.report-open {
+  display: flex; align-items: center; gap: 4px;
+  background: var(--color-red); color: #fff; text-decoration: none;
+  border-radius: 999px; padding: 8px 12px 8px 16px;
+  font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px;
+}
+.report-open img { width: 18px; height: 18px; filter: brightness(0) invert(1); }
+
 /* App bar: 66px tall (logo centered with 16px above/below), sitting flush against
    the card container below it (gap 0) — Figma home 108:16691. */
 .app-bar { height: 66px; box-sizing: border-box; padding: 16px; }

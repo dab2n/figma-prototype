@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<title>Newton — Session Recap</title>
+<link rel="stylesheet" href="styles/main.css">
+<link rel="stylesheet" href="styles/recap.css">
+</head>
+<body>
+<div class="phone">
+  <div class="screen recap-screen" id="recapScreen">
+    <div class="status-bar on-dark" style="position:absolute; top:0; left:0; z-index:6;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
+
+    <img class="recap-runner" src="assets/photos/session-runner.png" alt="">
+
+    <p class="recap-title">Session Recap</p>
+
+    <div class="recap-match">
+      <p class="recap-match-label">Outstanding Match</p>
+      <div class="recap-pct"><span class="num">0</span><span class="unit">%</span></div>
+    </div>
+
+    <a class="recap-full" href="records.html">
+      <img src="assets/icons/explore-chevron-up.svg" alt="">
+      <span>View Full Report</span>
+    </a>
+  </div>
+</div>
+<script>
+// Rapid count-up of the match % from 0 → 76 on entry.
+(function () {
+  var el = document.querySelector('.recap-pct .num');
+  var target = 76, dur = 900, s = null;
+  requestAnimationFrame(function step(t) {
+    if (s === null) s = t;
+    var p = Math.min((t - s) / dur, 1);
+    el.textContent = Math.round((1 - Math.pow(1 - p, 2)) * target);   // ease-out
+    if (p < 1) requestAnimationFrame(step);
+  });
+})();
+
+// Scroll / swipe UP once more → full report (records.html).
+(function () {
+  var sc = document.getElementById('recapScreen');
+  var startY = null, going = false;
+  function go() { if (going) return; going = true; location.href = 'records.html'; }
+  sc.addEventListener('pointerdown', function (e) { startY = e.clientY; });
+  sc.addEventListener('pointerup', function (e) {
+    if (startY === null) return;
+    var dy = e.clientY - startY; startY = null;
+    if (dy < -45) go();                       // swipe up
+  });
+  sc.addEventListener('pointercancel', function () { startY = null; });
+  var lock = false;
+  sc.addEventListener('wheel', function (e) {
+    if (lock || e.deltaY <= 10) return;       // scroll down gesture = pull content up
+    lock = true; go();
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
