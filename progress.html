@@ -18,7 +18,7 @@
 <body>
 <div class="phone">
   <div class="screen stats-screen">
-    <img class="stats-bg" src="assets/photos/progress-bg.png" alt="">
+    <img class="stats-bg" src="assets/photos/progress-bg2.png" alt="">
 
     <div class="status-bar on-dark" style="position:absolute; top:0; left:0; z-index:6;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
 
@@ -27,8 +27,13 @@
       <a class="stat-tab" href="library.html">Library</a>
     </div>
 
-    <!-- Title, subtitle and ring dots are baked into progress-bg.png; only the metric
-         number labels are overlaid (they're not in the image). -->
+    <!-- The new bg image has the figure + ring dots but NO text, so overlay the title
+         and subtitle sharply on top. Metric number labels are overlaid too. -->
+    <div class="stats-title">
+      <p class="st-title">All 5 metrics improved</p>
+      <p class="st-sub">Darker areas improved the most</p>
+    </div>
+
     <div class="stat s-sm" style="left:96px; top:213px; align-items:flex-end; --d:.05s;"><p>Rhythm</p><div class="num-row"><span class="n">72</span><span class="d">+24</span></div></div>
     <div class="stat s-lg" style="left:47px; top:356px; --d:.15s;"><p>Balance</p><div class="num-row"><span class="n">85</span><span class="d">+25</span></div></div>
     <div class="stat" style="left:239px; top:344px; --d:.12s;"><p>Stability</p><div class="num-row"><span class="n" style="font-size:31px;">68</span><span class="d">+13</span></div></div>

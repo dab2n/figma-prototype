@@ -152,7 +152,7 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 20px 0;
+  padding: 12px 20px 0;
 }
 .tabbar .tabs a {
   display: flex;
@@ -160,8 +160,8 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
   gap: 8px;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   padding: 0;
   border-radius: 80px;
   text-decoration: none;
@@ -181,7 +181,7 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 134px;
+  padding: 10px 134px;
 }
 .tabbar .home-indicator span {
   width: 144px;
