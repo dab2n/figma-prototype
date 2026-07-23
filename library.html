@@ -26,12 +26,17 @@
     </div>
 
     <div class="lib-filter" id="libFilter">
+      <button class="filter-ic" id="libSearchBtn" aria-label="검색"><img src="assets/icons/icon-search-black.svg" alt="검색"></button>
       <span class="filter-ic"><img src="assets/icons/icon-filter.svg" alt="필터"></span>
       <button class="chip active" data-sport="all">All</button>
       <button class="chip" data-sport="Running">Running</button>
       <button class="chip" data-sport="Boxing">Boxing</button>
       <button class="chip" data-sport="Basketball">Basketball</button>
       <button class="chip" data-sport="Tennis">Tennis</button>
+    </div>
+
+    <div class="lib-searchbar" id="libSearchbar" hidden>
+      <input type="search" id="libSearchInput" placeholder="Search packs by name…" autocomplete="off">
     </div>
 
     <div class="lib-list" id="libList">
@@ -69,6 +74,30 @@
 document.querySelectorAll('#libList .lib-card').forEach(function (c, i) {
   c.style.animationDelay = (i * 0.05) + 's';
 });
+
+// Search: the magnifier reveals an input that filters cards by title (live),
+// hiding date groups that end up empty.
+(function () {
+  var btn = document.getElementById('libSearchBtn');
+  var bar = document.getElementById('libSearchbar');
+  var input = document.getElementById('libSearchInput');
+  var cards = document.querySelectorAll('#libList .lib-card');
+  var groups = document.querySelectorAll('#libList .lib-group');
+  btn.addEventListener('click', function () {
+    btn.classList.toggle('on');
+    bar.hidden = !bar.hidden;
+    if (!bar.hidden) { input.focus(); } else { input.value = ''; apply(''); }
+  });
+  function apply(q) {
+    q = q.trim().toLowerCase();
+    cards.forEach(function (card) {
+      var t = (card.querySelector('.lib-title').textContent || '').toLowerCase();
+      card.classList.toggle('hidden', q !== '' && t.indexOf(q) === -1);
+    });
+    groups.forEach(function (g) { g.classList.toggle('hidden', !g.querySelector('.lib-card:not(.hidden)')); });
+  }
+  input.addEventListener('input', function () { apply(input.value); });
+})();
 // Sport filter: highlight the chip, show only matching cards, hide empty date groups.
 (function () {
   var chips = document.querySelectorAll('#libFilter .chip');

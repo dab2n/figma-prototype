@@ -175,12 +175,23 @@
 .lib-filter .filter-ic {
   flex: none;
   width: 36px; height: 36px;
+  border: none; padding: 0; cursor: pointer;
   border-radius: 80px;
   background: #fff;
   box-shadow: 0 0 5px rgba(0,0,0,0.06);
   display: flex; align-items: center; justify-content: center;
 }
 .lib-filter .filter-ic img { width: 20px; height: 20px; }
+/* Search magnifier: same 36px as the filter icon; fills red when active */
+.lib-filter #libSearchBtn.on { background: linear-gradient(180deg, #FA3030 54%, #FE6E3C 90%, #FEC389 110%); }
+.lib-filter #libSearchBtn.on img { filter: brightness(0) invert(1); }
+.lib-searchbar { padding: 0 16px 8px; background: var(--color-neutral-50); }
+.lib-searchbar input {
+  width: 100%; height: 40px; box-sizing: border-box;
+  border: none; border-radius: 12px; background: #fff;
+  padding: 0 16px; font-family: var(--font-supreme); font-size: 14px; letter-spacing: -0.4px;
+  color: var(--color-neutral-900); box-shadow: 0 0 5px rgba(0,0,0,0.06);
+}
 .chip {
   flex: none;
   padding: 6px 14px;
@@ -201,14 +212,16 @@
   font-family: var(--font-supreme-medium);
 }
 
-.lib-list { padding: 8px 16px 16px; }
-.lib-group { margin: 8px 0; }               /* each date section spaced 8 top & bottom */
+/* Sections 16 apart (list gap); date + cards inside a section 8 apart (group gap). */
+.lib-list { display: flex; flex-direction: column; gap: 16px; padding: 8px 16px 16px; }
+.lib-group { display: flex; flex-direction: column; gap: 8px; }
 .lib-group.hidden { display: none; }
+.lib-date { margin: 0; }
 
 /* "차라락" slide-in when the Library opens (staggered per card via JS animation-delay) */
-.lib-card { animation: lib-slide .42s cubic-bezier(.2,.85,.3,1) both; }
+.lib-card { margin-bottom: 0; animation: lib-slide .42s cubic-bezier(.2,.85,.3,1) both; }
 @keyframes lib-slide { from { opacity: 0; transform: translateY(18px); } }
-.lib-date { margin: 8px 0; padding: 0 8px; font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.5px; color: var(--color-neutral-500); }
+.lib-date { margin: 0; padding: 0 8px; font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.5px; color: var(--color-neutral-500); }
 /* Card (node 151:4573): white, r20, p16, gap4; sport+kebab row, then title (left,
    bottom-aligned) vs Match Rate + % (right, bottom-aligned). */
 /* Card fixed 105px; title (biggest type) TOP-aligned with the Match Rate block. */
@@ -221,7 +234,7 @@
   background: #fff;
   border-radius: 20px;
   padding: 16px;
-  margin-bottom: 8px;
+  margin-bottom: 0;
   box-shadow: 0 2px 10px rgba(0,0,0,0.04);
 }
 .lib-card.hidden { display: none; }
