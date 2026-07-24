@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<script src="assets/openext.js?v=775"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NEWTON">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#ffffff">
+<title>Newton — Sports</title>
+<link rel="stylesheet" href="styles/main.css?v=775">
+<link rel="stylesheet" href="styles/onboarding.css?v=775">
+</head>
+<body>
+<div class="phone">
+  <div class="screen ob-screen" style="display:flex; flex-direction:column;">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <div class="ob-appbar">
+      <a class="back" href="onboarding.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
+      <a class="skip" href="onboarding-goal.html">Skip</a>
+    </div>
+
+    <div class="ob-title">
+      <h1>What kinds of<br>sports are you into?</h1>
+      <p>You can pick more than one.</p>
+    </div>
+
+    <div class="ob-body" data-group>
+      <div class="ob-grid">
+        <div class="ob-col">
+          <div class="ob-card tall"  data-toggle><p class="t">Running</p><div class="img" style="background-image:url('assets/photos/sport-running.png')"></div></div>
+          <div class="ob-card short" data-toggle><p class="t">Marathon</p><div class="img" style="background-image:url('assets/photos/sport-marathon.png'); background-position:right bottom;"></div></div>
+          <div class="ob-card tall"  data-toggle><p class="t">Basketball</p><div class="img" style="background-image:url('assets/photos/sport-basketball.png')"></div></div>
+          <div class="ob-card short" data-toggle><p class="t">Dance</p><div class="img" style="background-image:url('assets/photos/sport-dance.png'); background-position:right bottom;"></div></div>
+          <div class="ob-card tall"  data-toggle><p class="t">Golf</p><div class="img" style="background-image:url('assets/photos/sport-golf.png')"></div></div>
+        </div>
+        <div class="ob-col">
+          <div class="ob-card short" data-toggle><p class="t">Tennis</p><div class="img" style="background-image:url('assets/photos/sport-tennis.png'); background-position:right bottom;"></div></div>
+          <div class="ob-card tall"  data-toggle><p class="t">Boxing</p><div class="img" style="background-image:url('assets/photos/sport-boxing.png')"></div></div>
+          <div class="ob-card short" data-toggle><p class="t">Soccer</p><div class="img" style="background-image:url('assets/photos/sport-soccer.png'); background-position:right bottom;"></div></div>
+          <div class="ob-card tall"  data-toggle><p class="t">Hiking</p><div class="img" style="background-image:url('assets/photos/sport-hiking.png')"></div></div>
+          <div class="ob-card short" data-toggle><p class="t">Home<br>Workout</p><div class="img" style="background-image:url('assets/photos/sport-hometraining.png'); background-position:right bottom;"></div></div>
+          <div class="ob-card tall"  data-toggle><p class="t">Badminton</p><div class="img" style="background-image:url('assets/photos/sport-badminton.png')"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="tabbar ob-bottom">
+    <div class="sb-row">
+      <a class="ob-next" href="onboarding-goal.html">Next <img src="assets/icons/arrow-right-lg.svg" alt=""></a>
+    </div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
+</div>
+<script src="assets/onboarding.js?v=775"></script>
+</body>
+</html>

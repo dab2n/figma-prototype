@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<script src="assets/openext.js?v=775"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NEWTON">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#ffffff">
+<title>Newton — Where</title>
+<link rel="stylesheet" href="styles/main.css?v=775">
+<link rel="stylesheet" href="styles/onboarding.css?v=775">
+</head>
+<body>
+<div class="phone">
+  <div class="screen ob-screen" style="display:flex; flex-direction:column;">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <div class="ob-appbar">
+      <a class="back" href="onboarding-goal.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
+      <a class="skip" href="index.html">Skip</a>
+    </div>
+
+    <div class="ob-title">
+      <h1>Where do you<br>usually work out?</h1>
+      <p>We’ll set the best default mode for you.</p>
+    </div>
+
+    <div class="ob-body" data-single>
+      <div class="ob-where">
+        <div class="col">
+          <div class="ob-wcard h" data-toggle>
+            <p class="t">Indoors</p><p class="s">Mostly indoors</p>
+            <div class="img" style="background-image:url('assets/photos/sport-hometraining.png')"></div>
+          </div>
+          <div class="ob-wcard h" data-toggle>
+            <p class="t">Outdoors</p><p class="s">Parks, tracks, and<br>another spots</p>
+            <div class="img" style="background-image:url('assets/photos/sport-running.png')"></div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="ob-wcard full sel" data-toggle>
+            <p class="t">Both</p><p class="s">Depends on the day</p>
+            <div class="img" style="background-image:url('assets/photos/sport-marathon.png'); background-position:center 80%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="tabbar ob-bottom">
+    <div class="sb-row">
+      <a class="ob-next" href="index.html">Next <img src="assets/icons/arrow-right-lg.svg" alt=""></a>
+    </div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
+</div>
+<script src="assets/onboarding.js?v=775"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<script src="assets/openext.js?v=775"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NEWTON">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#ffffff">
+<title>Newton — Goal</title>
+<link rel="stylesheet" href="styles/main.css?v=775">
+<link rel="stylesheet" href="styles/onboarding.css?v=775">
+</head>
+<body>
+<div class="phone">
+  <div class="screen ob-screen" style="display:flex; flex-direction:column;">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <div class="ob-appbar">
+      <a class="back" href="onboarding-sport.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
+      <a class="skip" href="onboarding-where.html">Skip</a>
+    </div>
+
+    <div class="ob-title">
+      <h1>What do you<br>want to do most?</h1>
+      <p>We’ll set the best default mode for you.</p>
+    </div>
+
+    <div class="ob-body" data-single>
+      <div class="ob-list">
+        <div class="ob-row" data-toggle><p class="t">Running</p><div class="img" style="background-image:url('assets/photos/sport-running.png')"></div></div>
+        <div class="ob-row sel" data-toggle><p class="t">Follow cool moves</p><div class="img" style="background-image:url('assets/photos/sport-dance.png')"></div></div>
+        <div class="ob-row" data-toggle><p class="t">Recovery, Care</p><div class="img" style="background-image:url('assets/photos/sport-hometraining.png')"></div></div>
+        <div class="ob-row" data-toggle><p class="t">Build Sport Skills</p><div class="img" style="background-image:url('assets/photos/sport-boxing.png')"></div></div>
+        <div class="ob-row" data-toggle><p class="t">Play with Friends</p><div class="img" style="background-image:url('assets/photos/sport-badminton.png')"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="tabbar ob-bottom">
+    <div class="sb-row">
+      <a class="ob-next" href="onboarding-where.html">Next <img src="assets/icons/arrow-right-lg.svg" alt=""></a>
+    </div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
+</div>
+<script src="assets/onboarding.js?v=775"></script>
+</body>
+</html>
