@@ -96,8 +96,16 @@
    centers; active = Bold 20 white, others = Regular 16 gray. */
 .setup-stepbar { justify-content: flex-end; gap: 14px; padding-top: 12px; }
 .setup-stepbar .steps-wrap { width: 100%; overflow: hidden; }
-.setup-stepbar .steps { display: inline-flex; align-items: center; gap: 24px; white-space: nowrap; transition: transform .35s cubic-bezier(.4,0,.2,1); padding: 0 20px; }
-.setup-stepbar .step { flex: none; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-500); text-decoration: none; transition: color .35s ease, font-size .35s ease; }
+/* Hidden until JS places the steps, so a new page never flashes the row at x=0
+   and then snaps it into place. */
+/* position:relative so each step's offsetLeft is measured from the row itself (which
+   starts at the wrap's left edge) — the centring maths depends on that origin. */
+.setup-stepbar .steps { position: relative; display: inline-flex; align-items: center; gap: 24px; white-space: nowrap; padding: 0 20px; visibility: hidden; }
+.setup-stepbar .steps.placed { visibility: visible; }
+/* Each step carries its own translate (not the row) so they walk left one after
+   another via staggered delays instead of the whole bar sliding in as one block. */
+.setup-stepbar .step { flex: none; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-500); text-decoration: none; }
+.setup-stepbar .steps.placed .step { transition: color .35s ease, font-size .35s ease, translate .4s cubic-bezier(.4,0,.2,1); }
 .setup-stepbar .step.active { font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: #fff; }
 /* Once every input on the page is filled, the NEXT step grows a touch and brightens
    to invite the user forward (steps also slide left to centre the current one via JS). */
