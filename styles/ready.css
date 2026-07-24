@@ -57,25 +57,25 @@
    (plus-darker → multiply). */
 .rts-foot { position: absolute; left: 37px; top: 230px; width: 287px; height: 327px; z-index: 2;
   background: url('../assets/icons/tap-foot.png') center / contain no-repeat; mix-blend-mode: multiply;
-  opacity: 0; animation: rts-final-in .7s cubic-bezier(.2,.7,.2,1) 3s both, foot-tap 1.8s ease-in-out 3.7s infinite; }
-@keyframes foot-tap {
-  0%, 66%, 100% { transform: translateY(0); }
-  12%, 40%      { transform: translateY(12px); }   /* down (tap) */
-  26%, 54%      { transform: translateY(0); }       /* up — twice */
+  opacity: 0; animation: rts-final-in .7s cubic-bezier(.2,.7,.2,1) 3s both, foot-tap 2.6s ease-in-out 3.7s infinite; }
+@keyframes foot-tap {                                 /* gentle, small double-dip */
+  0%, 62%, 100% { transform: translateY(0); }
+  14%, 40%      { transform: translateY(5px); }       /* down (soft tap) */
+  27%, 53%      { transform: translateY(0); }          /* up — twice */
 }
 /* Tap ripple: two flat ellipses (no blur) that pulse in sync with each foot tap — the
    foot lands at 12%/40% of its 1.8s loop, so the rings flash there and ripple out.
    The outer ring is offset a touch so the two read as a sequence. */
 .rts-plate, .rts-plate2 { position: absolute; left: 50%; z-index: 1; border-radius: 50%; opacity: 0;
-  animation: plate-ripple 1.8s ease-out infinite; }
-.rts-plate  { top: 553px; width: 293px; height: 32px; margin-left: -146px; background: rgba(250,48,48,0.14); animation-delay: 3.8s; }
-.rts-plate2 { top: 561px; width: 177px; height: 16px; margin-left: -88px;  background: rgba(250,48,48,0.32); animation-delay: 3.7s; }
-@keyframes plate-ripple {
-  0%, 66%, 100% { opacity: 0; transform: scale(.55); }
-  12%           { opacity: .9; transform: scale(1); }      /* tap 1 lands */
-  28%           { opacity: 0; transform: scale(1.25); }    /* ripple out + fade */
-  40%           { opacity: .9; transform: scale(1); }      /* tap 2 lands */
-  56%           { opacity: 0; transform: scale(1.25); }
+  animation: plate-ripple 2.6s ease-out infinite; }
+.rts-plate  { top: 553px; width: 293px; height: 32px; margin-left: -146px; background: rgba(250,48,48,0.10); animation-delay: 3.78s; }
+.rts-plate2 { top: 561px; width: 177px; height: 16px; margin-left: -88px;  background: rgba(250,48,48,0.20); animation-delay: 3.7s; }
+@keyframes plate-ripple {                                  /* faint flash, barely grows */
+  0%, 62%, 100% { opacity: 0; transform: scale(.85); }
+  14%           { opacity: .55; transform: scale(1); }     /* tap 1 lands */
+  27%           { opacity: 0; transform: scale(1.08); }    /* soft fade out */
+  40%           { opacity: .55; transform: scale(1); }     /* tap 2 lands */
+  53%           { opacity: 0; transform: scale(1.08); }
 }
 
 .rts-start { position: absolute; left: 0; right: 0; bottom: 30px; text-align: center; z-index: 4;
