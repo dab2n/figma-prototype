@@ -22,20 +22,19 @@
 
 /* ── Ready to Start (node 246:15915 / 15874) ──────────────────────────────────── */
 .rts-screen { position: relative; height: 100%; overflow: hidden; background: #fff; }
-/* Very subtle warm inner shadow across the whole viewport (node 246:15874/15915). */
+/* Very subtle warm inner glow across the viewport (node 246:15874/15915) — kept faint. */
 .rts-screen::after { content: ""; position: absolute; inset: 0; z-index: 6; pointer-events: none; border-radius: inherit;
-  box-shadow: inset 0 -14px 57.6px -5px #FFB56D, inset 0 28px 13.1px 0 rgba(250,48,48,0.49); }
-/* Supplied red-blur gradient — smaller/higher for the pack phase, then eases DOWN and
-   grows as the tap page appears (node 246:15874 → 246:15915). Sits below text/foot. */
+  box-shadow: inset 0 -10px 40px -2px rgba(255,181,109,0.35), inset 0 14px 22px 0 rgba(250,48,48,0.10); }
+/* Supplied red-blur gradient — full width (no scaling, so no visible box edge); it just
+   eases DOWN a touch as the tap page appears. Sits below the text/foot. */
 .rts-blur { position: absolute; top: 0; left: 0; width: 360px; height: 100%; z-index: 1; pointer-events: none;
-  transform-origin: 50% 0%;
   background: url('../assets/icons/start-blur.png') center top / 100% 100% no-repeat;
   animation: rts-blur 3.6s cubic-bezier(.3,0,.2,1) both; }
 @keyframes rts-blur {
-  0%   { opacity: 0; transform: scale(.72); }
-  18%  { opacity: 1; transform: scale(.72); }   /* Sean's Final: blur small + high */
-  74%  { transform: scale(.72); }               /* hold through the pack name */
-  100% { opacity: 1; transform: scale(1); }     /* Tap page: blur slides down + grows */
+  0%   { opacity: 0; transform: translateY(-72px); }
+  20%  { opacity: 1; transform: translateY(-72px); }   /* Sean's Final: blur higher */
+  74%  { transform: translateY(-72px); }               /* hold through the pack name */
+  100% { opacity: 1; transform: translateY(0); }        /* Tap page: eases down into place */
 }
 .rts-screen .status-bar { position: absolute; top: 0; left: 0; z-index: 5; background: transparent; }
 
@@ -64,11 +63,20 @@
   12%, 40%      { transform: translateY(12px); }   /* down (tap) */
   26%, 54%      { transform: translateY(0); }       /* up — twice */
 }
-/* Tap ripple: two flat ellipses of differing opacity — NO blur (phase 2 only). */
-.rts-plate, .rts-plate2 { position: absolute; left: 50%; z-index: 1; border-radius: 50%;
-  opacity: 0; animation: rts-final-in .7s cubic-bezier(.2,.7,.2,1) 3s both; }
-.rts-plate  { top: 553px; width: 293px; height: 32px; margin-left: -146px; background: rgba(250,48,48,0.14); }
-.rts-plate2 { top: 561px; width: 177px; height: 16px; margin-left: -88px;  background: rgba(250,48,48,0.30); }
+/* Tap ripple: two flat ellipses (no blur) that pulse in sync with each foot tap — the
+   foot lands at 12%/40% of its 1.8s loop, so the rings flash there and ripple out.
+   The outer ring is offset a touch so the two read as a sequence. */
+.rts-plate, .rts-plate2 { position: absolute; left: 50%; z-index: 1; border-radius: 50%; opacity: 0;
+  animation: plate-ripple 1.8s ease-out infinite; }
+.rts-plate  { top: 553px; width: 293px; height: 32px; margin-left: -146px; background: rgba(250,48,48,0.14); animation-delay: 3.8s; }
+.rts-plate2 { top: 561px; width: 177px; height: 16px; margin-left: -88px;  background: rgba(250,48,48,0.32); animation-delay: 3.7s; }
+@keyframes plate-ripple {
+  0%, 66%, 100% { opacity: 0; transform: scale(.55); }
+  12%           { opacity: .9; transform: scale(1); }      /* tap 1 lands */
+  28%           { opacity: 0; transform: scale(1.25); }    /* ripple out + fade */
+  40%           { opacity: .9; transform: scale(1); }      /* tap 2 lands */
+  56%           { opacity: 0; transform: scale(1.25); }
+}
 
 .rts-start { position: absolute; left: 0; right: 0; bottom: 30px; text-align: center; z-index: 4;
   font-family: var(--font-supreme-medium); font-size: 16px; letter-spacing: -0.8px; color: #FE6E3C; text-decoration: none;
