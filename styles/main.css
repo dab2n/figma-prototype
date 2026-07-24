@@ -223,21 +223,23 @@ button { font-family: inherit; }
   body { padding: 0; align-items: stretch; min-height: 100dvh; }
   /* Full-bleed on a phone: no OUTER frame corner radius, fill the whole viewport. */
   .phone { width: 100vw; height: 100dvh; border-radius: 0; box-shadow: none; }
-  .recap-screen, .records-screen, .swipe-detail, .creator-screen { height: 100dvh; border-radius: 0; }
-  /* Content frame FILLS the viewport above the 80px navbar (no fixed 780 → kills the
+  .recap-screen, .records-screen, .swipe-detail, .creator-screen,
+  .ob-splash, .ob-screen, .rts-screen { height: 100dvh; border-radius: 0; }
+  /* Content frame FILLS the viewport above the navbar (no fixed 780 → kills the
      white gap on tall phones) and keeps its rounded BOTTOM (inverted/concave radius
-     over the flat black navbar). Square top so it's flush to the screen edge. */
-  /* `body` prefix bumps specificity so this BEATS per-page concrete heights
-     (home.css sets 700px/634px at equal specificity but loads later). Without it
-     the home screen stays 700px on tall phones, leaving a dead band above the
-     pinned navbar. */
-  body .phone:has(> .tabbar) > .screen { height: calc(100dvh - 80px); border-radius: 0 0 40px 40px; }
-  body .phone.notif-on:has(> .tabbar) > .screen { height: calc(100dvh - 80px - 66px); }
-  /* Status bar: keep its 44px space but hide the 9:41 graphic on mobile — the real
-     device status bar normally occupies it. On the web it stays visible. */
+     over the flat black navbar). Square top so it's flush to the screen edge.
+     `body` prefix bumps specificity so this BEATS per-page concrete heights. */
+  body .phone:has(> .tabbar) > .screen { height: calc(100dvh - 80px - env(safe-area-inset-bottom, 0px)); border-radius: 0 0 40px 40px; }
+  body .phone.notif-on:has(> .tabbar) > .screen { height: calc(100dvh - 80px - 66px - env(safe-area-inset-bottom, 0px)); }
+  /* Status bar: keep the 44px space but drop the 9:41 graphic — the device draws its
+     own. Grow it up into the top safe area (notch) so that strip is filled with the
+     page's status-bar colour, never the black phone frame. */
   .status-bar .statusbar-svg { visibility: hidden; }
-  /* Navbar pinned to the very bottom of the viewport on every tabbar page. */
-  .tabbar { position: fixed; left: 0; bottom: 0; width: 100vw; }
+  .status-bar { box-sizing: border-box; height: calc(44px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px); }
+  /* Navbar pinned to the bottom; its background extends into the bottom safe area
+     (iPhone home indicator) so no black band shows below it. */
+  .tabbar { position: fixed; left: 0; bottom: 0; width: 100vw;
+    height: calc(80px + env(safe-area-inset-bottom, 0px)); padding-bottom: env(safe-area-inset-bottom, 0px); }
 }
 
 /* Galaxy/Android in fullscreen (double-tap) or as an installed PWA hides the OS
