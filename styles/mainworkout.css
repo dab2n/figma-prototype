@@ -45,16 +45,22 @@
 .mw-dist-val { display: flex; align-items: baseline; font-family: var(--font-supreme-bold); color: var(--color-black); }
 .mw-dist-val .d { font-size: 40px; line-height: 1; letter-spacing: -1.6px; }
 .mw-dist-val .k { font-size: 13px; letter-spacing: -0.5px; margin-left: 8px; }
-.mw-ruler { position: relative; width: 100%; height: 37px; }
-/* Fixed centre pointer the value is read against. */
-.mw-ruler::after { content: ""; position: absolute; left: 50%; top: 0; width: 3px; height: 24px; margin-left: -1.5px; background: var(--color-red); border-radius: 99px; pointer-events: none; z-index: 2; }
-.mw-track { position: absolute; inset: 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
+.mw-ruler { position: relative; width: 100%; height: 26px; }
+/* Fixed centre pointer the value is read against — swipe the ruler either side of it. */
+.mw-ruler::after { content: ""; position: absolute; left: 50%; bottom: 0; width: 3px; height: 26px; margin-left: -1.5px; background: var(--color-red); border-radius: 99px; pointer-events: none; z-index: 2; }
+/* Ticks fill the card width and fade toward both edges (node 338:19979). */
+.mw-track { position: absolute; inset: 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent); }
 .mw-track::-webkit-scrollbar { display: none; }
-.mw-ticks { display: flex; align-items: flex-start; width: max-content; height: 19px; }
+.mw-ticks { display: flex; align-items: flex-end; width: max-content; height: 26px; }
 .mw-ticks .sp { flex: none; }                         /* half-width spacers so ends can centre */
-.mw-tick { flex: none; width: 2px; height: 19px; border-radius: 99px; background: #E5E5E5; scroll-snap-align: center; }
-.mw-tick.maj { width: 2px; height: 24px; background: #C7C7C7; }
-.mw-dist-scale { display: flex; justify-content: space-between; width: 200px; font-family: var(--font-supreme-bold); font-size: 13px; letter-spacing: -0.5px; }
+/* 0.2km minor lines: short, Neutral/200. Integer lines: taller, Neutral/300.
+   4.0 is the recommended distance, so its line is darker (Neutral/500). */
+.mw-tick { flex: none; width: 2px; height: 14px; border-radius: 99px; background: #E5E5E5; scroll-snap-align: center; }
+.mw-tick.maj { height: 24px; background: #C7C7C7; }
+.mw-tick.rec { background: #757575; }
+.mw-dist-scale { display: flex; justify-content: space-between; width: 180px; font-family: var(--font-supreme-bold); font-size: 13px; letter-spacing: -0.5px; }
 .mw-dist-scale .lo { color: var(--color-neutral-500); }
 .mw-dist-scale .hi { color: #C7C7C7; font-family: var(--font-supreme); }
 
@@ -62,9 +68,11 @@
 .mw-time { position: relative; height: 132px; display: flex; align-items: stretch; justify-content: center; }
 /* The selected row sits in a highlighted band across the centre. */
 .mw-time::before { content: ""; position: absolute; left: 12px; right: 12px; top: 50%; height: 36px; margin-top: -18px; background: var(--color-neutral-100); border-radius: 12px; pointer-events: none; }
-.mw-wheel { position: relative; width: 66px; overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; text-align: center; }
+.mw-wheel { position: relative; width: 52px; overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; text-align: center; }
 .mw-wheel::-webkit-scrollbar { display: none; }
 .mw-wheel .op { height: 36px; line-height: 36px; scroll-snap-align: center; font-family: var(--font-supreme-medium); font-size: 22px; letter-spacing: -0.5px; color: #C7C7C7; transition: color .15s ease; }
 .mw-wheel .op.on { color: var(--color-black); font-family: var(--font-supreme-bold); }
 .mw-wheel .pad { height: 48px; }                       /* centres first/last item in the band */
-.mw-unit { align-self: center; font-family: var(--font-supreme-medium); font-size: 13px; color: var(--color-neutral-500); margin: 0 2px 0 -4px; }
+/* h / m / s unit, pinned in the centred selection band right after each column.
+   position:relative lifts it above the band ::before (which would otherwise cover it). */
+.mw-unit { position: relative; z-index: 1; align-self: center; font-family: var(--font-supreme-bold); font-size: 15px; color: var(--color-neutral-700); margin: 0 12px 0 2px; }

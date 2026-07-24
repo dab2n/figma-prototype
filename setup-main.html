@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
-<script src="assets/openext.js?v=763"></script>
+<script src="assets/openext.js?v=767"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,9 +13,9 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#ffffff">
 <title>Newton — Setup · Main Workout</title>
-<link rel="stylesheet" href="styles/main.css?v=763">
-<link rel="stylesheet" href="styles/setup.css?v=763">
-<link rel="stylesheet" href="styles/mainworkout.css?v=763">
+<link rel="stylesheet" href="styles/main.css?v=767">
+<link rel="stylesheet" href="styles/setup.css?v=767">
+<link rel="stylesheet" href="styles/mainworkout.css?v=767">
 </head>
 <body>
 <div class="phone">
@@ -92,12 +92,12 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/setup.js?v=763"></script>
+<script src="assets/setup.js?v=767"></script>
 <script>
 (function () {
   var STRETCH = 8, LEARN = 10;   // fixed pack minutes (node 338:19949/19953)
   var PACE = 6;                  // min per km → run time
-  var DMIN = 4.0, DMAX = 6.0, DSTEP = 0.2;   // distance ruler: centre 5.0, +0.2/notch
+  var DMIN = 3.2, DMAX = 6.8, DSTEP = 0.2;   // ruler ticks; 4.0 is the recommended distance
 
   var runMin = 30;               // 5.0km × 6 = 30
   var graph  = document.getElementById('mwGraph');
@@ -150,8 +150,10 @@
     ticks.appendChild(lead);
     for (var i = 0; i <= steps; i++) {
       if (i) { var g = document.createElement('div'); g.style.width = (GAP - 2) + 'px'; g.style.flex = 'none'; ticks.appendChild(g); }
+      var km = DMIN + i * DSTEP;
+      var isInt = Math.abs(km - Math.round(km)) < 0.01;
       var t = document.createElement('div');
-      t.className = 'mw-tick' + (i % 5 === 0 ? ' maj' : '');
+      t.className = 'mw-tick' + (isInt ? ' maj' : '') + (Math.abs(km - 4.0) < 0.01 ? ' rec' : '');
       ticks.appendChild(t);
     }
     var trail = document.createElement('div'); trail.className = 'sp'; trail.style.width = edge + 'px';
@@ -189,14 +191,18 @@
   }
   function val(w) { return Math.round(w.scrollTop / ROW); }
   function readWheels() {
+    if (syncing) return;               // ignore scroll events from a programmatic setWheel
     var mins = val(wheels.h) * 60 + val(wheels.m) + (val(wheels.s) >= 30 ? 1 : 0);
     runMin = Math.max(1, mins);
     layout();
   }
-  function setWheel(mins) {           // reflect a value without firing scroll handlers
+  var syncing = false, syncT;
+  function setWheel(mins) {           // reflect a value; its snap-settle scrolls are ignored
+    syncing = true; clearTimeout(syncT);
     var h = Math.floor(mins / 60), m = mins % 60;
     wheels.h.scrollTop = h * ROW; wheels.m.scrollTop = m * ROW; wheels.s.scrollTop = 0;
     mark(wheels.h); mark(wheels.m); mark(wheels.s);
+    syncT = setTimeout(function () { syncing = false; }, 280);
   }
 
   // ── Tabs ───────────────────────────────────────────────────────────────────
