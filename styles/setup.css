@@ -22,6 +22,23 @@
 
 .setup-body { padding: 0 12px 24px; display: flex; flex-direction: column; gap: 32px; }
 .setup-sec { display: flex; flex-direction: column; gap: 8px; }
+
+/* Arriving on a step, the cards ripple up one after the other (the step change itself
+   is a hard cut, so this is what gives the page its entrance). */
+@keyframes card-in { from { opacity: 0; transform: translateY(16px); } }
+.setup-body :is(.card-sel, .toggle-btn, .diff-seg, .chip-sel, .mode-card, .injury-stage) {
+  animation: card-in .42s cubic-bezier(.2,.7,.2,1) both;
+  animation-delay: calc(var(--sec, 0ms) + var(--i, 0) * 55ms);
+}
+.setup-body > .setup-sec:nth-child(2) { --sec: 130ms; }
+.setup-body > .setup-sec:nth-child(3) { --sec: 260ms; }
+.setup-body :is(.card-list, .toggle-row, .diff-row, .chip-row, .mode-scroll) > *:nth-child(2) { --i: 1; }
+.setup-body :is(.card-list, .toggle-row, .diff-row, .chip-row, .mode-scroll) > *:nth-child(3) { --i: 2; }
+.setup-body :is(.card-list, .toggle-row, .diff-row, .chip-row, .mode-scroll) > *:nth-child(4) { --i: 3; }
+.setup-body :is(.card-list, .toggle-row, .diff-row, .chip-row, .mode-scroll) > *:nth-child(5) { --i: 4; }
+@media (prefers-reduced-motion: reduce) {
+  .setup-body :is(.card-sel, .toggle-btn, .diff-seg, .chip-sel, .mode-card, .injury-stage) { animation: none; }
+}
 .setup-sec-label { margin: 0; padding: 0 12px; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-700); }
 
 /* Shared default card shadow (연한카드) + the selected fill (gradient + drop
