@@ -6,9 +6,9 @@
   var next   = active && active.nextElementSibling;
   if (next && !next.classList.contains('step')) next = null;
   var items  = steps ? [].slice.call(steps.querySelectorAll('.step')) : [];
-  // On load the active step sits centred (instantly, no anim); completing walks the steps
-  // left until the NEXT one is centred — which is exactly where the next page loads it,
-  // so navigating never replays the slide.
+  // On load the active step sits centred (instantly, no anim); completing slides the steps
+  // left until the NEXT one is centred — exactly where the next page loads them, so the
+  // hand-off is seamless — then the flow advances on its own.
 
   // Required input groups: single-select cards/toggles, and the multi-select injury/mode groups.
   var groups = document.querySelectorAll('.setup-body [data-single], .setup-body [data-group]');
@@ -42,23 +42,25 @@
     steps.classList.add('placed');
   }
 
-  function place(done, stagger) {
+  function place(done) {
     if (!active || !wrap) return;
     var x = done ? xs.done : xs.load;
-    items.forEach(function (el, i) {
-      el.style.transitionDelay = stagger ? (i * 45) + 'ms' : '0ms';
-      el.style.translate = x + 'px';
-    });
+    items.forEach(function (el) { el.style.translate = x + 'px'; });
   }
 
-  var done = null;
+  var done = null, advance;
   function refresh() {
     var c = isComplete();
     if (c === done) return;
     done = c;
     steps.classList.toggle('done', c);
-    if (next) next.classList.toggle('next', c);   // next step grows + brightens when complete
-    place(c, true);                                // walk the steps left, one after another
+    if (next) next.classList.toggle('next', c);
+    place(c);                                      // steps slide left together
+
+    // Everything answered → let the slide play out, then move on by itself.
+    // (Un-selecting before it fires cancels the hand-off.)
+    clearTimeout(advance);
+    if (c && next && next.href) advance = setTimeout(function () { location.href = next.href; }, 1100);
   }
 
   // Toggle any [data-toggle] button: tap to select (.sel), tap again to clear.
