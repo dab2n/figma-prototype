@@ -96,12 +96,14 @@
    centers; active = Bold 20 white, others = Regular 16 gray. */
 .setup-stepbar { justify-content: flex-end; gap: 14px; padding-top: 12px; }
 .setup-stepbar .steps-wrap { width: 100%; overflow: hidden; }
-/* Hidden until JS places the steps, so a new page never flashes the row at x=0
-   and then snaps it into place. */
+/* The bar must never re-animate between steps: give it its own view-transition name so
+   the cross-document transition swaps it instantly instead of fading it back in. */
+.setup-stepbar { view-transition-name: setup-stepbar; }
+::view-transition-old(setup-stepbar) { animation: none; opacity: 0; }
+::view-transition-new(setup-stepbar) { animation: none; opacity: 1; }
 /* position:relative so each step's offsetLeft is measured from the row itself (which
    starts at the wrap's left edge) — the centring maths depends on that origin. */
-.setup-stepbar .steps { position: relative; display: inline-flex; align-items: center; gap: 24px; white-space: nowrap; padding: 0 20px; visibility: hidden; }
-.setup-stepbar .steps.placed { visibility: visible; }
+.setup-stepbar .steps { position: relative; display: inline-flex; align-items: center; gap: 24px; white-space: nowrap; padding: 0 20px; }
 /* Each step carries its own translate (not the row) — all move left together at the
    same speed, so the bar never slides back in as one block on the next page. */
 .setup-stepbar .step { flex: none; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-500); text-decoration: none; }

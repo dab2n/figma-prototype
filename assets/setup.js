@@ -73,10 +73,11 @@
 
       var c = isComplete();
       setDone(c);
-      // Everything answered → let the hand-off play out, then move on by itself.
+      // Everything answered → the next title glides to centre and the content swaps the
+      // moment it lands (matches the .6s translate in setup.css).
       // (Changing an answer before it fires just resets the timer.)
       clearTimeout(advance);
-      if (c && next && next.href) advance = setTimeout(function () { location.href = next.href; }, 900);
+      if (c && next && next.href) advance = setTimeout(function () { location.href = next.href; }, 600);
     });
   });
 
