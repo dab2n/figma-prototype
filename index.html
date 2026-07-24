@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
-<script src="assets/openext.js?v=773"></script>
+<script src="assets/openext.js?v=777"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,194 +12,25 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#ffffff">
-<title>Newton — Home</title>
-<link rel="stylesheet" href="styles/main.css?v=773">
-<link rel="stylesheet" href="styles/home.css?v=773">
+<title>Newton — Welcome</title>
+<link rel="stylesheet" href="styles/main.css?v=777">
+<link rel="stylesheet" href="styles/onboarding.css?v=777">
 </head>
 <body>
 <div class="phone">
-  <div class="screen">
-    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+  <div class="screen ob-splash">
+    <div class="status-bar on-dark"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
 
-    <div class="app-bar">
-      <img class="logo" src="assets/photos/logo-newton-brand.png" alt="Newton">
-      <div class="actions">
-        <img src="assets/icons/appbar-bell.svg" alt="알림">
-        <img src="assets/icons/appbar-search.svg" alt="검색">
-      </div>
+    <p class="ob-turn">Now, Your Turn!</p>
+    <div class="ob-logo"><img src="assets/icons/newton-logo.svg" alt="Newton"></div>
+
+    <div class="ob-cta">
+      <a class="ob-get" href="onboarding-sport.html">Get Started <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></a>
+      <a class="ob-account" href="home.html">Already have an account</a>
     </div>
 
-    <div class="hero-section">
-    <div class="hero-shadow"></div>
-    <div class="hero-scroll">
-      <a class="hero-card" href="pyeongso.html" style="background-image:url('assets/photos/cardbg-akiyama.png');">
-        <div class="hero-text">
-          <p class="hero-title">Akiyama's Ghost Step</p>
-          <div class="hero-meta"><span>Pro Pack</span><span class="dim">11 min</span></div>
-        </div>
-        <span class="hero-btn" style="--btn:#FA3030;">View Now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
-      </a>
-      <a class="hero-card" href="pyeongso.html" style="background-image:url('assets/photos/cardbg-sean.png');">
-        <div class="hero-text">
-          <p class="hero-title">Sean's Final 1km Pace</p>
-          <div class="hero-meta"><span>Creator Pack</span><span class="dim">18 min</span></div>
-        </div>
-        <span class="hero-btn" style="--btn:#FB552F;">View Now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
-      </a>
-      <a class="hero-card" href="pyeongso.html" style="background-image:url('assets/photos/cardbg-curry.png');">
-        <div class="hero-text">
-          <p class="hero-title">Curry's Step Back</p>
-          <div class="hero-meta"><span>Pro Pack</span><span class="dim">23 min</span></div>
-        </div>
-        <span class="hero-btn" style="--btn:#8A1A00;">View Now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
-      </a>
-    </div>
-    </div>
-
-    <section class="section">
-      <div class="section-title t-subtitle-b">
-        Recently Viewed
-        <img src="assets/icons/section-icon-recently.svg" alt="">
-      </div>
-      <div class="recent-list">
-        <a class="recent-item" href="pyeongso.html">
-          <img class="recent-thumb" src="assets/photos/recent-basketball.png" alt="">
-          <div class="recent-info">
-            <p class="t-body-bold">Basketball Basic Dribble</p>
-            <div class="recent-meta t-caption-regular">
-              <span>Janghoon</span><img class="sep" src="assets/icons/dot-sep-small.svg" alt=""><span class="dim">12m</span>
-            </div>
-          </div>
-          <img class="play" src="assets/icons/play-btn1.svg" alt="재생">
-        </a>
-        <a class="recent-item" href="pyeongso.html">
-          <img class="recent-thumb" src="assets/photos/recent-running.png" alt="">
-          <div class="recent-info">
-            <p class="t-body-bold">Running Intervals</p>
-            <div class="recent-meta t-caption-regular">
-              <span>Daniel</span><img class="sep" src="assets/icons/dot-sep-small.svg" alt=""><span class="dim">18m</span>
-            </div>
-          </div>
-          <img class="play" src="assets/icons/play-btn1.svg" alt="재생">
-        </a>
-        <a class="recent-item" href="pyeongso.html">
-          <img class="recent-thumb" src="assets/photos/recent-tennis.png" alt="">
-          <div class="recent-info">
-            <p class="t-body-bold">The Tennis Skill</p>
-            <div class="recent-meta t-caption-regular">
-              <span>Sojin</span><img class="sep" src="assets/icons/dot-sep-small2.svg" alt=""><span class="dim">20m</span>
-            </div>
-          </div>
-          <img class="play" src="assets/icons/play-btn2.svg" alt="재생">
-        </a>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-title t-subtitle-b">
-        Today's Movement
-        <img src="assets/icons/section-icon-movement.svg" alt="">
-      </div>
-      <div class="movement-scroll">
-        <a class="movement-card" href="pyeongso.html">
-          <div class="movement-collage">
-            <img src="assets/photos/movement-collage1.png" alt="">
-            <img src="assets/photos/movement-collage2.png" alt="">
-            <img src="assets/photos/movement-collage3.png" alt="">
-            <img src="assets/photos/movement-collage4.png" alt="">
-          </div>
-          <p class="t-body-bold">Basketball Highlight</p>
-          <p class="t-caption-regular dim">Pro Pack</p>
-        </a>
-        <a class="movement-card" href="pyeongso.html">
-          <img class="movement-photo" src="assets/photos/movement-boxing.png" alt="">
-          <p class="t-body-bold">Boxing Basic Jab Combo</p>
-          <p class="t-caption-regular dim">Skilled</p>
-        </a>
-        <a class="movement-card" href="pyeongso.html">
-          <img class="movement-photo" src="assets/photos/movement-basicsteps.png" alt="">
-          <p class="t-body-bold">Basic Steps For Biginner</p>
-          <p class="t-caption-regular dim">Creator</p>
-        </a>
-      </div>
-    </section>
-
-  </div>
-
-  <!-- Notification strip: sits in the black area above the navbar, revealed when the
-       content frame shrinks up. State 1 = "New Report"; tapping morphs to state 2
-       (avatar + title + Open) which links to the Session Recap. -->
-  <div class="notif-bar" id="notifBar">
-    <button class="notif-new" id="notifNew"><span class="notif-dot"></span>New Report</button>
-    <div class="notif-rich">
-      <div class="notif-left">
-        <img class="notif-av" src="assets/icons/avatar-ellipse-sean.png" alt="">
-        <span>Sean's Final 1km Pace</span>
-      </div>
-      <a class="report-open" href="recap.html">Open <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></a>
-    </div>
-  </div>
-
-  <nav class="tabbar">
-    <div class="tabs">
-      <a href="index.html" class="active"><img src="assets/icons/nav-home.svg" alt="홈"><span class="dot"></span></a>
-      <a href="packs.html"><img src="assets/icons/nav-packs.svg" alt="팩"></a>
-      <a href="progress.html"><img src="assets/icons/nav-stats.svg" alt="통계"></a>
-      <a href="my.html"><img src="assets/icons/nav-profile.svg" alt="프로필"></a>
-    </div>
     <div class="home-indicator"><span></span></div>
-  </nav>
+  </div>
 </div>
-<script>
-// Report notification: for now the trigger is "5s on Home". The content frame
-// shrinks up (revealing the black strip), and "New Report" fades in. Tapping it
-// morphs the strip to the avatar + Open state.
-(function () {
-  var phone = document.querySelector('.phone');
-  var screen = document.querySelector('.screen');
-
-  // Smoothly shrink the content frame up by 66px. A CSS height transition freezes
-  // on this scroll container (its sticky status-bar child blocks height interpolation),
-  // so drive it with rAF — direct height sets render fine. The CSS notif-on rule holds
-  // the resting 634px once we hand the inline height back.
-  function reveal() {
-    var from = screen.offsetHeight;                   // current resting height (any viewport)
-    phone.classList.add('notif-on');
-    var to = from - 66, dur = 450, s = null;
-    screen.style.height = from + 'px';
-    requestAnimationFrame(function step(t) {
-      if (s === null) s = t;
-      var p = Math.min((t - s) / dur, 1);
-      var e = 1 - Math.pow(1 - p, 3);                 // ease-out cubic
-      screen.style.height = (from - (from - to) * e) + 'px';
-      if (p < 1) requestAnimationFrame(step);
-      else screen.style.height = '';                  // CSS (notif-on) holds the shrunk height
-    });
-  }
-
-  // Reverse the reveal: content frame grows back and the notification is dismissed.
-  function restore() {
-    var from = screen.offsetHeight, to = from + 66, dur = 360, s = null;
-    screen.style.height = from + 'px';
-    requestAnimationFrame(function step(t) {
-      if (s === null) s = t;
-      var p = Math.min((t - s) / dur, 1);
-      var e = 1 - Math.pow(1 - p, 3);
-      screen.style.height = (from + (to - from) * e) + 'px';
-      if (p < 1) requestAnimationFrame(step);
-      else { screen.style.height = ''; phone.classList.remove('notif-on', 'notif-open'); }
-    });
-  }
-
-  setTimeout(reveal, 5000);
-  document.getElementById('notifNew').addEventListener('click', function () {
-    phone.classList.add('notif-open');
-  });
-  // Tap anywhere in the top content area (not the notification itself) → dismiss it.
-  screen.addEventListener('click', function () {
-    if (phone.classList.contains('notif-on')) restore();
-  });
-})();
-</script>
 </body>
 </html>
