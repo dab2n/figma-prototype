@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
-<script src="assets/openext.js?v=773"></script>
+<script src="assets/openext.js?v=778"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,9 +13,9 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#ffffff">
 <title>Newton — Setup · Main Workout</title>
-<link rel="stylesheet" href="styles/main.css?v=773">
-<link rel="stylesheet" href="styles/setup.css?v=773">
-<link rel="stylesheet" href="styles/mainworkout.css?v=773">
+<link rel="stylesheet" href="styles/main.css?v=778">
+<link rel="stylesheet" href="styles/setup.css?v=778">
+<link rel="stylesheet" href="styles/mainworkout.css?v=778">
 </head>
 <body>
 <div class="phone">
@@ -91,7 +91,7 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/setup.js?v=773"></script>
+<script src="assets/setup.js?v=778"></script>
 <script>
 (function () {
   var STRETCH = 8, LEARN = 10;   // fixed pack minutes (node 338:19949/19953)
@@ -103,10 +103,12 @@
   var totalEl = document.getElementById('mwTotal');
   var bars = { stretch: STRETCH, learn: LEARN, run: runMin };
 
-  var runSet = false;                  // first entry: run is "You Can Choose", not counted
-  function total() { return STRETCH + LEARN + (runSet ? runMin : 0); }
+  // The default 5km already carries its suggested run time, so the run bar is sized and
+  // counted from the start; it just reads "You Can Choose" until the user adjusts it.
+  var runSet = false;
+  function total() { return STRETCH + LEARN + runMin; }
 
-  // The moment the user adjusts distance or time, run joins the graph for good.
+  // The moment the user adjusts distance or time, the run bar shows its real minutes.
   function chooseRun() {
     if (runSet) return;
     runSet = true;
@@ -116,17 +118,15 @@
 
   // Widths stay proportional to each other; run just reflects the set-up value.
   function layout() {
-    var full = graph.clientWidth, denom = runSet ? total() : (STRETCH + LEARN);
+    var full = graph.clientWidth, t = total();
     var mins = { stretch: STRETCH, learn: LEARN, run: runMin };
     ['stretch', 'learn', 'run'].forEach(function (k) {
       var bar = graph.querySelector('.mw-' + k);
-      // before a run is chosen it fills the row full-width (holds "You Can Choose")
-      var w = (k === 'run' && !runSet) ? full : Math.max(56, Math.round(mins[k] / denom * full));
-      bar.style.width = w + 'px';
+      bar.style.width = Math.max(56, Math.round(mins[k] / t * full)) + 'px';
       if (k !== 'run') bar.querySelector('.v').textContent = mins[k] + 'min';
     });
     graph.querySelector('.mw-run .v').textContent = runSet ? runMin + 'min' : 'You Can Choose';
-    totalEl.textContent = total();
+    totalEl.textContent = t;
   }
 
   // Entry: bars collapse to the number, then grow leftward; total counts up.

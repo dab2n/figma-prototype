@@ -26,9 +26,8 @@
 .mw-stretch, .mw-learn, .mw-run {
   background: linear-gradient(to right, #FA3030 0, #FA3030 calc(100% - 48px), #FE6E3C calc(100% - 24px), #FEC389 calc(100% - 6px), #D1FEFF 100%);
 }
-/* First entry: run isn't chosen yet — a flat grey bar reading "You Can Choose". */
-.mw-run.unset { background: var(--color-neutral-100); }
-.mw-run.unset .v { color: #A3A3A3; }
+/* Default run: the gradient bar is sized to the 5km-suggested time and reads a white
+   "You Can Choose" until the user adjusts distance/time (then it shows the minutes). */
 .mw-graph.run .mw-row[data-k="run"].unset .mw-out { opacity: 0; }   /* no RUN! label until chosen */
 /* Big OffBit total, overlaid on the left. */
 .mw-num { position: absolute; left: 14px; top: 8px; z-index: 2; color: var(--color-black); display: flex; flex-direction: column; align-items: flex-start; }

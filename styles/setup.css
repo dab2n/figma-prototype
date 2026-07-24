@@ -129,7 +129,7 @@
 .body-hot.sel img { opacity: 1; transform: scale(1); filter: drop-shadow(0 2px 8px rgba(250,48,48,0.45)); }
 
 /* Assist Mode — horizontal scroll of figure cards */
-.mode-scroll { display: flex; gap: 8px; overflow-x: auto; margin: 0 -12px; padding: 0 12px 4px; scrollbar-width: none; }
+.mode-scroll { display: flex; gap: 8px; overflow-x: auto; margin: -14px -12px 0; padding: 14px 12px 26px; scrollbar-width: none; }
 .mode-scroll::-webkit-scrollbar { display: none; }
 .mode-card {
   position: relative; flex: 0 0 200px; height: 200px; box-sizing: border-box;
