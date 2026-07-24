@@ -52,6 +52,7 @@
 /* Card-select (Today's Goal, Condition) */
 .card-list { display: flex; flex-direction: column; gap: 4px; }
 .card-sel {
+  position: relative;
   display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
   width: 100%; box-sizing: border-box; text-align: left; cursor: pointer;
   background: #fff; border: none; border-radius: 20px; padding: 16px 20px;
@@ -59,7 +60,15 @@
 .card-sel .cs-title { margin: 0; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
 .card-sel .cs-desc { margin: 0; font-family: var(--font-supreme); font-size: 14px; line-height: 1.4; letter-spacing: -0.42px; color: var(--color-neutral-600); }
 .card-sel.sel .cs-title { color: #fff; }
-.card-sel.sel .cs-desc { color: var(--color-neutral-50); }
+.card-sel.sel .cs-desc { color: var(--color-neutral-100); }
+/* Selected card carries the check badge (node 9:9851): 28px circle, vertically centred
+   at the card's right padding. The asset holds its soft shadow as transparent padding,
+   so a 52px box renders the circle itself at 28px. */
+.card-sel.sel::after {
+  content: ""; position: absolute; right: 8px; top: 50%; margin-top: -26px;
+  width: 52px; height: 52px; pointer-events: none;
+  background: url('../assets/icons/check-circle.png') center / contain no-repeat;
+}
 
 /* Indoor/Outdoor toggle + Difficulty 3-segment */
 .toggle-row { display: flex; gap: 4px; }
