@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
-<script src="assets/openext.js?v=767"></script>
+<script src="assets/openext.js?v=770"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,9 +13,9 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#ffffff">
 <title>Newton — Setup · Main Workout</title>
-<link rel="stylesheet" href="styles/main.css?v=767">
-<link rel="stylesheet" href="styles/setup.css?v=767">
-<link rel="stylesheet" href="styles/mainworkout.css?v=767">
+<link rel="stylesheet" href="styles/main.css?v=770">
+<link rel="stylesheet" href="styles/setup.css?v=770">
+<link rel="stylesheet" href="styles/mainworkout.css?v=770">
 </head>
 <body>
 <div class="phone">
@@ -38,9 +38,9 @@
         <p class="mw-label">Total</p>
         <div class="mw-total">
           <div class="mw-graph" id="mwGraph">
-            <div class="mw-row" data-k="stretch"><span class="mw-out">STRETCH</span><div class="mw-bar mw-stretch"><span class="v">8min</span><span class="l">STRETCH</span></div></div>
-            <div class="mw-row" data-k="learn"><span class="mw-out">LEARN</span><div class="mw-bar mw-learn"><span class="v">10min</span><span class="l">LEARN</span></div></div>
-            <div class="mw-row" data-k="run"><div class="mw-bar mw-run"><span class="v">30min</span><span class="l">RUN!</span></div></div>
+            <div class="mw-row" data-k="stretch"><span class="mw-out">STRETCH</span><div class="mw-bar mw-stretch"><span class="v">8min</span></div></div>
+            <div class="mw-row" data-k="learn"><span class="mw-out">LEARN</span><div class="mw-bar mw-learn"><span class="v">10min</span></div></div>
+            <div class="mw-row unset" data-k="run"><span class="mw-out">RUN!</span><div class="mw-bar mw-run unset"><span class="v">You Can Choose</span></div></div>
           </div>
           <div class="mw-num"><span class="n" id="mwTotal">0</span><span class="u">min</span></div>
         </div>
@@ -60,7 +60,6 @@
             <div class="mw-ruler">
               <div class="mw-track" id="mwTrack"><div class="mw-ticks" id="mwTicks"></div></div>
             </div>
-            <div class="mw-dist-scale"><span class="lo">4.0</span><span class="hi">6.0</span></div>
           </div>
         </div>
 
@@ -92,34 +91,42 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/setup.js?v=767"></script>
+<script src="assets/setup.js?v=770"></script>
 <script>
 (function () {
   var STRETCH = 8, LEARN = 10;   // fixed pack minutes (node 338:19949/19953)
   var PACE = 6;                  // min per km → run time
-  var DMIN = 3.2, DMAX = 6.8, DSTEP = 0.2;   // ruler ticks; 4.0 is the recommended distance
+  var DMIN = 1.0, DMAX = 10.0, DSTEP = 0.2;  // ruler 1–10km; 4.0 is the recommended distance
 
   var runMin = 30;               // 5.0km × 6 = 30
   var graph  = document.getElementById('mwGraph');
   var totalEl = document.getElementById('mwTotal');
   var bars = { stretch: STRETCH, learn: LEARN, run: runMin };
 
-  function total() { return STRETCH + LEARN + runMin; }
+  var runSet = false;                  // first entry: run is "You Can Choose", not counted
+  function total() { return STRETCH + LEARN + (runSet ? runMin : 0); }
+
+  // The moment the user adjusts distance or time, run joins the graph for good.
+  function chooseRun() {
+    if (runSet) return;
+    runSet = true;
+    var row = graph.querySelector('.mw-row[data-k="run"]');
+    row.classList.remove('unset'); row.querySelector('.mw-bar').classList.remove('unset');
+  }
 
   // Widths stay proportional to each other; run just reflects the set-up value.
   function layout() {
-    bars.run = runMin;
-    var t = total(), full = graph.clientWidth;
+    var full = graph.clientWidth, denom = runSet ? total() : (STRETCH + LEARN);
+    var mins = { stretch: STRETCH, learn: LEARN, run: runMin };
     ['stretch', 'learn', 'run'].forEach(function (k) {
-      var row = graph.querySelector('.mw-row[data-k="' + k + '"]');
-      var bar = row.querySelector('.mw-bar');
-      var w = Math.max(56, Math.round(bars[k] / t * full));
+      var bar = graph.querySelector('.mw-' + k);
+      // before a run is chosen it fills the row full-width (holds "You Can Choose")
+      var w = (k === 'run' && !runSet) ? full : Math.max(56, Math.round(mins[k] / denom * full));
       bar.style.width = w + 'px';
-      bar.querySelector('.v').textContent = bars[k] + 'min';
-      // too narrow for the label alongside the time → push the label outside-left
-      if (k !== 'run') row.classList.toggle('compact', w < 120);
+      if (k !== 'run') bar.querySelector('.v').textContent = mins[k] + 'min';
     });
-    totalEl.textContent = t;
+    graph.querySelector('.mw-run .v').textContent = runSet ? runMin + 'min' : 'You Can Choose';
+    totalEl.textContent = total();
   }
 
   // Entry: bars collapse to the number, then grow leftward; total counts up.
@@ -143,30 +150,32 @@
   var track = document.getElementById('mwTrack');
   var ticks = document.getElementById('mwTicks');
   var GAP = 18;                                    // px between notches
-  var steps = Math.round((DMAX - DMIN) / DSTEP);   // 10
+  var steps = Math.round((DMAX - DMIN) / DSTEP);
   (function build() {
     var edge = Math.round(track.clientWidth / 2);  // half-track spacers so an end tick can centre
     var lead = document.createElement('div'); lead.className = 'sp'; lead.style.width = edge + 'px';
     ticks.appendChild(lead);
     for (var i = 0; i <= steps; i++) {
-      if (i) { var g = document.createElement('div'); g.style.width = (GAP - 2) + 'px'; g.style.flex = 'none'; ticks.appendChild(g); }
       var km = DMIN + i * DSTEP;
       var isInt = Math.abs(km - Math.round(km)) < 0.01;
-      var t = document.createElement('div');
-      t.className = 'mw-tick' + (isInt ? ' maj' : '') + (Math.abs(km - 4.0) < 0.01 ? ' rec' : '');
-      ticks.appendChild(t);
+      var cell = document.createElement('div');
+      cell.className = 'mw-cell' + (isInt ? ' maj' : '') + (Math.abs(km - 4.0) < 0.01 ? ' rec' : '');
+      cell.style.width = GAP + 'px';
+      cell.innerHTML = '<div class="mw-tick"></div>' + (isInt ? '<div class="mw-lbl">' + km.toFixed(1) + '</div>' : '');
+      ticks.appendChild(cell);
     }
     var trail = document.createElement('div'); trail.className = 'sp'; trail.style.width = edge + 'px';
     ticks.appendChild(trail);
   })();
 
   function setDistFromScroll() {
-    var i = Math.round(track.scrollLeft / GAP);
-    i = Math.max(0, Math.min(steps, i));
+    var i = Math.max(0, Math.min(steps, Math.round(track.scrollLeft / GAP)));
     var km = DMIN + i * DSTEP;
     document.getElementById('mwDist').textContent = km.toFixed(1);
+    if (!interacted) return;    // only a real swipe (not the centring/snap-settle) counts
+    chooseRun();
     runMin = Math.round(km * PACE);
-    setWheel(runMin);        // keep the Time wheel in sync
+    setWheel(runMin);           // keep the Time wheel in sync
     layout();
   }
   var dScroll;
@@ -191,7 +200,8 @@
   }
   function val(w) { return Math.round(w.scrollTop / ROW); }
   function readWheels() {
-    if (syncing) return;               // ignore scroll events from a programmatic setWheel
+    if (syncing || !interacted) return;   // ignore programmatic setWheel + the initial sync
+    chooseRun();
     var mins = val(wheels.h) * 60 + val(wheels.m) + (val(wheels.s) >= 30 ? 1 : 0);
     runMin = Math.max(1, mins);
     layout();
@@ -215,6 +225,14 @@
       dPanel.hidden = time; tPanel.hidden = !time;
       if (time) setWheel(runMin);      // wheels need a laid-out panel to scroll
     });
+  });
+
+  // A real interaction (drag / wheel / touch) on either control flips runMin from its
+  // "You Can Choose" placeholder into the graph — the centring scroll & snap-settle don't.
+  var interacted = false;
+  ['pointerdown', 'touchstart', 'wheel', 'keydown'].forEach(function (ev) {
+    track.addEventListener(ev, function () { interacted = true; }, { passive: true });
+    Object.keys(wheels).forEach(function (k) { wheels[k].addEventListener(ev, function () { interacted = true; }, { passive: true }); });
   });
 
   // ── Init ───────────────────────────────────────────────────────────────────

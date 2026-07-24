@@ -140,7 +140,8 @@
 /* Default cards use the pre-tinted art; a selected card takes the Newton gradient with
    the natural photo laid over it in plus-lighter, plus the library's selected shadow. */
 /* Art is supplied square at card size, so it just fills the 200x200 frame. */
-.mode-card .fig { position: absolute; inset: 0; background-size: contain; background-position: center; background-repeat: no-repeat; }
+/* Art is card-sized square: fill the frame, centred horizontally and pinned to the top. */
+.mode-card .fig { position: absolute; inset: 0; background-size: cover; background-position: center top; background-repeat: no-repeat; }
 .mode-card .fig-sel { display: none; }
 .mode-card.sel .fig { display: none; }
 .mode-card.sel .fig-sel { display: block; mix-blend-mode: plus-lighter; }
