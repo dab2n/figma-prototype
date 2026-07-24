@@ -99,6 +99,7 @@
   position: absolute; top: 0; left: 50%; margin-left: -156px;
   width: 312px; height: 554px; object-fit: cover; display: block;
   mix-blend-mode: multiply;
+  filter: saturate(1.55) contrast(1.05);   /* multiply mutes the clip — push the colour back */
   /* …and the edges fade out, so even the clip's own lighting can't draw a box. */
   -webkit-mask-image: linear-gradient(to right, transparent, #000 14%, #000 86%, transparent),
                       linear-gradient(to bottom, transparent, #000 10%, #000 92%, transparent);
@@ -112,13 +113,20 @@
    left-right icon saying the figure can be spun. */
 .injury-glow { position: absolute; top: 288px; left: 50%; transform: translateX(-50%); width: 380px; height: 150px; pointer-events: none; background: radial-gradient(closest-side, rgba(255,255,255,0.85), rgba(255,255,255,0)); }
 .injury-plate { position: absolute; top: 333px; left: 50%; margin-left: -164px; width: 328px; height: 44.57px; pointer-events: none; }
-.injury-turn { position: absolute; top: 362px; left: 50%; margin-left: -8px; width: 24px; height: 24px; pointer-events: none; filter: brightness(0) invert(0.32); }
+.injury-turn { position: absolute; top: 362px; left: 50%; margin-left: -8px; width: 24px; height: 24px; pointer-events: none; filter: brightness(0) invert(1) drop-shadow(0 1px 3px rgba(0,0,0,0.25)); }
+/* Frosted panel over the lower legs/feet: sits above the clip but below the chips (which
+   live later in the DOM), so the feet blur out while the chips stay crisp. */
+.injury-scrim { position: absolute; top: 360px; left: -20px; right: -20px; height: 240px; pointer-events: none;
+  -webkit-backdrop-filter: blur(7px); backdrop-filter: blur(7px);
+  background: linear-gradient(to bottom, rgba(242,242,242,0) 0%, rgba(242,242,242,0.55) 55%, rgba(242,242,242,0.9) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 40%);
+          mask-image: linear-gradient(to bottom, transparent, #000 40%); }
 
 /* Body regions: the same ring used on Records/Progress, as a tap target over the figure. */
 .injury-map { position: absolute; top: 0; left: 50%; margin-left: -156px; width: 312px; height: 554px; }
 .body-hot { position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; padding: 0; border: none; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.body-hot img { width: 30px; height: 30px; opacity: 0.5; transition: opacity .2s ease, width .2s ease, height .2s ease; }
-.body-hot.sel img { width: 38px; height: 38px; opacity: 1; filter: drop-shadow(0 2px 8px rgba(250,48,48,0.45)); }
+.body-hot img { width: 38px; height: 38px; opacity: 0; transition: opacity .2s ease, transform .2s ease; transform: scale(.6); }
+.body-hot.sel img { opacity: 1; transform: scale(1); filter: drop-shadow(0 2px 8px rgba(250,48,48,0.45)); }
 
 /* Assist Mode — horizontal scroll of figure cards */
 .mode-scroll { display: flex; gap: 8px; overflow-x: auto; margin: 0 -12px; padding: 0 12px 4px; scrollbar-width: none; }
@@ -132,7 +140,7 @@
 /* Default cards use the pre-tinted art; a selected card takes the Newton gradient with
    the natural photo laid over it in plus-lighter, plus the library's selected shadow. */
 /* Art is supplied square at card size, so it just fills the 200x200 frame. */
-.mode-card .fig { position: absolute; inset: 0; background-size: cover; background-position: center; background-repeat: no-repeat; }
+.mode-card .fig { position: absolute; inset: 0; background-size: contain; background-position: center; background-repeat: no-repeat; }
 .mode-card .fig-sel { display: none; }
 .mode-card.sel .fig { display: none; }
 .mode-card.sel .fig-sel { display: block; mix-blend-mode: plus-lighter; }
@@ -151,7 +159,11 @@
    answers are in. Moving on shifts every title one slot to the left. */
 .setup-stepbar { justify-content: flex-end; gap: 0; padding: 12px 16px 0; box-sizing: border-box; }
 .setup-stepbar .sb-row { display: flex; align-items: center; gap: 56px; width: 100%; height: 32px; }
-.setup-stepbar .steps-wrap { flex: 1 1 auto; min-width: 0; height: 24px; overflow: hidden; }
+/* Trailing steps dissolve at the right edge instead of being hard-cut mid-word, so a step
+   is either legibly in view or gone (no "Inju…" fragment). */
+.setup-stepbar .steps-wrap { flex: 1 1 auto; min-width: 0; height: 24px; overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, #000 62%, transparent 82%);
+          mask-image: linear-gradient(to right, #000 62%, transparent 82%); }
 .setup-stepbar .steps { position: relative; display: inline-flex; align-items: center; gap: 24px; white-space: nowrap; }
 .setup-stepbar .step { flex: none; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-500); text-decoration: none; }
 .setup-stepbar .steps.placed .step { transition: color .45s ease, font-size .45s ease, translate .55s cubic-bezier(.4,0,.2,1); }
