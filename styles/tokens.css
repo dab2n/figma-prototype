@@ -6,7 +6,7 @@
 @font-face { font-family:'Pretendard'; font-weight:600; font-style:normal; font-display:swap; src:url('../fonts/pretendard/Pretendard-SemiBold.woff2') format('woff2'), url('../fonts/pretendard/Pretendard-SemiBold.woff') format('woff'); }
 @font-face { font-family:'Pretendard'; font-weight:700; font-style:normal; font-display:swap; src:url('../fonts/pretendard/Pretendard-Bold.woff2') format('woff2'), url('../fonts/pretendard/Pretendard-Bold.woff') format('woff'); }
 /* OffBit — the "18 min" process-graph numeral */
-@font-face { font-family:'OffBit'; font-weight:700; font-style:normal; font-display:swap; src:url('../fonts/offbit/OffBitTrial-Bold.woff2') format('woff2'), url('../fonts/offbit/OffBitTrial-Bold.woff') format('woff'); }
+@font-face { font-family:'OffBit'; font-weight:700; font-style:normal; font-display:swap; src:url('../fonts/offbit/OffBitTrial-101Bold.woff2') format('woff2'), url('../fonts/offbit/OffBitTrial-Bold.woff') format('woff'); }
 
 :root {
   /* Colors — Figma design system */

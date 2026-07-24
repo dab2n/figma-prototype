@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
-<script src="assets/openext.js?v=762"></script>
+<script src="assets/openext.js?v=763"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,9 +13,9 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta name="theme-color" content="#ffffff">
 <title>Newton — Setup · Main Workout</title>
-<link rel="stylesheet" href="styles/main.css?v=762">
-<link rel="stylesheet" href="styles/setup.css?v=762">
-<link rel="stylesheet" href="styles/mainworkout.css?v=762">
+<link rel="stylesheet" href="styles/main.css?v=763">
+<link rel="stylesheet" href="styles/setup.css?v=763">
+<link rel="stylesheet" href="styles/mainworkout.css?v=763">
 </head>
 <body>
 <div class="phone">
@@ -38,9 +38,9 @@
         <p class="mw-label">Total</p>
         <div class="mw-total">
           <div class="mw-graph" id="mwGraph">
-            <div class="mw-bar mw-stretch"><span class="v">8min</span><span class="l">STRETCH</span></div>
-            <div class="mw-bar mw-learn"><span class="v">10min</span><span class="l">LEARN</span></div>
-            <div class="mw-bar mw-run"><span class="v">30min</span><span class="l">RUN!</span></div>
+            <div class="mw-row" data-k="stretch"><span class="mw-out">STRETCH</span><div class="mw-bar mw-stretch"><span class="v">8min</span><span class="l">STRETCH</span></div></div>
+            <div class="mw-row" data-k="learn"><span class="mw-out">LEARN</span><div class="mw-bar mw-learn"><span class="v">10min</span><span class="l">LEARN</span></div></div>
+            <div class="mw-row" data-k="run"><div class="mw-bar mw-run"><span class="v">30min</span><span class="l">RUN!</span></div></div>
           </div>
           <div class="mw-num"><span class="n" id="mwTotal">0</span><span class="u">min</span></div>
         </div>
@@ -92,7 +92,7 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/setup.js?v=762"></script>
+<script src="assets/setup.js?v=763"></script>
 <script>
 (function () {
   var STRETCH = 8, LEARN = 10;   // fixed pack minutes (node 338:19949/19953)
@@ -111,9 +111,13 @@
     bars.run = runMin;
     var t = total(), full = graph.clientWidth;
     ['stretch', 'learn', 'run'].forEach(function (k) {
-      var bar = graph.querySelector('.mw-' + k);
-      bar.style.width = Math.max(56, Math.round(bars[k] / t * full)) + 'px';
+      var row = graph.querySelector('.mw-row[data-k="' + k + '"]');
+      var bar = row.querySelector('.mw-bar');
+      var w = Math.max(56, Math.round(bars[k] / t * full));
+      bar.style.width = w + 'px';
       bar.querySelector('.v').textContent = bars[k] + 'min';
+      // too narrow for the label alongside the time → push the label outside-left
+      if (k !== 'run') row.classList.toggle('compact', w < 120);
     });
     totalEl.textContent = t;
   }
