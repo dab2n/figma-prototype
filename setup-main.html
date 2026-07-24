@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<script src="assets/openext.js?v=762"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NEWTON">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#ffffff">
+<title>Newton — Setup · Main Workout</title>
+<link rel="stylesheet" href="styles/main.css?v=762">
+<link rel="stylesheet" href="styles/setup.css?v=762">
+<link rel="stylesheet" href="styles/mainworkout.css?v=762">
+</head>
+<body>
+<div class="phone">
+  <div class="screen setup-screen">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <div class="setup-appbar">
+      <a class="back" href="setup-level.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
+      <a class="skip" href="recap.html">Skip</a>
+    </div>
+
+    <div class="setup-title">
+      <h1>Set your<br>main workout</h1>
+      <p>The 18m Pack (Stretching + Learning) stays as-is</p>
+    </div>
+
+    <div class="mw-body">
+      <!-- Total: Stretch + Learn + Run, bars grow leftward on entry -->
+      <section class="mw-sec">
+        <p class="mw-label">Total</p>
+        <div class="mw-total">
+          <div class="mw-graph" id="mwGraph">
+            <div class="mw-bar mw-stretch"><span class="v">8min</span><span class="l">STRETCH</span></div>
+            <div class="mw-bar mw-learn"><span class="v">10min</span><span class="l">LEARN</span></div>
+            <div class="mw-bar mw-run"><span class="v">30min</span><span class="l">RUN!</span></div>
+          </div>
+          <div class="mw-num"><span class="n" id="mwTotal">0</span><span class="u">min</span></div>
+        </div>
+      </section>
+
+      <!-- Set up: Distance ruler / iPhone-timer Time wheels -->
+      <section class="mw-sec">
+        <p class="mw-label">Set up</p>
+        <div class="mw-tabs">
+          <button class="mw-tab sel" type="button" data-tab="dist">Distance</button>
+          <button class="mw-tab" type="button" data-tab="time">Time</button>
+        </div>
+
+        <div class="mw-panel" id="mwDistPanel">
+          <div class="mw-dist">
+            <div class="mw-dist-val"><span class="d" id="mwDist">5.0</span><span class="k">km</span></div>
+            <div class="mw-ruler">
+              <div class="mw-track" id="mwTrack"><div class="mw-ticks" id="mwTicks"></div></div>
+            </div>
+            <div class="mw-dist-scale"><span class="lo">4.0</span><span class="hi">6.0</span></div>
+          </div>
+        </div>
+
+        <div class="mw-panel" id="mwTimePanel" hidden>
+          <div class="mw-time">
+            <div class="mw-wheel" id="wheelH" data-max="3"></div>
+            <span class="mw-unit">h</span>
+            <div class="mw-wheel" id="wheelM" data-max="59"></div>
+            <span class="mw-unit">m</span>
+            <div class="mw-wheel" id="wheelS" data-max="59"></div>
+            <span class="mw-unit">s</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <nav class="tabbar setup-stepbar">
+    <div class="sb-row">
+      <div class="steps-wrap"><div class="steps">
+      <a class="step" href="setup-location.html">Location</a>
+      <a class="step" href="setup-condition.html">Condition</a>
+      <a class="step" href="setup-injury.html">Injury check</a>
+      <a class="step" href="setup-level.html">Level/Mode</a>
+      <a class="step active" href="setup-main.html">Main Workout</a>
+      </div></div>
+      <a class="sb-next" data-next="recap.html" data-force-ready>Done <img src="assets/icons/arrow-right-lg.svg" alt=""></a>
+    </div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
+</div>
+<script src="assets/setup.js?v=762"></script>
+<script>
+(function () {
+  var STRETCH = 8, LEARN = 10;   // fixed pack minutes (node 338:19949/19953)
+  var PACE = 6;                  // min per km → run time
+  var DMIN = 4.0, DMAX = 6.0, DSTEP = 0.2;   // distance ruler: centre 5.0, +0.2/notch
+
+  var runMin = 30;               // 5.0km × 6 = 30
+  var graph  = document.getElementById('mwGraph');
+  var totalEl = document.getElementById('mwTotal');
+  var bars = { stretch: STRETCH, learn: LEARN, run: runMin };
+
+  function total() { return STRETCH + LEARN + runMin; }
+
+  // Widths stay proportional to each other; run just reflects the set-up value.
+  function layout() {
+    bars.run = runMin;
+    var t = total(), full = graph.clientWidth;
+    ['stretch', 'learn', 'run'].forEach(function (k) {
+      var bar = graph.querySelector('.mw-' + k);
+      bar.style.width = Math.max(56, Math.round(bars[k] / t * full)) + 'px';
+      bar.querySelector('.v').textContent = bars[k] + 'min';
+    });
+    totalEl.textContent = t;
+  }
+
+  // Entry: bars collapse to the number, then grow leftward; total counts up.
+  // The FINAL state is committed synchronously so it's correct even if rAF is throttled
+  // (e.g. a backgrounded tab); the transition/count-up are the visible enhancement.
+  function intro() {
+    graph.querySelectorAll('.mw-bar').forEach(function (b) { b.style.transition = 'none'; b.style.width = '56px'; });
+    void graph.offsetWidth;                                     // commit the collapsed start
+    graph.querySelectorAll('.mw-bar').forEach(function (b) { b.style.transition = ''; });
+    layout(); graph.classList.add('run');                      // real widths → width transition
+    var t = total(), s = null;
+    requestAnimationFrame(function step(ts) {
+      if (s === null) s = ts;
+      var p = Math.min((ts - s) / 700, 1);
+      totalEl.textContent = Math.round((1 - Math.pow(1 - p, 2)) * t);
+      if (p < 1) requestAnimationFrame(step);
+    });
+  }
+
+  // ── Distance ruler ─────────────────────────────────────────────────────────
+  var track = document.getElementById('mwTrack');
+  var ticks = document.getElementById('mwTicks');
+  var GAP = 18;                                    // px between notches
+  var steps = Math.round((DMAX - DMIN) / DSTEP);   // 10
+  (function build() {
+    var edge = Math.round(track.clientWidth / 2);  // half-track spacers so an end tick can centre
+    var lead = document.createElement('div'); lead.className = 'sp'; lead.style.width = edge + 'px';
+    ticks.appendChild(lead);
+    for (var i = 0; i <= steps; i++) {
+      if (i) { var g = document.createElement('div'); g.style.width = (GAP - 2) + 'px'; g.style.flex = 'none'; ticks.appendChild(g); }
+      var t = document.createElement('div');
+      t.className = 'mw-tick' + (i % 5 === 0 ? ' maj' : '');
+      ticks.appendChild(t);
+    }
+    var trail = document.createElement('div'); trail.className = 'sp'; trail.style.width = edge + 'px';
+    ticks.appendChild(trail);
+  })();
+
+  function setDistFromScroll() {
+    var i = Math.round(track.scrollLeft / GAP);
+    i = Math.max(0, Math.min(steps, i));
+    var km = DMIN + i * DSTEP;
+    document.getElementById('mwDist').textContent = km.toFixed(1);
+    runMin = Math.round(km * PACE);
+    setWheel(runMin);        // keep the Time wheel in sync
+    layout();
+  }
+  var dScroll;
+  track.addEventListener('scroll', function () {
+    clearTimeout(dScroll); dScroll = setTimeout(setDistFromScroll, 60);
+  });
+
+  // ── Time wheels (h / m / s) ────────────────────────────────────────────────
+  var wheels = { h: document.getElementById('wheelH'), m: document.getElementById('wheelM'), s: document.getElementById('wheelS') };
+  var ROW = 36;
+  Object.keys(wheels).forEach(function (k) {
+    var w = wheels[k], max = +w.getAttribute('data-max'), html = '<div class="pad"></div>';
+    for (var i = 0; i <= max; i++) html += '<div class="op">' + (i < 10 ? '0' + i : i) + '</div>';
+    w.innerHTML = html + '<div class="pad"></div>';
+    var t; w.addEventListener('scroll', function () {
+      mark(w); clearTimeout(t); t = setTimeout(readWheels, 80);
+    });
+  });
+  function mark(w) {
+    var idx = Math.round(w.scrollTop / ROW);
+    [].forEach.call(w.querySelectorAll('.op'), function (o, i) { o.classList.toggle('on', i === idx); });
+  }
+  function val(w) { return Math.round(w.scrollTop / ROW); }
+  function readWheels() {
+    var mins = val(wheels.h) * 60 + val(wheels.m) + (val(wheels.s) >= 30 ? 1 : 0);
+    runMin = Math.max(1, mins);
+    layout();
+  }
+  function setWheel(mins) {           // reflect a value without firing scroll handlers
+    var h = Math.floor(mins / 60), m = mins % 60;
+    wheels.h.scrollTop = h * ROW; wheels.m.scrollTop = m * ROW; wheels.s.scrollTop = 0;
+    mark(wheels.h); mark(wheels.m); mark(wheels.s);
+  }
+
+  // ── Tabs ───────────────────────────────────────────────────────────────────
+  var dPanel = document.getElementById('mwDistPanel'), tPanel = document.getElementById('mwTimePanel');
+  document.querySelectorAll('.mw-tab').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.mw-tab').forEach(function (b) { b.classList.remove('sel'); });
+      btn.classList.add('sel');
+      var time = btn.getAttribute('data-tab') === 'time';
+      dPanel.hidden = time; tPanel.hidden = !time;
+      if (time) setWheel(runMin);      // wheels need a laid-out panel to scroll
+    });
+  });
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  track.scrollLeft = Math.round((5.0 - DMIN) / DSTEP) * GAP;   // centre on 5.0
+  setWheel(runMin);
+  intro();
+})();
+</script>
+</body>
+</html>

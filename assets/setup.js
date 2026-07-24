@@ -44,7 +44,7 @@
   // Next lights up white once the page is answered, and only then navigates.
   function refresh() {
     if (!nextBtn) return;
-    var c = isComplete();
+    var c = nextBtn.hasAttribute('data-force-ready') || isComplete();
     nextBtn.classList.toggle('ready', c);
     if (c) nextBtn.setAttribute('href', nextBtn.getAttribute('data-next'));
     else nextBtn.removeAttribute('href');

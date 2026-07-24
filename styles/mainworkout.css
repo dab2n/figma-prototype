@@ -1,0 +1,63 @@
+/* ── Main Workout (setup step 5, node 338:19922) ──────────────────────────────
+   Total = Stretch(8) + Learn(10) + Run. Run isn't touched directly; it follows the
+   Set-up value (Distance→time, or the Time wheel). The three bars are right-aligned
+   and grow LEFTWARD on entry, their widths kept proportional to each other. */
+.mw-body { padding: 0 12px; display: flex; flex-direction: column; gap: 32px; }
+.mw-sec { display: flex; flex-direction: column; gap: 8px; }
+.mw-label { margin: 0; padding: 0 12px; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-700); }
+
+/* Total card ------------------------------------------------------------------ */
+.mw-total { position: relative; height: 156px; box-sizing: border-box; background: #fff; border-radius: 20px; padding: 4px; }
+.mw-graph { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; height: 100%; border-radius: 18px; overflow: hidden; }
+.mw-bar {
+  flex: 1; min-height: 0; box-sizing: border-box; width: 56px;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 0 14px; border-radius: 12px; color: #fff; white-space: nowrap; overflow: hidden;
+  transition: width .6s cubic-bezier(.2,.8,.25,1);
+}
+.mw-bar .v { font-family: var(--font-supreme); font-size: 15px; letter-spacing: -0.5px; }
+.mw-bar .l { font-family: var(--font-supreme-bold); font-size: 13px; letter-spacing: -0.5px; opacity: .9; transition: opacity .3s ease; }
+.mw-graph:not(.run) .mw-bar .l { opacity: 0; }
+.mw-stretch { background: linear-gradient(270deg, #D1FEFF 0%, #FEC389 6.7%, #FE6E3C 17%, #FA3030 33%); }
+.mw-learn,
+.mw-run     { background: linear-gradient(90deg, #FA3030 63%, #FE6E3C 90%, #FEC389 101%, #D1FEFF 108%); }
+/* Big OffBit total, overlaid on the left. */
+.mw-num { position: absolute; left: 14px; top: 8px; z-index: 2; color: var(--color-black); display: flex; flex-direction: column; align-items: flex-start; }
+.mw-num .n { font-family: var(--font-offbit); font-weight: 700; font-size: 60px; line-height: 0.95; }
+.mw-num .u { font-family: var(--font-supreme-bold); font-size: 18px; opacity: .6; letter-spacing: -0.54px; }
+
+/* Set up: Distance / Time tabs ------------------------------------------------ */
+.mw-tabs { display: flex; gap: 4px; padding: 4px; background: #fff; border-radius: 20px; }
+.mw-tab { flex: 1; border: none; cursor: pointer; background: transparent; border-radius: 16px; padding: 8px 16px; font-family: var(--font-supreme-medium); font-size: 14px; letter-spacing: -0.56px; color: var(--color-neutral-700); }
+.mw-tab.sel { background: var(--color-neutral-100); }
+.mw-panel { position: relative; background: #fff; border-radius: 20px; overflow: hidden; }
+.mw-panel[hidden] { display: none; }
+
+/* Distance ruler -------------------------------------------------------------- */
+.mw-dist { padding: 12px 0 8px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.mw-dist-val { display: flex; align-items: baseline; font-family: var(--font-supreme-bold); color: var(--color-black); }
+.mw-dist-val .d { font-size: 40px; line-height: 1; letter-spacing: -1.6px; }
+.mw-dist-val .k { font-size: 13px; letter-spacing: -0.5px; margin-left: 8px; }
+.mw-ruler { position: relative; width: 100%; height: 37px; }
+/* Fixed centre pointer the value is read against. */
+.mw-ruler::after { content: ""; position: absolute; left: 50%; top: 0; width: 3px; height: 24px; margin-left: -1.5px; background: var(--color-red); border-radius: 99px; pointer-events: none; z-index: 2; }
+.mw-track { position: absolute; inset: 0; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
+.mw-track::-webkit-scrollbar { display: none; }
+.mw-ticks { display: flex; align-items: flex-start; width: max-content; height: 19px; }
+.mw-ticks .sp { flex: none; }                         /* half-width spacers so ends can centre */
+.mw-tick { flex: none; width: 2px; height: 19px; border-radius: 99px; background: #E5E5E5; scroll-snap-align: center; }
+.mw-tick.maj { width: 2px; height: 24px; background: #C7C7C7; }
+.mw-dist-scale { display: flex; justify-content: space-between; width: 200px; font-family: var(--font-supreme-bold); font-size: 13px; letter-spacing: -0.5px; }
+.mw-dist-scale .lo { color: var(--color-neutral-500); }
+.mw-dist-scale .hi { color: #C7C7C7; font-family: var(--font-supreme); }
+
+/* Time wheels (iPhone-timer style) -------------------------------------------- */
+.mw-time { position: relative; height: 132px; display: flex; align-items: stretch; justify-content: center; }
+/* The selected row sits in a highlighted band across the centre. */
+.mw-time::before { content: ""; position: absolute; left: 12px; right: 12px; top: 50%; height: 36px; margin-top: -18px; background: var(--color-neutral-100); border-radius: 12px; pointer-events: none; }
+.mw-wheel { position: relative; width: 66px; overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; text-align: center; }
+.mw-wheel::-webkit-scrollbar { display: none; }
+.mw-wheel .op { height: 36px; line-height: 36px; scroll-snap-align: center; font-family: var(--font-supreme-medium); font-size: 22px; letter-spacing: -0.5px; color: #C7C7C7; transition: color .15s ease; }
+.mw-wheel .op.on { color: var(--color-black); font-family: var(--font-supreme-bold); }
+.mw-wheel .pad { height: 48px; }                       /* centres first/last item in the band */
+.mw-unit { align-self: center; font-family: var(--font-supreme-medium); font-size: 13px; color: var(--color-neutral-500); margin: 0 2px 0 -4px; }
