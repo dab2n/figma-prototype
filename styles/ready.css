@@ -21,9 +21,9 @@
 
 /* ── Ready to Start (node 246:15915 / 15874) ──────────────────────────────────── */
 .rts-screen { position: relative; height: 100%; overflow: hidden; background: #fff; }
-/* Supplied red-blur gradient, easing down from the top; sits BELOW the text/foot. */
+/* Supplied red-blur gradient — larger, reaching past the middle; sits BELOW the text/foot. */
 .rts-blur { position: absolute; top: 0; left: 0; width: 360px; height: 100%; z-index: 1; pointer-events: none;
-  background: url('../assets/icons/start-blur.png') top center / 360px auto no-repeat;
+  background: url('../assets/icons/start-blur.png') center top / 100% 100% no-repeat;
   animation: rts-blur-in 1.2s cubic-bezier(.2,.7,.2,1) both; }
 @keyframes rts-blur-in { from { opacity: 0; transform: translateY(-48px); } }
 .rts-screen .status-bar { position: absolute; top: 0; left: 0; z-index: 5; background: transparent; }
@@ -43,8 +43,9 @@
 .rts-prompt .s { font-family: var(--font-supreme); font-size: 14px; line-height: 1.4; letter-spacing: -0.42px; color: rgba(255,255,255,0.8); }
 .rts-prompt .m { font-family: var(--font-supreme-bold); font-size: 28px; line-height: 1.2; letter-spacing: -1.5px; color: #fff; }
 
-/* Tapping foot — above the blur, taps the floor twice on a loop (plus-darker → multiply). */
-.rts-foot { position: absolute; left: 50%; top: 280px; width: 287px; height: 327px; margin-left: -143px; z-index: 2;
+/* Tapping foot — above the blur at Figma x37/y230; taps the floor twice on a loop
+   (plus-darker → multiply). */
+.rts-foot { position: absolute; left: 37px; top: 230px; width: 287px; height: 327px; z-index: 2;
   background: url('../assets/icons/tap-foot.png') center / contain no-repeat; mix-blend-mode: multiply;
   opacity: 0; animation: rts-final-in .7s cubic-bezier(.2,.7,.2,1) 3s both, foot-tap 1.8s ease-in-out 3.7s infinite; }
 @keyframes foot-tap {
@@ -52,8 +53,11 @@
   12%, 40%      { transform: translateY(12px); }   /* down (tap) */
   26%, 54%      { transform: translateY(0); }       /* up — twice */
 }
-.rts-plate { position: absolute; left: 50%; top: 560px; width: 293px; height: 30px; margin-left: -146px; z-index: 1;
-  background: radial-gradient(closest-side, rgba(250,48,48,0.30), rgba(250,48,48,0)); border-radius: 50%; }
+/* Tap ripple: two flat ellipses of differing opacity — NO blur (phase 2 only). */
+.rts-plate, .rts-plate2 { position: absolute; left: 50%; z-index: 1; border-radius: 50%;
+  opacity: 0; animation: rts-final-in .7s cubic-bezier(.2,.7,.2,1) 3s both; }
+.rts-plate  { top: 553px; width: 293px; height: 32px; margin-left: -146px; background: rgba(250,48,48,0.14); }
+.rts-plate2 { top: 561px; width: 177px; height: 16px; margin-left: -88px;  background: rgba(250,48,48,0.30); }
 
 .rts-start { position: absolute; left: 0; right: 0; bottom: 30px; text-align: center; z-index: 4;
   font-family: var(--font-supreme-medium); font-size: 16px; letter-spacing: -0.8px; color: #FE6E3C; text-decoration: none;
