@@ -65,12 +65,10 @@
 
         <div class="mw-panel" id="mwTimePanel" hidden>
           <div class="mw-time">
-            <div class="mw-wheel" id="wheelH" data-max="3"></div>
+            <div class="mw-wheel" id="wheelH" data-max="2"></div>
             <span class="mw-unit">h</span>
             <div class="mw-wheel" id="wheelM" data-max="59"></div>
             <span class="mw-unit">m</span>
-            <div class="mw-wheel" id="wheelS" data-max="59"></div>
-            <span class="mw-unit">s</span>
           </div>
         </div>
       </section>
@@ -183,8 +181,8 @@
     clearTimeout(dScroll); dScroll = setTimeout(setDistFromScroll, 60);
   });
 
-  // ── Time wheels (h / m / s) ────────────────────────────────────────────────
-  var wheels = { h: document.getElementById('wheelH'), m: document.getElementById('wheelM'), s: document.getElementById('wheelS') };
+  // ── Time wheels (h / m) — seconds dropped, max 2h ─────────────────────────
+  var wheels = { h: document.getElementById('wheelH'), m: document.getElementById('wheelM') };
   var ROW = 36;
   Object.keys(wheels).forEach(function (k) {
     var w = wheels[k], max = +w.getAttribute('data-max'), html = '<div class="pad"></div>';
@@ -202,16 +200,16 @@
   function readWheels() {
     if (syncing || !interacted) return;   // ignore programmatic setWheel + the initial sync
     chooseRun();
-    var mins = val(wheels.h) * 60 + val(wheels.m) + (val(wheels.s) >= 30 ? 1 : 0);
+    var mins = val(wheels.h) * 60 + val(wheels.m);
     runMin = Math.max(1, mins);
     layout();
   }
   var syncing = false, syncT;
   function setWheel(mins) {           // reflect a value; its snap-settle scrolls are ignored
     syncing = true; clearTimeout(syncT);
-    var h = Math.floor(mins / 60), m = mins % 60;
-    wheels.h.scrollTop = h * ROW; wheels.m.scrollTop = m * ROW; wheels.s.scrollTop = 0;
-    mark(wheels.h); mark(wheels.m); mark(wheels.s);
+    var h = Math.min(2, Math.floor(mins / 60)), m = mins % 60;
+    wheels.h.scrollTop = h * ROW; wheels.m.scrollTop = m * ROW;
+    mark(wheels.h); mark(wheels.m);
     syncT = setTimeout(function () { syncing = false; }, 280);
   }
 

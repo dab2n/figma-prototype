@@ -10,6 +10,7 @@
 .dc-name { margin: 0; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
 .dc-meta { margin: 4px 0 0; font-family: var(--font-supreme); font-size: 14px; line-height: 1.4; letter-spacing: -0.42px; color: var(--color-neutral-600); }
 .dc-state { flex: none; width: 24px; height: 24px; display: block; }
+.dc-check { width: 34px; height: 34px; margin: -5px; }   /* icon overflows its 24 frame (Figma inset -24%) */
 /* Next button pinned to the right of the bar. */
 .dc-bottom .sb-row { justify-content: flex-end; }
 /* Entrance: cards slide up, staggered */
@@ -21,15 +22,25 @@
 
 /* ── Ready to Start (node 246:15915 / 15874) ──────────────────────────────────── */
 .rts-screen { position: relative; height: 100%; overflow: hidden; background: #fff; }
-/* Supplied red-blur gradient — larger, reaching past the middle; sits BELOW the text/foot. */
+/* Very subtle warm inner shadow across the whole viewport (node 246:15874/15915). */
+.rts-screen::after { content: ""; position: absolute; inset: 0; z-index: 6; pointer-events: none; border-radius: inherit;
+  box-shadow: inset 0 -14px 57.6px -5px #FFB56D, inset 0 28px 13.1px 0 rgba(250,48,48,0.49); }
+/* Supplied red-blur gradient — smaller/higher for the pack phase, then eases DOWN and
+   grows as the tap page appears (node 246:15874 → 246:15915). Sits below text/foot. */
 .rts-blur { position: absolute; top: 0; left: 0; width: 360px; height: 100%; z-index: 1; pointer-events: none;
+  transform-origin: 50% 0%;
   background: url('../assets/icons/start-blur.png') center top / 100% 100% no-repeat;
-  animation: rts-blur-in 1.2s cubic-bezier(.2,.7,.2,1) both; }
-@keyframes rts-blur-in { from { opacity: 0; transform: translateY(-48px); } }
+  animation: rts-blur 3.6s cubic-bezier(.3,0,.2,1) both; }
+@keyframes rts-blur {
+  0%   { opacity: 0; transform: scale(.72); }
+  18%  { opacity: 1; transform: scale(.72); }   /* Sean's Final: blur small + high */
+  74%  { transform: scale(.72); }               /* hold through the pack name */
+  100% { opacity: 1; transform: scale(1); }     /* Tap page: blur slides down + grows */
+}
 .rts-screen .status-bar { position: absolute; top: 0; left: 0; z-index: 5; background: transparent; }
 
 /* Phase 1: the pack name slides in centre; Phase 2: it clears and the foot prompt shows. */
-.rts-pack { position: absolute; left: 24px; right: 24px; top: 214px; z-index: 3; text-align: center;
+.rts-pack { position: absolute; left: 24px; right: 24px; top: 300px; z-index: 3; text-align: center;
   font-family: var(--font-supreme-bold); font-size: 48px; line-height: 1.2; letter-spacing: -2.4px; color: var(--color-red);
   mix-blend-mode: color-burn;
   animation: rts-pack-in .7s cubic-bezier(.2,.7,.2,1) .5s both, rts-pack-out .5s ease 2.6s both; }
