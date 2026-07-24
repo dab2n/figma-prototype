@@ -29,6 +29,8 @@
 
 /* ── Shared onboarding page chrome (gray frame like setup) ────────────────────── */
 .ob-screen { background: var(--color-neutral-100); }
+/* Bottom bar is grey, not black — square off the screen's bottom so no black inverse-round shows. */
+.phone:has(> .tabbar) > .screen.ob-screen { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
 .ob-screen .status-bar { background: var(--color-neutral-100); }
 .ob-screen .statusbar-svg { mix-blend-mode: multiply; }
 .ob-appbar { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; box-sizing: border-box; }
@@ -49,7 +51,7 @@
 .ob-card.short { height: 108px; }
 .ob-card .t { position: relative; z-index: 2; margin: 0; padding: 16px; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
 /* Sport silhouette, bottom-anchored. Already red-tinted; on a selected card it lightens. */
-.ob-card .img { position: absolute; inset: 0; background-position: center bottom; background-repeat: no-repeat; background-size: cover; mix-blend-mode: multiply; }
+.ob-card .img { position: absolute; inset: 0; background-position: center bottom; background-repeat: no-repeat; background-size: contain; mix-blend-mode: multiply; }
 /* Selected: Newton gradient fill + white title + light-blend image + check + inner glow. */
 .ob-card.sel { background: linear-gradient(180deg, #FA3030 48%, #FE6E3C 77.6%, #FEC389 100.5%, #D1FEFF 107.5%);
   box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6); }
@@ -78,7 +80,7 @@
 .ob-wcard.full { height: 442px; }
 .ob-wcard .t { margin: 0; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); position: relative; z-index: 2; }
 .ob-wcard .s { margin: 2px 0 0; font-family: var(--font-supreme); font-size: 13px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-500); position: relative; z-index: 2; }
-.ob-wcard .img { position: absolute; inset: 0; background-position: center bottom; background-repeat: no-repeat; background-size: cover; mix-blend-mode: multiply; }
+.ob-wcard .img { position: absolute; inset: 0; background-position: center bottom; background-repeat: no-repeat; background-size: contain; mix-blend-mode: multiply; }
 .ob-wcard.sel { background: linear-gradient(180deg, #FA3030 48%, #FE6E3C 77.6%, #FEC389 100.5%, #D1FEFF 107.5%);
   box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6); }
 .ob-wcard.sel .t { color: #fff; }
