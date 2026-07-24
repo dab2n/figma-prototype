@@ -43,7 +43,7 @@
 
 /* Shared default card shadow (연한카드) + the selected fill (gradient + drop
    shadow + white inner glow) registered in the Figma library. */
-.card-sel, .toggle-btn, .diff-seg, .mode-card { box-shadow: 0 14px 54px 10px rgba(0,0,0,0.03); }
+.card-sel, .toggle-btn, .diff-seg { box-shadow: 0 14px 54px 10px rgba(0,0,0,0.03); }
 .card-sel.sel, .toggle-btn.sel, .diff-seg.sel, .chip-sel.sel, .mode-card.sel {
   background: linear-gradient(180deg, #FA3030 48%, #FE6E3C 77.6%, #FEC389 100.5%, #D1FEFF 107.5%);
   box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6);
@@ -140,8 +140,8 @@
 /* Default cards use the pre-tinted art; a selected card takes the Newton gradient with
    the natural photo laid over it in plus-lighter, plus the library's selected shadow. */
 /* Art is supplied square at card size, so it just fills the 200x200 frame. */
-/* Art is card-sized square: fill the frame, centred horizontally and pinned to the top. */
-.mode-card .fig { position: absolute; inset: 0; background-size: cover; background-position: center top; background-repeat: no-repeat; }
+/* Art fills the card width and is pinned to the top (subject is flush to the top edge). */
+.mode-card .fig { position: absolute; inset: 0; background-size: 100% auto; background-position: center top; background-repeat: no-repeat; }
 .mode-card .fig-sel { display: none; }
 .mode-card.sel .fig { display: none; }
 .mode-card.sel .fig-sel { display: block; mix-blend-mode: plus-lighter; }
