@@ -110,5 +110,7 @@
 .setup-stepbar .step { flex: none; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-500); text-decoration: none; }
 .setup-stepbar .steps.placed .step { transition: color .45s ease, font-size .45s ease, translate .6s cubic-bezier(.4,0,.2,1); }
 .setup-stepbar .step.active { font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: #fff; }
-/* Once every input is filled the NEXT step simply becomes the active title and the row
-   slides left to centre it, then setup.js navigates there (see assets/setup.js). */
+/* Hand-off (node 380:2996): the moment the page is complete the NEXT step takes the
+   Title/T2 shape — Bold 20 — but stays Neutral/500 while the row slides it to centre;
+   the current step keeps its white until the page actually changes. */
+.setup-stepbar .step.handoff { font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-neutral-500); }

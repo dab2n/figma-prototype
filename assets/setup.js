@@ -30,14 +30,14 @@
     return groups.length > 0 && [].every.call(groups, function (g) { return g.querySelector('.sel'); });
   }
 
-  // Centre `active`, or once the page is complete, `next` — measured as if it were already
-  // the active step (borrow the class for the measurement, no paint happens in between)
-  // so the resting position matches where the NEXT page loads its steps, to the pixel.
+  // Centre `active`, or once the page is complete, `next` — measured in the hand-off
+  // shape it will actually have (borrow the class, no paint happens in between), so the
+  // title lands dead centre, which is where the next page opens it.
   function offsetFor(done) {
     var target = (done && next) || active;
-    if (target !== active) { active.classList.remove('active'); next.classList.add('active'); }
+    if (target !== active) next.classList.add('handoff');
     var x = wrap.clientWidth / 2 - (target.offsetLeft + target.offsetWidth / 2);
-    if (target !== active) { next.classList.remove('active'); active.classList.add('active'); }
+    if (target !== active) next.classList.remove('handoff');
     return x;
   }
 
@@ -56,7 +56,7 @@
   function setDone(c) {
     if (c === done || !active) return;
     done = c;
-    if (next) { next.classList.toggle('active', c); active.classList.toggle('active', !c); }
+    if (next) next.classList.toggle('handoff', c);   // next grows to Bold 20, still gray
     var x = c ? xs.done : xs.load;
     items.forEach(function (el) { el.style.translate = x + 'px'; });   // all move together
   }
