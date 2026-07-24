@@ -1,19 +1,15 @@
-// Setup flow: option toggles, bottom step-bar, auto-advance.
+// Setup flow: option toggles, bottom step-bar, Next button.
 (function () {
   var steps  = document.querySelector('.setup-stepbar .steps');
   var active = steps && steps.querySelector('.step.active');
   var wrap   = steps && steps.parentElement;
-  var next   = active && active.nextElementSibling;
-  if (next && !next.classList.contains('step')) next = null;
   var items  = steps ? [].slice.call(steps.querySelectorAll('.step')) : [];
-  // On load the active step sits centred (instantly, no anim). Answering everything hands
-  // the title over to the NEXT step and slides them left to centre it — exactly where the
-  // next page loads them, so the page change is seamless.
+  var prev   = active && active.previousElementSibling;
+  if (prev && !prev.classList.contains('step')) prev = null;
+  var nextBtn = document.querySelector('.setup-stepbar .sb-next');
 
   var toggles = [].slice.call(document.querySelectorAll('[data-toggle]'));
   var hots    = [].slice.call(document.querySelectorAll('.body-hot'));
-  // Injury check allows several answers, so it nudges instead of advancing by itself.
-  var nudgeOnly = !!(steps && steps.closest('[data-nudge]'));
   var KEY = 'nw_setup_' + location.pathname;
 
   // Picks survive a back-navigation to this step (per-step, per-tab).
@@ -33,35 +29,25 @@
     return groups.length > 0 && [].every.call(groups, function (g) { return g.querySelector('.sel'); });
   }
 
-  // Centre `active`, or once the page is complete, `next` — measured in the hand-off
-  // shape it will actually have (borrow the class, no paint happens in between), so the
-  // title lands dead centre, which is where the next page opens it.
-  function offsetFor(done) {
-    var target = (done && next) || active;
-    if (target !== active) next.classList.add('handoff');
-    var x = wrap.clientWidth / 2 - (target.offsetLeft + target.offsetWidth / 2);
-    if (target !== active) next.classList.remove('handoff');
+  // The active title sits flush left in the strip; the rest trail off to the right.
+  // Measured with a given step playing active, so the arrival slide starts from exactly
+  // where the previous page left the row.
+  function offsetFor(step) {
+    var swap = step !== active;
+    if (swap) { active.classList.remove('active'); step.classList.add('active'); }
+    var x = -step.offsetLeft;
+    if (swap) { step.classList.remove('active'); active.classList.add('active'); }
     return x;
   }
+  function place(x) { items.forEach(function (el) { el.style.translate = x + 'px'; }); }
 
-  // Both resting positions are measured with transitions off (.placed absent), so a
-  // font-size mid-transition can never skew the maths.
-  var xs = {};
-  function measure() {
-    var on = steps.classList.contains('placed');
-    steps.classList.remove('placed');
-    xs.load = offsetFor(false);
-    xs.done = offsetFor(true);
-    if (on) steps.classList.add('placed');
-  }
-
-  var done = null, advance;   // null = not placed yet
-  function setDone(c) {
-    if (c === done || !active) return;
-    done = c;
-    if (next) next.classList.toggle('handoff', c);   // next grows to Bold 20, still gray
-    var x = c ? xs.done : xs.load;
-    items.forEach(function (el) { el.style.translate = x + 'px'; });   // all move together
+  // Next lights up white once the page is answered, and only then navigates.
+  function refresh() {
+    if (!nextBtn) return;
+    var c = isComplete();
+    nextBtn.classList.toggle('ready', c);
+    if (c) nextBtn.setAttribute('href', nextBtn.getAttribute('data-next'));
+    else nextBtn.removeAttribute('href');
   }
 
   // Toggle any [data-toggle] button: tap to select (.sel), tap again to clear.
@@ -74,26 +60,8 @@
       if (group && !on) group.querySelectorAll('[data-toggle].sel').forEach(function (b) { b.classList.remove('sel'); });
       btn.classList.toggle('sel', !on);
       save();
-
-      steps.classList.add('placed');   // from the first tap on, the row may animate
-      var c = isComplete();
-      setDone(c);
-      // Everything answered → the next title glides to centre and the content swaps the
-      // moment it lands. Wait for the actual transition to end (not a guessed delay) so
-      // the bar is never captured mid-slide.
-      // (Changing an answer before it fires just resets the hand-off.)
       syncHots();
-      clearTimeout(advance);
-      if (c && !nudgeOnly && next && next.href) {
-        var go = function () {
-          items[0].removeEventListener('transitionend', onEnd);
-          clearTimeout(advance);
-          if (isComplete()) location.href = next.href;
-        };
-        var onEnd = function (e) { if (e.propertyName === 'translate') go(); };
-        items[0].addEventListener('transitionend', onEnd);
-        advance = setTimeout(go, 800);      // fallback if the transition never fires
-      }
+      refresh();
     });
   });
 
@@ -115,11 +83,12 @@
     });
   });
 
-  restore();   // never auto-advances: coming back to a filled-in step just shows the picks
+  restore();
   syncHots();
+  refresh();
 
-  // Step → step is a hard cut: no cross-document fade, so the bar can't be snapshotted,
-  // faded or nudged on arrival. It is already showing the step the new page opens on.
+  // Step → step is a hard cut: no cross-document fade, so the bar isn't snapshotted or
+  // faded on arrival — the only motion is the slide below.
   function isStep(u) { return /setup-\w+\.html/.test(u || ''); }
   window.addEventListener('pageswap', function (e) {
     var to = (e.activation && e.activation.entry && e.activation.entry.url) || '';
@@ -131,12 +100,23 @@
   });
 
   if (steps && active) {
-    // Placed instantly, and left WITHOUT transitions: nothing that happens after a page
-    // load — webfont swap, reflow, the view transition — can make the bar move.
-    measure();
-    setDone(false);
-    function replace() { var d = done; measure(); done = null; setDone(d); }
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(replace);
-    window.addEventListener('resize', replace);
+    var here = -active.offsetLeft;
+    // Arrived from the step before this one → start the row where that page had it and
+    // shift everything one slot left, the previous title dimming as this one lights up.
+    var cameFromPrev = prev && document.referrer && document.referrer.indexOf(prev.getAttribute('href')) !== -1;
+    if (cameFromPrev) {
+      place(offsetFor(prev));
+      active.classList.remove('active');
+      prev.classList.add('active');
+      void steps.offsetWidth;              // commit that start state (no rAF: a backgrounded
+                                           // tab would never deliver the frame)
+      steps.classList.add('placed');       // transitions on, for this slide only
+      prev.classList.remove('active');
+      active.classList.add('active');
+      place(here);
+    } else {
+      place(here);                          // land instantly, no motion
+    }
+    window.addEventListener('resize', function () { place(-active.offsetLeft); });
   }
 })();
