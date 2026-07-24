@@ -41,14 +41,15 @@
     return x;
   }
 
-  // Both resting positions are measured up-front with transitions off (before .placed),
-  // so a font-size mid-transition can never skew the maths.
+  // Both resting positions are measured with transitions off (.placed absent), so a
+  // font-size mid-transition can never skew the maths.
   var xs = {};
   function measure() {
+    var on = steps.classList.contains('placed');
     steps.classList.remove('placed');
     xs.load = offsetFor(false);
     xs.done = offsetFor(true);
-    steps.classList.add('placed');
+    if (on) steps.classList.add('placed');
   }
 
   var done = null, advance;   // null = not placed yet
@@ -71,23 +72,48 @@
       btn.classList.toggle('sel', !on);
       save();
 
+      steps.classList.add('placed');   // from the first tap on, the row may animate
       var c = isComplete();
       setDone(c);
       // Everything answered → the next title glides to centre and the content swaps the
-      // moment it lands (matches the .6s translate in setup.css).
-      // (Changing an answer before it fires just resets the timer.)
+      // moment it lands. Wait for the actual transition to end (not a guessed delay) so
+      // the bar is never captured mid-slide.
+      // (Changing an answer before it fires just resets the hand-off.)
       clearTimeout(advance);
-      if (c && next && next.href) advance = setTimeout(function () { location.href = next.href; }, 600);
+      if (c && next && next.href) {
+        var go = function () {
+          items[0].removeEventListener('transitionend', onEnd);
+          clearTimeout(advance);
+          if (isComplete()) location.href = next.href;
+        };
+        var onEnd = function (e) { if (e.propertyName === 'translate') go(); };
+        items[0].addEventListener('transitionend', onEnd);
+        advance = setTimeout(go, 800);      // fallback if the transition never fires
+      }
     });
   });
 
   restore();   // never auto-advances: coming back to a filled-in step just shows the picks
 
+  // Step → step is a hard cut: no cross-document fade, so the bar can't be snapshotted,
+  // faded or nudged on arrival. It is already showing the step the new page opens on.
+  function isStep(u) { return /setup-\w+\.html/.test(u || ''); }
+  window.addEventListener('pageswap', function (e) {
+    var to = (e.activation && e.activation.entry && e.activation.entry.url) || '';
+    if (e.viewTransition && isStep(to)) e.viewTransition.skipTransition();
+  });
+  window.addEventListener('pagereveal', function (e) {
+    var from = (e.activation && e.activation.from && e.activation.from.url) || '';
+    if (e.viewTransition && isStep(from)) e.viewTransition.skipTransition();
+  });
+
   if (steps && active) {
+    // Placed instantly, and left WITHOUT transitions: nothing that happens after a page
+    // load — webfont swap, reflow, the view transition — can make the bar move.
     measure();
-    steps.classList.remove('placed');
-    setDone(false);                     // land instantly — no re-entry slide on page load
-    steps.classList.add('placed');      // transitions only apply from here on
-    window.addEventListener('resize', function () { var d = done; measure(); done = null; setDone(d); });
+    setDone(false);
+    function replace() { var d = done; measure(); done = null; setDone(d); }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(replace);
+    window.addEventListener('resize', replace);
   }
 })();
