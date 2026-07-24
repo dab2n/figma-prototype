@@ -107,9 +107,18 @@
   -webkit-mask-composite: source-in;
           mask-composite: intersect;
 }
-.injury-plate { position: absolute; top: 333px; left: 50%; transform: translateX(-50%); width: 328px; height: 45px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255,255,255,0.9), rgba(255,255,255,0)); }
-.injury-plate::after { content: ""; position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); width: 56px; height: 12px; border-radius: 6px; background: #fff; opacity: 0.85; }
-.injury-arrow { position: absolute; top: 362px; left: 50%; transform: translateX(-50%); width: 24px; height: 24px; opacity: 0.9; display: flex; align-items: center; justify-content: center; color: var(--color-neutral-600); font-size: 18px; }
+/* Effect layer sits ON TOP of the clip (node 338:19742/19755/19753): a soft glow, the
+   elliptical stroke platform whose opacity falls to 0 toward the back, and the
+   left-right icon saying the figure can be spun. */
+.injury-glow { position: absolute; top: 288px; left: 50%; transform: translateX(-50%); width: 380px; height: 150px; pointer-events: none; background: radial-gradient(closest-side, rgba(255,255,255,0.85), rgba(255,255,255,0)); }
+.injury-plate { position: absolute; top: 333px; left: 50%; margin-left: -164px; width: 328px; height: 44.57px; pointer-events: none; }
+.injury-turn { position: absolute; top: 362px; left: 50%; margin-left: -8px; width: 24px; height: 24px; pointer-events: none; filter: brightness(0) invert(0.32); }
+
+/* Body regions: the same ring used on Records/Progress, as a tap target over the figure. */
+.injury-map { position: absolute; top: 0; left: 50%; margin-left: -156px; width: 312px; height: 554px; }
+.body-hot { position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; padding: 0; border: none; background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.body-hot img { width: 30px; height: 30px; opacity: 0.5; transition: opacity .2s ease, width .2s ease, height .2s ease; }
+.body-hot.sel img { width: 38px; height: 38px; opacity: 1; filter: drop-shadow(0 2px 8px rgba(250,48,48,0.45)); }
 
 /* Assist Mode — horizontal scroll of figure cards */
 .mode-scroll { display: flex; gap: 8px; overflow-x: auto; margin: 0 -12px; padding: 0 12px 4px; scrollbar-width: none; }

@@ -11,6 +11,9 @@
   // next page loads them, so the page change is seamless.
 
   var toggles = [].slice.call(document.querySelectorAll('[data-toggle]'));
+  var hots    = [].slice.call(document.querySelectorAll('.body-hot'));
+  // Injury check allows several answers, so it nudges instead of advancing by itself.
+  var nudgeOnly = !!(steps && steps.closest('[data-nudge]'));
   var KEY = 'nw_setup_' + location.pathname;
 
   // Picks survive a back-navigation to this step (per-step, per-tab).
@@ -79,8 +82,9 @@
       // moment it lands. Wait for the actual transition to end (not a guessed delay) so
       // the bar is never captured mid-slide.
       // (Changing an answer before it fires just resets the hand-off.)
+      syncHots();
       clearTimeout(advance);
-      if (c && next && next.href) {
+      if (c && !nudgeOnly && next && next.href) {
         var go = function () {
           items[0].removeEventListener('transitionend', onEnd);
           clearTimeout(advance);
@@ -93,7 +97,26 @@
     });
   });
 
+  // Tapping a region on the body figure is the same as tapping its chip.
+  function chipFor(name) {
+    for (var i = 0; i < toggles.length; i++) if (toggles[i].textContent.trim() === name) return toggles[i];
+    return null;
+  }
+  function syncHots() {
+    hots.forEach(function (h) {
+      var chip = chipFor(h.getAttribute('data-region'));
+      h.classList.toggle('sel', !!(chip && chip.classList.contains('sel')));
+    });
+  }
+  hots.forEach(function (h) {
+    h.addEventListener('click', function () {
+      var chip = chipFor(h.getAttribute('data-region'));
+      if (chip) chip.click();
+    });
+  });
+
   restore();   // never auto-advances: coming back to a filled-in step just shows the picks
+  syncHots();
 
   // Step → step is a hard cut: no cross-document fade, so the bar can't be snapshotted,
   // faded or nudged on arrival. It is already showing the step the new page opens on.
