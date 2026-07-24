@@ -21,9 +21,11 @@
    left in Neutral/400 (node 338:20034/20038). */
 .mw-out { flex: none; font-family: var(--font-supreme-bold); font-size: 13px; letter-spacing: -0.5px; color: #A3A3A3; opacity: 0; transition: opacity .3s ease; }
 .mw-graph.run .mw-out { opacity: 1; }
-.mw-stretch { background: linear-gradient(270deg, #D1FEFF 0%, #FEC389 6.7%, #FE6E3C 17%, #FA3030 33%); }
-.mw-learn,
-.mw-run     { background: linear-gradient(90deg, #FA3030 63%, #FE6E3C 90%, #FEC389 101%, #D1FEFF 108%); }
+/* Same gradient on every bar, anchored in px to the FAR (right) end so a short bar and a
+   long bar read identically — red body with a fixed ~48px pastel fade at the tip. */
+.mw-stretch, .mw-learn, .mw-run {
+  background: linear-gradient(to right, #FA3030 0, #FA3030 calc(100% - 48px), #FE6E3C calc(100% - 24px), #FEC389 calc(100% - 6px), #D1FEFF 100%);
+}
 /* First entry: run isn't chosen yet — a flat grey bar reading "You Can Choose". */
 .mw-run.unset { background: var(--color-neutral-100); }
 .mw-run.unset .v { color: #A3A3A3; }

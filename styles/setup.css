@@ -144,7 +144,9 @@
 .mode-card .fig { position: absolute; inset: 0; background-size: 100% auto; background-position: center top; background-repeat: no-repeat; }
 .mode-card .fig-sel { display: none; }
 .mode-card.sel .fig { display: none; }
-.mode-card.sel .fig-sel { display: block; mix-blend-mode: plus-lighter; }
+/* The selected art is a full card-sized image (gradient baked in) — fill it edge to edge,
+   no blend, and lay the library's white inner glow (selected effect) over the top. */
+.mode-card.sel .fig-sel { display: block; background-size: cover; background-position: center; box-shadow: inset 0 0 16px 6px rgba(255,255,255,0.6); }
 .mode-card .mc-title { position: relative; margin: 0; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
 .mode-card .mc-desc { position: relative; margin: 0; font-family: var(--font-supreme); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px; color: var(--color-neutral-500); }
 .mode-card.sel .mc-title, .mode-card.sel .mc-desc { color: #fff; }
@@ -175,3 +177,25 @@
 .setup-stepbar .sb-next img { width: 13px; height: 12px; display: block; margin: 0 5px; }
 .setup-stepbar .sb-next.ready { color: #fff; cursor: pointer; }
 .setup-stepbar .sb-next.ready img { filter: brightness(0) invert(1); }
+
+/* ── Setup Complete (node 338:20073) ──────────────────────────────────────── */
+.sc-body { padding: 0 12px; display: flex; flex-direction: column; gap: 32px; }
+.sc-sec { display: flex; flex-direction: column; gap: 8px; }
+.sc-label { margin: 0; padding: 0 12px; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-700); }
+/* Pack card: 85px thumbnail + title/meta */
+.sc-pack { display: flex; align-items: center; gap: 16px; background: #fff; border-radius: 20px; padding: 8px; }
+.sc-thumb { flex: none; width: 85px; height: 85px; border-radius: 16px; background-position: center; background-size: cover; }
+.sc-pack-title { margin: 0; font-family: var(--font-supreme-bold); font-size: 18px; line-height: 1.2; letter-spacing: -0.54px; color: var(--color-black); }
+.sc-pack-sub { margin: 4px 0 0; font-family: var(--font-supreme); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px; color: var(--color-neutral-400); }
+/* Setup summary list */
+.sc-list { display: flex; flex-direction: column; gap: 4px; background: #fff; border-radius: 20px; padding: 4px; }
+.sc-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; background: var(--color-neutral-100); border-radius: 16px; padding: 16px 8px 16px 16px; text-decoration: none; }
+.sc-row-title { font-family: var(--font-supreme-bold); font-size: 18px; line-height: 1.2; letter-spacing: -0.54px; color: var(--color-black); }
+.sc-row-right { display: flex; align-items: center; gap: 4px; min-width: 0; }
+.sc-row-val { font-family: var(--font-supreme); font-size: 14px; line-height: 1.4; letter-spacing: -0.42px; color: var(--color-neutral-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sc-chev { flex: none; width: 24px; height: 24px; display: block; transform: rotate(90deg); }
+/* Bottom bar: Later chip (left) + Start Now (right) */
+.sc-bottom .sb-row { justify-content: space-between; gap: 12px; }
+.sc-later { display: inline-flex; align-items: center; gap: 4px; background: var(--color-neutral-700); border-radius: 20px; padding: 4px 12px 4px 8px; text-decoration: none; }
+.sc-later img { width: 24px; height: 24px; display: block; filter: brightness(0) invert(1); }
+.sc-later span { font-family: var(--font-supreme-medium); font-size: 14px; letter-spacing: -0.56px; color: #fff; }
