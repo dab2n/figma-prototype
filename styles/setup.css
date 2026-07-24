@@ -107,6 +107,5 @@
 .setup-stepbar .step { flex: none; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-500); text-decoration: none; }
 .setup-stepbar .steps.placed .step { transition: color .45s ease, font-size .45s ease, translate .6s cubic-bezier(.4,0,.2,1); }
 .setup-stepbar .step.active { font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: #fff; }
-/* Once every input on the page is filled, the steps slide left to centre the NEXT one,
-   which grows and brightens as it takes over — then setup.js navigates there. */
-.setup-stepbar .step.next { font-family: var(--font-supreme-medium); font-size: 18px; color: #d4d4d4; }
+/* Once every input is filled the NEXT step simply becomes the active title and the row
+   slides left to centre it, then setup.js navigates there (see assets/setup.js). */
