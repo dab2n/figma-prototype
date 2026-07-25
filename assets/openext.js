@@ -69,6 +69,21 @@
     document.addEventListener('pointerdown', restore, true);
   })();
 
+  // Prerender same-origin pages on hover/tap intent so navigation is instant and the
+  // next page's images (incl. CSS backgrounds + the injury video) are already decoded.
+  // Without this, each page-change cold-loads its images and they pop in late/broken
+  // mid view-transition — the "지글거림". Chromium (Galaxy) only; iOS ignores it and
+  // just navigates normally. `moderate` = prerender when a link looks about to be tapped.
+  (function () {
+    try {
+      if (!HTMLScriptElement.supports || !HTMLScriptElement.supports('speculationrules')) return;
+      var s = document.createElement('script');
+      s.type = 'speculationrules';
+      s.textContent = JSON.stringify({ prerender: [{ where: { href_matches: '/*' }, eagerness: 'moderate' }] });
+      (document.body || document.documentElement).appendChild(s);
+    } catch (e) {}
+  })();
+
   var open = target();
   if (!open) return;
 
