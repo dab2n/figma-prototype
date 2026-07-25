@@ -220,6 +220,14 @@ button { font-family: inherit; }
    bezel, shadow) and let the phone go edge-to-edge. */
 @media (max-width: 400px) {
   html, body { background: var(--color-black); }
+  /* iOS + a fixed-width (width=360) viewport can't always extend the page under the
+     status bar / home indicator, so those safe-area strips show the <html> CANVAS
+     colour. Black blends under the black tab bar, but not under the grey onboarding
+     bar, red splash, or white ready screen — match the canvas to each so no band shows.
+     (Harmless when the viewport DOES cover: the bars/screen paint over it anyway.) */
+  html:has(.ob-bottom)  { background: var(--color-neutral-100); }
+  html:has(.ob-splash)  { background: var(--color-red); }
+  html:has(.rts-screen) { background: #fff; }
   body { padding: 0; align-items: stretch; min-height: 100dvh; }
   /* Full-bleed on a phone: no OUTER frame corner radius, fill the whole viewport. */
   .phone { width: 100vw; height: 100dvh; border-radius: 0; box-shadow: none; }
