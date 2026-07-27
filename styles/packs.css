@@ -103,3 +103,11 @@
 .pack-info p { margin: 0 0 4px; color: var(--color-black); }
 .pack-meta { display: flex; align-items: center; gap: 4px; color: var(--color-neutral-500); }
 .pack-meta .sep { width: 2px; height: 2px; }
+
+/* "차라락" slide-in when Packs opens — same curve and distance as the Library list.
+   Three cards, so nth-child delays do the stagger; no JS needed (the Library wires
+   its delays up in script only because its list length is dynamic). */
+.pack-card { animation: pack-slide .42s cubic-bezier(.2,.85,.3,1) both; }
+.pack-card:nth-child(2) { animation-delay: .06s; }
+.pack-card:nth-child(3) { animation-delay: .12s; }
+@keyframes pack-slide { from { opacity: 0; transform: translateY(18px); } }
