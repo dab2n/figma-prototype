@@ -260,4 +260,41 @@ button { font-family: inherit; }
   html:has(.ob-bottom)  { background: var(--color-neutral-100); }
   html:has(.ob-splash)  { background: var(--color-red); }
   html:has(.rts-screen) { background: #fff; }
+  /* Pages with no bottom bar end in white, so the canvas behind the system gesture
+     bar has to be white too or a black strip shows through it. */
+  html:has(.records-screen), html:has(.recap-screen) { background: #fff; }
+
+  /* The phone draws its own home indicator / gesture bar, so every mocked-up one is
+     duplication — drop them all (.tabbar's pill, the detail pages' row). !important
+     because each page reintroduces it through a more specific selector of its own
+     (.tabbar .home-indicator, .swipe-detail .home-indicator-row, …) from a stylesheet
+     that loads after this one; a kill switch shouldn't need specificity arithmetic. */
+  .home-indicator, .home-indicator-row { display: none !important; }
+
+  /* Detail pages were laid out at a fixed 780/790px — taller than a real phone
+     viewport (a Galaxy in standalone leaves ~750), so their bottom bar (Start /
+     Explore Packs) fell off the bottom edge. Fill the viewport instead and give the
+     hero the slack, so nothing is cut at either end. */
+  body .detail-screen {
+    min-height: 0;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+  body .detail-screen > .hero-photo { flex: 1 1 auto; height: auto; min-height: 0; }
+  /* The swipe variant positions everything absolutely inside the screen instead, so
+     it must NOT become a flex column — restore block flow and let the hero fill. */
+  body .swipe-detail { display: block; }
+  body .swipe-detail > .hero-photo { position: absolute; inset: 0; height: auto; }
+  /* Bottom bars sit under the system gesture bar with viewport-fit=cover, which clipped
+     the Start row. content-box + padding keeps the bar's own content at its designed
+     height and just extends the black underneath, so the gesture bar blends into it. */
+  body .detail-bottombar, body .detail-sheet {
+    box-sizing: content-box;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  /* Same for the two pages whose last element sits near the bottom edge with no bar
+     under it — otherwise the gesture bar covers them. */
+  body .rts-start { bottom: calc(30px + env(safe-area-inset-bottom, 0px)); }
+  body .records-content { padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)); }
 }
