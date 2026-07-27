@@ -256,6 +256,14 @@ button { font-family: inherit; }
     height: calc(80px + env(safe-area-inset-bottom, 0px));
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
+  /* ponytail: on Android this padding is a no-op today and the black tab bar stops
+     above a light gesture bar we cannot colour. Not a bug here — the opt-in for
+     drawing under it is viewport-fit=cover (Chrome 135+), which the viewport meta
+     already sets, but INSTALLED PWAs still refuse to go edge-to-edge: crbug is
+     In Progress as of 2026-07, no ship date. theme-color only tints the status bar,
+     so there is no web-side lever for the gesture bar. When Chrome ships the fix,
+     env() starts returning the inset and this rule fills it with no code change.
+     Only alternative if it can't wait: relight the tab bar to match the white bar. */
   /* Fallback for when env() reads 0: with a fixed-width (width=360) viewport iOS
      can't always extend the page under the safe-area strips, and they then show the
      <html> CANVAS colour. Black blends under the black tab bar but not under the grey
