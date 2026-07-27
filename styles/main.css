@@ -231,13 +231,31 @@ button { font-family: inherit; }
      (home.css sets 700px/634px at equal specificity but loads later). Without it
      the home screen stays 700px on tall phones, leaving a dead band above the
      pinned navbar. */
-  body .phone:has(> .tabbar) > .screen { height: calc(100dvh - 80px); border-radius: 0 0 40px 40px; }
-  body .phone.notif-on:has(> .tabbar) > .screen { height: calc(100dvh - 80px - 66px); }
+  body .phone:has(> .tabbar) > .screen { height: calc(100dvh - 80px - env(safe-area-inset-bottom, 0px)); border-radius: 0 0 40px 40px; }
+  body .phone.notif-on:has(> .tabbar) > .screen { height: calc(100dvh - 80px - 66px - env(safe-area-inset-bottom, 0px)); }
   /* Status bar: keep its 44px space but hide the 9:41 graphic on mobile — the real
      device status bar normally occupies it. On the web it stays visible. */
   .status-bar .statusbar-svg { visibility: hidden; }
-  /* Navbar pinned to the very bottom of the viewport on every tabbar page. */
+  /* Navbar pinned to the very bottom of the viewport on every tabbar page. Its
+     background grows into the iPhone home-indicator strip so no black band shows
+     under it. BOTTOM ONLY — the top status bar is deliberately left untouched
+     (an env(safe-area-inset-top) padding there pushed the bar down and let content
+     scroll over the OS status bar). `body` prefix beats .ob-bottom's padding
+     shorthand in onboarding.css, which loads later. */
   .tabbar { position: fixed; left: 0; bottom: 0; width: 100vw; }
+  body .tabbar {
+    box-sizing: border-box;
+    height: calc(80px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  /* Fallback for when env() reads 0: with a fixed-width (width=360) viewport iOS
+     can't always extend the page under the safe-area strips, and they then show the
+     <html> CANVAS colour. Black blends under the black tab bar but not under the grey
+     onboarding bar / red splash / white ready screen — match the canvas to each.
+     These three are single-colour full-bleed pages, so it's correct at both edges. */
+  html:has(.ob-bottom)  { background: var(--color-neutral-100); }
+  html:has(.ob-splash)  { background: var(--color-red); }
+  html:has(.rts-screen) { background: #fff; }
 }
 
 /* Galaxy/Android in fullscreen (double-tap) or as an installed PWA hides the OS
