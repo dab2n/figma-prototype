@@ -233,9 +233,13 @@ button { font-family: inherit; }
      pinned navbar. */
   body .phone:has(> .tabbar) > .screen { height: calc(100dvh - 80px - env(safe-area-inset-bottom, 0px)); border-radius: 0 0 40px 40px; }
   body .phone.notif-on:has(> .tabbar) > .screen { height: calc(100dvh - 80px - 66px - env(safe-area-inset-bottom, 0px)); }
-  /* Status bar: keep its 44px space but hide the 9:41 graphic on mobile — the real
-     device status bar normally occupies it. On the web it stays visible. */
-  .status-bar .statusbar-svg { visibility: hidden; }
+  /* Status bar: DROP ours entirely on a phone — graphic and its 44px of space. The
+     device always draws the real one (browser chrome in a tab, the PWA shell when
+     installed to the home screen), so ours was pure duplication sitting under a blank
+     band. The real bar is tinted to each page's top colour via that page's
+     <meta name="theme-color">, so it reads as part of the app instead of a grey strip.
+     Desktop keeps the 9:41 graphic — there it's the mockup's phone frame. */
+  .status-bar { display: none; }
   /* Navbar pinned to the very bottom of the viewport on every tabbar page. Its
      background grows into the iPhone home-indicator strip so no black band shows
      under it. BOTTOM ONLY — the top status bar is deliberately left untouched
@@ -256,19 +260,4 @@ button { font-family: inherit; }
   html:has(.ob-bottom)  { background: var(--color-neutral-100); }
   html:has(.ob-splash)  { background: var(--color-red); }
   html:has(.rts-screen) { background: #fff; }
-}
-
-/* Galaxy/Android in fullscreen (double-tap) or as an installed PWA hides the OS
-   status bar, so the top 44px goes blank. Reveal our own status bar there — it sits
-   on the transparent bar over the frame, so it's already filled with the main
-   background colour, exactly like the web view. In a normal browser tab the OS draws
-   the bar, so we keep ours hidden (above) to avoid a doubled bar. */
-@media (max-width: 400px) {
-  :root:fullscreen .status-bar .statusbar-svg { visibility: visible; }
-}
-@media (max-width: 400px) and (display-mode: fullscreen) {
-  .status-bar .statusbar-svg { visibility: visible; }
-}
-@media (max-width: 400px) and (display-mode: standalone) {
-  .status-bar .statusbar-svg { visibility: visible; }
 }
