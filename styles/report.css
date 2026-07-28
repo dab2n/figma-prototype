@@ -31,9 +31,15 @@
 
 .rp-hero .app-bar { height: 66px; box-sizing: border-box; }
 .rp-title { margin: 0; font-family: var(--font-supreme-bold); font-size: 26px; line-height: 1.3; letter-spacing: -1px; color: #fff; }
-.rp-hero .actions img { width: 24px; height: 24px; display: block; }
-/* kebab-dots.svg is the vertical ⋮; the design uses ⋯ */
-.rp-hero .actions .kebab { transform: rotate(90deg); }
+/* 24x24 is the FRAME, not the glyph. Both assets carry preserveAspectRatio="none",
+   so stretching them to fill 24x24 blew the calendar up and fattened the kebab's dots
+   into ovals — the glyph keeps its own size inside the frame instead. Selectors carry
+   .app-bar so they outrank main.css's blanket 24x24 on app-bar action icons. */
+.rp-hero .app-bar .actions .ic { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+.rp-hero .app-bar .actions img { display: block; }
+.rp-hero .app-bar .actions .ic-cal { width: 19.4px; height: 19.3px; }
+/* kebab-dots.svg is the vertical ⋮ (4x18); the design uses ⋯ */
+.rp-hero .app-bar .actions .ic-kebab { width: 4px; height: 18px; transform: rotate(90deg); }
 /* Every hero icon is drawn white over the red wash, whatever fill its file ships with
    — brightness(0) flattens the artwork, invert(1) turns it white. */
 .rp-hero .actions img, .rp-daynav img, .rp-appbar img { filter: brightness(0) invert(1); }
@@ -307,6 +313,8 @@
 .rp-appbar { display: flex; align-items: center; justify-content: space-between; height: 66px; padding: 0 16px; box-sizing: border-box; }
 .rp-appbar .icon-btn { background: none; border: none; padding: 0; display: block; cursor: pointer; }
 .rp-appbar img { width: 24px; height: 24px; display: block; }
+/* Share is an 18 glyph in a 24 frame in the design, not a 24 glyph. */
+.rp-appbar .ic-share { width: 18px; height: 18px; margin: 3px; }
 .rp-pill {
   display: inline-flex;
   align-items: center;
