@@ -1,4 +1,4 @@
-@import url('./tokens.css?v=838');
+@import url('./tokens.css?v=840');
 
 /* Tell the phone which way each screen leans, so its own chrome — the gesture bar most
    of all — picks the matching side instead of always landing light. Declared per page in
@@ -255,6 +255,7 @@ button { font-family: inherit; }
      <meta name="theme-color">, so it reads as part of the app instead of a grey strip.
      Desktop keeps the 9:41 graphic — there it's the mockup's phone frame. */
   .status-bar { display: none; }
+
   /* Navbar pinned to the very bottom of the viewport on every tabbar page. Its
      background grows into the iPhone home-indicator strip so no black band shows
      under it. BOTTOM ONLY — the top status bar is deliberately left untouched
@@ -327,4 +328,13 @@ button { font-family: inherit; }
      under it — otherwise the gesture bar covers them. */
   body .rts-start { bottom: calc(30px + env(safe-area-inset-bottom, 0px)); }
   body .records-content { padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* Fullscreen (installed on Android): the phone draws no status bar at all, so ours comes
+   back to fill that space — exactly the 44px the Figma frames budget for it. Scoped to
+   the fullscreen display mode so it can never sit under a real one. */
+@media (max-width: 400px) and (display-mode: fullscreen) {
+  .status-bar { display: block; }
+  .status-bar .statusbar-svg { visibility: visible; }
+  .app-bar-transparent { top: 44px; }
 }
