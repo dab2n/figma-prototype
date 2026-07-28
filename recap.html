@@ -5,7 +5,7 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=825"></script>
+<script defer src="assets/openext.js?v=826"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,16 +13,14 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Session Recap</title>
-<link rel="stylesheet" href="styles/main.css?v=825">
-<link rel="stylesheet" href="styles/recap.css?v=825">
+<link rel="stylesheet" href="styles/main.css?v=826">
+<link rel="stylesheet" href="styles/recap.css?v=826">
 </head>
 <body>
 <div class="phone">
   <div class="screen recap-screen" id="recapScreen">
-    <video class="recap-clip on" id="clipSean" src="assets/video/recap-sean.mp4"
+    <video class="recap-clip" id="clip" src="assets/video/recap-overlay.mp4"
            muted playsinline autoplay preload="auto" disablepictureinpicture></video>
-    <video class="recap-clip user" id="clipUser" src="assets/video/recap-user.mp4"
-           muted playsinline preload="auto" disablepictureinpicture></video>
 
     <div class="status-bar on-dark" style="position:absolute; top:0; left:0; z-index:6;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
 
@@ -40,12 +38,11 @@
   </div>
 </div>
 <script>
-// The two clips are the point of this screen: the creator's run plays, the user's run
-// lands on top of it two seconds later, and only then is the match score revealed.
-// Muted + playsinline + no controls so it just runs, once, on a phone too.
+// One clip, and it already carries the overlap of the creator's run and the user's.
+// The screen plays it once — muted, playsinline, no controls, so it just runs on a
+// phone too — and reveals the match score once the overlap has landed.
 (function () {
-  var sean = document.getElementById('clipSean');
-  var user = document.getElementById('clipUser');
+  var clip = document.getElementById('clip');
   var num = document.querySelector('.recap-pct .num');
   var scored = false;
 
@@ -64,21 +61,14 @@
     });
   }
 
-  // 0s creator alone · 2s both running together · 3.6s creator leaves, user carries on.
-  play(sean);
-  setTimeout(function () {
-    user.classList.add('on');
-    play(user);
-    setTimeout(function () { sean.classList.add('off'); }, 1600);   // overlap, then hand over
-    setTimeout(revealScore, 900);
-  }, 2000);
+  play(clip);
+  setTimeout(revealScore, 2800);
 
-  // Autoplay can still be refused. First touch starts whatever is paused, so the screen
-  // is never left sitting on a still frame.
+  // Autoplay can still be refused. First touch starts it, so the screen is never left
+  // sitting on a still frame.
   document.addEventListener('touchstart', function once() {
     document.removeEventListener('touchstart', once);
-    if (sean.paused) play(sean);
-    if (user.classList.contains('on') && user.paused) play(user);
+    if (clip.paused) play(clip);
   }, { passive: true });
 })();
 

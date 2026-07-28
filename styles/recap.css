@@ -8,39 +8,40 @@
      this replaces, clear of the runner, so the saturation and the red→cream falloff are
      the original's — the clips only add the runners on top. */
   background: linear-gradient(180deg,
-    #FA3030 0%, #FA3030 54%, #FD483A 62%, #FD7350 69%,
-    #FEA97B 77%, #FED4B1 85%, #FFF1E4 92%, #FFEEDD 100%);
+    #FA2F2F 0%, #FA2F2F 50%, #FA3331 54%, #FB4538 62%, #FC7350 69%,
+    #FEA87A 77%, #FED3B0 85%, #FFF1E5 94%, #FFF6EE 100%);
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
 }
 
-/* Session clips. Square 1440s whose white corners must never reach the frame, so they
-   are covered AND scaled past it: cover already crops to the middle 46% horizontally,
-   and the extra scale pushes the soft top edge out too. Both sit in the same place so
-   the second lands exactly over the first. */
+/* The session clip. It already carries the overlap of the two runners, so the screen
+   only has to place it and keep its edges out of the frame.
+
+   Those edges are the catch: the clip's own wash lightens to near-white in the last
+   ~24px on each side and along the bottom, and once it is crushed to luminance and
+   screened, anything light reads as a bright band. Cover crops most of the sides, and a
+   pair of composited masks fade every edge out well before the frame, so only the middle
+   — the figure — ever contributes. */
 .recap-clip {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  transform: scale(1.18);
-  transform-origin: 50% 42%;
+  transform: scale(1.06);
   pointer-events: none;
   z-index: 0;
-  /* Only the runner should survive. Crushing the clip to luminance drops its own
-     (much flatter) wash to black, and screen then adds just the bright figure over our
-     gradient — the mid tones stay grey enough to keep the shading in the limbs. */
-  filter: grayscale(1) brightness(0.74) contrast(3.1);
+  filter: grayscale(1) brightness(0.86) contrast(2.5);
   mix-blend-mode: screen;
-  transition: opacity .9s ease;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 7%, #000 60%, transparent 86%),
+                      linear-gradient(to right,  transparent 0%, #000 9%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 7%, #000 60%, transparent 86%),
+              linear-gradient(to right,  transparent 0%, #000 9%, #000 91%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
-/* Creator's run leads; the user's joins over it; the creator then leaves and the user
-   carries on alone. Both are just opacity — while both are up, both runners show. */
-.recap-clip.user { opacity: 0; }
-.recap-clip.on { opacity: 1; }
-.recap-clip.off { opacity: 0; }
-/* Everything else on the screen sits above both clips. */
+
+/* Everything else on the screen sits above the clip. */
 .recap-screen > *:not(.recap-clip) { z-index: 2; }
 
 .recap-title {
