@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#8E7E65">
-<script defer src="assets/openext.js?v=852"></script>
-<script defer src="assets/packs.js?v=852"></script>
-<script defer src="assets/enter.js?v=852"></script>
+<script defer src="assets/openext.js?v=853"></script>
+<script defer src="assets/packs.js?v=853"></script>
+<script defer src="assets/enter.js?v=853"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,10 +16,10 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Sean's Final 1km Pace</title>
-<link rel="stylesheet" href="styles/main.css?v=852">
-<link rel="stylesheet" href="styles/detail.css?v=852">
-<link rel="stylesheet" href="styles/creator.css?v=852">
-<link rel="stylesheet" href="styles/enter.css?v=852">
+<link rel="stylesheet" href="styles/main.css?v=853">
+<link rel="stylesheet" href="styles/detail.css?v=853">
+<link rel="stylesheet" href="styles/creator.css?v=853">
+<link rel="stylesheet" href="styles/enter.css?v=853">
 </head>
 <body>
 <div class="phone">
@@ -67,7 +67,7 @@
     </div>
 
     <!-- Sits in the gap the hero opens up, and folds away once the sheet has arrived. -->
-    <div class="dj-explore">
+    <div class="dj-explore" id="djExplore">
       <span class="explore-row"><img src="assets/icons/explore-chevron-up.svg" alt=""><span>Explore Packs</span></span>
     </div>
 
@@ -164,6 +164,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Concave corners where the card meets the black below it; rides the card edge. -->
+  <div class="dj-fillets"><span></span><span></span></div>
 
   <!-- 평소: who has joined, and the action. Fixed to the bottom edge, and it is the
        handle for the whole gesture, so it leaves as soon as the fold is under way. -->

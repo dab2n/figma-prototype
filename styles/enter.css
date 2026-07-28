@@ -1,13 +1,20 @@
 /* 평소 → 1회 진입 → 올릴때 — one scrolling screen, not three pages.
-   How far you have scrolled IS how far the fold has gone: the hero clips back from its
-   bottom edge into the 231px 올릴때 header, and the Explore bar and the pack sheet ride
-   up into the space it leaves. assets/enter.js writes that progress to --p (0 → 1).
+   How far you have scrolled IS how far the fold has gone, and assets/enter.js writes it
+   out as two numbers:
 
-   The geometry is one equation, so the card edge and the Explore bar never separate:
-     hero bottom edge = 780 - p·549      (549 = 780 − 231, the header it folds into)
+     --p  raw fold 0 → 1. Only the card edge reads it:  edge = 780 − p·549
+     --q  the SECOND stage, 0 at 1회 진입 (p 0.213) → 1 at 올릴때. Everything that moves
+          reads this one.
+
+   That split is the whole point. In 1회 진입 the original has the card shrunk to 663 and
+   Explore Packs showing, with the profile, title and pills still exactly where 평소 left
+   them — the stage is a hint that there is more below, not the transition already under
+   way. Only past it does the hero fold into the creator header.
+
+   The Explore bar has to track the card edge exactly:
+     card edge        = 780 - p·549      (549 = 780 − 231, the header it folds into)
      Explore bar top  = 780 - p·300 - p·249
-   TRAVEL (300, in enter.js) + LIFT (249) = 549, so those two are the same number at
-   every p. Change one and you have to change the others. */
+   TRAVEL (300, in enter.js) + LIFT (249) = 549. Change one, change the others. */
 
 .dj-screen { background: var(--color-black); }
 
@@ -19,34 +26,40 @@
   z-index: 1;
   /* Clipped, not resized: the photo is cropped from the bottom rather than squashed,
      and the card rounds off as it folds. Layout height stays 780 so the flow below it
-     is unaffected — that is what keeps the equation above linear. */
-  clip-path: inset(0 0 calc(var(--p, 0) * 549px) 0 round 0 0 calc(var(--p, 0) * 28px) calc(var(--p, 0) * 28px));
+     is unaffected — that is what keeps the equation above linear.
+     The radius is full by 1회 진입: from there on the card is detached, sitting in black
+     on every side, so it is an ordinary rounded card. The concave junction belongs only
+     to 평소, where it meets the fixed bottom bar — see .dj-fillets. */
+  clip-path: inset(0 0 calc(var(--p, 0) * 549px) 0 round 0 0 calc(min(1, var(--p, 0) * 4.7) * 28px) calc(min(1, var(--p, 0) * 4.7) * 28px));
 }
 .dj-photo {
   position: absolute;
   inset: 0;
   background-size: cover;
   background-position: 30% 20%;
-  transform: scale(calc(1 + 0.06 * var(--p, 0)));
+  transform: scale(calc(1 + 0.06 * var(--q, 0)));
   /* Only at the very end, where it becomes the blurred 올릴때 header — a full-height
      blur running the whole way would cost frames on a phone for nothing. */
-  filter: blur(calc(max(0, var(--p, 0) - 0.62) * 58px));
+  filter: blur(calc(max(0, var(--q, 0) - 0.55) * 50px));
 }
-/* 평소 scrim: the warm blurred band the title sits on. It tracks the copy rather than
-   the card edge, so the text keeps its footing the whole way down. */
+/* The warm blurred band the title sits on. Heavy and tall, as drawn: the legs behind
+   the copy are meant to go soft, not just tint. It travels with the copy, so the text
+   keeps its footing the whole way down. */
 .dj-hero::after {
   content: "";
   position: absolute;
   left: 0; right: 0; bottom: 0;
-  height: 60%;
+  height: 62%;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(108,94,67,0.3) 0%, rgba(210,183,130,0.72) 100%);
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
-  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 70%);
-  mask-image: linear-gradient(180deg, transparent 0%, #000 70%);
-  transform: translateY(calc(var(--p, 0) * -363px));
+  background: linear-gradient(180deg, rgba(108,94,67,0.42) 0%, rgba(210,183,130,0.78) 100%);
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+  /* Reaches full strength early (40%, not 70%) — that is most of the difference in
+     how blurred the band reads. */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 40%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 40%);
+  transform: translateY(calc(-1 * max(0px, var(--p, 0) * 549px - 113px)));
 }
 /* …and the flat gradient fills in behind everything as the fold completes, which is
    what the 올릴때 header sits on. */
@@ -55,7 +68,7 @@
   inset: 0;
   z-index: 2;
   background: linear-gradient(180deg, rgba(120,105,72,0.5) 0%, rgba(168,147,101,0.56) 55%, rgba(214,188,138,0.72) 100%);
-  opacity: calc(var(--p, 0) * 2 - 1);
+  opacity: calc(var(--q, 0) * 2.2 - 1.2);
   pointer-events: none;
 }
 .dj-hero .status-bar,
@@ -64,11 +77,13 @@
 /* top comes from main.css: 44px on the desktop mockup, 0 on a phone where our
    status bar is gone and this row belongs directly under the phone's own. */
 
-/* Everything that does not survive the fold rides up with the card edge, keeping its
-   distance from it, then leaves at the very end. */
+/* Copy and pills hold still through 1회 진입 (the card edge comes to them), then keep a
+   constant gap to that edge for the rest of the fold, then leave. */
+.dj-copy, .dj-side, .dj-hero .fire-icons {
+  transform: translateY(calc(-1 * max(0px, var(--p, 0) * 549px - 113px)));
+}
 .dj-copy, .dj-side {
-  transform: translateY(calc(var(--p, 0) * -363px));
-  opacity: calc(1 - 3.5 * max(0, var(--p, 0) - 0.42));
+  opacity: calc(1 - 3 * max(0, var(--q, 0) - 0.4));
 }
 .dj-side {
   position: absolute;
@@ -97,46 +112,63 @@
 }
 .dj-copy.desc-open .dj-desc { -webkit-line-clamp: unset; }
 
-.dj-hero .fire-icons { position: absolute; left: 46px; bottom: 92px; z-index: 4; transform: translateY(calc(var(--p, 0) * -363px)); opacity: calc(1 - 4 * var(--p, 0)); }
+.dj-hero .fire-icons { position: absolute; left: 46px; bottom: 92px; z-index: 4; opacity: calc(1 - 5 * var(--p, 0)); }
 
-/* The profile is the one thing that carries across, so it is the one thing that moves:
-   it travels to the centre of the folded header and grows into the 올릴때 avatar. */
+/* The profile is the one thing that carries across, so it is the one thing that moves —
+   and only in the second stage. It travels to the centre of the folded header and grows
+   into the 올릴때 avatar. */
 .dj-profile {
   position: absolute;
   left: 20px;
-  bottom: calc(267px + var(--p, 0) * 369px);
+  bottom: calc(267px + var(--q, 0) * 369px);
   z-index: 5;
   display: flex;
   align-items: center;
   gap: 8px;
   text-decoration: none;
   color: #fff;
-  transform: translateX(calc(var(--p, 0) * 109px));
+  transform: translateX(calc(var(--q, 0) * 109px));
 }
 .dj-profile img {
-  width: calc(24px + var(--p, 0) * 77px);
-  height: calc(24px + var(--p, 0) * 77px);
+  width: calc(24px + var(--q, 0) * 77px);
+  height: calc(24px + var(--q, 0) * 77px);
   border-radius: 999px;
   display: block;
   object-fit: cover;
-  border: solid rgba(255,255,255,var(--p, 0));
-  border-width: calc(var(--p, 0) * 2px);
+  border: solid rgba(255,255,255,var(--q, 0));
+  border-width: calc(var(--q, 0) * 2px);
   box-sizing: border-box;
 }
-.dj-profile .who { display: flex; flex-direction: column; gap: 2px; opacity: calc(1 - 1.6 * var(--p, 0)); }
+.dj-profile .who { display: flex; flex-direction: column; gap: 2px; opacity: calc(1 - 2 * var(--q, 0)); }
 .dj-profile .name { font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; }
 /* The creator line only belongs to the folded state, so it arrives last. */
 .dj-meta {
   position: absolute;
   left: 0; right: 0;
-  top: 154px;
+  top: 165px;
   z-index: 5;
   text-align: center;
   color: #fff;
-  opacity: calc(var(--p, 0) * 3.4 - 2.1);
+  opacity: calc(var(--q, 0) * 3.5 - 2.4);
   pointer-events: none;
 }
 .dj-meta .sub { margin: 0 0 10px; font-family: var(--font-supreme); font-size: 14px; letter-spacing: -0.42px; }
+
+/* Inverted (concave) radius where the card meets the black below it — the black curls up
+   into the card's bottom corners rather than the card simply rounding off. It rides the
+   card edge, so it is on the phone frame rather than inside the clipped hero (a
+   pseudo-element on .dj-hero would be clipped away by the very edge it has to sit on).
+   It belongs to 평소 alone and leaves with that bar: once the card has lifted off it is
+   detached, and the original draws it as a plain rounded card from there on. */
+.dj-fillets { position: absolute; left: 0; right: 0; bottom: 80px; height: 0; z-index: 7; pointer-events: none; opacity: calc(1 - 7 * var(--p, 0)); }
+.dj-fillets span {
+  position: absolute;
+  bottom: 0;
+  width: 40px; height: 40px;
+  background: var(--color-black);
+}
+.dj-fillets span:first-child { left: 0;  -webkit-mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%); mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%); }
+.dj-fillets span:last-child  { right: 0; -webkit-mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);   mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%); }
 
 /* ── What rises into the gap ──────────────────────────────────────────────── */
 /* LIFT: they come up faster than the scroll, which is what makes the top area read as
@@ -144,18 +176,19 @@
 .dj-explore, .dj-sheet { transform: translateY(calc(var(--p, 0) * -249px)); }
 
 /* Height, not opacity: it has to give its 100px back to the flow by the time the sheet
-   reaches the folded header, or the sheet lands 100px too low. Holds full size until
-   p 0.6 so the mid-fold state still reads as "Explore Packs". */
+   reaches the folded header, or the sheet lands 100px too low. Holds full size well past
+   1회 진입, where it is the whole point of the state. */
 .dj-explore {
   position: relative;
   z-index: 2;
-  height: calc(100px * clamp(0, (1 - var(--p, 0)) * 2.5, 1));
+  height: calc(100px * clamp(0, (1 - var(--q, 0)) * 2.5, 1));
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--color-black);
-  opacity: clamp(0, (1 - var(--p, 0)) * 2.5, 1);
+  opacity: clamp(0, (1 - var(--q, 0)) * 2.5, 1);
+  cursor: pointer;
 }
 
 .dj-sheet {
@@ -165,9 +198,9 @@
 }
 
 /* ── Bottom bars ──────────────────────────────────────────────────────────── */
-/* 평소: joined + Start. Fixed to the bottom edge and the handle for the gesture, so it
-   leaves as soon as the fold is under way. */
-/* absolute, not fixed: fixed anchors to the browser viewport, which on desktop is the
+/* 평소: joined + Start, and the handle for the gesture. It hands over exactly when the
+   rising Explore bar reaches its top edge (p = 80/549), so the two never overlap.
+   absolute, not fixed: fixed anchors to the browser viewport, which on desktop is the
    grey page around the mock — the bar would sit outside the phone frame entirely.
    .phone is position:relative and fills the viewport on a real phone, so absolute is
    the same thing there and correct here. */
@@ -181,14 +214,15 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  opacity: calc(1 - 5 * var(--p, 0));
+  opacity: calc(1 - 7 * var(--p, 0));
 }
 .dj-joined .joined-row { padding: 0 16px; }
 
-/* Start is the action on this screen, so it never scrolls away. It lives OUTSIDE the
-   scroller: .dj-sheet is transformed, and a transformed ancestor becomes the containing
-   block for it, which would have pinned the button to the sheet instead of
-   the screen. The copy inside the content is hidden in its favour. */
+/* Start is the action on the OPEN screen, so it never scrolls away — and it stays out of
+   1회 진입, which has no button in the original. It lives OUTSIDE the scroller: .dj-sheet
+   is transformed, and a transformed ancestor becomes the containing block for it, which
+   would have pinned the button to the sheet instead of the screen. The copy inside the
+   content is hidden in its favour. */
 .dj-screen .creator-start { display: none; }
 .dj-start {
   position: absolute;
@@ -196,8 +230,7 @@
   bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   width: auto;
   z-index: 9;
-  /* Hands over from the joined row's Start rather than sitting on top of it. */
-  opacity: calc(var(--p, 0) * 7 - 2);
+  opacity: calc(var(--q, 0) * 5 - 1.2);
   pointer-events: none;
 }
 /* opacity alone leaves both Starts clickable, so the handover is a real one:
