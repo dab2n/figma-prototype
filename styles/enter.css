@@ -113,12 +113,16 @@
 }
 
 /* ── The sheet that rises ─────────────────────────────────────────────────── */
+/* The sheet rises FASTER than the scroll, which is what makes the top area read as
+   shrinking: by the time you have pulled a little, the title and the pack info below are
+   already on screen rather than waiting a full viewport away. */
 .dj-sheet {
   position: relative;
   z-index: 2;
   background: var(--color-black);
   border-radius: 28px 28px 0 0;
   margin-top: -28px;                 /* its rounded lip overlaps the hero */
+  transform: translateY(calc(var(--p, 0) * -330px));
 }
 
 /* Grab bar: the affordance for the whole gesture, so it leaves once you are moving. */
@@ -126,6 +130,6 @@
   position: fixed;
   left: 0; right: 0; bottom: 0;
   z-index: 8;
-  opacity: calc(1 - 2.2 * var(--p, 0));
+  opacity: calc(1 - 5 * var(--p, 0));
   pointer-events: none;
 }
