@@ -132,6 +132,13 @@
    letters are small grey Supreme, not OffBit. Packs/Steps are fixed widths and the
    last cell takes the slack. */
 .rp-stats { display: flex; gap: 3px; align-items: center; margin: 8px 12px 0; }
+/* Cells arrive left to right. Kept short and shallow — 14px and 80ms apart reads as
+   settling into place, not as three things flying in. */
+.rp-stats .rp-stat { animation: rp-stat-in .42s cubic-bezier(.2,.85,.3,1) both; }
+.rp-stats .rp-stat:nth-child(1) { animation-delay: .06s; }
+.rp-stats .rp-stat:nth-child(2) { animation-delay: .14s; }
+.rp-stats .rp-stat:nth-child(3) { animation-delay: .22s; }
+@keyframes rp-stat-in { from { opacity: 0; transform: translateX(-14px); } }
 /* 8px below the period picker on Records; flush to the top on the Report, which has none. */
 .rp-stats:first-child { margin-top: 0; }
 .rp-stat {
@@ -267,9 +274,10 @@
 .rp-balance::after { content: ""; position: absolute; inset: 0; border-radius: 20px; box-shadow: inset 0 0 70px 10px #fff; pointer-events: none; }
 
 /* ── Performance Scores ────────────────────────────────────────────────────
-   Drawn rather than exported now, because each graph has to animate in its own
-   direction. Cards run top-left → bottom-right once the block scrolls into view;
-   each number waits for its own graph to land, and never counts. */
+   The graphs are the exported artwork, unchanged — only the number is live text, so it
+   can be held back. Each card reveals its art along the axis the graph runs: Agility
+   sweeps around the dome, the other three wipe left to right. Cards fire top-left to
+   bottom-right once the block is scrolled to. */
 .rp-scores { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 .sc {
   position: relative;
@@ -277,6 +285,7 @@
   background: #fff;
   border-radius: 20px;
   overflow: hidden;
+  --d: calc(var(--i) * 200ms);
 }
 .sc-n {
   position: absolute; top: 12px; left: 0; right: 0;
@@ -285,46 +294,26 @@
   color: var(--color-black);
   opacity: 0;
 }
-.sc-l {
-  position: absolute; bottom: 12px; left: 0; right: 0;
-  margin: 0; text-align: center;
-  font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.3px;
-  color: var(--color-neutral-500);
-}
-.sc-g { position: absolute; left: 0; top: 46px; width: 166px; height: 96px; overflow: visible; }
+.sc-art { position: absolute; left: 0; top: 52px; width: 166px; height: 114px; display: block; }
 
-/* Stagger: card index drives every delay in the card. */
-.sc { --d: calc(var(--i) * 200ms); }
+/* Left-to-right wipe for the bar, the wave and the tick field. */
+.sc-art { clip-path: inset(0 100% 0 0); }
+.rp-scores.run .sc-art { animation: sc-wipe .6s cubic-bezier(.3,.7,.3,1) var(--d) both; }
+@keyframes sc-wipe { to { clip-path: inset(0 0 0 0); } }
+
+/* Agility instead sweeps around the dome's centre, so the arc appears to be drawn. */
+@property --sweep { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+.sc.ag .sc-art {
+  clip-path: none;
+  -webkit-mask-image: conic-gradient(from 270deg at 50% 100%, #000 0deg, #000 var(--sweep), transparent var(--sweep));
+  mask-image: conic-gradient(from 270deg at 50% 100%, #000 0deg, #000 var(--sweep), transparent var(--sweep));
+}
+.rp-scores.run .sc.ag .sc-art { animation: sc-sweep .62s cubic-bezier(.3,.7,.3,1) var(--d) both; }
+@keyframes sc-sweep { from { --sweep: 0deg; } to { --sweep: 180deg; } }
+
+/* The number never counts — it waits for its own graph to land, then rises in. */
 .rp-scores.run .sc-n { animation: sc-num .34s ease calc(var(--d) + 620ms) both; }
 @keyframes sc-num { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-
-/* Agility — the arc draws itself around the dome. */
-.sc-arc { stroke-dasharray: 240; stroke-dashoffset: 240; }
-.rp-scores.run .sc-arc { animation: sc-draw .62s cubic-bezier(.3,.7,.3,1) var(--d) both; }
-@keyframes sc-draw { to { stroke-dashoffset: 0; } }
-/* Rhythm — same idea, the wave arrives left to right. */
-.sc-wave { stroke-dasharray: 300; stroke-dashoffset: 300; }
-.rp-scores.run .sc-wave { animation: sc-draw .62s cubic-bezier(.3,.7,.3,1) var(--d) both; }
-/* Endurance — the fill grows from its left edge. */
-.sc-fill { transform-origin: 4px center; transform: scaleX(0); }
-.rp-scores.run .sc-fill { animation: sc-grow .58s cubic-bezier(.3,.7,.3,1) var(--d) both; }
-@keyframes sc-grow { to { transform: scaleX(1); } }
-/* Stability — the heavy bar slides in from the left. */
-.sc-bar { opacity: 0; }
-.rp-scores.run .sc-bar { animation: sc-slide .55s cubic-bezier(.3,.7,.3,1) var(--d) both; }
-@keyframes sc-slide { from { opacity: 0; transform: translateX(-70px); } to { opacity: 1; transform: none; } }
-/* The quiet parts (markers, guide ticks, tick field) just fade up behind the motion. */
-.sc-quiet { opacity: 0; }
-.rp-scores.run .sc-quiet { animation: sc-fade .4s ease calc(var(--d) + 260ms) both; }
-@keyframes sc-fade { to { opacity: 1; } }
-.sc-ticks {
-  position: absolute; left: 6px; right: 6px; top: 30px; height: 32px;
-  background: repeating-linear-gradient(90deg, #FA3030 0 1.6px, transparent 1.6px 9.2px);
-  -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,.6) 0%, rgba(0,0,0,.5) 48%, rgba(0,0,0,.2) 100%);
-  mask-image: linear-gradient(90deg, rgba(0,0,0,.6) 0%, rgba(0,0,0,.5) 48%, rgba(0,0,0,.2) 100%);
-  opacity: 0;
-}
-.rp-scores.run .sc-ticks { animation: sc-fade .45s ease var(--d) both; }
 
 /* ── Recommendation ────────────────────────────────────────────────────────
    Carried over unchanged from the previous Records page — the design reuses it. */
@@ -423,18 +412,10 @@
    show — and the period picker is buttons now, not links. */
 .rp-daynav .nav-day { background: none; border: none; padding: 0; cursor: pointer; display: block; }
 .rp-daynav .nav-day[disabled] { opacity: .35; cursor: default; }
-.sc .sc-bar {
-  position: absolute;
-  left: 88px; top: 22px;
-  width: 6px; height: 48px;
-  border-radius: 3px;
-  background: linear-gradient(180deg, #FA3030 0%, #FE6E3C 100%);
-}
-
 /* Nothing above should move for anyone who asked it not to — show the end state. */
 @media (prefers-reduced-motion: reduce) {
   .rp-balance .lb-heat { animation: none; }
-  .rp-scores .sc-n, .rp-scores .sc-quiet, .rp-scores .sc-ticks, .rp-scores .sc-bar { opacity: 1; animation: none; }
-  .rp-scores .sc-arc, .rp-scores .sc-wave { stroke-dashoffset: 0; animation: none; }
-  .rp-scores .sc-fill { transform: none; animation: none; }
+  .rp-scores .sc-n { opacity: 1; animation: none; }
+  .rp-scores .sc-art { clip-path: none; -webkit-mask-image: none; mask-image: none; animation: none; }
+  .rp-stats .rp-stat { animation: none; }
 }
