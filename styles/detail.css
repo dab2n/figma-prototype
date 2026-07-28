@@ -134,7 +134,7 @@
   justify-content: center;
   height: 24px;
 }
-.home-indicator-row span { width: 144px; height: 4px; border-radius: 2px; background: var(--color-neutral-400); mix-blend-mode: plus-lighter; }
+.home-indicator-row span { width: 144px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.6); mix-blend-mode: plus-lighter; }
 
 /* ── Swipe-morph detail (평소 → 1회 진입 → 올릴때) ───────────────── */
 .swipe-detail {

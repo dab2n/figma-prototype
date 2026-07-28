@@ -81,7 +81,7 @@
   z-index: 20;
   pointer-events: none;
 }
-.creator-nav-indicator span { width: 144px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.9); }
+.creator-nav-indicator span { width: 144px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.6); mix-blend-mode: plus-lighter; }
 
 .creator-content { padding: 20px 16px 56px; display: flex; flex-direction: column; gap: 48px; }
 .creator-content .top-row { display: flex; align-items: center; justify-content: space-between; }
