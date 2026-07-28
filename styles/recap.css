@@ -7,9 +7,11 @@
   /* The wash is ours, not the clips'. Stops sampled straight down the arrival artwork
      this replaces, clear of the runner, so the saturation and the red→cream falloff are
      the original's — the clips only add the runners on top. */
-  background: linear-gradient(180deg,
-    #FA2F2F 0%, #FA2F2F 50%, #FA3331 54%, #FB4538 62%, #FC7350 69%,
-    #FEA87A 77%, #FED3B0 85%, #FFF1E5 94%, #FFF6EE 100%);
+  /* The design's own gradient vector (Ellipse 31226), rendered out and cropped past the
+     frame's corner radius so it can go full-bleed. A CSS ramp could not hold its
+     saturation — the falloff is organic, not linear. The flat colour underneath only
+     covers the instant before the image decodes. */
+  background: url('../assets/photos/recap-bg.png') center / cover no-repeat, #FA2F2F;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
