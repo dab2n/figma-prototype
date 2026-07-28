@@ -6,10 +6,10 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#8E7E65">
-<script defer src="assets/openext.js?v=854"></script>
-<script defer src="assets/packs.js?v=854"></script>
-<script defer src="assets/enter.js?v=854"></script>
-<script defer src="assets/process.js?v=854"></script>
+<script defer src="assets/openext.js?v=855"></script>
+<script defer src="assets/packs.js?v=855"></script>
+<script defer src="assets/enter.js?v=855"></script>
+<script defer src="assets/process.js?v=855"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,10 +17,10 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Sean's Final 1km Pace</title>
-<link rel="stylesheet" href="styles/main.css?v=854">
-<link rel="stylesheet" href="styles/detail.css?v=854">
-<link rel="stylesheet" href="styles/creator.css?v=854">
-<link rel="stylesheet" href="styles/enter.css?v=854">
+<link rel="stylesheet" href="styles/main.css?v=855">
+<link rel="stylesheet" href="styles/detail.css?v=855">
+<link rel="stylesheet" href="styles/creator.css?v=855">
+<link rel="stylesheet" href="styles/enter.css?v=855">
 </head>
 <body>
 <div class="phone">
@@ -209,6 +209,23 @@
   var desc = text && text.querySelector('.dj-desc');
   if (!desc) return;
   var collapsing = false;
+
+  // The profile is positioned off the copy's height (--copyh in enter.css), so it has to
+  // follow the spring rather than jump at the end of it. Poll for the length of the
+  // transition; it is one read of one element, and it stops as soon as it settles.
+  var screen = document.getElementById('djScreen');
+  var track = 0, last = -1, still = 0;
+  function sync() {
+    var h = text.offsetHeight;
+    if (h !== last) { last = h; still = 0; screen.style.setProperty('--copyh', h + 'px'); }
+    else if (++still > 6) { track = 0; return; }
+    track = requestAnimationFrame(sync);
+  }
+  function follow() { if (!track) { still = 0; track = requestAnimationFrame(sync); } }
+  follow();
+  addEventListener('resize', follow);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(follow);
+
   function onEnd(e) {
     if (e.propertyName !== 'max-height') return;
     desc.removeEventListener('transitionend', onEnd);
@@ -222,6 +239,7 @@
   }
   text.addEventListener('click', function () {
     desc.removeEventListener('transitionend', onEnd);
+    follow();
     if (text.classList.contains('desc-open')) {
       collapsing = true;                                 // stays unclamped while shrinking
       desc.style.maxHeight = desc.scrollHeight + 'px';

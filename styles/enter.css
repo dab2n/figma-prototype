@@ -18,7 +18,9 @@
    Below 0.2 the Explore bar is simply behind the 평소 bar. Change one constant and every
    other one has to move with it. */
 
-.dj-screen { background: var(--color-black); }
+/* Vertical only. Left as auto, the horizontal axis rubber-bands under a sideways drag
+   and the 16px content margins visibly slide with it. */
+.dj-screen { background: var(--color-black); overflow-x: hidden; overscroll-behavior-x: none; }
 
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 .dj-hero {
@@ -30,9 +32,10 @@
      and the card rounds off as it folds. Layout height stays 780 so the flow below it
      is unaffected — that is what keeps the edge equation linear.
      Measured up from the BOTTOM, so it scales with the viewport instead of assuming 780.
-     The radius fills in over stage one: 평소 is full-bleed with a concave junction to the
-     bar (.dj-fillets), and from 1회 진입 on the card is detached and simply rounded. */
-  clip-path: inset(0 0 calc(80px + var(--s, 0) * 37px + var(--q, 0) * 432px) 0 round 0 0 calc(var(--s, 0) * 28px) calc(var(--s, 0) * 28px));
+     Nothing about the corners changes during the roll — the concave 40 junction to the
+     bar stays exactly as it is at 평소 and the card simply rises. Only in stage two, once
+     the sheet starts arriving underneath, does it become a detached rounded card. */
+  clip-path: inset(0 0 calc(80px + var(--s, 0) * 37px + var(--q, 0) * 432px) 0 round 0 0 calc(min(1, var(--q, 0) * 2.5) * 40px) calc(min(1, var(--q, 0) * 2.5) * 40px));
 }
 .dj-photo {
   position: absolute;
@@ -118,11 +121,17 @@
 
 /* The profile is the one thing that carries across, so it is the one thing that moves —
    and only in the second stage. It travels to the centre of the folded header and grows
-   into the 올릴때 avatar. */
+   into the 올릴때 avatar.
+   At rest it sits 8px above the copy, whatever height the copy currently is: tapping the
+   description to read it in full pushes the profile up rather than letting the title run
+   through it. The travel is written as rest → 636 rather than rest + 369, so it lands in
+   the same place whether the description was open or closed. --copyh is kept in sync in
+   pyeongso.html. */
 .dj-profile {
   position: absolute;
   left: 20px;
-  bottom: calc(267px + var(--q, 0) * 369px);
+  --dj-rest: calc(136px + var(--copyh, 131px));
+  bottom: calc(var(--dj-rest) + (636px - var(--dj-rest)) * var(--q, 0));
   z-index: 5;
   display: flex;
   align-items: center;
@@ -162,7 +171,7 @@
    pseudo-element on .dj-hero would be clipped away by the very edge it has to sit on).
    It belongs to 평소 alone and leaves with that bar: once the card has lifted off it is
    detached, and the original draws it as a plain rounded card from there on. */
-.dj-fillets { position: absolute; left: 0; right: 0; bottom: calc(80px + var(--s, 0) * 37px); height: 0; z-index: 7; pointer-events: none; opacity: calc(1 - 1.8 * var(--s, 0)); }
+.dj-fillets { position: absolute; left: 0; right: 0; bottom: calc(80px + var(--s, 0) * 37px + var(--q, 0) * 432px); height: 0; z-index: 7; pointer-events: none; opacity: calc(1 - 2.5 * var(--q, 0)); }
 .dj-fillets span {
   position: absolute;
   bottom: 0;
