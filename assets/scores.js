@@ -38,9 +38,9 @@
     }
   }
 
-  // Blocks below the fold animate when they are scrolled to, not on load. .screen is
-  // the scroller, so it is the observer root.
-  var blocks = [document.getElementById('rpScores'), document.querySelector('.rec-scroll')].filter(Boolean);
+  // The score block animates when it is scrolled to, not on load. .screen is the
+  // scroller, so it is the observer root.
+  var blocks = [document.getElementById('rpScores')].filter(Boolean);
   if (!window.IntersectionObserver) { blocks.forEach(function (b) { b.classList.add('run'); }); return; }
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {

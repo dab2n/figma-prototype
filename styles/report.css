@@ -388,12 +388,8 @@
 /* ── Recommendation ────────────────────────────────────────────────────────
    Carried over unchanged from the previous Records page — the design reuses it. */
 .rec-scroll { display: flex; gap: 8px; overflow-x: auto; margin: 0 -12px; padding: 0 12px 4px; }
-/* Cards rise in sequence, same curve and distance as the Packs and Library lists.
-   Held until the row is scrolled to, and replayed whenever the record changes. */
-.rec-scroll.run .rec-card { animation: rec-in .45s cubic-bezier(.2,.85,.3,1) both; }
-.rec-scroll.run .rec-card:nth-child(2) { animation-delay: .08s; }
-.rec-scroll.run .rec-card:nth-child(3) { animation-delay: .16s; }
-@keyframes rec-in { from { opacity: 0; transform: translateY(18px); } }
+/* No entrance here on purpose: .rec-scroll is a horizontal scroller, so its overflow
+   clips vertically too and a rising card gets its top sliced off mid-animation. */
 .rec-scroll::-webkit-scrollbar { display: none; }
 .rec-card {
   flex: 0 0 308px;
@@ -493,7 +489,6 @@
   .rp-balance .lb-heat { animation: none; }
   .rp-scores .sc-n, .rp-scores .sc-tri { opacity: 1; animation: none; }
   .rp-hcard .badge svg { opacity: 1; transform: none; animation: none; }
-  .rec-scroll.run .rec-card { animation: none; }
   .rp-scores .sc-art { clip-path: none; -webkit-mask-image: none; mask-image: none; animation: none; --pass: 79px; }
   .rp-stats .rp-stat { animation: none; }
 }
