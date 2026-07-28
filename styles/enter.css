@@ -167,8 +167,12 @@
 /* ── Bottom bars ──────────────────────────────────────────────────────────── */
 /* 평소: joined + Start. Fixed to the bottom edge and the handle for the gesture, so it
    leaves as soon as the fold is under way. */
+/* absolute, not fixed: fixed anchors to the browser viewport, which on desktop is the
+   grey page around the mock — the bar would sit outside the phone frame entirely.
+   .phone is position:relative and fills the viewport on a real phone, so absolute is
+   the same thing there and correct here. */
 .dj-joined {
-  position: fixed;
+  position: absolute;
   left: 0; right: 0; bottom: 0;
   z-index: 8;
   height: calc(80px + env(safe-area-inset-bottom, 0px));
@@ -183,11 +187,11 @@
 
 /* Start is the action on this screen, so it never scrolls away. It lives OUTSIDE the
    scroller: .dj-sheet is transformed, and a transformed ancestor becomes the containing
-   block for position:fixed, which would have pinned the button to the sheet instead of
+   block for it, which would have pinned the button to the sheet instead of
    the screen. The copy inside the content is hidden in its favour. */
 .dj-screen .creator-start { display: none; }
 .dj-start {
-  position: fixed;
+  position: absolute;
   left: 16px; right: 16px;
   bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   width: auto;
