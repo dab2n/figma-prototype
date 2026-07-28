@@ -5,7 +5,7 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=808"></script>
+<script defer src="assets/openext.js?v=810"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,8 +13,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Session Recap</title>
-<link rel="stylesheet" href="styles/main.css?v=808">
-<link rel="stylesheet" href="styles/recap.css?v=808">
+<link rel="stylesheet" href="styles/main.css?v=810">
+<link rel="stylesheet" href="styles/recap.css?v=810">
 </head>
 <body>
 <div class="phone">
@@ -25,7 +25,7 @@
 
     <div class="recap-match">
       <p class="recap-match-label">Outstanding Match</p>
-      <div class="recap-pct"><span class="num">0</span><span class="unit">%</span></div>
+      <div class="recap-pct"><span class="num">0.0</span><span class="unit">pts</span></div>
     </div>
 
     <a class="recap-full" href="records.html">
@@ -38,31 +38,54 @@
 // Rapid count-up of the match % from 0 → 76 on entry.
 (function () {
   var el = document.querySelector('.recap-pct .num');
-  var target = 76, dur = 900, s = null;
+  var target = 78.8, dur = 900, s = null;
   requestAnimationFrame(function step(t) {
     if (s === null) s = t;
     var p = Math.min((t - s) / dur, 1);
-    el.textContent = Math.round((1 - Math.pow(1 - p, 2)) * target);   // ease-out
+    el.textContent = ((1 - Math.pow(1 - p, 2)) * target).toFixed(1);   // ease-out
     if (p < 1) requestAnimationFrame(step);
     else document.querySelector('.recap-match').classList.add('done');  // reveal "Outstanding Match"
   });
 })();
 
-// Scroll / swipe UP once more → full report (records.html).
+// Grab the "View Full Report" handle and drag up: the screen follows your finger, and
+// past 60px it commits and the report slides in on the same gesture (detail-in). Let go
+// short of that and it springs back. A wheel-down still counts as the same intent.
 (function () {
   var sc = document.getElementById('recapScreen');
-  var startY = null, going = false;
+  var handle = document.querySelector('.recap-full');
+  var startY = null, dy = 0, going = false;
+  var MAX = 160, COMMIT = 60;
+
   function go() { if (going) return; going = true; location.href = 'records.html'; }
-  sc.addEventListener('pointerdown', function (e) { startY = e.clientY; });
-  sc.addEventListener('pointerup', function (e) {
-    if (startY === null) return;
-    var dy = e.clientY - startY; startY = null;
-    if (dy < -45) go();                       // swipe up
+  function lift(px) { sc.style.transform = px ? 'translateY(' + px + 'px)' : ''; }
+
+  handle.addEventListener('pointerdown', function (e) {
+    startY = e.clientY; dy = 0;
+    handle.style.animation = 'none';           // stop the hint bounce while dragging
+    sc.style.transition = 'none';
+    handle.setPointerCapture(e.pointerId);
   });
-  sc.addEventListener('pointercancel', function () { startY = null; });
+  handle.addEventListener('pointermove', function (e) {
+    if (startY === null) return;
+    dy = Math.max(-MAX, Math.min(0, e.clientY - startY));
+    lift(dy);
+  });
+  function release() {
+    if (startY === null) return;
+    startY = null;
+    sc.style.transition = 'transform .32s cubic-bezier(.32,.72,0,1)';
+    if (dy <= -COMMIT) { lift(-MAX); go(); }
+    else { lift(0); handle.style.animation = ''; }
+  }
+  handle.addEventListener('pointerup', release);
+  handle.addEventListener('pointercancel', release);
+  // Tapping it (no drag) still opens the report — it is a link.
+  handle.addEventListener('click', function (e) { if (dy <= -8) e.preventDefault(); });
+
   var lock = false;
   sc.addEventListener('wheel', function (e) {
-    if (lock || e.deltaY <= 10) return;       // scroll down gesture = pull content up
+    if (lock || e.deltaY <= 10) return;        // scroll down gesture = pull content up
     lock = true; go();
   }, { passive: true });
 })();

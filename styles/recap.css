@@ -25,13 +25,14 @@
   color: #fff;
 }
 
+/* Sits at the design's x99 / y566, left-aligned from there rather than centred. */
 .recap-match {
   position: absolute;
-  top: 470px;
-  left: 0; right: 0;
+  top: 566px;
+  left: 99px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   color: #fff;
 }

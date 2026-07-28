@@ -19,6 +19,10 @@
   width: 360px; height: 620px;
   z-index: 0;
   pointer-events: none;
+  /* Fades itself out into the page instead of stopping dead — the hard edge landed
+     right on the top of the first card row. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
 }
 /* z-index only. This used to also set `position: relative`, which outranked the
    absolute placement below (`.rp-hero > *:not(...)` beats a bare `.rp-big`) and dropped
@@ -88,7 +92,10 @@
 /* Gauge: the top slice of the design's 522x377 ellipse, so the curve keeps its very
    flat rise. Stroke fades out at both ends the way the artwork does. */
 .rp-gauge { position: absolute; top: 308px; left: 0; width: 360px; height: 130px; }
-/* The marker's entrance is the travel along the arc in gauge.js, not a scale-in. */
+/* The marker's entrance is its travel along the arc (gauge.js). The score itself is
+   held back until that lands, then fades in as it counts. */
+.rp-gauge #arcVal, .rp-big .n { transition: opacity .28s ease; }
+.rp-gauge #arcVal.wait, .rp-big .n.wait { opacity: 0; }
 
 /* ── Body ──────────────────────────────────────────────────────────────────
    Fades out of the hero wash so there is no seam where the artwork stops. */
@@ -98,15 +105,6 @@
    body on purpose (the fade has to finish somewhere). Without this it painted over the
    first row of cards and swallowed their labels. */
 .rp-body { position: relative; z-index: 1; padding: 0 0 24px; }
-.rp-body::before {
-  content: "";
-  position: absolute;
-  top: -48px; left: 0; right: 0;
-  height: 48px;
-  background: linear-gradient(to bottom, rgba(242,242,242,0), var(--color-neutral-100));
-  pointer-events: none;
-}
-
 /* Day / Week / Month / 6 Month */
 .rp-seg { display: flex; gap: 4px; margin: 0 12px; padding: 4px; border-radius: 999px; background: rgba(255,255,255,0.55); }
 .rp-seg button {
@@ -161,7 +159,11 @@
   justify-content: flex-end;
 }
 .rp-stat .delta { margin: 0; font-family: var(--font-supreme-medium); font-size: 14px; line-height: 1.4; letter-spacing: -0.56px; color: var(--color-neutral-400); white-space: nowrap; }
-.rp-stat .delta.best { color: var(--color-red); }
+.rp-stat .delta.best {
+  color: var(--color-red);
+  animation: rp-best-in .5s cubic-bezier(.2,.85,.3,1) .95s both;
+}
+@keyframes rp-best-in { from { opacity: 0; transform: translateY(10px); } }
 .rp-stat .num { margin: 0; display: flex; align-items: baseline; gap: 6px; white-space: nowrap; }
 /* numeral + its unit letter, 2 apart */
 .rp-stat .num .pair { display: flex; align-items: baseline; gap: 2px; }
