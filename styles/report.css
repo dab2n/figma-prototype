@@ -92,10 +92,10 @@
 /* Gauge: the top slice of the design's 522x377 ellipse, so the curve keeps its very
    flat rise. Stroke fades out at both ends the way the artwork does. */
 .rp-gauge { position: absolute; top: 308px; left: 0; width: 360px; height: 130px; }
-/* The marker's entrance is its travel along the arc (gauge.js). The score itself is
-   held back until that lands, then fades in as it counts. */
-.rp-gauge #arcVal, .rp-big .n { transition: opacity .28s ease; }
-.rp-gauge #arcVal.wait, .rp-big .n.wait { opacity: 0; }
+/* The label under the marker counts the whole way, so only the headline waits — it
+   joins a moment after the marker sets off and lands with it (gauge.js). */
+.rp-big .n { transition: opacity .22s ease; }
+.rp-big .n.wait { opacity: 0; }
 
 /* ── Body ──────────────────────────────────────────────────────────────────
    Fades out of the hero wash so there is no seam where the artwork stops. */
