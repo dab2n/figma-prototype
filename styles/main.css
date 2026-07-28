@@ -1,4 +1,4 @@
-@import url('./tokens.css?v=845');
+@import url('./tokens.css?v=846');
 
 /* Tell the phone which way each screen leans, so its own chrome — the gesture bar most
    of all — picks the matching side instead of always landing light. Declared per page in
@@ -300,7 +300,8 @@ button { font-family: inherit; }
      because each page reintroduces it through a more specific selector of its own
      (.tabbar .home-indicator, .swipe-detail .home-indicator-row, …) from a stylesheet
      that loads after this one; a kill switch shouldn't need specificity arithmetic. */
-  .home-indicator, .home-indicator-row, .creator-nav-indicator { display: none !important; }
+  /* The 24px below the icons is the design's own gesture strip — with the phone's own
+     turned off it is the only one, so it stays. 144x4, as drawn. */
 
   /* Detail pages were laid out at a fixed 780/790px — taller than a real phone
      viewport (a Galaxy in standalone leaves ~750), so their bottom bar (Start /
