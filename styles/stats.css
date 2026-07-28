@@ -10,7 +10,9 @@
    back there. */
 .lib-appbar { display: flex; align-items: center; height: 66px; padding: 0 16px; box-sizing: border-box; }
 .lib-appbar .icon-btn { background: none; border: none; padding: 0; display: block; cursor: pointer; }
-.lib-appbar img { width: 24px; height: 24px; display: block; }
+/* appbar-back.svg is stroked white for the dark hero screens — on this light panel it
+   would be invisible, so flatten it to black. */
+.lib-appbar img { width: 24px; height: 24px; display: block; filter: brightness(0); }
 .lib-screen { background: var(--color-neutral-100); }
 /* Status bar matches the gray frame (frame color as backdrop + multiply-blend
    the status-bar SVG so its baked white rect dissolves into the gray). */

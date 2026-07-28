@@ -20,7 +20,14 @@
   z-index: 0;
   pointer-events: none;
 }
-.rp-hero > *:not(.rp-hero-bg) { position: relative; z-index: 2; }
+/* z-index only. This used to also set `position: relative`, which outranked the
+   absolute placement below (`.rp-hero > *:not(...)` beats a bare `.rp-big`) and dropped
+   the number, caption and gauge back into flow, each shoved down by its own `top`. */
+/* Excluding the wash matters: a bare `.rp-hero > *` also matched it, and since that
+   rule comes later it beat the z-index: 0 above — the wash then painted over the body
+   and hid the first row of card labels. */
+.rp-hero > *:not(.rp-hero-bg) { z-index: 2; }
+.rp-hero > .app-bar, .rp-hero > .rp-daynav, .rp-hero > .rp-appbar, .rp-hero > .rp-date { position: relative; }
 
 .rp-hero .app-bar { height: 66px; box-sizing: border-box; }
 .rp-title { margin: 0; font-family: var(--font-supreme-bold); font-size: 26px; line-height: 1.3; letter-spacing: -1px; color: #fff; }
@@ -32,7 +39,6 @@
 /* Records: ‹ Today › */
 .rp-daynav { display: flex; align-items: center; justify-content: space-between; height: 56px; padding: 0 16px; }
 .rp-daynav img { width: 24px; height: 24px; display: block; opacity: .9; }
-.rp-daynav .back { transform: scaleX(-1); }
 .rp-chip {
   padding: 6px 12px;
   border-radius: 999px;
@@ -81,7 +87,10 @@
    Fades out of the hero wash so there is no seam where the artwork stops. */
 /* No top padding: .rp-hero is exactly as tall as the design's hero (462px once the
    44px status bar is taken off), so the body already starts on the right line. */
-.rp-body { position: relative; padding: 0 0 24px; }
+/* z-index: the hero wash is 523px tall inside a 462px hero, so it bleeds 61px into the
+   body on purpose (the fade has to finish somewhere). Without this it painted over the
+   first row of cards and swallowed their labels. */
+.rp-body { position: relative; z-index: 1; padding: 0 0 24px; }
 .rp-body::before {
   content: "";
   position: absolute;
