@@ -208,7 +208,24 @@
 .rp-hcard .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
 .rp-hcard .cap { margin: 0 0 4px; font-family: var(--font-supreme); font-size: 13px; line-height: 16px; letter-spacing: -0.3px; color: var(--color-neutral-500); }
 .rp-hcard .val { margin: 0; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 24px; letter-spacing: -0.6px; color: var(--color-black); }
-.rp-hcard .badge { width: 32px; height: 32px; flex: none; display: block; }
+/* Badge is a circle plus an arrow, not one flat asset, so the arrow can arrive on its
+   own beat. Down uses Neutral/200 rather than 100 — 100 all but disappears on the white
+   card. */
+.rp-hcard .badge {
+  width: 32px; height: 32px; flex: none;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.rp-hcard .badge.up { background: var(--color-red); }
+.rp-hcard .badge.down { background: var(--color-neutral-200); }
+.rp-hcard .badge svg { width: 16px; height: 16px; display: block; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.rp-hcard .badge.up svg { stroke: #fff; }
+.rp-hcard .badge.down svg { stroke: var(--color-red); }
+/* Each arrow enters along the direction it points, a beat after the card settles. */
+.rp-hcard .badge.up svg   { animation: arrow-up-in .42s cubic-bezier(.2,.85,.3,1) .5s both; }
+.rp-hcard .badge.down svg { animation: arrow-down-in .42s cubic-bezier(.2,.85,.3,1) .62s both; }
+@keyframes arrow-up-in   { from { opacity: 0; transform: translate(-7px, 7px); } }
+@keyframes arrow-down-in { from { opacity: 0; transform: translate(-7px, -7px); } }
 .rp-hcard .desc { margin: 0; font-family: var(--font-supreme); font-size: 13px; line-height: 16px; letter-spacing: -0.3px; color: #A3A3A3; }
 
 /* Landing Balance. The heat is a CSS blob, not baked artwork, so its red core sits
@@ -471,6 +488,7 @@
 @media (prefers-reduced-motion: reduce) {
   .rp-balance .lb-heat { animation: none; }
   .rp-scores .sc-n, .rp-scores .sc-tri { opacity: 1; animation: none; }
+  .rp-hcard .badge svg { opacity: 1; transform: none; animation: none; }
   .rp-scores .sc-art { clip-path: none; -webkit-mask-image: none; mask-image: none; animation: none; --pass: 79px; }
   .rp-stats .rp-stat { animation: none; }
 }
