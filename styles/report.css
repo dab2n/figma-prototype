@@ -311,35 +311,55 @@
   z-index: 3;
 }
 .sc-art { position: absolute; left: 0; width: 166px; display: block; z-index: 1; }
-.sc.ag  .sc-art { top: 66px; height: 68px; }
+.sc.ag  .sc-art { top: 66px; height: 71px; }
 .sc.en  .sc-art { top: 86px; height: 48px; }
 .sc.rh  .sc-art { top: 52px; height: 82px; }
 .sc.st  .sc-art { top: 52px; height: 82px; }
+/* Stability. Geometry and both tones measured off the export: 1.6px ticks 7.6px apart,
+   32px tall; the heavy bar 6.2x45 finishing at x=79. Ticks start in the warm default
+   and turn red behind the bar as it travels. */
+@property --pass { syntax: '<length>'; inherits: true; initial-value: 0px; }
+.st-base, .st-hot {
+  position: absolute;
+  left: 5px; right: 6px; top: 17px; height: 32px;
+  background: repeating-linear-gradient(90deg, currentColor 0 1.6px, transparent 1.6px 7.6px);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+.st-base { color: rgba(254,140,74,0.30); }
+.st-hot  { color: rgba(250,48,48,0.42); clip-path: inset(0 calc(100% - var(--pass)) 0 0); }
+.st-bar {
+  position: absolute;
+  top: 10px; left: 0;
+  width: 6.2px; height: 45px;
+  border-radius: 1.5px;
+  background: linear-gradient(180deg, #FA3030 0%, #FE8C4A 100%);
+  transform: translateX(var(--pass));
+}
+.rp-scores.run .sc.st .sc-art { animation: st-pass .72s cubic-bezier(.3,.7,.3,1) var(--d) both; }
+@keyframes st-pass { from { --pass: 0px; } to { --pass: 79px; } }
 
 /* Marker: drawn, not baked, so it stays crisp over the blurred art. */
-.sc-tri {
-  position: absolute;
-  z-index: 3;
-  width: 0; height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-top: 8px solid var(--color-red);
-  opacity: 0;
-}
+.sc-tri { position: absolute; z-index: 3; width: 12px; height: 9px; opacity: 0; }
+.sc-tri svg { display: block; width: 100%; height: 100%; }
 .sc.ag .sc-tri { left: 76px; top: 54px; }
 .sc.en .sc-tri { left: 101.5px; top: 74px; }
 
-/* Left-to-right wipe for the bar, the wave and the tick field. */
-.sc-art { clip-path: inset(0 100% 0 0); }
-.rp-scores.run .sc-art { animation: sc-wipe .6s cubic-bezier(.3,.7,.3,1) var(--d) both; }
+/* Left-to-right wipe for the bar and the wave. */
+.sc.en .sc-art, .sc.rh .sc-art { clip-path: inset(0 100% 0 0); }
+.rp-scores.run .sc.en .sc-art, .rp-scores.run .sc.rh .sc-art { animation: sc-wipe .6s cubic-bezier(.3,.7,.3,1) var(--d) both; }
 @keyframes sc-wipe { to { clip-path: inset(0 0 0 0); } }
 
 /* Agility instead sweeps around the dome's centre, so the arc appears to be drawn. */
 @property --sweep { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
 .sc.ag .sc-art {
   clip-path: none;
-  -webkit-mask-image: conic-gradient(from 270deg at 50% 100%, #000 0deg, #000 var(--sweep), transparent var(--sweep));
-  mask-image: conic-gradient(from 270deg at 50% 100%, #000 0deg, #000 var(--sweep), transparent var(--sweep));
+  -webkit-mask-image: conic-gradient(from 270deg at 50% 100%, #000 0deg, #000 var(--sweep), transparent var(--sweep)),
+                      linear-gradient(to bottom, #000 62%, transparent 100%);
+  mask-image: conic-gradient(from 270deg at 50% 100%, #000 0deg, #000 var(--sweep), transparent var(--sweep)),
+              linear-gradient(to bottom, #000 62%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
 .rp-scores.run .sc.ag .sc-art { animation: sc-sweep .62s cubic-bezier(.3,.7,.3,1) var(--d) both; }
 @keyframes sc-sweep { from { --sweep: 0deg; } to { --sweep: 180deg; } }
@@ -451,6 +471,6 @@
 @media (prefers-reduced-motion: reduce) {
   .rp-balance .lb-heat { animation: none; }
   .rp-scores .sc-n, .rp-scores .sc-tri { opacity: 1; animation: none; }
-  .rp-scores .sc-art { clip-path: none; -webkit-mask-image: none; mask-image: none; animation: none; }
+  .rp-scores .sc-art { clip-path: none; -webkit-mask-image: none; mask-image: none; animation: none; --pass: 79px; }
   .rp-stats .rp-stat { animation: none; }
 }
