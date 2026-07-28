@@ -15,9 +15,12 @@
 
   function paint() {
     raf = 0;
-    var v = progress().toFixed(4);
+    var p = progress();
+    var v = p.toFixed(4);
     screen.style.setProperty('--p', v);
-    document.documentElement.style.setProperty('--p', v);   // the grab bar sits outside the scroller
+    document.documentElement.style.setProperty('--p', v);   // the bottom bars sit outside the scroller
+    // Opacity alone would leave both Start buttons clickable through each other.
+    document.documentElement.classList.toggle('dj-open', p > 0.3);
   }
   screen.addEventListener('scroll', function () {
     if (!raf) raf = requestAnimationFrame(paint);
@@ -42,9 +45,11 @@
     }, { passive: true });
   });
 
-  // Tapping the grab bar does the same thing the drag does, just on its own.
+  // Tapping the bottom bar does the same thing the drag does, just on its own — but
+  // Start is a real action sitting inside it, so links keep their own behaviour.
   var grab = document.getElementById('djGrab');
   if (grab) grab.addEventListener('click', function (e) {
+    if (e.target.closest('a')) return;
     e.preventDefault();
     screen.scrollTo({ top: OPEN, behavior: 'smooth' });
   });

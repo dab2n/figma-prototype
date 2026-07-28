@@ -6,41 +6,58 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#8E7E65">
-<script defer src="assets/openext.js?v=850"></script>
-<script defer src="assets/packs.js?v=850"></script>
+<script defer src="assets/openext.js?v=851"></script>
+<script defer src="assets/packs.js?v=851"></script>
+<script defer src="assets/enter.js?v=851"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>Newton — Pack Detail (평소)</title>
-<link rel="stylesheet" href="styles/main.css?v=850">
-<link rel="stylesheet" href="styles/detail.css?v=850">
+<title>Newton — Sean's Final 1km Pace</title>
+<link rel="stylesheet" href="styles/main.css?v=851">
+<link rel="stylesheet" href="styles/detail.css?v=851">
+<link rel="stylesheet" href="styles/creator.css?v=851">
+<link rel="stylesheet" href="styles/enter.css?v=851">
 </head>
 <body>
 <div class="phone">
-  <div class="screen detail-screen swipe-detail" id="swipeScreen">
-    <div class="hero-photo" style="background-image:url('assets/photos/hero-sean-running.png');">
-      <div class="status-bar on-dark" style="position:absolute; top:0; left:0; z-index:6;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
+  <!-- 평소 → 1회 진입 → 올릴때 are one scrolling page, not three. How far you have
+       scrolled IS how far the fold has gone: the hero clips back from the bottom, the
+       Explore bar and the pack sheet ride up into the space it leaves, and letting go
+       part-way commits to whichever end is closer. -->
+  <div class="screen dj-screen" id="djScreen">
+
+    <div class="dj-hero">
+      <div class="dj-photo" style="background-image:url('assets/photos/hero-sean-running.png');"></div>
+      <div class="dj-wash"></div>
+
+      <div class="status-bar on-dark"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
       <div class="app-bar-transparent">
-        <button class="icon-btn" onclick="location.href='packs.html'"><img src="assets/icons/appbar-back.svg" alt="뒤로"></button>
+        <button class="icon-btn" onclick="history.back()"><img src="assets/icons/appbar-back.svg" alt="뒤로"></button>
         <button class="kebab-tan"><img src="assets/icons/kebab-dots.svg" alt="더보기"></button>
       </div>
 
-      <div class="detail-info">
-        <div class="detail-text">
-          <a class="author" href="ollilttae.html">
-            <img src="assets/icons/avatar-ellipse-sean.png" alt="">
-            <span class="author-name">Sean</span>
-          </a>
-          <p class="detail-title">Sean's Final 1km Pace</p>
-          <p class="detail-desc">How to hold your pace when it falls apart in the last 1km of a run. Learn Sean's breathing rhythm and footfall tempo, then apply them to real runs with SAFE and BOOST modes.</p>
-        </div>
-        <div class="detail-actions">
-          <div class="action-pill"><img src="assets/icons/detail-bookmark.svg" alt="북마크"><span>124</span></div>
-          <div class="action-pill"><img src="assets/icons/detail-share.svg" alt="공유"><span>888+</span></div>
-        </div>
+      <div class="dj-side">
+        <div class="action-pill"><img src="assets/icons/detail-bookmark.svg" alt="북마크"><span>124</span></div>
+        <div class="action-pill"><img src="assets/icons/detail-share.svg" alt="공유"><span>888+</span></div>
+      </div>
+
+      <!-- The one element that survives the fold, so it is the one that travels:
+           it slides to the centre and grows into the 올릴때 header avatar. -->
+      <div class="dj-profile">
+        <img src="assets/photos/creator-profile-sean.png" alt="">
+        <span class="who"><span class="name">Sean</span></span>
+      </div>
+      <div class="dj-meta">
+        <p class="sub">Running Creator · 240K subscribers</p>
+        <span class="tag-pill">Sean</span>
+      </div>
+
+      <div class="dj-copy">
+        <p class="dj-title">Sean's Final 1km Pace</p>
+        <p class="dj-desc">How to hold your pace when it falls apart in the last 1km of a run. Learn Sean's breathing rhythm and footfall tempo, then apply them to real runs with SAFE and BOOST modes.</p>
       </div>
 
       <div class="fire-icons">
@@ -49,108 +66,132 @@
       </div>
     </div>
 
-    <!-- Bottom sheet: swipe up morphs 평소 → 1회 진입, swipe up again → 올릴때 -->
-    <div class="detail-sheet" id="detailSheet">
-      <div class="sheet-joined">
-        <div class="joined-row">
-          <div class="joined-people">
-            <div class="joined-avatars">
-              <img src="assets/photos/packs-avatar1.png" alt="">
-              <img src="assets/photos/packs-avatar2.png" alt="">
-              <img src="assets/photos/joined-avatar-swim.png" alt="">
-            </div>
-            <p>877 joined this week</p>
-          </div>
-          <a class="start-btn" href="setup-location.html">Start <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></a>
+    <!-- Sits in the gap the hero opens up, and folds away once the sheet has arrived. -->
+    <div class="dj-explore">
+      <span class="explore-row"><img src="assets/icons/explore-chevron-up.svg" alt=""><span>Explore Packs</span></span>
+    </div>
+
+    <div class="dj-sheet">
+      <div class="creator-content">
+      <div class="top-row">
+        <span class="tag-pill">Creator Pack</span>
+        <div class="top-actions">
+          <img class="save-icon" src="assets/icons/creator-bookmark.svg" alt="저장">
+          <div class="icon-circle"><img src="assets/icons/creator-share.svg" alt="공유"></div>
         </div>
       </div>
 
-      <div class="sheet-explore">
-        <a class="explore-row" href="1hoe-jinip.html">
-          <img src="assets/icons/explore-chevron-up.svg" alt="">
-          <span>Explore this Pack</span>
-        </a>
+      <div class="creator-heading">
+        <p class="title">Sean's Final 1km Pace</p>
+        <p class="desc">How to hold your pace when it falls apart in the last 1km of a run. Learn Sean's breathing rhythm and footfall tempo, then apply them to real runs with SAFE and BOOST modes.</p>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat"><p class="label">Sport</p><p class="value">Running</p></div>
+        <div class="divider"></div>
+        <div class="stat"><p class="label">Joined</p><p class="value">877</p></div>
+        <div class="divider"></div>
+        <div class="stat"><p class="label">Recommended</p><p class="value">Pace On</p></div>
+      </div>
+
+      <div>
+        <p class="process-title t-subtitle-b">Process</p>
+        <div class="process-graph">
+          <div class="big-number">
+            <span class="num">18</span>
+            <span class="unit">min</span>
+          </div>
+          <div class="bars">
+            <div class="bar bar-stretch"><span>8min</span><span class="label">STRETCH</span></div>
+            <div class="bar bar-learn"><span>10min</span><span class="label">LEARN</span></div>
+            <div class="bar bar-run"><span>You Can Choose</span><span class="label">RUN!</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="cell"><p class="label">Entry Level</p><p class="value">Basics Recommended</p></div>
+        <div class="cell"><p class="label">Sensory Focus</p><p class="value">Rhythm · Endurance</p></div>
+        <div class="cell"><p class="label">Environment</p><p class="value">Outdoor</p></div>
+        <div class="cell"><p class="label">Pack Source</p><p class="value">Creator</p></div>
+      </div>
+
+      <div>
+        <p class="t-subtitle-b" style="color:var(--color-neutral-50); margin:0 0 8px;">You might also like</p>
+        <div class="also-like-list">
+          <a class="also-like-item" href="pyeongso.html?pack=interval">
+            <img src="assets/photos/related-running-intervals.png" alt="">
+            <div class="txt">
+              <p class="t-body-bold">Running Intervals</p>
+              <div class="meta"><span>Skilled</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>12m</span></div>
+            </div>
+          </a>
+          <a class="also-like-item" href="pyeongso.html?pack=boxing">
+            <img src="assets/photos/related-boxing-beginner.png" alt="">
+            <div class="txt">
+              <p class="t-body-bold">Boxing Beginner Challenge</p>
+              <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>12m</span></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <div class="top-row" style="margin-bottom:8px;">
+          <p class="t-subtitle-b more-from" style="color:var(--color-neutral-50); margin:0;">More Packs from Sean</p>
+          <img src="assets/icons/section-icon-recently.svg" alt="" style="width:26px; height:26px;">
+        </div>
+        <div class="more-scroll">
+          <a class="more-card" href="pyeongso.html?pack=sprinter">
+            <img src="assets/photos/more-running-form.png" alt="">
+            <p class="t-body-bold">Running Form Correction Routine</p>
+            <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny2.svg" alt=""><span>25m</span></div>
+          </a>
+          <a class="more-card" href="pyeongso.html?pack=legburn">
+            <img src="assets/photos/more-everyday-crew.png" alt="">
+            <p class="t-body-bold">Everyday Running Crew</p>
+            <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny2.svg" alt=""><span>23m</span></div>
+          </a>
+          <a class="more-card" href="pyeongso.html?pack=sprint">
+            <img src="assets/photos/more-5km-finish.png" alt="">
+            <p class="t-body-bold">Sean's 5km Finish Strategy</p>
+            <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny2.svg" alt=""><span>15m</span></div>
+          </a>
+        </div>
+      </div>
+
+      <a class="btn-pill creator-start" href="setup-location.html">Start <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></a>
       </div>
     </div>
+  </div>
 
-    <!-- Phone's own bottom bar — stays pinned, never rides the Explore Packs push. -->
+  <!-- 평소: who has joined, and the action. Fixed to the bottom edge, and it is the
+       handle for the whole gesture, so it leaves as soon as the fold is under way. -->
+  <div class="dj-joined" id="djGrab">
+    <div class="joined-row">
+      <div class="joined-people">
+        <div class="joined-avatars">
+          <img src="assets/photos/packs-avatar1.png" alt="">
+          <img src="assets/photos/packs-avatar2.png" alt="">
+          <img src="assets/photos/joined-avatar-swim.png" alt="">
+        </div>
+        <p>877 joined this week</p>
+      </div>
+      <a class="start-btn" href="setup-location.html">Start <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></a>
+    </div>
     <div class="home-indicator-row"><span></span></div>
   </div>
+
+  <!-- Once the sheet is open the inline Start is gone, so the action gets pinned.
+       Outside the scroller on purpose — see .dj-start in enter.css. -->
+  <a class="btn-pill dj-start" href="setup-location.html">Start <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></a>
 </div>
 
 <script>
-(function () {
-  var screen = document.getElementById('swipeScreen');
-  var hero = screen.querySelector('.hero-photo');
-  var sheet = document.getElementById('detailSheet');
-  var COMMIT = 150;                 // px of upward push that commits to 올릴때
-  var pushed = 0, committing = false, gestured = false;
-
-  function isExpanded() { return screen.classList.contains('expanded'); }
-
-  // In 1회진입, an upward scroll/drag gradually pushes the WHOLE page up — the photo
-  // AND the Explore Packs container (black strip + up-arrow) move together as one,
-  // so it reads as a continuous page transition; past COMMIT it hands off to 올릴때.
-  function setPush(px, animate) {
-    pushed = Math.max(0, Math.min(px, COMMIT + 24));
-    var t = pushed ? 'translateY(' + (-pushed) + 'px)' : '';
-    hero.style.transition = animate ? 'transform .32s ease, border-radius .32s ease' : 'none';
-    hero.style.transform = t;
-    hero.style.borderRadius = pushed ? '0 0 40px 40px' : '';
-    sheet.style.transition = animate ? 'transform .32s ease' : 'none';
-    sheet.style.transform = t;
-    screen.style.setProperty('--push', pushed + 'px');   // concave fillets ride up too
-    if (pushed >= COMMIT && !committing) { committing = true; window.location.href = 'ollilttae.html'; }
-  }
-
-  // Pointer (touch / mouse drag)
-  var startY = null;
-  screen.addEventListener('pointerdown', function (e) { startY = e.clientY; gestured = false; });
-  screen.addEventListener('pointermove', function (e) {
-    if (startY === null || !isExpanded()) return;
-    var dy = e.clientY - startY;
-    if (dy < 0 || pushed > 0) { gestured = true; setPush(-dy, false); }
-  });
-  screen.addEventListener('pointerup', function (e) {
-    if (startY === null) return;
-    var dy = e.clientY - startY; startY = null;
-    if (!isExpanded()) {
-      if (dy < -45) { gestured = true; screen.classList.add('expanded'); }   // 평소 → 1회진입
-    } else if (!committing) {
-      if (pushed > 0) setPush(0, true);                                      // released early → snap back
-      else if (dy > 45) { gestured = true; screen.classList.remove('expanded'); } // 1회진입 → 평소
-    }
-  });
-  screen.addEventListener('pointercancel', function () {
-    startY = null; if (!committing && pushed > 0) setPush(0, true);
-  });
-  // Suppress the click that follows a real drag (so links don't fire on snap-back)
-  screen.addEventListener('click', function (e) {
-    if (gestured) { e.preventDefault(); e.stopPropagation(); gestured = false; }
-  }, true);
-
-  // Wheel (desktop): accumulate the push; snap back if it stalls below COMMIT.
-  var toggleLock = false, stall;
-  screen.addEventListener('wheel', function (e) {
-    if (!isExpanded()) {
-      if (e.deltaY > 10 && !toggleLock) { toggleLock = true; setTimeout(function(){toggleLock=false;},420); screen.classList.add('expanded'); }
-      return;
-    }
-    if (committing) return;
-    if (e.deltaY > 0 || pushed > 0) {
-      setPush(pushed + e.deltaY, false);
-    } else if (!toggleLock) {
-      toggleLock = true; setTimeout(function(){toggleLock=false;},420); screen.classList.remove('expanded');
-    }
-    clearTimeout(stall);
-    stall = setTimeout(function () { if (!committing && pushed > 0) setPush(0, true); }, 220);
-  }, { passive: true });
-})();
-
 // Tap the title/description to expand the clamped description (tap again to collapse).
 (function () {
-  var text = document.querySelector('.detail-text');
-  var desc = text && text.querySelector('.detail-desc');
+  var text = document.querySelector('.dj-copy');
+  var desc = text && text.querySelector('.dj-desc');
   if (!desc) return;
   var collapsing = false;
   function onEnd(e) {
@@ -158,14 +199,13 @@
     desc.removeEventListener('transitionend', onEnd);
     if (collapsing) {
       // Reapply the 2-line clamp/ellipsis only AFTER the shrink finishes, so the
-      // box is already at 42px — no reflow jump ("둠칫") mid-animation.
+      // box is already at 42px — no reflow jump mid-animation.
       text.classList.remove('desc-open');
       desc.style.maxHeight = '';
       collapsing = false;
     }
   }
-  text.addEventListener('click', function (e) {
-    if (e.target.closest('.author')) return;   // let the author avatar/link navigate
+  text.addEventListener('click', function () {
     desc.removeEventListener('transitionend', onEnd);
     if (text.classList.contains('desc-open')) {
       collapsing = true;                                 // stays unclamped while shrinking
@@ -180,19 +220,6 @@
     }
   });
 })();
-
-// Tag the cross-document view transition so 1회진입 → 올릴때 slides up,
-// and 올릴때 → 1회진입 (back) slides down (see main.css slide-* keyframes).
-window.addEventListener('pageswap', function (e) {
-  if (!e.viewTransition) return;
-  var to = (e.activation && e.activation.entry && e.activation.entry.url) || '';
-  if (to.indexOf('ollilttae.html') !== -1) e.viewTransition.types.add('detail-in');
-});
-window.addEventListener('pagereveal', function (e) {
-  if (!e.viewTransition) return;
-  var from = (e.activation && e.activation.from && e.activation.from.url) || '';
-  if (from.indexOf('ollilttae.html') !== -1) e.viewTransition.types.add('detail-out');
-});
 </script>
 </body>
 </html>

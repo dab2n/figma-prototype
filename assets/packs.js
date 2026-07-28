@@ -76,7 +76,7 @@
       for (var i = 0; i < d.length; i += 4) { r += d[i]; gr += d[i + 1]; b += d[i + 2]; k++; }
       r = Math.round(r / k); gr = Math.round(gr / k); b = Math.round(b / k);
       var deep = function (v) { return Math.max(0, Math.round(v * 0.72)); };
-      var el = document.querySelector('.swipe-detail') || document.body;
+      var el = document.querySelector('.swipe-detail, .dj-screen') || document.body;
       el.style.setProperty('--pack-main', 'rgb(' + r + ',' + gr + ',' + b + ')');
       el.style.setProperty('--pack-main-80', 'rgba(' + r + ',' + gr + ',' + b + ',0.8)');
       el.style.setProperty('--pack-deep', 'rgb(' + deep(r) + ',' + deep(gr) + ',' + deep(b) + ')');
@@ -101,7 +101,7 @@
   try { key = new URLSearchParams(location.search).get('pack'); } catch (e) { key = null; }
   var p = key && PACKS[key];
 
-  var hero = document.querySelector('.hero-photo');
+  var hero = document.querySelector('.dj-photo, .hero-photo');
   if (!p) {                                  // default pack: markup stays, still tint it
     if (hero) {
       var m = (hero.style.backgroundImage || '').match(/url\(["']?([^"')]+)["']?\)/);
@@ -110,19 +110,23 @@
     return;
   }
   tone('assets/photos/' + p.photo);
-  var av = document.querySelector('.detail-text .author img');
-  var name = document.querySelector('.detail-text .author-name');
-  var title = document.querySelector('.detail-title');
-  var desc = document.querySelector('.detail-desc');
+
+  function put(sel, fn) {
+    // Hero and sheet both carry the title/description now that they are one page,
+    // so every match gets filled, not just the first.
+    [].forEach.call(document.querySelectorAll(sel), fn);
+  }
 
   if (hero) {
     hero.style.backgroundImage = "url('assets/photos/" + p.photo + "')";
     // Landscape thumbs crop hard in a portrait hero; a few carry their own framing.
     if (p.pos) hero.style.backgroundPosition = p.pos;
   }
-  if (av) av.src = 'assets/photos/' + p.avatar;
-  if (name) name.textContent = p.author;
-  if (title) title.textContent = p.title;
-  if (desc) desc.textContent = p.desc;
+  put('.dj-profile img, .detail-text .author img', function (el) { el.src = 'assets/photos/' + p.avatar; });
+  put('.dj-profile .name, .detail-text .author-name', function (el) { el.textContent = p.author; });
+  put('.dj-title, .detail-title, .creator-heading .title', function (el) { el.textContent = p.title; });
+  put('.dj-desc, .detail-desc, .creator-heading .desc', function (el) { el.textContent = p.desc; });
+  put('.dj-meta .tag-pill', function (el) { el.textContent = p.author; });
+  put('.more-from', function (el) { el.textContent = 'More Packs from ' + p.author; });
   document.title = 'Newton — ' + p.title;
 })();
