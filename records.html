@@ -5,7 +5,7 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=803"></script>
+<script defer src="assets/openext.js?v=805"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,17 +13,17 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Report</title>
-<link rel="stylesheet" href="styles/main.css?v=803">
-<link rel="stylesheet" href="styles/report.css?v=803">
+<link rel="stylesheet" href="styles/main.css?v=805">
+<link rel="stylesheet" href="styles/report.css?v=805">
 </head>
 <body>
 <div class="phone">
   <div class="screen rp-screen">
+    <!-- The wash sits above the status bar, so the bar's white glyphs read. -->
+    <img class="rp-hero-bg" src="assets/photos/report-hero.png" alt="">
     <div class="status-bar on-dark"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
 
     <div class="rp-hero">
-      <img class="rp-hero-bg" src="assets/photos/report-hero.png" alt="">
-
       <div class="rp-appbar">
         <!-- The report arrives straight after a workout, so back returns to Home rather
              than to the recap it came from. -->
@@ -37,8 +37,8 @@
       <p class="rp-big"><span class="n">78.8</span><span class="u">%</span></p>
       <p class="rp-cap">Movement Performance Gain</p>
 
-      <!-- Top slice of the design's 522x377 ellipse: rx/ry keep the curve as flat as the
-           artwork, and the stroke fades to nothing at both ends. -->
+      <!-- Top slice of the design's 522x377 ellipse. The marker is the same ring used
+           for body-area selection (신체 영역 in the design), not a plain dot. -->
       <svg class="rp-gauge" viewBox="0 0 360 130" fill="none" aria-hidden="true">
         <defs>
           <linearGradient id="gaugeFade" x1="0" y1="0" x2="1" y2="0">
@@ -48,31 +48,28 @@
             <stop offset="1" stop-color="#fff" stop-opacity="0"/>
           </linearGradient>
         </defs>
-        <path d="M 19 54 A 261 188.5 0 0 1 341 54" stroke="url(#gaugeFade)" stroke-width="2.5" stroke-linecap="round"/>
-        <g class="arc-dot">
-          <circle cx="228" cy="17" r="15" fill="#fff" opacity=".18"/>
-          <circle cx="228" cy="17" r="8" fill="#fff"/>
-        </g>
-        <text x="228" y="57" text-anchor="middle" fill="#fff" font-family="Supreme, sans-serif" font-size="12" opacity=".92">78.8</text>
-        <text x="48"  y="80" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">0</text>
-        <text x="306" y="80" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">100</text>
+        <path d="M 19 64 A 261 188.5 0 0 1 341 64" stroke="url(#gaugeFade)" stroke-width="2.5" stroke-linecap="round"/>
+        <image class="arc-dot" href="assets/icons/body-ring.png" x="208.5" y="7.5" width="39" height="39"/>
+        <text x="228" y="67" text-anchor="middle" fill="#fff" font-family="Supreme, sans-serif" font-size="12" opacity=".92">78.8</text>
+        <text x="48"  y="90" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">0</text>
+        <text x="306" y="90" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">100</text>
       </svg>
     </div>
 
     <div class="rp-body">
-      <!-- Three equal 110px cells here, unlike Records' content-driven widths. -->
+      <!-- Same card spec as Records; three equal cells here. -->
       <div class="rp-stats">
         <div class="rp-stat">
           <p class="lab">Duration</p>
-          <div class="val"><p class="num"><span class="n">46</span><span class="u">m</span></p></div>
+          <div class="val"><p class="num"><span class="pair"><span class="n">46</span><span class="u">m</span></span></p></div>
         </div>
         <div class="rp-stat">
           <p class="lab">Pack Match</p>
-          <div class="val"><p class="delta">+ 8%</p><p class="num"><span class="n">74</span><span class="u">%</span></p></div>
+          <div class="val"><p class="delta">+ 8%</p><p class="num"><span class="pair"><span class="n">74</span><span class="u">%</span></span></p></div>
         </div>
         <div class="rp-stat">
           <p class="lab">Skill Proficiency</p>
-          <div class="val"><p class="delta best">NEW Best</p><p class="num"><span class="n">68</span><span class="u">%</span></p></div>
+          <div class="val"><p class="delta best">NEW Best</p><p class="num"><span class="pair"><span class="n">68</span><span class="u">%</span></span></p></div>
         </div>
       </div>
 

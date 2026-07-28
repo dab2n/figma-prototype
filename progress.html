@@ -5,7 +5,7 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=803"></script>
+<script defer src="assets/openext.js?v=805"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,38 +13,38 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Records</title>
-<link rel="stylesheet" href="styles/main.css?v=803">
-<link rel="stylesheet" href="styles/report.css?v=803">
+<link rel="stylesheet" href="styles/main.css?v=805">
+<link rel="stylesheet" href="styles/report.css?v=805">
 </head>
 <body>
 <div class="phone">
   <div class="screen rp-screen">
+    <!-- The wash sits above the status bar, so the bar's white glyphs read. -->
+    <img class="rp-hero-bg" src="assets/photos/report-hero.png" alt="">
     <div class="status-bar on-dark"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
 
     <div class="rp-hero">
-      <img class="rp-hero-bg" src="assets/photos/report-hero.png" alt="">
-
       <div class="app-bar">
         <p class="rp-title">Records</p>
         <div class="actions">
           <!-- The old Progress|Library toggle is gone with the redesign, and this was the
                only route into the Library — the calendar (past sessions) carries it now. -->
           <a href="library.html"><img src="assets/icons/appbar-calendar.svg" alt="지난 기록"></a>
-          <img src="assets/icons/kebab-dots.svg" alt="더보기">
+          <img class="kebab" src="assets/icons/kebab-dots.svg" alt="더보기">
         </div>
       </div>
 
       <div class="rp-daynav">
-        <img src="assets/icons/appbar-back.svg" alt="이전 날짜">
-        <span class="rp-chip">Today</span>
-        <img src="assets/icons/icon-back2.svg" alt="다음 날짜">
+        <button class="nav-day" id="dayPrev" aria-label="이전 날짜"><img src="assets/icons/appbar-back.svg" alt=""></button>
+        <span class="rp-chip" id="dayChip">Today</span>
+        <button class="nav-day" id="dayNext" aria-label="다음 날짜" disabled><img src="assets/icons/icon-back2.svg" alt=""></button>
       </div>
 
-      <p class="rp-big"><span class="sign">+</span><span class="n">26.6</span><span class="u">pts</span></p>
-      <p class="rp-cap">From yesterday</p>
+      <p class="rp-big"><span class="sign" id="gainSign">+</span><span class="n" id="gainNum">26.6</span><span class="u">pts</span></p>
+      <p class="rp-cap" id="gainFrom">From yesterday</p>
 
-      <!-- Top slice of the design's 522x377 ellipse: rx/ry keep the curve as flat as the
-           artwork, and the stroke fades to nothing at both ends. -->
+      <!-- Top slice of the design's 522x377 ellipse. The marker is the same ring used
+           for body-area selection (신체 영역 in the design), not a plain dot. -->
       <svg class="rp-gauge" viewBox="0 0 360 130" fill="none" aria-hidden="true">
         <defs>
           <linearGradient id="gaugeFade" x1="0" y1="0" x2="1" y2="0">
@@ -54,60 +54,37 @@
             <stop offset="1" stop-color="#fff" stop-opacity="0"/>
           </linearGradient>
         </defs>
-        <path d="M 19 54 A 261 188.5 0 0 1 341 54" stroke="url(#gaugeFade)" stroke-width="2.5" stroke-linecap="round"/>
-        <g class="arc-dot">
-          <circle cx="228" cy="17" r="15" fill="#fff" opacity=".18"/>
-          <circle cx="228" cy="17" r="8" fill="#fff"/>
-        </g>
-        <text x="228" y="57" text-anchor="middle" fill="#fff" font-family="Supreme, sans-serif" font-size="12" opacity=".92">78.8</text>
-        <text x="48"  y="80" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">0</text>
-        <text x="306" y="80" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">100</text>
+        <path d="M 19 64 A 261 188.5 0 0 1 341 64" stroke="url(#gaugeFade)" stroke-width="2.5" stroke-linecap="round"/>
+        <image class="arc-dot" id="arcRing" href="assets/icons/body-ring.png" x="208.5" y="7.5" width="39" height="39"/>
+        <text id="arcVal" x="228" y="67" text-anchor="middle" fill="#fff" font-family="Supreme, sans-serif" font-size="12" opacity=".92">78.8</text>
+        <text x="48"  y="90" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">0</text>
+        <text x="306" y="90" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">100</text>
       </svg>
     </div>
 
     <div class="rp-body">
-      <div class="rp-seg">
-        <a class="sel" href="progress.html">Day</a>
-        <a href="progress.html">Week</a>
-        <a href="progress.html">Month</a>
-        <a href="progress.html">6 Month</a>
+      <div class="rp-seg" id="rpSeg">
+        <button class="sel" data-period="day">Day</button>
+        <button data-period="week">Week</button>
+        <button data-period="month">Month</button>
+        <button data-period="half">6 Month</button>
       </div>
 
-      <!-- Cell widths are the design's (72 / 103 / 155), driven by their content. -->
+      <!-- Node 653:8925: Packs 82, Steps 88, Active Time takes the slack. -->
       <div class="rp-stats">
-        <div class="rp-stat" style="flex:0 0 72px;">
+        <div class="rp-stat" style="flex:0 0 82px;">
           <p class="lab">Packs</p>
-          <div class="val"><p class="delta">+ 2</p><p class="num"><span class="n">6</span></p></div>
+          <div class="val"><p class="delta" id="packsDelta">+ 2</p><p class="num"><span class="pair"><span class="n" id="packsNum">6</span></span></p></div>
         </div>
-        <div class="rp-stat" style="flex:0 0 103px;">
+        <div class="rp-stat" style="flex:0 0 88px;">
           <p class="lab">Steps</p>
-          <div class="val"><p class="delta">+ 3102</p><p class="num"><span class="n">13,119</span></p></div>
+          <div class="val"><p class="delta" id="stepsDelta">+ 3102</p><p class="num"><span class="pair"><span class="n" id="stepsNum">13,119</span></span></p></div>
         </div>
-        <div class="rp-stat" style="flex:0 0 155px;">
+        <div class="rp-stat">
           <p class="lab">Active Time</p>
-          <div class="val"><p class="delta">+ 57m</p><p class="num"><span class="n">1</span><span class="u">h</span><span class="n">&nbsp;43</span><span class="u">m</span></p></div>
+          <div class="val"><p class="delta" id="timeDelta">+ 57m</p><p class="num"><span class="pair"><span class="n" id="timeH">1</span><span class="u">h</span></span><span class="pair"><span class="n" id="timeM">43</span><span class="u">m</span></span></p></div>
         </div>
       </div>
-
-      <section class="rp-sec">
-        <h2>Session Highlights</h2>
-        <div class="rp-pair">
-          <div class="rp-hcard">
-            <div class="top">
-              <div><p class="cap">Went Well</p><p class="val">Balance</p></div>
-              <img class="badge" src="assets/icons/arrow-up-badge.png" alt="">
-            </div>
-            <p class="desc">Held your balance<br>through the final stretch</p>
-          </div>
-          <div class="rp-hcard">
-            <div class="top">
-              <div><p class="cap">Next Focus</p><p class="val">Agility</p></div>
-              <img class="badge" src="assets/icons/arrow-down-badge.png" alt="">
-            </div>
-            <p class="desc">Improve early reaction</p>
-          </div>
-        </div>
-      </section>
 
       <section class="rp-sec">
         <h2>Landing Balance</h2>
@@ -172,5 +149,96 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
+<script>
+// Period picker + day stepper. The Day figures for today are the design's; older days
+// are generated from the offset so the history is stable across reloads rather than
+// reshuffling every time. Week/Month/6 Month are aggregates, and the date arrows go
+// dead there because a prototype has no per-period history to step through.
+(function () {
+  var DESIGN = { gain: '26.6', sign: '+', from: 'From yesterday', score: 78.8,
+                 packs: ['+ 2', '6'], steps: ['+ 3102', '13,119'], time: ['+ 57m', '1', '43'] };
+  var AGG = {
+    week:  { gain: '48.2',  sign: '+', from: 'From last week',    score: 74.1, chip: 'This week',
+             packs: ['+ 5', '21'],  steps: ['+ 8,420', '68,204'],      time: ['+ 2h 10m', '9', '12'] },
+    month: { gain: '112.4', sign: '+', from: 'From last month',   score: 69.5, chip: 'This month',
+             packs: ['+ 12', '84'], steps: ['+ 21,350', '271,930'],    time: ['+ 6h 40m', '38', '25'] },
+    half:  { gain: '305.9', sign: '+', from: 'From 6 months ago', score: 61.2, chip: 'Last 6 months',
+             packs: ['+ 40', '468'], steps: ['+ 102,880', '1,592,470'], time: ['+ 28h 15m', '214', '05'] }
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var state = { period: 'day', off: 0 };
+
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function comma(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  // Deterministic per (day, field) so yesterday reads the same tomorrow.
+  function rnd(off, i, lo, hi) {
+    var x = Math.sin((off + 1) * 127.1 + i * 311.7) * 43758.5453;
+    return Math.floor(lo + (x - Math.floor(x)) * (hi - lo + 1));
+  }
+  function dayFor(off) {
+    if (off === 0) return DESIGN;
+    var mins = rnd(off, 3, 35, 155);
+    var gain = rnd(off, 4, -180, 420) / 10;
+    return {
+      gain: Math.abs(gain).toFixed(1),
+      sign: gain < 0 ? '−' : '+',
+      from: 'From the day before',
+      score: rnd(off, 5, 520, 910) / 10,
+      packs: ['+ ' + rnd(off, 6, 0, 4), String(rnd(off, 1, 2, 9))],
+      steps: ['+ ' + comma(rnd(off, 7, 200, 4200)), comma(rnd(off, 2, 5200, 17800))],
+      time: ['+ ' + rnd(off, 8, 5, 70) + 'm', String(Math.floor(mins / 60)), pad(mins % 60)]
+    };
+  }
+  function chipLabel(off) {
+    if (off === 0) return 'Today';
+    if (off === 1) return 'Yesterday';
+    var d = new Date();
+    d.setDate(d.getDate() - off);
+    return d.getFullYear() + '.' + pad(d.getMonth() + 1) + '.' + pad(d.getDate());
+  }
+  // Marker rides the same ellipse the arc is drawn from, anchored so the design's
+  // 78.8 still lands exactly where it does in Figma.
+  function setGauge(score) {
+    var x = Math.max(64, Math.min(316, 228 + (score - 78.8) * 2.58));
+    var dx = (x - 180) / 261;
+    var y = 24 + 188.5 * (1 - Math.sqrt(Math.max(0, 1 - dx * dx)));
+    $('arcRing').setAttribute('x', (x - 19.5).toFixed(1));
+    $('arcRing').setAttribute('y', (y - 19.5).toFixed(1));
+    $('arcVal').setAttribute('x', x.toFixed(1));
+    $('arcVal').setAttribute('y', (y + 40).toFixed(1));
+    $('arcVal').textContent = score.toFixed(1);
+  }
+
+  function render() {
+    var isDay = state.period === 'day';
+    var d = isDay ? dayFor(state.off) : AGG[state.period];
+    $('gainSign').textContent = d.sign;
+    $('gainNum').textContent = d.gain;
+    $('gainFrom').textContent = d.from;
+    setGauge(d.score);
+    $('packsDelta').textContent = d.packs[0]; $('packsNum').textContent = d.packs[1];
+    $('stepsDelta').textContent = d.steps[0]; $('stepsNum').textContent = d.steps[1];
+    $('timeDelta').textContent = d.time[0];
+    $('timeH').textContent = d.time[1]; $('timeM').textContent = d.time[2];
+    $('dayChip').textContent = isDay ? chipLabel(state.off) : d.chip;
+    $('dayPrev').disabled = !isDay;
+    $('dayNext').disabled = !isDay || state.off === 0;
+  }
+
+  $('rpSeg').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-period]');
+    if (!b) return;
+    [].forEach.call(this.querySelectorAll('button'), function (x) { x.classList.toggle('sel', x === b); });
+    state.period = b.dataset.period;
+    if (state.period === 'day') state.off = 0;
+    render();
+  });
+  $('dayPrev').addEventListener('click', function () { state.off += 1; render(); });
+  $('dayNext').addEventListener('click', function () { if (state.off > 0) { state.off -= 1; render(); } });
+
+  render();
+})();
+</script>
 </body>
 </html>
