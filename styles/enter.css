@@ -34,7 +34,8 @@
 .dj-hero .status-bar,
 .dj-hero .app-bar-transparent { position: absolute; left: 0; right: 0; z-index: 6; }
 .dj-hero .status-bar { top: 0; }
-.dj-hero .app-bar-transparent { top: 44px; }
+/* top comes from main.css: 44px on the desktop mockup, 0 on a phone where our
+   status bar is gone and this row belongs directly under the phone's own. */
 
 /* Everything that does not survive the fold: title, description, side actions. They go
    ahead of the rest (x1.8) so the hero is clear before the profile finishes moving. */
