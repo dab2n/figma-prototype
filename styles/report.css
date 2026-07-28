@@ -204,9 +204,10 @@
 .rp-hcard .badge { width: 32px; height: 32px; flex: none; display: block; }
 .rp-hcard .desc { margin: 0; font-family: var(--font-supreme); font-size: 13px; line-height: 16px; letter-spacing: -0.3px; color: #A3A3A3; }
 
-/* Landing Balance. Only the heat wash is exported artwork — the footprints are the
-   design's own silhouette used as a mask, the crosshair is CSS, and the two readings
-   are live text, so they can change per session. */
+/* Landing Balance. The heat is a CSS blob, not baked artwork, so its red core sits
+   where the Left/Right split puts it (--heat-x, set from the readings) and can drift.
+   Footprints are the design's silhouette used as a mask; crosshair and dots are CSS;
+   the readings are live text. */
 .rp-balance {
   position: relative;
   width: 336px; height: 166px;
@@ -214,7 +215,25 @@
   overflow: hidden;
   background: #EEFDFB;
 }
-.rp-balance .lb-heat { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.rp-balance .lb-heat {
+  position: absolute;
+  top: 50%;
+  left: var(--heat-x, 58%);
+  width: 300px; height: 260px;
+  margin: -130px 0 0 -150px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    rgba(250,48,48,.95) 0%, rgba(254,110,60,.82) 34%, rgba(254,195,137,.55) 58%, rgba(254,195,137,0) 80%);
+  filter: blur(8px);
+  /* Slow, uneven drift so it breathes instead of pulsing on a beat. */
+  animation: lb-drift 9s ease-in-out infinite alternate;
+}
+@keyframes lb-drift {
+  0%   { transform: translate(-7px, -5px) scale(1); }
+  40%  { transform: translate(3px, 4px)   scale(1.06); }
+  70%  { transform: translate(9px, -2px)  scale(1.02); }
+  100% { transform: translate(-2px, 6px)  scale(1.05); }
+}
 .rp-balance .lb-foot {
   position: absolute;
   top: 25px;
@@ -238,7 +257,7 @@
   opacity: .9;
   box-shadow: 0 126px 0 #fff, -135px 69px 0 #fff, 137px 69px 0 #fff, 1px 69px 0 #fff;
 }
-.rp-balance .lb-read { position: absolute; bottom: 12px; display: flex; flex-direction: column; gap: 4px; }
+.rp-balance .lb-read { position: absolute; bottom: 12px; display: flex; flex-direction: column; gap: 4px; z-index: 2; }
 .rp-balance .lb-read.l { left: 12px; align-items: flex-start; }
 .rp-balance .lb-read.r { right: 12px; align-items: flex-end; }
 .rp-balance .lb-read p { margin: 0; }
@@ -247,11 +266,65 @@
 /* The card's inner white halo, which softens the wash into its corners. */
 .rp-balance::after { content: ""; position: absolute; inset: 0; border-radius: 20px; box-shadow: inset 0 0 70px 10px #fff; pointer-events: none; }
 
-/* Performance Scores — four exported cards. Each is irreducible vector art (blurred
-   gradient arcs, wave stacks, tick fields) that CSS can only approximate, so the card
-   ships whole rather than half-redrawn. */
+/* ── Performance Scores ────────────────────────────────────────────────────
+   Drawn rather than exported now, because each graph has to animate in its own
+   direction. Cards run top-left → bottom-right once the block scrolls into view;
+   each number waits for its own graph to land, and never counts. */
 .rp-scores { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-.rp-scores img { display: block; width: 166px; height: 166px; border-radius: 20px; }
+.sc {
+  position: relative;
+  height: 166px;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.sc-n {
+  position: absolute; top: 12px; left: 0; right: 0;
+  margin: 0; text-align: center;
+  font-family: var(--font-offbit); font-weight: 700; font-size: 38px; line-height: 1;
+  color: var(--color-black);
+  opacity: 0;
+}
+.sc-l {
+  position: absolute; bottom: 12px; left: 0; right: 0;
+  margin: 0; text-align: center;
+  font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.3px;
+  color: var(--color-neutral-500);
+}
+.sc-g { position: absolute; left: 0; top: 46px; width: 166px; height: 96px; overflow: visible; }
+
+/* Stagger: card index drives every delay in the card. */
+.sc { --d: calc(var(--i) * 200ms); }
+.rp-scores.run .sc-n { animation: sc-num .34s ease calc(var(--d) + 620ms) both; }
+@keyframes sc-num { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Agility — the arc draws itself around the dome. */
+.sc-arc { stroke-dasharray: 240; stroke-dashoffset: 240; }
+.rp-scores.run .sc-arc { animation: sc-draw .62s cubic-bezier(.3,.7,.3,1) var(--d) both; }
+@keyframes sc-draw { to { stroke-dashoffset: 0; } }
+/* Rhythm — same idea, the wave arrives left to right. */
+.sc-wave { stroke-dasharray: 300; stroke-dashoffset: 300; }
+.rp-scores.run .sc-wave { animation: sc-draw .62s cubic-bezier(.3,.7,.3,1) var(--d) both; }
+/* Endurance — the fill grows from its left edge. */
+.sc-fill { transform-origin: 4px center; transform: scaleX(0); }
+.rp-scores.run .sc-fill { animation: sc-grow .58s cubic-bezier(.3,.7,.3,1) var(--d) both; }
+@keyframes sc-grow { to { transform: scaleX(1); } }
+/* Stability — the heavy bar slides in from the left. */
+.sc-bar { opacity: 0; }
+.rp-scores.run .sc-bar { animation: sc-slide .55s cubic-bezier(.3,.7,.3,1) var(--d) both; }
+@keyframes sc-slide { from { opacity: 0; transform: translateX(-70px); } to { opacity: 1; transform: none; } }
+/* The quiet parts (markers, guide ticks, tick field) just fade up behind the motion. */
+.sc-quiet { opacity: 0; }
+.rp-scores.run .sc-quiet { animation: sc-fade .4s ease calc(var(--d) + 260ms) both; }
+@keyframes sc-fade { to { opacity: 1; } }
+.sc-ticks {
+  position: absolute; left: 6px; right: 6px; top: 30px; height: 32px;
+  background: repeating-linear-gradient(90deg, #FA3030 0 1.6px, transparent 1.6px 9.2px);
+  -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,.6) 0%, rgba(0,0,0,.5) 48%, rgba(0,0,0,.2) 100%);
+  mask-image: linear-gradient(90deg, rgba(0,0,0,.6) 0%, rgba(0,0,0,.5) 48%, rgba(0,0,0,.2) 100%);
+  opacity: 0;
+}
+.rp-scores.run .sc-ticks { animation: sc-fade .45s ease var(--d) both; }
 
 /* ── Recommendation ────────────────────────────────────────────────────────
    Carried over unchanged from the previous Records page — the design reuses it. */
@@ -350,3 +423,18 @@
    show — and the period picker is buttons now, not links. */
 .rp-daynav .nav-day { background: none; border: none; padding: 0; cursor: pointer; display: block; }
 .rp-daynav .nav-day[disabled] { opacity: .35; cursor: default; }
+.sc .sc-bar {
+  position: absolute;
+  left: 88px; top: 22px;
+  width: 6px; height: 48px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #FA3030 0%, #FE6E3C 100%);
+}
+
+/* Nothing above should move for anyone who asked it not to — show the end state. */
+@media (prefers-reduced-motion: reduce) {
+  .rp-balance .lb-heat { animation: none; }
+  .rp-scores .sc-n, .rp-scores .sc-quiet, .rp-scores .sc-ticks, .rp-scores .sc-bar { opacity: 1; animation: none; }
+  .rp-scores .sc-arc, .rp-scores .sc-wave { stroke-dashoffset: 0; animation: none; }
+  .rp-scores .sc-fill { transform: none; animation: none; }
+}
