@@ -1,4 +1,11 @@
-@import url('./tokens.css?v=835');
+@import url('./tokens.css?v=837');
+
+/* Tell the phone which way each screen leans, so its own chrome — the gesture bar most
+   of all — picks the matching side instead of always landing light. Declared per page in
+   <meta name="color-scheme"> too; this is the CSS half, self-selecting off the screens
+   whose bottom edge is pale. */
+:root { color-scheme: dark; }
+:root:has(.ob-bottom), :root:has(.rts-screen), :root:has(.recap-screen) { color-scheme: light; }
 
 /* Smooth cross-document crossfade between screens (Chrome; ignored elsewhere) */
 @view-transition { navigation: auto; }
