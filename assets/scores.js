@@ -38,18 +38,18 @@
     }
   }
 
-  // The cards animate when the block is scrolled to, not on load — the section sits
-  // well below the fold. .screen is the scroller, so it is the observer root.
-  var scores = document.getElementById('rpScores');
-  if (!scores || !window.IntersectionObserver) { if (scores) scores.classList.add('run'); return; }
+  // Blocks below the fold animate when they are scrolled to, not on load. .screen is
+  // the scroller, so it is the observer root.
+  var blocks = [document.getElementById('rpScores'), document.querySelector('.rec-scroll')].filter(Boolean);
+  if (!window.IntersectionObserver) { blocks.forEach(function (b) { b.classList.add('run'); }); return; }
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       if (!e.isIntersecting) return;
-      scores.classList.add('run');
-      io.disconnect();
+      e.target.classList.add('run');
+      io.unobserve(e.target);
     });
-  }, { root: scores.closest('.screen'), threshold: 0.2 });
-  io.observe(scores);
+  }, { root: blocks[0].closest('.screen'), threshold: 0.2 });
+  blocks.forEach(function (b) { io.observe(b); });
 })();
 
 // Landing Balance is data-driven, so the page can re-point it whenever the reading

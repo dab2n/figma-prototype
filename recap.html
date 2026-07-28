@@ -5,7 +5,7 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=819"></script>
+<script defer src="assets/openext.js?v=821"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,12 +13,17 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Session Recap</title>
-<link rel="stylesheet" href="styles/main.css?v=819">
-<link rel="stylesheet" href="styles/recap.css?v=819">
+<link rel="stylesheet" href="styles/main.css?v=821">
+<link rel="stylesheet" href="styles/recap.css?v=821">
 </head>
 <body>
 <div class="phone">
   <div class="screen recap-screen" id="recapScreen">
+    <video class="recap-clip" id="clipSean" src="assets/video/recap-sean.mp4"
+           muted playsinline autoplay preload="auto" disablepictureinpicture></video>
+    <video class="recap-clip user" id="clipUser" src="assets/video/recap-user.mp4"
+           muted playsinline preload="auto" disablepictureinpicture></video>
+
     <div class="status-bar on-dark" style="position:absolute; top:0; left:0; z-index:6;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
 
     <p class="recap-title">Session Recap</p>
@@ -35,17 +40,44 @@
   </div>
 </div>
 <script>
-// Rapid count-up of the match % from 0 → 76 on entry.
+// The two clips are the point of this screen: the creator's run plays, the user's run
+// lands on top of it two seconds later, and only then is the match score revealed.
+// Muted + playsinline + no controls so it just runs, once, on a phone too.
 (function () {
-  var el = document.querySelector('.recap-pct .num');
-  var target = 78.8, dur = 900, s = null;
-  requestAnimationFrame(function step(t) {
-    if (s === null) s = t;
-    var p = Math.min((t - s) / dur, 1);
-    el.textContent = ((1 - Math.pow(1 - p, 2)) * target).toFixed(1);   // ease-out
-    if (p < 1) requestAnimationFrame(step);
-    else document.querySelector('.recap-match').classList.add('done');  // reveal "Outstanding Match"
-  });
+  var sean = document.getElementById('clipSean');
+  var user = document.getElementById('clipUser');
+  var num = document.querySelector('.recap-pct .num');
+  var scored = false;
+
+  function play(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+
+  function revealScore() {
+    if (scored) return;
+    scored = true;
+    var target = 78.8, dur = 900, s = null;
+    requestAnimationFrame(function step(t) {
+      if (s === null) s = t;
+      var p = Math.min((t - s) / dur, 1);
+      num.textContent = ((1 - Math.pow(1 - p, 2)) * target).toFixed(1);   // ease-out
+      if (p < 1) requestAnimationFrame(step);
+      else document.querySelector('.recap-match').classList.add('done');  // "Outstanding Match"
+    });
+  }
+
+  play(sean);
+  setTimeout(function () {
+    user.classList.add('on');
+    play(user);
+    setTimeout(revealScore, 700);
+  }, 2000);
+
+  // Autoplay can still be refused. First touch starts whatever is paused, so the screen
+  // is never left sitting on a still frame.
+  document.addEventListener('touchstart', function once() {
+    document.removeEventListener('touchstart', once);
+    if (sean.paused) play(sean);
+    if (user.classList.contains('on') && user.paused) play(user);
+  }, { passive: true });
 })();
 
 // Grab the "View Full Report" handle and drag up: the screen follows your finger, and
