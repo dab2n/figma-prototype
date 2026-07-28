@@ -331,24 +331,8 @@
    .pack-light or .pack-dark class. Falling back to the original black and tan means
    the screen still looks right if that sampling never lands. */
 
-/* Sheet: the photo blurred through it, with the image's own colour ramped a little
-   darker over the top at 70% — so it reads as the card's colour, not a slab. */
-.swipe-detail .detail-sheet {
-  background: transparent;
-  -webkit-backdrop-filter: blur(26px) saturate(140%);
-  backdrop-filter: blur(26px) saturate(140%);
-}
-.swipe-detail .detail-sheet::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, var(--pack-main, #050A0A) 0%, var(--pack-deep, #000) 100%);
-  opacity: .7;
-  pointer-events: none;
-}
-/* The concave fillets continue the bar, so they take the same colour. */
-.swipe-detail::before,
-.swipe-detail::after { background: var(--pack-main, var(--color-black)); opacity: .7; }
+/* Sheet stays the design's solid black — a translucent tint over the photo read as a
+   smear rather than a bar. Only the kebab takes its colour from the image. */
 
 /* Kebab: main colour at 80%, then a 20% veil — black over a light photo, white over a
    dark one — with the same blur underneath. */

@@ -1,4 +1,4 @@
-@import url('./tokens.css?v=834');
+@import url('./tokens.css?v=835');
 
 /* Smooth cross-document crossfade between screens (Chrome; ignored elsewhere) */
 @view-transition { navigation: auto; }
@@ -237,6 +237,10 @@ button { font-family: inherit; }
      pinned navbar. */
   body .phone:has(> .tabbar) > .screen { height: calc(100dvh - 80px - env(safe-area-inset-bottom, 0px)); border-radius: 0 0 40px 40px; }
   body .phone.notif-on:has(> .tabbar) > .screen { height: calc(100dvh - 80px - 66px - env(safe-area-inset-bottom, 0px)); }
+  /* No title bar on these screens, so the back/kebab row sits directly under the
+     phone's own status bar instead of below the 44px ours used to occupy. */
+  .app-bar-transparent { top: 0; }
+
   /* Status bar: DROP ours entirely on a phone — graphic and its 44px of space. The
      device always draws the real one (browser chrome in a tab, the PWA shell when
      installed to the home screen), so ours was pure duplication sitting under a blank
@@ -288,7 +292,7 @@ button { font-family: inherit; }
      because each page reintroduces it through a more specific selector of its own
      (.tabbar .home-indicator, .swipe-detail .home-indicator-row, …) from a stylesheet
      that loads after this one; a kill switch shouldn't need specificity arithmetic. */
-  .home-indicator, .home-indicator-row { display: none !important; }
+  .home-indicator, .home-indicator-row, .creator-nav-indicator { display: none !important; }
 
   /* Detail pages were laid out at a fixed 780/790px — taller than a real phone
      viewport (a Galaxy in standalone leaves ~750), so their bottom bar (Start /
