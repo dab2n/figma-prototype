@@ -6,9 +6,10 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#8E7E65">
-<script defer src="assets/openext.js?v=853"></script>
-<script defer src="assets/packs.js?v=853"></script>
-<script defer src="assets/enter.js?v=853"></script>
+<script defer src="assets/openext.js?v=854"></script>
+<script defer src="assets/packs.js?v=854"></script>
+<script defer src="assets/enter.js?v=854"></script>
+<script defer src="assets/process.js?v=854"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,10 +17,10 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Sean's Final 1km Pace</title>
-<link rel="stylesheet" href="styles/main.css?v=853">
-<link rel="stylesheet" href="styles/detail.css?v=853">
-<link rel="stylesheet" href="styles/creator.css?v=853">
-<link rel="stylesheet" href="styles/enter.css?v=853">
+<link rel="stylesheet" href="styles/main.css?v=854">
+<link rel="stylesheet" href="styles/detail.css?v=854">
+<link rel="stylesheet" href="styles/creator.css?v=854">
+<link rel="stylesheet" href="styles/enter.css?v=854">
 </head>
 <body>
 <div class="phone">
@@ -168,22 +169,33 @@
   <!-- Concave corners where the card meets the black below it; rides the card edge. -->
   <div class="dj-fillets"><span></span><span></span></div>
 
-  <!-- 평소: who has joined, and the action. Fixed to the bottom edge, and it is the
-       handle for the whole gesture, so it leaves as soon as the fold is under way. -->
-  <div class="dj-joined" id="djGrab">
-    <div class="joined-row">
-      <div class="joined-people">
-        <div class="joined-avatars">
-          <img src="assets/photos/packs-avatar1.png" alt="">
-          <img src="assets/photos/packs-avatar2.png" alt="">
-          <img src="assets/photos/joined-avatar-swim.png" alt="">
+  <!-- ONE bottom bar, not two. Swiping up rolls the joined row away and brings Explore
+       Packs in from below inside the same black strip — no second frame is ever added.
+       By the time the roll finishes the strip is sitting exactly where the in-flow
+       Explore bar has arrived, so handing over to it is invisible. -->
+  <div class="dj-bar" id="djGrab">
+    <div class="dj-roll">
+      <div class="dj-roll-joined">
+        <div class="joined-row">
+          <div class="joined-people">
+            <div class="joined-avatars">
+              <img src="assets/photos/packs-avatar1.png" alt="">
+              <img src="assets/photos/packs-avatar2.png" alt="">
+              <img src="assets/photos/joined-avatar-swim.png" alt="">
+            </div>
+            <p>877 joined this week</p>
+          </div>
+          <a class="start-btn" href="setup-location.html">Start <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></a>
         </div>
-        <p>877 joined this week</p>
       </div>
-      <a class="start-btn" href="setup-location.html">Start <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></a>
+      <div class="dj-roll-explore">
+        <span class="explore-row"><img src="assets/icons/explore-chevron-up.svg" alt=""><span>Explore Packs</span></span>
+      </div>
     </div>
-    <div class="home-indicator-row"><span></span></div>
   </div>
+
+  <!-- The phone's own bottom bar: one of them, pinned, never part of the roll. -->
+  <div class="home-indicator-row dj-indicator"><span></span></div>
 
   <!-- Once the sheet is open the inline Start is gone, so the action gets pinned.
        Outside the scroller on purpose — see .dj-start in enter.css. -->

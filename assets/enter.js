@@ -12,7 +12,7 @@
   var screen = document.getElementById('djScreen');
   if (!screen) return;
   var TRAVEL = 300;            // scroll distance that takes the hero fully folded
-  var STOP = 0.213;            // 1회 진입: card edge at 663, matching the Figma frame
+  var STOP = 0.2;              // 1회 진입: card edge at 663, matching the Figma frame
   // Exactly TRAVEL, not a pixel more: at TRAVEL the sheet sits flush against the folded
   // header. Overshooting slides it up OVER the header's bottom, which is what was
   // swallowing the creator line and the tag.
@@ -25,12 +25,14 @@
   function paint() {
     raf = 0;
     var p = progress();
-    var q = Math.max(0, Math.min(1, (p - STOP) / (1 - STOP)));
-    var root = document.documentElement;          // the bottom bars sit outside the scroller
-    screen.style.setProperty('--p', p.toFixed(4));
-    screen.style.setProperty('--q', q.toFixed(4));
-    root.style.setProperty('--p', p.toFixed(4));
-    root.style.setProperty('--q', q.toFixed(4));
+    var s = Math.min(1, p / STOP);                             // 평소 → 1회 진입
+    var q = Math.max(0, (p - STOP) / (1 - STOP));              // 1회 진입 → 올릴때
+    var root = document.documentElement;          // the bottom bar sits outside the scroller
+    [screen, root].forEach(function (el) {
+      el.style.setProperty('--p', p.toFixed(4));
+      el.style.setProperty('--s', s.toFixed(4));
+      el.style.setProperty('--q', q.toFixed(4));
+    });
     // Opacity alone would leave both Start buttons clickable through each other.
     root.classList.toggle('dj-open', q > 0.15);
   }

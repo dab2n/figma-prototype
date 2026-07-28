@@ -119,7 +119,7 @@
   background: var(--color-neutral-900);   /* #141A1A — distinct from page #050A0A */
   border-radius: 20px;
   padding: 4px;
-  height: 156px;
+  height: 168px;
   box-sizing: border-box;
 }
 .process-graph .big-number {
@@ -133,7 +133,7 @@
   align-items: flex-start;
 }
 .process-graph .big-number .num { font-family: var(--font-offbit); font-weight: 700; font-size: 60px; line-height: 0.95; letter-spacing: 0; }
-.process-graph .big-number .unit { font-family: var(--font-supreme-bold); font-size: 18px; opacity: 0.6; letter-spacing: -0.54px; margin-left: 2px; }
+.process-graph .big-number .unit { font-family: var(--font-supreme-bold); font-size: 18px; opacity: 0.6; letter-spacing: -0.54px; margin-top: 13px; }
 .process-graph .bars { display: flex; flex-direction: column; gap: 4px; height: 100%; }
 .process-graph .bar {
   border-radius: 12px;
@@ -154,20 +154,25 @@
    number (8min / 10min / You Can Choose); the right label (STRETCH / LEARN / RUN)
    is hidden. On first entry each bar EXPANDS LEFTWARD to full and the label fades
    in, staggered top→bottom. */
-.bar-stretch { flex: 1; width: 54%;  margin-left: auto; --start: 30%; background: linear-gradient(270deg, #D1FEFF 0%, #FEC389 6.5%, #FE6E3C 16.8%, #FA3030 41.7%); }
-.bar-learn   { flex: 1; width: 67%;  margin-left: auto; --start: 30%; background: linear-gradient(90deg, #FA3030 58.3%, #FE6E3C 83%, #FEC389 93.5%, #D1FEFF 100%); }
-.bar-run     { flex: 1; width: 100%; margin-left: auto; --start: 54%; background: var(--color-neutral-700); }
+.bar-stretch { flex: 1; width: 54%;  margin-left: auto; --start: 26%; background: linear-gradient(270deg, #D1FEFF 0%, #FEC389 6.5%, #FE6E3C 16.8%, #FA3030 41.7%); }
+.bar-learn   { flex: 1; width: 67%;  margin-left: auto; --start: 28%; background: linear-gradient(90deg, #FA3030 58.3%, #FE6E3C 83%, #FEC389 93.5%, #D1FEFF 100%); }
+.bar-run     { flex: 1; width: 100%; margin-left: auto; --start: 47%; background: var(--color-neutral-700); }
 
+/* Resting state until the card is actually looked at (assets/process.js adds .animate
+   when it scrolls into view). --start is the stub width: narrow, but wide enough to
+   carry its own minute count, so 8min is readable at the shortest instant. The right
+   label lands only once that bar has finished growing. */
 .process-graph:not(.animate) .bar { width: var(--start); }
 .process-graph:not(.animate) .bar .label { opacity: 0; }
-.process-graph.animate .bar        { animation: bar-grow .5s cubic-bezier(.2,.8,.25,1) both; }
-.process-graph.animate .bar .label { animation: label-in .3s ease both; animation-delay: .3s; }
-.process-graph.animate .bar-learn        { animation-delay: .1s; }
-.process-graph.animate .bar-learn .label { animation-delay: .4s; }
-.process-graph.animate .bar-run          { animation-delay: .2s; }
-.process-graph.animate .bar-run .label   { animation-delay: .5s; }
+.process-graph:not(.animate) .big-number .num { visibility: hidden; }
+.process-graph.animate .bar        { animation: bar-grow .62s cubic-bezier(.2,.8,.25,1) both; }
+.process-graph.animate .bar .label { animation: label-in .3s ease both; animation-delay: .66s; }
+.process-graph.animate .bar-learn        { animation-delay: .12s; }
+.process-graph.animate .bar-learn .label { animation-delay: .78s; }
+.process-graph.animate .bar-run          { animation-delay: .24s; }
+.process-graph.animate .bar-run .label   { animation-delay: .9s; }
 @keyframes bar-grow  { from { width: var(--start); } }
-@keyframes label-in  { from { opacity: 0; } }
+@keyframes label-in  { from { opacity: 0; transform: translateX(10px); } }
 
 .info-grid {
   display: grid;
