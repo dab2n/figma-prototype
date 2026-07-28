@@ -11,20 +11,16 @@
      frame's corner radius so it can go full-bleed. A CSS ramp could not hold its
      saturation — the falloff is organic, not linear. The flat colour underneath only
      covers the instant before the image decodes. */
-  background: url('../assets/photos/recap-bg.png') center / cover no-repeat, #FA2F2F;
+  background: #050A0A;   /* only ever seen for an instant before the layers paint */
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
 }
 
-/* The session clip. It already carries the overlap of the two runners, so the screen
-   only has to place it and keep its edges out of the frame.
-
-   Those edges are the catch: the clip's own wash lightens to near-white in the last
-   ~24px on each side and along the bottom, and once it is crushed to luminance and
-   screened, anything light reads as a bright band. Cover crops most of the sides, and a
-   pair of composited masks fade every edge out well before the frame, so only the middle
-   — the figure — ever contributes. */
+/* Layering, bottom up: the clip, then the wash, then the glow — both laid over it with
+   lighten, which is the Figma blend. Lighten keeps whichever is brighter, so every black
+   pixel of the clip is replaced by the wash and the black backing can never show, while
+   the runner survives wherever it is brighter than the gradient. */
 .recap-clip {
   position: absolute;
   top: 0; left: 0;
@@ -33,14 +29,30 @@
   transform: scale(1.06);
   pointer-events: none;
   z-index: 0;
-  filter: grayscale(1) brightness(0.86) contrast(2.5);
-  mix-blend-mode: screen;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 7%, #000 60%, transparent 86%),
-                      linear-gradient(to right,  transparent 0%, #000 9%, #000 91%, transparent 100%);
-  mask-image: linear-gradient(to bottom, transparent 0%, #000 7%, #000 60%, transparent 86%),
-              linear-gradient(to right,  transparent 0%, #000 9%, #000 91%, transparent 100%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
+}
+/* The design's gradient, full frame, so nothing is left for the clip's black to fill. */
+.recap-wash {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  mix-blend-mode: lighten;
+  pointer-events: none;
+}
+/* The supplied blur blob, sitting where the figure runs. */
+.recap-glow {
+  position: absolute;
+  /* Scaled well past the frame and eased back, so its soft centre sits behind the
+     figure and the ring at its edge never crosses the screen. */
+  left: 50%;
+  top: 46%;
+  width: 900px;
+  transform: translate(-50%, -50%);
+  opacity: .5;
+  z-index: 2;
+  mix-blend-mode: lighten;
+  pointer-events: none;
 }
 
 /* Everything else on the screen sits above the clip. */
