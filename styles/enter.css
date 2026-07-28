@@ -1,0 +1,130 @@
+/* 1회 진입 — one scrolling screen, not two pages.
+   The hero is sticky and the pack sheet rises over it, so how far you have scrolled IS
+   how far the transition has gone: drag an inch and it opens an inch, let it back down
+   and it closes the same way. assets/enter.js writes that progress to --p (0 → 1) and
+   everything below reads it. */
+
+.dj-screen { background: var(--color-black); }
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+.dj-hero {
+  position: sticky;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+/* The photo pulls back and fades as the sheet takes over. */
+.dj-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(calc(1 + 0.08 * var(--p, 0)));
+  opacity: calc(1 - 0.85 * var(--p, 0));
+}
+/* …and the gradient fills in behind it, which is what the collapsed state sits on. */
+.dj-wash {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #2A2622 0%, #14110F 46%, var(--color-black) 100%);
+  opacity: var(--p, 0);
+  pointer-events: none;
+}
+.dj-hero .status-bar,
+.dj-hero .app-bar-transparent { position: absolute; left: 0; right: 0; z-index: 6; }
+.dj-hero .status-bar { top: 0; }
+.dj-hero .app-bar-transparent { top: 44px; }
+
+/* Everything that does not survive the fold: title, description, side actions. They go
+   ahead of the rest (x1.8) so the hero is clear before the profile finishes moving. */
+.dj-title, .dj-desc, .dj-side {
+  opacity: calc(1 - 1.8 * var(--p, 0));
+  pointer-events: none;
+}
+.dj-side {
+  position: absolute;
+  right: 16px; bottom: 220px;
+  display: flex; flex-direction: column; gap: 8px;
+  z-index: 4;
+}
+.dj-side .pill {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.28);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  font-family: var(--font-supreme); font-size: 11px; letter-spacing: -0.3px;
+}
+.dj-side .pill img { width: 18px; height: 18px; display: block; }
+
+.dj-copy {
+  position: absolute;
+  left: 20px; right: 20px; bottom: 128px;
+  z-index: 4;
+  color: #fff;
+}
+.dj-title { margin: 0 0 12px; max-width: 210px; font-family: var(--font-supreme-bold); font-size: 32px; line-height: 1.2; letter-spacing: -1.5px; }
+.dj-desc { margin: 0; max-width: 205px; font-family: var(--font-supreme); font-size: 13px; line-height: 1.4; letter-spacing: -0.5px; opacity: 0.7; }
+
+/* The profile is the one thing that carries across, so it is the one thing that moves:
+   it travels up into the header slot and grows on the way. */
+.dj-profile {
+  position: absolute;
+  left: 20px;
+  bottom: calc(292px + var(--p, 0) * 136px);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #fff;
+  transform: translateX(calc(var(--p, 0) * 92px));
+}
+.dj-profile img {
+  width: calc(24px + var(--p, 0) * 62px);
+  height: calc(24px + var(--p, 0) * 62px);
+  border-radius: 999px;
+  display: block;
+  object-fit: cover;
+}
+.dj-profile .who { display: flex; flex-direction: column; gap: 2px; opacity: calc(1 - 1.6 * var(--p, 0)); }
+.dj-profile .name { font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; }
+/* The creator line only belongs to the collapsed state, so it arrives late. */
+.dj-meta {
+  position: absolute;
+  left: 0; right: 0;
+  top: 152px;
+  z-index: 5;
+  text-align: center;
+  color: #fff;
+  opacity: calc(var(--p, 0) * 1.6 - 0.6);
+  pointer-events: none;
+}
+.dj-meta .sub { margin: 0 0 8px; font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.4px; opacity: .7; }
+.dj-meta .tag-pill {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.14);
+  font-family: var(--font-supreme-bold); font-size: 13px; letter-spacing: -0.4px;
+}
+
+/* ── The sheet that rises ─────────────────────────────────────────────────── */
+.dj-sheet {
+  position: relative;
+  z-index: 2;
+  background: var(--color-black);
+  border-radius: 28px 28px 0 0;
+  margin-top: -28px;                 /* its rounded lip overlaps the hero */
+}
+
+/* Grab bar: the affordance for the whole gesture, so it leaves once you are moving. */
+.dj-grab {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 8;
+  opacity: calc(1 - 2.2 * var(--p, 0));
+  pointer-events: none;
+}

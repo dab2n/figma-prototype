@@ -4,50 +4,157 @@
 <meta charset="utf-8">
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
-<meta name="theme-color" content="#B3C7CA">
-<script defer src="assets/openext.js?v=831"></script>
+<meta name="theme-color" content="#050A0A">
+<script defer src="assets/openext.js?v=834"></script>
+<script defer src="assets/enter.js?v=834"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>Newton — Pack Detail (첫 진입)</title>
-<link rel="stylesheet" href="styles/main.css?v=831">
-<link rel="stylesheet" href="styles/detail.css?v=831">
+<title>Newton — Sean's Final 1km Pace</title>
+<link rel="stylesheet" href="styles/main.css?v=834">
+<link rel="stylesheet" href="styles/detail.css?v=834">
+<link rel="stylesheet" href="styles/creator.css?v=834">
+<link rel="stylesheet" href="styles/enter.css?v=834">
 </head>
 <body>
 <div class="phone">
-  <div class="screen detail-screen">
-    <div class="hero-photo" style="background-image:url('assets/photos/hero-sean-running-full.png');">
+  <!-- One screen. The hero is sticky and the pack sheet scrolls up over it, so the
+       transition has no separate trigger: how far you have scrolled is how far it has
+       gone, in either direction. -->
+  <div class="screen dj-screen" id="djScreen">
+
+    <div class="dj-hero">
+      <div class="dj-photo" style="background-image:url('assets/photos/hero-sean-running.png');"></div>
+      <div class="dj-wash"></div>
+
       <div class="status-bar on-dark"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
       <div class="app-bar-transparent">
         <button class="icon-btn" onclick="history.back()"><img src="assets/icons/appbar-back.svg" alt="뒤로"></button>
         <button class="handle-btn"><img src="assets/icons/appbar-handle.svg" alt="더보기"></button>
       </div>
 
-      <div class="side-actions">
+      <div class="dj-side">
         <div class="pill"><img src="assets/icons/icon-bookmark-count.svg" alt="북마크"><span>124</span></div>
         <div class="pill"><img src="assets/icons/icon-bookmark.svg" alt="공유"><span>888+</span></div>
       </div>
 
-      <div class="hero-content">
-        <a class="author" href="ollilttae.html">
-          <img src="assets/icons/avatar-ellipse-sean.png" alt="">
-          <span class="t-body-bold">Sean</span>
-        </a>
-        <p class="title t-display-d1">Sean's Final 1km Pace</p>
-        <p class="desc" style="opacity:0.7;">How to hold your pace when it falls apart in the last 1km of a run. Learn Sean's breathing rhythm and footfall tempo, then apply them to real runs with SAFE and BOOST modes.</p>
+      <!-- The one element that survives the fold, so it is the one that travels. -->
+      <a class="dj-profile" href="ollilttae.html">
+        <img src="assets/photos/creator-profile-sean.png" alt="">
+        <span class="who"><span class="name">Sean</span></span>
+      </a>
+      <div class="dj-meta">
+        <p class="sub">Running Creator · 240K subscribers</p>
+        <span class="tag-pill">Sean</span>
+      </div>
+
+      <div class="dj-copy">
+        <p class="dj-title">Sean's Final 1km Pace</p>
+        <p class="dj-desc">How to hold your pace when it falls apart in the last 1km of a run. Learn Sean's breathing rhythm and footfall tempo, then apply them to real runs with SAFE and BOOST modes.</p>
       </div>
     </div>
 
-    <div class="detail-bottombar explore">
-      <a class="explore-row" href="packs.html">
-        <img src="assets/icons/explore-chevron-up.svg" alt="">
-        <span>Explore Packs</span>
-      </a>
-      <div class="home-indicator-row"><span></span></div>
+    <div class="dj-sheet">
+      <div class="creator-content">
+      <div class="top-row">
+        <span class="tag-pill">Creator Pack</span>
+        <div class="top-actions">
+          <img class="save-icon" src="assets/icons/creator-bookmark.svg" alt="저장">
+          <div class="icon-circle"><img src="assets/icons/creator-share.svg" alt="공유"></div>
+        </div>
+      </div>
+
+      <div class="creator-heading">
+        <p class="title">Sean's Final 1km Pace</p>
+        <p class="desc">How to hold your pace when it falls apart in the last 1km of a run. Learn Sean's breathing rhythm and footfall tempo, then apply them to real runs with SAFE and BOOST modes.</p>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat"><p class="label">Sport</p><p class="value">Running</p></div>
+        <div class="divider"></div>
+        <div class="stat"><p class="label">Joined</p><p class="value">877</p></div>
+        <div class="divider"></div>
+        <div class="stat"><p class="label">Recommended</p><p class="value">Pace On</p></div>
+      </div>
+
+      <div>
+        <p class="process-title t-subtitle-b">Process</p>
+        <div class="process-graph">
+          <div class="big-number">
+            <span class="num">18</span>
+            <span class="unit">min</span>
+          </div>
+          <div class="bars">
+            <div class="bar bar-stretch"><span>8min</span><span class="label">STRETCH</span></div>
+            <div class="bar bar-learn"><span>10min</span><span class="label">LEARN</span></div>
+            <div class="bar bar-run"><span>You Can Choose</span><span class="label">RUN!</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="cell"><p class="label">Entry Level</p><p class="value">Basics Recommended</p></div>
+        <div class="cell"><p class="label">Sensory Focus</p><p class="value">Rhythm · Endurance</p></div>
+        <div class="cell"><p class="label">Environment</p><p class="value">Outdoor</p></div>
+        <div class="cell"><p class="label">Pack Source</p><p class="value">Creator</p></div>
+      </div>
+
+      <div>
+        <p class="t-subtitle-b" style="color:var(--color-neutral-50); margin:0 0 8px;">You might also like</p>
+        <div class="also-like-list">
+          <a class="also-like-item" href="pyeongso.html">
+            <img src="assets/photos/related-running-intervals.png" alt="">
+            <div class="txt">
+              <p class="t-body-bold">Running Intervals</p>
+              <div class="meta"><span>Skilled</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>12m</span></div>
+            </div>
+          </a>
+          <a class="also-like-item" href="pyeongso.html">
+            <img src="assets/photos/related-boxing-beginner.png" alt="">
+            <div class="txt">
+              <p class="t-body-bold">Boxing Beginner Challenge</p>
+              <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>12m</span></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <div class="top-row" style="margin-bottom:8px;">
+          <p class="t-subtitle-b" style="color:var(--color-neutral-50); margin:0;">More Packs from Sean</p>
+          <img src="assets/icons/section-icon-recently.svg" alt="" style="width:26px; height:26px;">
+        </div>
+        <div class="more-scroll">
+          <a class="more-card" href="pyeongso.html">
+            <img src="assets/photos/more-running-form.png" alt="">
+            <p class="t-body-bold">Running Form Correction Routine</p>
+            <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny2.svg" alt=""><span>25m</span></div>
+          </a>
+          <a class="more-card" href="pyeongso.html">
+            <img src="assets/photos/more-everyday-crew.png" alt="">
+            <p class="t-body-bold">Everyday Running Crew</p>
+            <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny2.svg" alt=""><span>23m</span></div>
+          </a>
+          <a class="more-card" href="pyeongso.html">
+            <img src="assets/photos/more-5km-finish.png" alt="">
+            <p class="t-body-bold">Sean's 5km Finish Strategy</p>
+            <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny2.svg" alt=""><span>15m</span></div>
+          </a>
+        </div>
+      </div>
+
+      <a class="btn-pill creator-start" href="setup-location.html">Start <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></a>
+      </div>
     </div>
+  </div>
+
+  <!-- Grab this to start the pull; it fades out once the sheet is moving. -->
+  <div class="detail-bottombar explore dj-grab" id="djGrab">
+    <a class="explore-row" href="#"><img src="assets/icons/explore-chevron-up.svg" alt=""><span>Explore Packs</span></a>
+    <div class="home-indicator-row"><span></span></div>
   </div>
 </div>
 </body>
