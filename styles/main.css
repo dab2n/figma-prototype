@@ -1,4 +1,4 @@
-@import url('./tokens.css?v=827');
+@import url('./tokens.css?v=829');
 
 /* Smooth cross-document crossfade between screens (Chrome; ignored elsewhere) */
 @view-transition { navigation: auto; }
@@ -281,8 +281,8 @@ button { font-family: inherit; }
   body .notif-dot { background: var(--color-black); }
   /* Detail pages carry their own bottom bar instead of a tabbar; same treatment,
      including the two masked fillets that form the concave junction. */
-  body .detail-bottombar, body .detail-sheet,
-  body .swipe-detail::before, body .swipe-detail::after { background: var(--color-neutral-50); }
+  /* The pack sheet is tinted from its own photo (detail.css), so it opts out here. */
+  body .detail-bottombar { background: var(--color-neutral-50); }
   body .joined-people p, body .explore-row span { color: var(--color-black); }
   body .explore-row img { filter: brightness(0); }
 

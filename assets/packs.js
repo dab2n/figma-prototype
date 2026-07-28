@@ -5,7 +5,7 @@
 (function () {
   var PACKS = {
     sprint: {
-      photo: 'packs-card1-thumb.png', pos: '72% center', author: 'Kanni', avatar: 'packs-profile-kanni.png',
+      photo: 'recent-running.png', author: 'Kanni', avatar: 'packs-profile-kanni.png',
       title: 'Sprint Without Limits',
       desc: 'Break the ceiling you keep hitting at top speed. Kanni rebuilds your drive phase and arm carriage first, then holds that form under fatigue so the last 20m stops falling apart.'
     },
@@ -61,12 +61,48 @@
     }
   };
 
+  // The bottom sheet and the kebab are tinted from the hero photo itself, so the screen
+  // has to know its colour. Average a small downsample, keep a darker mate for the ramp,
+  // and record whether the photo is light or dark — that decides which veil goes on top.
+  function tone(url) {
+    var img = new Image();
+    img.onload = function () {
+      var n = 24, c = document.createElement('canvas');
+      c.width = n; c.height = n;
+      var g = c.getContext('2d');
+      g.drawImage(img, 0, 0, n, n);
+      var d, r = 0, gr = 0, b = 0, k = 0;
+      try { d = g.getImageData(0, 0, n, n).data; } catch (e) { return; }
+      for (var i = 0; i < d.length; i += 4) { r += d[i]; gr += d[i + 1]; b += d[i + 2]; k++; }
+      r = Math.round(r / k); gr = Math.round(gr / k); b = Math.round(b / k);
+      var deep = function (v) { return Math.max(0, Math.round(v * 0.72)); };
+      var el = document.querySelector('.swipe-detail') || document.body;
+      el.style.setProperty('--pack-main', 'rgb(' + r + ',' + gr + ',' + b + ')');
+      el.style.setProperty('--pack-main-80', 'rgba(' + r + ',' + gr + ',' + b + ',0.8)');
+      el.style.setProperty('--pack-deep', 'rgb(' + deep(r) + ',' + deep(gr) + ',' + deep(b) + ')');
+      // 0.40, not 0.5: a photograph's average almost never clears mid-grey, so 0.5 calls
+      // everything dark. Calibrated on the pack this screen shipped with — Sean's tan
+      // photo averages 0.42 and the design gives it the black veil.
+      var lum = (0.2126 * r + 0.7152 * gr + 0.0722 * b) / 255;
+      el.classList.toggle('pack-light', lum >= 0.40);
+      el.classList.toggle('pack-dark', lum < 0.40);
+    };
+    img.src = url;
+  }
+
   var key;
   try { key = new URLSearchParams(location.search).get('pack'); } catch (e) { key = null; }
   var p = key && PACKS[key];
-  if (!p) return;
 
   var hero = document.querySelector('.hero-photo');
+  if (!p) {                                  // default pack: markup stays, still tint it
+    if (hero) {
+      var m = (hero.style.backgroundImage || '').match(/url\(["']?([^"')]+)["']?\)/);
+      if (m) tone(m[1]);
+    }
+    return;
+  }
+  tone('assets/photos/' + p.photo);
   var av = document.querySelector('.detail-text .author img');
   var name = document.querySelector('.detail-text .author-name');
   var title = document.querySelector('.detail-title');
