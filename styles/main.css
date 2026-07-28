@@ -1,4 +1,4 @@
-@import url('./tokens.css?v=829');
+@import url('./tokens.css?v=831');
 
 /* Smooth cross-document crossfade between screens (Chrome; ignored elsewhere) */
 @view-transition { navigation: auto; }
@@ -264,27 +264,12 @@ button { font-family: inherit; }
      so there is no web-side lever for the gesture bar. When Chrome ships the fix,
      env() starts returning the inset and this rule fills it with no code change.
      Only alternative if it can't wait: relight the tab bar to match the white bar. */
-  /* ── Light bottom bars ─────────────────────────────────────────────────────
-     Android paints the gesture bar as a light strip, and an installed PWA has no
-     way to colour it (see the note above). A black bar sitting directly on top of
-     that strip reads as a cut-off mistake, so flip the one surface we DO control:
-     make our bars light and the two become one continuous base. Mobile only — the
-     desktop mockup keeps the Figma black bar. Reverting is this block alone. */
-  body .tabbar:not(.ob-bottom) { background: var(--color-neutral-50); }
-  body .tabbar:not(.ob-bottom) .tabs a.active img { filter: brightness(0); }
-  body .tabbar:not(.ob-bottom) .tabs a .dot { background: var(--color-black); }
-  /* The screen's concave bottom corners reveal .phone behind the bar, and Home's
-     notification strip is a transparent band over it — match it too, or black
-     slivers and a black strip survive. */
-  body .phone:has(> .tabbar:not(.ob-bottom)) { background: var(--color-neutral-50); }
-  body .notif-new, body .notif-left span { color: var(--color-black); }
-  body .notif-dot { background: var(--color-black); }
-  /* Detail pages carry their own bottom bar instead of a tabbar; same treatment,
-     including the two masked fillets that form the concave junction. */
-  /* The pack sheet is tinted from its own photo (detail.css), so it opts out here. */
-  body .detail-bottombar { background: var(--color-neutral-50); }
-  body .joined-people p, body .explore-row span { color: var(--color-black); }
-  body .explore-row img { filter: brightness(0); }
+  /* The bars keep the design's colour. The gesture bar is handled the other way round:
+     viewport-fit=cover plus the env() padding above lets each bar's own colour run under
+     it wherever the platform allows the page down there, and the canvas below is set to
+     the nearest colour to whatever sits above it — black here, the pack's own tone on a
+     pack (packs.js) — so the strip never reads as a different surface.
+     An earlier attempt lit every bar instead, which turned Home white. */
 
   /* Fallback for when env() reads 0: with a fixed-width (width=360) viewport iOS
      can't always extend the page under the safe-area strips, and they then show the

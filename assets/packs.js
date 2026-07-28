@@ -83,6 +83,13 @@
       // 0.40, not 0.5: a photograph's average almost never clears mid-grey, so 0.5 calls
       // everything dark. Calibrated on the pack this screen shipped with — Sean's tan
       // photo averages 0.42 and the design gives it the black veil.
+      // The canvas under the sheet takes the same tone, so the gesture bar strip below
+      // it reads as a continuation of the sheet rather than a different surface.
+      document.documentElement.style.background = 'rgb(' + deep(r) + ',' + deep(gr) + ',' + deep(b) + ')';
+      // Same idea at the top: the OS status bar takes the photo's tone instead of a
+      // fixed colour that was only ever right for one pack.
+      var tc = document.querySelector('meta[name=theme-color]');
+      if (tc) tc.setAttribute('content', 'rgb(' + r + ',' + gr + ',' + b + ')');
       var lum = (0.2126 * r + 0.7152 * gr + 0.0722 * b) / 255;
       el.classList.toggle('pack-light', lum >= 0.40);
       el.classList.toggle('pack-dark', lum < 0.40);
