@@ -13,6 +13,9 @@
   height: 100%;
   overflow: hidden;
   z-index: 1;
+  /* Rounds off as it folds, so the hero reads as a card the sheet slides under rather
+     than a full-bleed photo that got cut. */
+  border-radius: 0 0 calc(var(--p, 0) * 28px) calc(var(--p, 0) * 28px);
 }
 /* The photo pulls back and fades as the sheet takes over. */
 .dj-photo {
@@ -133,3 +136,20 @@
   opacity: calc(1 - 5 * var(--p, 0));
   pointer-events: none;
 }
+
+/* Start is the action on this screen, so it never scrolls away. It lives OUTSIDE the
+   scroller: .dj-sheet is transformed, and a transformed ancestor becomes the containing
+   block for position:fixed, which would have pinned the button to the sheet instead of
+   the screen. The copy inside the content is hidden in its favour. */
+.dj-screen .creator-start { display: none; }
+.dj-start {
+  position: fixed;
+  left: 16px; right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  width: auto;
+  z-index: 9;
+  /* Holds off until the fold is committed — arriving early put it across the title. */
+  opacity: calc(var(--p, 0) * 3 - 1.5);
+}
+/* The content already ends with it, so leave room rather than letting it sit on the copy. */
+.dj-sheet .creator-content { padding-bottom: 108px; }
