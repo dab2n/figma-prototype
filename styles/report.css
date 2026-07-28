@@ -82,8 +82,7 @@
 /* Gauge: the top slice of the design's 522x377 ellipse, so the curve keeps its very
    flat rise. Stroke fades out at both ends the way the artwork does. */
 .rp-gauge { position: absolute; top: 308px; left: 0; width: 360px; height: 130px; }
-.rp-gauge .arc-dot { animation: rp-dot-in .5s cubic-bezier(.2,.8,.3,1) .25s both; transform-origin: 228px 17px; }
-@keyframes rp-dot-in { from { opacity: 0; transform: scale(.3); } }
+/* The marker's entrance is the travel along the arc in gauge.js, not a scale-in. */
 
 /* ── Body ──────────────────────────────────────────────────────────────────
    Fades out of the hero wash so there is no seam where the artwork stops. */

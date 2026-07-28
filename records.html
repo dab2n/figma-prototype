@@ -5,7 +5,8 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=805"></script>
+<script defer src="assets/openext.js?v=806"></script>
+<script defer src="assets/gauge.js?v=806"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,8 +14,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Report</title>
-<link rel="stylesheet" href="styles/main.css?v=805">
-<link rel="stylesheet" href="styles/report.css?v=805">
+<link rel="stylesheet" href="styles/main.css?v=806">
+<link rel="stylesheet" href="styles/report.css?v=806">
 </head>
 <body>
 <div class="phone">
@@ -34,7 +35,7 @@
 
       <div class="rp-date"><span>2026. 07. 21</span></div>
 
-      <p class="rp-big"><span class="n">78.8</span><span class="u">%</span></p>
+      <p class="rp-big"><span class="n" id="gainNum">78.8</span><span class="u">%</span></p>
       <p class="rp-cap">Movement Performance Gain</p>
 
       <!-- Top slice of the design's 522x377 ellipse. The marker is the same ring used
@@ -48,9 +49,9 @@
             <stop offset="1" stop-color="#fff" stop-opacity="0"/>
           </linearGradient>
         </defs>
-        <path d="M 19 64 A 261 188.5 0 0 1 341 64" stroke="url(#gaugeFade)" stroke-width="2.5" stroke-linecap="round"/>
-        <image class="arc-dot" href="assets/icons/body-ring.png" x="208.5" y="7.5" width="39" height="39"/>
-        <text x="228" y="67" text-anchor="middle" fill="#fff" font-family="Supreme, sans-serif" font-size="12" opacity=".92">78.8</text>
+        <path d="M 19 64 A 261 188.5 0 0 1 341 64" stroke="url(#gaugeFade)" stroke-width="6" stroke-linecap="round"/>
+        <image class="arc-dot" id="arcRing" href="assets/icons/body-ring.png" x="208.5" y="7.5" width="39" height="39"/>
+        <text id="arcVal" x="228" y="67" text-anchor="middle" fill="#fff" font-family="Supreme, sans-serif" font-size="12" opacity=".92">78.8</text>
         <text x="48"  y="90" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">0</text>
         <text x="306" y="90" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">100</text>
       </svg>
@@ -163,6 +164,10 @@ window.addEventListener('pagereveal', function (e) {
   var from = (e.activation && e.activation.from && e.activation.from.url) || '';
   if (from.indexOf('recap.html') !== -1) e.viewTransition.types.add('detail-in');
 });
+</script>
+<script>
+// Same arrival motion as Records: the score counts up and the marker rides in.
+window.addEventListener('DOMContentLoaded', function () { window.rpGauge.to(78.8, 78.8); });
 </script>
 </body>
 </html>
