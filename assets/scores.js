@@ -21,3 +21,19 @@
   }, { root: scores.closest('.screen'), threshold: 0.2 });
   io.observe(scores);
 })();
+
+// Landing Balance is data-driven, so the page can re-point it whenever the reading
+// changes (a different day, a different period). Kept next to the initial pass above
+// so there is one place that knows how a split maps to the heat's position.
+window.rpBalance = {
+  apply: function (left, right) {
+    document.querySelectorAll('.rp-balance').forEach(function (el) {
+      el.dataset.left = left;
+      el.dataset.right = right;
+      el.style.setProperty('--heat-x', (50 + ((right - left) / (left + right)) * 65).toFixed(1) + '%');
+      var l = el.querySelector('.lb-read.l .v'), r = el.querySelector('.lb-read.r .v');
+      if (l) l.textContent = '+ ' + left + '%';
+      if (r) r.textContent = '+' + right + '%';
+    });
+  }
+};

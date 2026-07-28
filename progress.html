@@ -5,9 +5,9 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=815"></script>
-<script defer src="assets/gauge.js?v=815"></script>
-<script defer src="assets/scores.js?v=815"></script>
+<script defer src="assets/openext.js?v=816"></script>
+<script defer src="assets/gauge.js?v=816"></script>
+<script defer src="assets/scores.js?v=816"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,8 +15,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Records</title>
-<link rel="stylesheet" href="styles/main.css?v=815">
-<link rel="stylesheet" href="styles/report.css?v=815">
+<link rel="stylesheet" href="styles/main.css?v=816">
+<link rel="stylesheet" href="styles/report.css?v=816">
 </head>
 <body>
 <div class="phone">
@@ -176,14 +176,17 @@
 // dead there because a prototype has no per-period history to step through.
 (function () {
   var DESIGN = { gain: '26.6', sign: '+', from: 'From yesterday', score: 78.8,
-                 packs: ['+ 2', '6'], steps: ['+ 3102', '13,119'], time: ['+ 57m', '1', '43'] };
+                 packs: ['+ 2', '6'], steps: ['+ 3102', '13,119'], time: ['+ 57m', '1', '43'],
+                 bal: [25, 32] };
+  // Week / Month / 6 Month read as DAILY AVERAGES over the period, not running totals —
+  // totals ran to seven figures and spilled out of the cards.
   var AGG = {
-    week:  { gain: '48.2',  sign: '+', from: 'From last week',    score: 74.1, chip: 'This week',
-             packs: ['+ 5', '21'],  steps: ['+ 8,420', '68,204'],      time: ['+ 2h 10m', '9', '12'] },
-    month: { gain: '112.4', sign: '+', from: 'From last month',   score: 69.5, chip: 'This month',
-             packs: ['+ 12', '84'], steps: ['+ 21,350', '271,930'],    time: ['+ 6h 40m', '38', '25'] },
-    half:  { gain: '305.9', sign: '+', from: 'From 6 months ago', score: 61.2, chip: 'Last 6 months',
-             packs: ['+ 40', '468'], steps: ['+ 102,880', '1,592,470'], time: ['+ 28h 15m', '214', '05'] }
+    week:  { gain: '12.4', sign: '+', from: 'Daily average, this week',  score: 74.1, chip: 'This week',
+             packs: ['+ 1', '3'], steps: ['+ 820', '9,743'], time: ['+ 11m', '1', '18'], bal: [28, 30] },
+    month: { gain: '8.6',  sign: '+', from: 'Daily average, this month', score: 69.5, chip: 'This month',
+             packs: ['+ 1', '3'], steps: ['+ 540', '8,920'], time: ['+ 6m', '1', '06'], bal: [26, 31] },
+    half:  { gain: '5.1',  sign: '+', from: 'Daily average, 6 months',   score: 61.2, chip: 'Last 6 months',
+             packs: ['+ 0', '2'], steps: ['+ 310', '8,150'], time: ['+ 3m', '0', '58'], bal: [24, 33] }
   };
 
   var $ = function (id) { return document.getElementById(id); };
@@ -207,7 +210,8 @@
       score: rnd(off, 5, 520, 910) / 10,
       packs: ['+ ' + rnd(off, 6, 0, 4), String(rnd(off, 1, 2, 9))],
       steps: ['+ ' + comma(rnd(off, 7, 200, 4200)), comma(rnd(off, 2, 5200, 17800))],
-      time: ['+ ' + rnd(off, 8, 5, 70) + 'm', String(Math.floor(mins / 60)), pad(mins % 60)]
+      time: ['+ ' + rnd(off, 8, 5, 70) + 'm', String(Math.floor(mins / 60)), pad(mins % 60)],
+      bal: [rnd(off, 9, 18, 34), rnd(off, 10, 18, 34)]
     };
   }
   function chipLabel(off) {
@@ -228,6 +232,7 @@
     $('stepsDelta').textContent = d.steps[0]; $('stepsNum').textContent = d.steps[1];
     $('timeDelta').textContent = d.time[0];
     $('timeH').textContent = d.time[1]; $('timeM').textContent = d.time[2];
+    if (window.rpBalance && d.bal) window.rpBalance.apply(d.bal[0], d.bal[1]);
     $('dayChip').textContent = isDay ? chipLabel(state.off) : d.chip;
     $('dayPrev').disabled = !isDay;
     $('dayNext').disabled = !isDay || state.off === 0;

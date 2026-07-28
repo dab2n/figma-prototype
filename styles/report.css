@@ -132,13 +132,13 @@
    letters are small grey Supreme, not OffBit. Packs/Steps are fixed widths and the
    last cell takes the slack. */
 .rp-stats { display: flex; gap: 3px; align-items: center; margin: 8px 12px 0; }
-/* Cells arrive left to right. Kept short and shallow — 14px and 80ms apart reads as
-   settling into place, not as three things flying in. */
+/* Each cell rises into place, still one after the other left to right. Short and
+   shallow — 14px and 80ms apart reads as settling, not as three things flying in. */
 .rp-stats .rp-stat { animation: rp-stat-in .42s cubic-bezier(.2,.85,.3,1) both; }
 .rp-stats .rp-stat:nth-child(1) { animation-delay: .06s; }
 .rp-stats .rp-stat:nth-child(2) { animation-delay: .14s; }
 .rp-stats .rp-stat:nth-child(3) { animation-delay: .22s; }
-@keyframes rp-stat-in { from { opacity: 0; transform: translateX(-14px); } }
+@keyframes rp-stat-in { from { opacity: 0; transform: translateY(14px); } }
 /* 8px below the period picker on Records; flush to the top on the Report, which has none. */
 .rp-stats:first-child { margin-top: 0; }
 .rp-stat {
