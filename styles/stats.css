@@ -2,41 +2,19 @@
    both sit behind a top Progress|Library toggle. */
 .stats-screen { background: var(--color-white); }
 
-/* Top segmented toggle — sits in the 66px app-bar zone BELOW the 44px status bar */
-.stats-tabs {
-  position: absolute;
-  top: 44px; left: 0; right: 0;
-  height: 66px;
-  z-index: 6;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: center;
-}
-.stat-tab {
-  padding: 6px 16px;
-  border-radius: 999px;
-  font-family: var(--font-supreme-bold);
-  font-size: 16px;
-  letter-spacing: -0.5px;
-  text-decoration: none;
-  color: var(--color-neutral-100);   /* unselected on red bg = Neutral/100 */
-}
-.stat-tab.active { background: rgba(0,0,0,0.2); color: #fff; }   /* selected bg = #000 20% */
-/* On the white Library bg: unselected = Neutral/500; keep the toggle in the same
-   in-flow app-bar slot so it persists across Progress⇆Library. */
-.lib-screen .stats-tabs { position: static; }
-.lib-screen .stat-tab { color: var(--color-neutral-500); }
-.lib-screen .stat-tab.active { background: rgba(0,0,0,0.2); color: var(--color-black); }
-
 /* The Progress page's own styles lived here. It was redesigned as Records and now
    loads report.css instead, so only the toggle above and the Library block below
    remain in this file. */
 /* ── Library page ──────────────────────────────────────────────────────── */
-.lib-screen { background: var(--color-neutral-50); }
+/* Opened from the calendar icon in the Records header; the only chrome is the way
+   back there. */
+.lib-appbar { display: flex; align-items: center; height: 66px; padding: 0 16px; box-sizing: border-box; }
+.lib-appbar .icon-btn { background: none; border: none; padding: 0; display: block; cursor: pointer; }
+.lib-appbar img { width: 24px; height: 24px; display: block; }
+.lib-screen { background: var(--color-neutral-100); }
 /* Status bar matches the gray frame (frame color as backdrop + multiply-blend
    the status-bar SVG so its baked white rect dissolves into the gray). */
-.lib-screen .status-bar { background: var(--color-neutral-50); }
+.lib-screen .status-bar { background: var(--color-neutral-100); }
 .lib-screen .statusbar-svg { mix-blend-mode: multiply; }
 .lib-filter {
   position: sticky;
@@ -46,7 +24,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  background: var(--color-neutral-50);
+  background: var(--color-neutral-100);
   overflow-x: auto;
 }
 .lib-filter::-webkit-scrollbar { display: none; }
@@ -63,7 +41,7 @@
 /* Search magnifier: same 36px as the filter icon; fills red when active */
 .lib-filter #libSearchBtn.on { background: linear-gradient(180deg, #FA3030 54%, #FE6E3C 90%, #FEC389 110%); }
 .lib-filter #libSearchBtn.on img { filter: brightness(0) invert(1); }
-.lib-searchbar { padding: 0 16px 8px; background: var(--color-neutral-50); }
+.lib-searchbar { padding: 0 16px 8px; background: var(--color-neutral-100); }
 .lib-searchbar input {
   width: 100%; height: 40px; box-sizing: border-box;
   border: none; border-radius: 12px; background: #fff;
