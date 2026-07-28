@@ -4,10 +4,12 @@
   position: relative;
   height: 780px;
   overflow: hidden;
-  /* The two clips carry their own red→cream wash, so the screen only needs to hold the
-     same tone underneath them — it shows before the first frame paints and behind the
-     clips' own edges. Sampled from the arrival artwork this replaces. */
-  background: linear-gradient(180deg, #FA3030 0%, #FA3030 52%, #FE8C4A 74%, #FBD9C0 88%, #FFFFFF 100%);
+  /* The wash is ours, not the clips'. Stops sampled straight down the arrival artwork
+     this replaces, clear of the runner, so the saturation and the red→cream falloff are
+     the original's — the clips only add the runners on top. */
+  background: linear-gradient(180deg,
+    #FA3030 0%, #FA3030 54%, #FD483A 62%, #FD7350 69%,
+    #FEA97B 77%, #FED4B1 85%, #FFF1E4 92%, #FFEEDD 100%);
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
@@ -26,10 +28,18 @@
   transform-origin: 50% 42%;
   pointer-events: none;
   z-index: 0;
+  /* Only the runner should survive. Crushing the clip to luminance drops its own
+     (much flatter) wash to black, and screen then adds just the bright figure over our
+     gradient — the mid tones stay grey enough to keep the shading in the limbs. */
+  filter: grayscale(1) brightness(0.74) contrast(3.1);
+  mix-blend-mode: screen;
+  transition: opacity .9s ease;
 }
-/* The user's run arrives over the creator's, two seconds in. */
-.recap-clip.user { opacity: 0; transition: opacity .9s ease; }
-.recap-clip.user.on { opacity: 1; }
+/* Creator's run leads; the user's joins over it; the creator then leaves and the user
+   carries on alone. Both are just opacity — while both are up, both runners show. */
+.recap-clip.user { opacity: 0; }
+.recap-clip.on { opacity: 1; }
+.recap-clip.off { opacity: 0; }
 /* Everything else on the screen sits above both clips. */
 .recap-screen > *:not(.recap-clip) { z-index: 2; }
 
@@ -85,11 +95,12 @@
   text-decoration: none;
   animation: hint-bounce 2.6s ease-in-out 1s infinite;
 }
+/* A hint, not a bounce — 4px is enough to read as "pull me up". */
 @keyframes hint-bounce {
-  0%, 42%, 100% { transform: translateY(0); }
-  12% { transform: translateY(-9px); }
-  24% { transform: translateY(0); }
-  33% { transform: translateY(-9px); }
+  0%, 46%, 100% { transform: translateY(0); }
+  14% { transform: translateY(-4px); }
+  28% { transform: translateY(0); }
+  38% { transform: translateY(-4px); }
 }
-.recap-full img { width: 20px; height: 20px; filter: brightness(0) invert(0.35); }
-.recap-full span { font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; color: var(--color-neutral-600); }
+.recap-full img { width: 20px; height: 20px; filter: brightness(0) invert(0.55); }
+.recap-full span { font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; color: var(--color-neutral-500); }
