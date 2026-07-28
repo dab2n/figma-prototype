@@ -5,8 +5,9 @@
 @font-face { font-family:'Pretendard'; font-weight:500; font-style:normal; font-display:swap; src:url('../fonts/pretendard/Pretendard-Medium.woff2') format('woff2'), url('../fonts/pretendard/Pretendard-Medium.woff') format('woff'); }
 @font-face { font-family:'Pretendard'; font-weight:600; font-style:normal; font-display:swap; src:url('../fonts/pretendard/Pretendard-SemiBold.woff2') format('woff2'), url('../fonts/pretendard/Pretendard-SemiBold.woff') format('woff'); }
 @font-face { font-family:'Pretendard'; font-weight:700; font-style:normal; font-display:swap; src:url('../fonts/pretendard/Pretendard-Bold.woff2') format('woff2'), url('../fonts/pretendard/Pretendard-Bold.woff') format('woff'); }
-/* OffBit — the "18 min" process-graph numeral */
-@font-face { font-family:'OffBit'; font-weight:700; font-style:normal; font-display:swap; src:url('../fonts/offbit/OffBitTrial-101Bold.woff2') format('woff2'), url('../fonts/offbit/OffBitTrial-Bold.woff') format('woff'); }
+/* OffBit — every numeral in the app. Dot Bold is the ONE style used; the 101 and plain
+   Bold cuts were dropped so numbers read the same everywhere. */
+@font-face { font-family:'OffBit'; font-weight:700; font-style:normal; font-display:swap; src:url('../fonts/offbit/OffBitTrial-DotBold.woff2') format('woff2'), url('../fonts/offbit/OffBitTrial-DotBold.woff') format('woff'); }
 
 :root {
   /* Colors — Figma design system */

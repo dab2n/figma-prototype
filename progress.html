@@ -5,98 +5,159 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=800"></script>
+<script defer src="assets/openext.js?v=801"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>Newton — Progress</title>
-<link rel="stylesheet" href="styles/main.css?v=800">
-<link rel="stylesheet" href="styles/stats.css?v=800">
+<title>Newton — Records</title>
+<link rel="stylesheet" href="styles/main.css?v=801">
+<link rel="stylesheet" href="styles/report.css?v=801">
 </head>
 <body>
 <div class="phone">
-  <div class="screen stats-screen">
-    <img class="stats-bg" src="assets/photos/progress-bg3.png" alt="">
+  <div class="screen rp-screen">
+    <div class="status-bar on-dark"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
 
-    <div class="status-bar on-dark" style="position:absolute; top:0; left:0; z-index:6;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
+    <div class="rp-hero">
+      <img class="rp-hero-bg" src="assets/photos/report-hero.png" alt="">
 
-    <div class="stats-tabs">
-      <a class="stat-tab active" href="progress.html">Progress</a>
-      <a class="stat-tab" href="library.html">Library</a>
-    </div>
-
-    <!-- The new bg image has the figure + ring dots but NO text, so overlay the title
-         and subtitle sharply on top. Metric number labels are overlaid too. -->
-    <div class="stats-title">
-      <p class="st-title">All 5 metrics improved</p>
-      <p class="st-sub">Darker areas improved the most</p>
-    </div>
-
-    <!-- Ring dots (image) + dashed line connecting them in order. The line is revealed by
-         a MASK (uses the reveal stroke's painted pixels), so animating the stroke draws it. -->
-    <svg class="body-graph" viewBox="0 0 360 560" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <mask id="lineReveal" maskUnits="userSpaceOnUse" x="0" y="0" width="360" height="560">
-          <path class="reveal-path" d="M136.79 285.79 L213.52 381.5 L136.5 453.5" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" pathLength="100"/>
-        </mask>
-      </defs>
-      <path class="dashed-visible" d="M136.79 285.79 L213.52 381.5 L136.5 453.5" fill="none" stroke="#fff" stroke-width="1.4" stroke-dasharray="3 4" stroke-linecap="round" mask="url(#lineReveal)"/>
-    </svg>
-    <img class="body-dot" src="assets/icons/body-ring.png" alt="" style="left:125px; top:274px; width:23.584px; height:23.584px; opacity:.8; --dot:.15s;">
-    <img class="body-dot" src="assets/icons/body-ring.png" alt="" style="left:203px; top:371px; width:21px; height:21px; opacity:.9; --dot:.65s;">
-    <img class="body-dot" src="assets/icons/body-ring.png" alt="" style="left:121px; top:438px; width:31px; height:31px; opacity:1; --dot:1.15s;">
-
-    <!-- Alignment + label weight per node 319-18914: Balance & Stability are Bold/primary;
-         Rhythm, Endurance, Agility are Regular/secondary (dimmed). Rhythm & Balance right-aligned. -->
-    <div class="stat s-sm" style="left:96px; top:213px; align-items:flex-end; opacity:.8; --d:.05s;"><p>Rhythm</p><div class="num-row"><span class="n">72</span><span class="d">+24</span></div></div>
-    <div class="stat s-lg" style="left:47px; top:356px; align-items:flex-end; --d:.15s;"><p>Balance</p><div class="num-row"><span class="n">85</span><span class="d">+25</span></div></div>
-    <div class="stat" style="left:239px; top:344px; --d:.12s;"><p>Stability</p><div class="num-row"><span class="n" style="font-size:31px;">68</span><span class="d">+13</span></div></div>
-    <div class="stat sub" style="left:75px; top:481px; opacity:.62; --d:.26s;"><p>Endurance</p><div class="num-row"><span class="n">61</span><span class="d">+19</span></div></div>
-    <div class="stat s-sm" style="left:239px; top:456px; opacity:.9; --d:.22s;"><p>Agility</p><div class="num-row"><span class="n" style="font-size:26px;">51</span><span class="d">+22</span></div></div>
-
-    <div class="stats-content">
-      <div class="stats-hero-spacer"></div>
-
-      <section>
-        <p class="sec-title">Progress Overview</p>
-        <div class="ov-row3">
-          <div class="ov-card"><div><p class="ov-label">Balance</p><p class="ov-pts">+25 pts</p></div><span class="ov-num">85</span></div>
-          <div class="ov-card"><div><p class="ov-label">Rhythm</p><p class="ov-pts">+24 pts</p></div><span class="ov-num">72</span></div>
-          <div class="ov-card"><div><p class="ov-label">Stability</p><p class="ov-pts">+13 pts</p></div><span class="ov-num">68</span></div>
+      <div class="app-bar">
+        <p class="rp-title">Records</p>
+        <div class="actions">
+          <!-- The old Progress|Library toggle is gone with the redesign, and this was the
+               only route into the Library — the calendar (past sessions) carries it now. -->
+          <a href="library.html"><img src="assets/icons/appbar-calendar.svg" alt="지난 기록"></a>
+          <img src="assets/icons/kebab-dots.svg" alt="더보기">
         </div>
-        <div class="ov-row2">
-          <div class="ov-wide"><div class="ov-txt"><p class="ov-label">Agility</p><p class="ov-pts">+19 pts</p></div><span class="ov-num">61</span></div>
-          <div class="ov-wide"><div class="ov-txt"><p class="ov-label">Endurance</p><p class="ov-pts">+22 pts</p></div><span class="ov-num">51</span></div>
+      </div>
+
+      <div class="rp-daynav">
+        <img class="back" src="assets/icons/chevron-right.svg" alt="이전 날짜">
+        <span class="rp-chip">Today</span>
+        <img src="assets/icons/chevron-right.svg" alt="다음 날짜">
+      </div>
+
+      <p class="rp-big"><span class="sign">+</span><span class="n">26.6</span><span class="u">pts</span></p>
+      <p class="rp-cap">From yesterday</p>
+
+      <!-- Top slice of the design's 522x377 ellipse: rx/ry keep the curve as flat as the
+           artwork, and the stroke fades to nothing at both ends. -->
+      <svg class="rp-gauge" viewBox="0 0 360 130" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="gaugeFade" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+            <stop offset=".2" stop-color="#fff" stop-opacity=".85"/>
+            <stop offset=".8" stop-color="#fff" stop-opacity=".85"/>
+            <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M 19 54 A 261 188.5 0 0 1 341 54" stroke="url(#gaugeFade)" stroke-width="2.5" stroke-linecap="round"/>
+        <g class="arc-dot">
+          <circle cx="228" cy="17" r="15" fill="#fff" opacity=".18"/>
+          <circle cx="228" cy="17" r="8" fill="#fff"/>
+        </g>
+        <text x="228" y="57" text-anchor="middle" fill="#fff" font-family="Supreme, sans-serif" font-size="12" opacity=".92">78.8</text>
+        <text x="48"  y="80" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">0</text>
+        <text x="306" y="80" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">100</text>
+      </svg>
+    </div>
+
+    <div class="rp-body">
+      <div class="rp-seg">
+        <a class="sel" href="progress.html">Day</a>
+        <a href="progress.html">Week</a>
+        <a href="progress.html">Month</a>
+        <a href="progress.html">6 Month</a>
+      </div>
+
+      <!-- Cell widths are the design's (72 / 103 / 155), driven by their content. -->
+      <div class="rp-stats">
+        <div class="rp-stat" style="flex:0 0 72px;">
+          <p class="lab">Packs</p>
+          <div class="val"><p class="delta">+ 2</p><p class="num"><span class="n">6</span></p></div>
+        </div>
+        <div class="rp-stat" style="flex:0 0 103px;">
+          <p class="lab">Steps</p>
+          <div class="val"><p class="delta">+ 3102</p><p class="num"><span class="n">13,119</span></p></div>
+        </div>
+        <div class="rp-stat" style="flex:0 0 155px;">
+          <p class="lab">Active Time</p>
+          <div class="val"><p class="delta">+ 57m</p><p class="num"><span class="n">1</span><span class="u">h</span><span class="n">&nbsp;43</span><span class="u">m</span></p></div>
+        </div>
+      </div>
+
+      <section class="rp-sec">
+        <h2>Session Highlights</h2>
+        <div class="rp-pair">
+          <div class="rp-hcard">
+            <div class="top">
+              <div><p class="cap">Went Well</p><p class="val">Balance</p></div>
+              <img class="badge" src="assets/icons/arrow-up-badge.png" alt="">
+            </div>
+            <p class="desc">Held your balance<br>through the final stretch</p>
+          </div>
+          <div class="rp-hcard">
+            <div class="top">
+              <div><p class="cap">Next Focus</p><p class="val">Agility</p></div>
+              <img class="badge" src="assets/icons/arrow-down-badge.png" alt="">
+            </div>
+            <p class="desc">Improve early reaction</p>
+          </div>
         </div>
       </section>
 
-      <section class="sessions-pack">
-        <p class="sec-title">Sessions by Pack <img src="assets/icons/section-icon-recently.svg" alt=""></p>
-        <div class="sbp-list">
-          <div class="sbp-row">
-            <div><p class="sbp-title">Boxing Beginner Challenge</p><p class="sbp-sub">8 sessions</p></div>
-            <span class="sbp-pct">58<span class="u">%</span></span>
-          </div>
-          <div class="sbp-row">
-            <div><p class="sbp-title">Tennis Forehand<br>Basics</p><p class="sbp-sub">5 sessions</p></div>
-            <span class="sbp-pct">69<span class="u">%</span></span>
-          </div>
-          <div class="sbp-row">
-            <div><p class="sbp-title">Boxing Beginner Challenge</p><p class="sbp-sub">3 sessions</p></div>
-            <span class="sbp-pct">58<span class="u">%</span></span>
-          </div>
+      <section class="rp-sec">
+        <h2>Landing Balance</h2>
+        <img class="rp-balance" src="assets/photos/landing-balance.png" alt="좌우 착지 균형 — 왼발 +25%, 오른발 +32%">
+      </section>
+
+      <section class="rp-sec">
+        <h2>Performance Scores</h2>
+        <div class="rp-scores">
+          <img src="assets/photos/score-agility.png" alt="Agility 51">
+          <img src="assets/photos/score-endurance.png" alt="Endurance 61">
+          <img src="assets/photos/score-rhythm.png" alt="Rhythm 72">
+          <img src="assets/photos/score-stability.png" alt="Stability 85">
+        </div>
+      </section>
+
+      <section class="rp-sec">
+        <h2>Recommendation for you</h2>
+        <div class="rec-scroll">
+          <a class="rec-card" href="pyeongso.html">
+            <div class="rec-thumb" style="background-image:url('assets/photos/rec-curry.png');"><span class="rec-badge"><img class="badge-fire" src="assets/icons/badge-fire.svg" alt="">Boosts Agility</span></div>
+            <div class="rec-info">
+              <div class="rec-txt"><p class="rec-title">Curry's Step Back</p><p class="rec-meta">Pro Pack · 7m</p></div>
+              <span class="rec-start">Start now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
+            </div>
+          </a>
+          <a class="rec-card" href="pyeongso.html">
+            <div class="rec-thumb rec-dark" style="background-image:url('assets/photos/rec-strength.png');"><span class="rec-badge">HOT</span></div>
+            <div class="rec-info">
+              <div class="rec-txt"><p class="rec-title">Strength Exercise to Improve Agility</p><p class="rec-meta">Pro Pack · 7m</p></div>
+              <span class="rec-start">Start now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
+            </div>
+          </a>
+          <a class="rec-card" href="pyeongso.html">
+            <div class="rec-thumb rec-dark" style="background-image:url('assets/photos/rec-ladder.png');"><span class="rec-badge">New</span></div>
+            <div class="rec-info">
+              <div class="rec-txt"><p class="rec-title">ladder Footwork Drills</p><p class="rec-meta">Pro Pack · 7m</p></div>
+              <span class="rec-start">Start now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
+            </div>
+          </a>
         </div>
       </section>
     </div>
   </div>
+
   <nav class="tabbar">
     <div class="tabs">
       <a href="home.html"><img src="assets/icons/nav-home.svg" alt="홈"></a>
       <a href="packs.html"><img src="assets/icons/nav-packs.svg" alt="팩"></a>
-      <a href="progress.html" class="active"><img src="assets/icons/nav-stats.svg" alt="통계"><span class="dot"></span></a>
+      <a href="progress.html" class="active"><img src="assets/icons/nav-stats.svg" alt="기록"><span class="dot"></span></a>
       <a href="my.html"><img src="assets/icons/nav-profile.svg" alt="프로필"></a>
     </div>
     <div class="home-indicator"><span></span></div>

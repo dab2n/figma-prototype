@@ -1,0 +1,281 @@
+/* Records / post-workout Report.
+   Two pages, one layout: progress.html is Records (period picker + Packs/Steps/Active
+   Time), records.html is the report that lands right after a workout (date + session
+   stats). Everything from Session Highlights down is identical, so it lives here once.
+
+   Geometry is the Figma frame's, shifted up 44px: the status bar is a sibling of the
+   hero, not inside it, so hiding it on mobile moves the whole hero up as one piece
+   instead of leaving the absolutely-placed number and gauge behind. */
+
+.rp-screen { background: var(--color-neutral-100); }
+
+/* ── Hero ──────────────────────────────────────────────────────────────────
+   Red-to-white wash exported from the design (the frame's 블러 layer); every
+   text element sits on top of it as real text. */
+.rp-hero { position: relative; height: 462px; flex: none; }
+.rp-hero-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 360px; height: 523px;
+  z-index: 0;
+  pointer-events: none;
+}
+.rp-hero > *:not(.rp-hero-bg) { position: relative; z-index: 2; }
+
+.rp-hero .app-bar { height: 66px; box-sizing: border-box; }
+.rp-title { margin: 0; font-family: var(--font-supreme-bold); font-size: 26px; line-height: 1.3; letter-spacing: -1px; color: #fff; }
+.rp-hero .actions img { width: 24px; height: 24px; display: block; }
+/* Every hero icon is drawn white over the red wash, whatever fill its file ships with
+   — brightness(0) flattens the artwork, invert(1) turns it white. */
+.rp-hero .actions img, .rp-daynav img, .rp-appbar img { filter: brightness(0) invert(1); }
+
+/* Records: ‹ Today › */
+.rp-daynav { display: flex; align-items: center; justify-content: space-between; height: 56px; padding: 0 16px; }
+.rp-daynav img { width: 24px; height: 24px; display: block; opacity: .9; }
+.rp-daynav .back { transform: scaleX(-1); }
+.rp-chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.2);
+  font-family: var(--font-supreme-bold);
+  font-size: 13px;
+  letter-spacing: -0.2px;
+  color: #fff;
+}
+/* Report: the session date, centred on its own 33px row */
+.rp-date { display: flex; align-items: center; justify-content: center; height: 33px; }
+.rp-date span { font-family: var(--font-supreme); font-size: 15px; letter-spacing: -0.5px; color: rgba(255,255,255,0.92); }
+
+/* Headline number. The unit and sign are Supreme; only the numerals are OffBit. */
+.rp-big {
+  position: absolute;
+  top: 172px; left: 0; right: 0;
+  margin: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  color: #fff;
+}
+.rp-big .sign { font-family: var(--font-supreme-bold); font-size: 22px; letter-spacing: -0.5px; padding-bottom: 12px; }
+.rp-big .n { font-family: var(--font-offbit); font-weight: 700; font-size: 60px; line-height: 1; }
+.rp-big .u { font-family: var(--font-supreme-bold); font-size: 22px; letter-spacing: -0.5px; padding-bottom: 8px; }
+.rp-cap {
+  position: absolute;
+  top: 247px; left: 0; right: 0;
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-supreme);
+  font-size: 13px;
+  letter-spacing: -0.4px;
+  color: rgba(255,255,255,0.88);
+}
+
+/* Gauge: the top slice of the design's 522x377 ellipse, so the curve keeps its very
+   flat rise. Stroke fades out at both ends the way the artwork does. */
+.rp-gauge { position: absolute; top: 308px; left: 0; width: 360px; height: 130px; }
+.rp-gauge .arc-dot { animation: rp-dot-in .5s cubic-bezier(.2,.8,.3,1) .25s both; transform-origin: 228px 17px; }
+@keyframes rp-dot-in { from { opacity: 0; transform: scale(.3); } }
+
+/* ── Body ──────────────────────────────────────────────────────────────────
+   Fades out of the hero wash so there is no seam where the artwork stops. */
+/* No top padding: .rp-hero is exactly as tall as the design's hero (462px once the
+   44px status bar is taken off), so the body already starts on the right line. */
+.rp-body { position: relative; padding: 0 0 24px; }
+.rp-body::before {
+  content: "";
+  position: absolute;
+  top: -48px; left: 0; right: 0;
+  height: 48px;
+  background: linear-gradient(to bottom, rgba(242,242,242,0), var(--color-neutral-100));
+  pointer-events: none;
+}
+
+/* Day / Week / Month / 6 Month */
+.rp-seg { display: flex; gap: 4px; margin: 0 12px; padding: 4px; border-radius: 999px; background: rgba(255,255,255,0.55); }
+.rp-seg a {
+  flex: 1;
+  height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  text-decoration: none;
+  font-family: var(--font-supreme);
+  font-size: 14px;
+  letter-spacing: -0.4px;
+  color: var(--color-neutral-500);
+}
+.rp-seg a.sel {
+  background: #fff;
+  color: var(--color-black);
+  font-family: var(--font-supreme-bold);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* Metric row. Cell widths come from the design and differ per page, so they are set
+   inline; the shared box is here. */
+.rp-stats { display: flex; gap: 3px; margin: 8px 12px 0; }
+/* 8px below the period picker on Records; flush to the top on the Report, which has none. */
+.rp-stats:first-child { margin-top: 0; }
+.rp-stat {
+  flex: 1;
+  height: 120px;
+  box-sizing: border-box;
+  padding: 12px 8px;
+  background: #fff;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.rp-stat .lab { margin: 0; font-family: var(--font-supreme); font-size: 13px; line-height: 16px; letter-spacing: -0.3px; color: var(--color-neutral-500); white-space: nowrap; }
+/* Fixed 62px block bottom-aligned, so a cell with no delta (Duration) still lands its
+   number on the same baseline as the cells that have one. */
+.rp-stat .val {
+  margin-top: 18px;
+  height: 62px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+.rp-stat .delta { margin: 0 0 2px; font-family: var(--font-supreme); font-size: 13px; line-height: 20px; letter-spacing: -0.3px; color: var(--color-neutral-500); white-space: nowrap; }
+.rp-stat .delta.best { color: var(--color-red); font-family: var(--font-supreme-bold); }
+.rp-stat .num { display: flex; align-items: baseline; gap: 1px; }
+.rp-stat .num .n { font-family: var(--font-offbit); font-weight: 700; font-size: 34px; line-height: 1; color: var(--color-black); }
+.rp-stat .num .u { font-family: var(--font-offbit); font-weight: 700; font-size: 14px; color: var(--color-neutral-500); }
+
+/* ── Sections ──────────────────────────────────────────────────────────────
+   48px between blocks, title then 8px then content — the design's rhythm. */
+.rp-sec { margin: 48px 0 0; padding: 0 12px; }
+.rp-sec > h2 {
+  margin: 0 0 8px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  font-family: var(--font-supreme-bold);
+  font-size: 18px;
+  line-height: 1.2;
+  letter-spacing: -0.54px;
+  color: var(--color-black);
+}
+
+/* Session Highlights */
+.rp-pair { display: flex; gap: 4px; }
+.rp-hcard {
+  flex: 1;
+  height: 166px;
+  box-sizing: border-box;
+  padding: 16px;
+  background: #fff;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.rp-hcard .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.rp-hcard .cap { margin: 0 0 4px; font-family: var(--font-supreme); font-size: 13px; line-height: 16px; letter-spacing: -0.3px; color: var(--color-neutral-500); }
+.rp-hcard .val { margin: 0; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 24px; letter-spacing: -0.6px; color: var(--color-black); }
+.rp-hcard .badge { width: 32px; height: 32px; flex: none; display: block; }
+.rp-hcard .desc { margin: 0; font-family: var(--font-supreme); font-size: 13px; line-height: 16px; letter-spacing: -0.3px; color: #A3A3A3; }
+
+/* Landing Balance — the heat wash, footprints and crosshair are one exported artwork.
+   ponytail: the Left/Right readings are baked into it; if they ever need to change per
+   session, split them back out as text over the image. */
+.rp-balance { display: block; width: 336px; height: 166px; border-radius: 20px; }
+
+/* Performance Scores — four exported cards. Each is irreducible vector art (blurred
+   gradient arcs, wave stacks, tick fields) that CSS can only approximate, so the card
+   ships whole rather than half-redrawn. */
+.rp-scores { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.rp-scores img { display: block; width: 166px; height: 166px; border-radius: 20px; }
+
+/* ── Recommendation ────────────────────────────────────────────────────────
+   Carried over unchanged from the previous Records page — the design reuses it. */
+.rec-scroll { display: flex; gap: 8px; overflow-x: auto; margin: 0 -12px; padding: 0 12px 4px; }
+.rec-scroll::-webkit-scrollbar { display: none; }
+.rec-card {
+  flex: 0 0 308px;
+  background: #fff;
+  border-radius: 40px;
+  padding: 4px;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+.rec-thumb {
+  position: relative;
+  height: 189px;
+  border-radius: 38px;
+  background-size: cover;
+  background-position: center;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+.rec-thumb.rec-dark::before { content: ""; position: absolute; inset: 0; border-radius: 38px; background: rgba(0,0,0,0.2); }
+.rec-badge {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 80px;
+  background: rgba(255,255,255,0.9);
+  color: var(--color-neutral-600);
+  font-family: var(--font-supreme);
+  font-size: 12px;
+  letter-spacing: -0.5px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.12);
+}
+.rec-badge .badge-fire { width: 11px; height: 13px; display: block; flex: none; }
+.rec-info { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 16px 16px 20px; }
+.rec-txt { flex: 1; min-width: 0; }
+.rec-title { margin: 0 0 4px; font-family: var(--font-supreme-bold); font-size: 18px; line-height: 1.2; letter-spacing: -0.54px; color: var(--color-black); }
+.rec-meta { margin: 0; font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.5px; color: var(--color-neutral-500); }
+.rec-start {
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 4px;
+  background: var(--color-red);
+  color: #fff;
+  border-radius: 999px;
+  padding: 6px 12px 6px 16px;
+  font-family: var(--font-supreme-bold);
+  font-size: 14px;
+  letter-spacing: -0.5px;
+}
+.rec-start img { width: 18px; height: 18px; filter: brightness(0) invert(1); }
+
+/* Report app bar: back, the pack pill, share. */
+.rp-appbar { display: flex; align-items: center; justify-content: space-between; height: 66px; padding: 0 16px; box-sizing: border-box; }
+.rp-appbar .icon-btn { background: none; border: none; padding: 0; display: block; cursor: pointer; }
+.rp-appbar img { width: 24px; height: 24px; display: block; }
+.rp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.2);
+  text-decoration: none;
+  font-family: var(--font-supreme-bold);
+  font-size: 15px;
+  letter-spacing: -0.5px;
+  color: #fff;
+}
+.rp-pill img { width: 16px; height: 16px; filter: brightness(0) invert(1); }
+
+/* Sections rise in once on arrival, staggered — same curve as the Packs and Library
+   lists so every list screen in the app enters the same way. */
+.rp-body > .rp-seg,
+.rp-body > .rp-stats,
+.rp-body > .rp-sec { animation: rp-rise .42s cubic-bezier(.2,.85,.3,1) both; }
+.rp-body > *:nth-child(2) { animation-delay: .05s; }
+.rp-body > *:nth-child(3) { animation-delay: .10s; }
+.rp-body > *:nth-child(4) { animation-delay: .15s; }
+.rp-body > *:nth-child(5) { animation-delay: .20s; }
+.rp-body > *:nth-child(6) { animation-delay: .25s; }
+@keyframes rp-rise { from { opacity: 0; transform: translateY(18px); } }
