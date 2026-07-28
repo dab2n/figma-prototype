@@ -5,9 +5,9 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=823"></script>
-<script defer src="assets/gauge.js?v=823"></script>
-<script defer src="assets/scores.js?v=823"></script>
+<script defer src="assets/openext.js?v=825"></script>
+<script defer src="assets/gauge.js?v=825"></script>
+<script defer src="assets/scores.js?v=825"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,8 +15,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Records</title>
-<link rel="stylesheet" href="styles/main.css?v=823">
-<link rel="stylesheet" href="styles/report.css?v=823">
+<link rel="stylesheet" href="styles/main.css?v=825">
+<link rel="stylesheet" href="styles/report.css?v=825">
 </head>
 <body>
 <div class="phone">
@@ -192,15 +192,15 @@
   // Recommendations rotate with the record being viewed. Thumbnails come from the
   // project's own sport photography rather than new stock, so the art direction holds.
   var RECS = [
-    ['rec-curry.png',        "Curry's Step Back",   'Pro Pack · 7m',     'Boosts Agility', ''],
-    ['rec-strength.png',     'Strength for Agility', 'Pro Pack · 7m',    'HOT',            'rec-dark'],
-    ['rec-ladder.png',       'Ladder Footwork',     'Pro Pack · 7m',     'New',            'rec-dark'],
-    ['pack-sprinter.png',    'Sprint Starts',       'Pro Pack · 9m',     'Boosts Speed',   'rec-dark'],
-    ['pack-interval.png',    'Interval Push',       'Creator Pack · 12m', 'HOT',           'rec-dark'],
-    ['pack-legburn.png',     'Leg Burn Set',        'Pro Pack · 8m',     'New',            'rec-dark'],
-    ['movement-boxing.png',  'Southpaw Drill',      'Pro Pack · 10m',    'Boosts Rhythm',  'rec-dark'],
-    ['recent-tennis.png',    'Baseline Rally',      'Creator Pack · 11m', 'New',           'rec-dark'],
-    ['recent-basketball.png', 'Court Footwork',     'Pro Pack · 6m',     'Boosts Balance', 'rec-dark']
+    ['rec-curry.png',        "Curry's Step Back",   'Pro Pack · 7m',     'Boosts Agility', '',         'curry'],
+    ['rec-strength.png',     'Strength for Agility', 'Pro Pack · 7m',    'HOT',            'rec-dark', 'strength'],
+    ['rec-ladder.png',       'Ladder Footwork',     'Pro Pack · 7m',     'New',            'rec-dark', 'ladder'],
+    ['pack-sprinter.png',    'Sprint Starts',       'Pro Pack · 9m',     'Boosts Speed',   'rec-dark', 'sprinter'],
+    ['pack-interval.png',    'Interval Push',       'Creator Pack · 12m', 'HOT',           'rec-dark', 'interval'],
+    ['pack-legburn.png',     'Leg Burn Set',        'Pro Pack · 8m',     'New',            'rec-dark', 'legburn'],
+    ['movement-boxing.png',  'Southpaw Drill',      'Pro Pack · 10m',    'Boosts Rhythm',  'rec-dark', 'boxing'],
+    ['recent-tennis.png',    'Baseline Rally',      'Creator Pack · 11m', 'New',           'rec-dark', 'tennis'],
+    ['recent-basketball.png', 'Court Footwork',     'Pro Pack · 6m',     'Boosts Balance', 'rec-dark', 'basketball']
   ];
 
   var $ = function (id) { return document.getElementById(id); };
@@ -269,7 +269,7 @@
     if (!host) return;
     host.innerHTML = RECS.slice(0, 3).map(function (_, n) {
       var r = RECS[(start + n) % RECS.length];
-      return '<a class="rec-card" href="pyeongso.html">' +
+      return '<a class="rec-card" href="pyeongso.html?pack=' + r[5] + '">' +
         '<div class="rec-thumb ' + r[4] + '" style="background-image:url(\'assets/photos/' + r[0] + '\');">' +
         '<span class="rec-badge">' + r[3] + '</span></div>' +
         '<div class="rec-info"><div class="rec-txt">' +
