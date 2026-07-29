@@ -13,22 +13,32 @@
    Red-to-white wash exported from the design (the frame's 블러 layer); every
    text element sits on top of it as real text. */
 .rp-hero { position: relative; height: 462px; flex: none; }
+/* 블러 (729:8538): 677 x 701, its top 227 above the frame's content box — so on the page
+   it runs from -183 to 518, not down to 620. The blob's own radial centre is up and to
+   the right, which is where the red stays while the cream sweeps in from the lower left.
+   Overflowing the frame on both sides is the point: only the falloff belongs on screen.
+   Every offset is off the BOTTOM, since .rp-hero is a fixed 462 and the hero's top is
+   where the status bar was. */
 .rp-hero-bg {
   position: absolute;
-  top: 0; left: 0;
-  width: 360px; height: 620px;
+  top: -183px;
+  /* The blob's radial centre is 66% across its own box; putting that at x≈260 is what
+     keeps the red in the upper right while the cream sweeps up from the lower left. */
+  left: -187px;
+  width: 677px; height: 701px;
   z-index: 0;
   pointer-events: none;
-  /* Same blob as the recap, at this frame's size. Its core is #FA3030 out to 70% of the
-     radius, and outside the path the SVG is transparent — so the core colour goes behind
-     it to close the corners, exactly as on the recap. */
-  object-fit: cover;
+  /* The blob's core colour behind it, so the corners it does not reach close at the
+     colour they already are — same as the recap. Masked away with the artwork. */
   background: #FA3030;
-  /* Fades itself out into the page instead of stopping dead — the hard edge landed
-     right on the top of the first card row. */
-  -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
+  /* Fades out into the page rather than stopping dead. In element space 100% is the
+     blob's own foot, so the ramp lands around y 400 on the page — above the cards. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 96%);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 96%);
+  /* Arriving from the recap, the whole wash rides up into place instead of cutting. */
+  animation: rp-wash-rise .62s cubic-bezier(.2,.8,.25,1) both;
 }
+@keyframes rp-wash-rise { from { transform: translateY(90px); } }
 /* z-index only. This used to also set `position: relative`, which outranked the
    absolute placement below (`.rp-hero > *:not(...)` beats a bare `.rp-big`) and dropped
    the number, caption and gauge back into flow, each shoved down by its own `top`. */
@@ -80,9 +90,6 @@
   gap: 4px;
   color: #fff;
 }
-/* Pairs with .recap-pct: arriving from the recap, the score morphs into this place
-   instead of the page simply cutting. */
-.rp-big { view-transition-name: rp-score; }
 .rp-big .sign { font-family: var(--font-supreme-bold); font-size: 22px; letter-spacing: -0.5px; padding-bottom: 12px; }
 .rp-big .n { font-family: var(--font-offbit); font-weight: 700; font-size: 60px; line-height: 1; }
 .rp-big .u { font-family: var(--font-supreme-bold); font-size: 22px; letter-spacing: -0.5px; padding-bottom: 8px; }
@@ -104,6 +111,17 @@
    joins a moment after the marker sets off and lands with it (gauge.js). */
 .rp-big .n { transition: opacity .22s ease; }
 .rp-big .n.wait { opacity: 0; }
+
+/* Report entrance, in order: the curve draws itself left to right, and only when it has
+   finished does the marker set off — with the score sliding up under it at the same
+   moment. Records (progress.html) has neither class and is unaffected. */
+.rp-draw .arc-line { stroke-dasharray: 100; stroke-dashoffset: 100; animation: arc-draw .6s cubic-bezier(.4,0,.2,1) both; }
+@keyframes arc-draw { to { stroke-dashoffset: 0; } }
+.rp-draw .arc-dot, .rp-draw #arcVal { opacity: 0; }
+.rp-draw .rp-big { opacity: 0; transform: translateY(22px); }
+.rp-draw.rp-landed .arc-dot, .rp-draw.rp-landed #arcVal { opacity: 1; transition: opacity .3s ease; }
+.rp-draw.rp-landed .rp-big { opacity: 1; transform: translateY(0); }
+.rp-draw .rp-big { transition: opacity .4s ease, transform .52s cubic-bezier(.2,.8,.3,1); }
 
 /* ── Body ──────────────────────────────────────────────────────────────────
    Fades out of the hero wash so there is no seam where the artwork stops. */

@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=864"></script>
-<script defer src="assets/gauge.js?v=864"></script>
-<script defer src="assets/scores.js?v=864"></script>
+<script defer src="assets/openext.js?v=865"></script>
+<script defer src="assets/gauge.js?v=865"></script>
+<script defer src="assets/scores.js?v=865"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,8 +16,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Report</title>
-<link rel="stylesheet" href="styles/main.css?v=864">
-<link rel="stylesheet" href="styles/report.css?v=864">
+<link rel="stylesheet" href="styles/main.css?v=865">
+<link rel="stylesheet" href="styles/report.css?v=865">
 </head>
 <body>
 <div class="phone">
@@ -51,7 +51,8 @@
             <stop offset="1" stop-color="#fff" stop-opacity="0"/>
           </linearGradient>
         </defs>
-        <path d="M 19 64 A 261 188.5 0 0 1 341 64" stroke="url(#gaugeFade)" stroke-width="6" stroke-linecap="round"/>
+        <!-- pathLength 100 so the draw-on dash maths is just percentages. -->
+        <path class="arc-line" pathLength="100" d="M 19 64 A 261 188.5 0 0 1 341 64" stroke="url(#gaugeFade)" stroke-width="6" stroke-linecap="round"/>
         <image class="arc-dot" id="arcRing" href="assets/icons/body-ring.png" x="208.5" y="7.5" width="39" height="39"/>
         <text id="arcVal" x="228" y="67" text-anchor="middle" fill="#fff" font-family="Supreme, sans-serif" font-size="12" opacity=".92">78.8</text>
         <text x="48"  y="90" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">0</text>
@@ -187,7 +188,17 @@ window.addEventListener('pagereveal', function (e) {
 </script>
 <script>
 // Same arrival motion as Records: the score counts up and the marker rides in.
-window.addEventListener('DOMContentLoaded', function () { window.rpGauge.to(78.8, 78.8); });
+// Three beats, in order: the curve draws itself left to right, then the marker travels to
+// its place while the score slides up under it. The number does not count — the recap this
+// arrives from has just done that, and twice in a row reads as a stutter.
+window.addEventListener('DOMContentLoaded', function () {
+  var hero = document.querySelector('.rp-hero');
+  hero.classList.add('rp-draw');
+  setTimeout(function () {
+    hero.classList.add('rp-landed');
+    window.rpGauge.to(78.8, 78.8, { noCount: true });
+  }, 640);
+});
 </script>
 </body>
 </html>

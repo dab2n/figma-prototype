@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=864"></script>
+<script defer src="assets/openext.js?v=865"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,8 +14,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Session Recap</title>
-<link rel="stylesheet" href="styles/main.css?v=864">
-<link rel="stylesheet" href="styles/recap.css?v=864">
+<link rel="stylesheet" href="styles/main.css?v=865">
+<link rel="stylesheet" href="styles/recap.css?v=865">
 </head>
 <body>
 <div class="phone">
@@ -64,10 +64,15 @@
   // the runner dissolves into the red and returns out of it, so the loop has no seam.
   // Nothing under the clip but the screen's black, and everything over it is lighten —
   // so "faded out" is exactly the blob's own red.
-  var FADE = 0.5;
+  var FADE = 0.22, LEAD = 0.12;   // short crossfade, and the restart comes a beat early
   (function fade() {
     var d = clip.duration, t = clip.currentTime;
-    if (d) clip.style.opacity = Math.max(0, Math.min(1, t / FADE, (d - t) / FADE));
+    if (d) {
+      // Rewinding before the last frame means the incoming fade-in has already begun by
+      // the time the outgoing one would have finished — there is never an empty moment.
+      if (t >= d - LEAD) clip.currentTime = 0;
+      clip.style.opacity = Math.max(0, Math.min(1, t / FADE, (d - LEAD - t) / FADE));
+    }
     requestAnimationFrame(fade);
   })();
 

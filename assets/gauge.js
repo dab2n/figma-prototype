@@ -46,12 +46,22 @@ window.rpGauge = (function () {
     cur = { gain: gain, score: score };
   }
 
-  function to(gain, score) {
+  // opts.noCount: the marker still travels, but the headline is simply its final value.
+  // The post-workout Report uses it — the recap it arrives from has just counted a number
+  // up, and doing it twice in a row reads as a stutter.
+  function to(gain, score, opts) {
     cancelAnimationFrame(raf);
     if (reduce) { holdHeadline(false); settle(gain, score); return; }
 
+    var noCount = !!(opts && opts.noCount);
     var g0 = cur.gain, s0 = cur.score, t0 = 0, joined = false;
-    holdHeadline(true);
+    if (noCount) {                       // headline reads its final value from the start
+      var n0 = $('gainNum');
+      if (n0) n0.textContent = gain.toFixed(1);
+      g0 = gain;
+      joined = true;
+    }
+    holdHeadline(!noCount);
     place(s0);
 
     raf = requestAnimationFrame(function frame(t) {

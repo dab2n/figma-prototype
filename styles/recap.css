@@ -39,7 +39,7 @@
   position: absolute;
   inset: 0;
   mix-blend-mode: lighten;
-  background: linear-gradient(180deg, #050A0A 61%, #FFFFFF 80%);
+  background: linear-gradient(180deg, #050A0A 78%, #FFFFFF 100%);
   pointer-events: none;
 }
 /* The blob, full frame. Its radial runs solid #FA3030 out to 73%, then orange, peach and
@@ -79,10 +79,7 @@
 /* Sits at the design's x99 / y566, left-aligned from there rather than centred. */
 .recap-match {
   position: absolute;
-  /* Lifted from the design's 566: the fill now reaches pure white at 80% (624px), and
-     at 566 the white number sat inside that and vanished. This keeps it entirely above
-     the white, where the design shows it. */
-  top: 496px;
+  top: 566px;
   left: 99px;
   display: flex;
   flex-direction: column;
@@ -112,10 +109,6 @@
   transition: opacity .34s ease, transform .42s cubic-bezier(.2,.8,.3,1);
 }
 .recap-match.enter .recap-pct { opacity: 1; transform: translateY(0); }
-/* The score is the one thing both screens have, so it is the one thing that travels:
-   the report rises from below while this lifts into the place it holds up there,
-   the same idea as the profile carrying the pack fold. */
-.recap-pct { view-transition-name: rp-score; }
 /* Right-aligned in the width the final score needs, so the units digit never moves:
    the resting 0.0 sits in the same column 78.8 lands in, and the count does not shove
    "pts" around as it gains a digit. */
@@ -124,14 +117,17 @@
 
 /* Pull-up handle at the very bottom. #FA3030 with a 20% white layer over it, which is
    rgb(251,89,89) — the chevron is inline SVG so it takes the same colour from here. */
+/* 하단바 (730:8935): a 100-tall container on the frame's bottom edge, 16px side padding,
+   its content 8px in from the top — a 30px icon, 2px, then the 21px label. That puts the
+   block at 688–741, i.e. 39px off the bottom. */
 .recap-full {
   position: absolute;
-  bottom: 24px;
-  left: 0; right: 0;
+  bottom: 39px;
+  left: 16px; right: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   text-decoration: none;
   color: #FB5959;
   animation: hint-nudge 3.6s ease-in-out 1.2s infinite;
@@ -143,5 +139,5 @@
   9%  { transform: translateY(-6px); }
   22% { transform: translateY(0); }
 }
-.recap-full svg { width: 20px; height: 20px; display: block; }
-.recap-full span { font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; }
+.recap-full svg { width: 30px; height: 30px; display: block; }
+.recap-full span { font-family: var(--font-supreme-bold); font-size: 15px; line-height: 21px; letter-spacing: -0.5px; }
