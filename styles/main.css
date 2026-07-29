@@ -1,4 +1,4 @@
-@import url('./tokens.css?v=860');
+@import url('./tokens.css?v=861');
 
 /* Tell the phone which way each screen leans, so its own chrome — the gesture bar most
    of all — picks the matching side instead of always landing light. Declared per page in
@@ -284,9 +284,9 @@ button { font-family: inherit; }
     height: calc(56px + max(24px, env(safe-area-inset-bottom, 0px)));
     padding-bottom: 0;
   }
-  /* iOS standalone draws its own home indicator inside that inset (openext.js sets the
-     class off navigator.standalone), so ours would be a second line in the same strip. */
-  html.ios-pwa .tabbar .home-indicator { display: none; }
+  /* The drawn pill stays on every platform — it is part of the design, and with the
+     strip no longer doubled it lands within a couple of pixels of where iOS draws its
+     own, so the two read as one bar rather than two. */
   /* ponytail: on Android this padding is a no-op today and the black tab bar stops
      above a light gesture bar we cannot colour. Not a bug here — the opt-in for
      drawing under it is viewport-fit=cover (Chrome 135+), which the viewport meta

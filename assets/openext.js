@@ -5,10 +5,6 @@
 (function () {
   var ua = navigator.userAgent.toLowerCase();
 
-  // iOS home-screen apps are the one platform that draws its own home indicator inside
-  // the bottom safe area. main.css drops our mocked pill there so the two do not stack.
-  if (navigator.standalone) document.documentElement.classList.add('ios-pwa');
-
   function target() {
     if (ua.indexOf('kakaotalk') > -1)
       return function () { location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href); };

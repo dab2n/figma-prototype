@@ -55,6 +55,16 @@
   pointer-events: none;
 }
 
+/* Bottom of the frame goes hazy and white. Sits after the glow in the DOM so it lands
+   on top of the imagery but under the title, the score and the pull-up handle. */
+.recap-fade {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: lighten;
+  background: linear-gradient(180deg, #050A0A 78%, #FFFFFF 100%);
+  pointer-events: none;
+}
+
 /* Everything else on the screen sits above the clip. */
 .recap-screen > *:not(.recap-clip) { z-index: 2; }
 
@@ -94,9 +104,9 @@
   transition: opacity .45s ease, transform .5s cubic-bezier(.2,.8,.3,1);
 }
 .recap-match.done .recap-match-label { opacity: 1; transform: translateY(0); }
-.recap-pct { display: flex; align-items: flex-end; gap: 2px; }
-.recap-pct .num { font-family: var(--font-offbit); font-weight: 700; font-size: 60px; line-height: 0.95; }
-.recap-pct .unit { font-family: var(--font-supreme-bold); font-size: 32px; line-height: 1.2; letter-spacing: -1.5px; padding-bottom: 6px; }
+.recap-pct { display: flex; align-items: baseline; gap: 6px; }
+.recap-pct .num { font-family: var(--font-offbit); font-weight: 700; font-size: 72px; line-height: 1.1; letter-spacing: -1.44px; }
+.recap-pct .unit { font-family: var(--font-supreme-bold); font-size: 18px; line-height: 1.2; letter-spacing: -0.54px; }
 
 /* Pull-up handle at the very bottom — bounces up twice on a loop, hinting "scroll up". */
 .recap-full {
