@@ -1,0 +1,57 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>check — pack detail: click vs drag</title>
+<!-- Open this in a browser. Everything must read PASS.
+     .dj-hero is both a drag handle for the fold AND the thing the back button, the
+     tap-to-expand description and the Start link sit on. Those two jobs have collided
+     twice now (a pointer capture taken on pointerdown retargets the click to the
+     capturing element, which silently ate every click inside the hero), so the rule is
+     checked here rather than by eye. -->
+<style>body{font:14px/1.7 ui-monospace,monospace;padding:24px}
+.p{color:#158a3a}.f{color:#c00;font-weight:700}iframe{position:absolute;left:-9999px}</style>
+<h1 style="font:600 16px/1.4 system-ui">pack detail — click vs drag</h1>
+<pre id="o">running…</pre>
+<iframe src="pyeongso.html" width="360" height="780"></iframe>
+<script>
+addEventListener('load', function () { setTimeout(function () {
+  var f = document.querySelector('iframe'), d = f.contentDocument, w = f.contentWindow;
+  var scr = d.getElementById('djScreen');
+  function pe(el, t, y) {
+    el.dispatchEvent(new w.PointerEvent(t, { bubbles: true, cancelable: true,
+      pointerId: 1, pointerType: 'mouse', clientX: 100, clientY: y }));
+  }
+  function run(el, dy) {
+    scr.scrollTop = 0;
+    var hit = null;
+    var spy = function (e) {
+      var a = e.target.closest('a');
+      hit = a ? 'a:' + a.getAttribute('href') : (e.target.className || e.target.tagName);
+    };
+    d.addEventListener('click', spy, true);
+    var r = el.getBoundingClientRect(), y = r.top + r.height / 2;
+    pe(el, 'pointerdown', y);
+    for (var k = 1; k <= 4; k++) pe(el, 'pointermove', y - dy * k / 4);
+    pe(el, 'pointerup', y - dy);
+    if (!dy) el.dispatchEvent(new w.PointerEvent('click',
+      { bubbles: true, cancelable: true, pointerId: 1, clientX: 100, clientY: y }));
+    d.removeEventListener('click', spy, true);
+    return { click: hit, scrolled: Math.round(scr.scrollTop) };
+  }
+  var back = d.querySelector('.app-bar-transparent a'), copy = d.querySelector('.dj-copy');
+  var a = run(back, 0), b = run(copy, 0), c = run(copy, 120);
+  var checks = [
+    ['back button click reaches its <a>',        a.click === 'a:packs.html'],
+    ['back button click does not move the fold', a.scrolled === 0],
+    ['description click reaches .dj-copy',       /dj-/.test(String(b.click))],
+    ['description click expands the text',       copy.classList.contains('desc-open')],
+    ['description click does not move the fold', b.scrolled === 0],
+    ['a 120px drag moves the fold',              c.scrolled > 50],
+    ['a drag fires no click',                    c.click === null]
+  ];
+  var bad = checks.filter(function (x) { return !x[1]; }).length;
+  document.getElementById('o').innerHTML = checks.map(function (x) {
+    return '<span class="' + (x[1] ? 'p">PASS' : 'f">FAIL') + '</span>  ' + x[0];
+  }).join('\n') + '\n\n' + (bad ? bad + ' FAILING' : 'all clear') +
+    '\n\nraw: ' + JSON.stringify([a, b, c]);
+}, 2800); });
+</script>

@@ -158,7 +158,7 @@
   // as a handle: grab it anywhere, including over the joined row and the Start button.
   function handle(el, mouseOnly) {
     if (!el) return;
-    var id = null, y0 = 0, top0 = 0, moved = 0;
+    var id = null, y0 = 0, top0 = 0, moved = 0, captured = 0;
     el.addEventListener('pointerdown', function (e) {
       // A finger on something INSIDE the scroller already drags the fold, natively and
       // better; taking it over here would move it twice. Only the mouse needs help.
@@ -167,25 +167,41 @@
       holding = true;
       rollDown();                                   // the intro is over
       clearTimeout(idle);
-      if (el.setPointerCapture) { try { el.setPointerCapture(id); } catch (err) {} }
+      // NOTE: no setPointerCapture here. While a pointer is captured the browser fires
+      // the click at the CAPTURE TARGET, not at what was under the cursor — so capturing
+      // on pointerdown swallowed every click inside the element. That is what killed the
+      // back button, the tap-to-expand description and the Start link. Capture is only
+      // taken once this is provably a drag, below.
     });
+    // SLOP px of drift is a click, not a drag. Below it nothing moves at all — a mouse
+    // wobbles a few pixels on the way down, and this element sits over the back button
+    // and the tap-to-expand description.
+    var SLOP = 8;
     el.addEventListener('pointermove', function (e) {
       if (id === null || e.pointerId !== id) return;
       var dy = y0 - e.clientY;                      // up is forward
       if (Math.abs(dy) > moved) moved = Math.abs(dy);
+      if (moved <= SLOP) return;
+      if (!captured) {
+        captured = 1;                               // now it is a drag; keep the pointer
+        y0 = e.clientY; dy = 0;                     // re-baseline so it does not jump
+        if (el.setPointerCapture) { try { el.setPointerCapture(id); } catch (err) {} }
+      }
       screen.scrollTop = Math.max(0, top0 + dy);
     });
     ['pointerup', 'pointercancel'].forEach(function (t) {
       el.addEventListener(t, function (e) {
         if (id === null) return;
-        id = null;
+        var wasDrag = captured;
+        if (captured && el.releasePointerCapture) { try { el.releasePointerCapture(id); } catch (err) {} }
+        id = null; captured = 0;
         holding = false;
-        if (moved > 6) setTimeout(settle, 20);      // a drag: land on the nearest stop
+        if (wasDrag) setTimeout(settle, 20);       // a drag: land on the nearest stop
       });
     });
     // A drag that happens to end over the Start link must not follow it.
     el.addEventListener('click', function (e) {
-      if (moved > 6) { e.preventDefault(); e.stopPropagation(); moved = 0; }
+      if (moved > SLOP) { e.preventDefault(); e.stopPropagation(); moved = 0; }
     }, true);
   }
   handle(document.getElementById('djGrab'));
