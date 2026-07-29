@@ -50,9 +50,11 @@
   inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
-  /* The path stops ~64px short of the frame at both ends once it is cover-fitted, and
-     outside the path the SVG is transparent — which let the clip's black corners through.
-     Scaled up until the solid core reaches the top edge; the foot is white anyway. */
+  /* The blob is an egg, so scaling alone never reaches the top CORNERS — the shape is
+     narrower there than the frame, and outside the path the SVG is transparent, which is
+     what let the clip's black through. The core colour behind it closes those corners at
+     exactly the colour the core already is, so the seam is invisible. */
+  background: #FA3030;
   transform: scale(1.32);
   mix-blend-mode: lighten;
   pointer-events: none;
@@ -107,7 +109,10 @@
   transition: opacity .34s ease, transform .42s cubic-bezier(.2,.8,.3,1);
 }
 .recap-match.enter .recap-pct { opacity: 1; transform: translateY(0); }
-.recap-pct .num { font-family: var(--font-offbit); font-weight: 700; font-size: 72px; line-height: 1.1; letter-spacing: -1.44px; }
+/* Right-aligned in the width the final score needs, so the units digit never moves:
+   the resting 0.0 sits in the same column 78.8 lands in, and the count does not shove
+   "pts" around as it gains a digit. */
+.recap-pct .num { font-family: var(--font-offbit); font-weight: 700; font-size: 72px; line-height: 1.1; letter-spacing: -1.44px; min-width: 131px; text-align: right; }
 .recap-pct .unit { font-family: var(--font-supreme-bold); font-size: 18px; line-height: 1.2; letter-spacing: -0.54px; }
 
 /* Pull-up handle at the very bottom. #FA3030 with a 20% white layer over it, which is
