@@ -454,7 +454,9 @@
    The blur belongs to the CARD WALLS, not to the field. The sharp copy stops short of
    each wall and a blurred copy carries the last few ticks out through it — blurring the
    whole field, which is what this did before, just erased the pattern. */
-@property --pass { syntax: '<length>'; inherits: true; initial-value: 0px; }
+/* Starts OFF the card, not at x 0: the bar has to arrive, so it must not be sitting at
+   the left edge waiting for its cue. 6px wide at -10px puts it fully outside the clip. */
+@property --pass { syntax: '<length>'; inherits: true; initial-value: -10px; }
 .st-ticks {
   position: absolute; z-index: 1;
   top: 67.96px; width: 77.6px; height: 32px;
@@ -497,12 +499,16 @@
 /* The bar's leading edge IS where the field turns red, so one variable drives both. */
 .st-ticks.hot { clip-path: inset(0 calc(100% - var(--pass) - 1.8px) 0 0); }
 
-/* Stability's order: the ticks flick in left to right, the bar then runs out to its mark
-   and eases onto it, and the field turns red behind it as it passes. */
-.rp-scores.run .st-ticks { animation: sc-grow .22s linear var(--d) both; }
+/* Stability's order: every tick flicks in left to right in the DEFAULT colour, then the
+   bar comes in from off the left edge, eases onto its mark, and turns the field red
+   behind it as it goes.
+   The wipe is on the two default banks only. Run it on .hot as well and its end frame —
+   inset(0 0 0 0) — outranks the --pass clip below, which painted the whole left bank red
+   before the bar had moved at all. .hot is driven by --pass and nothing else. */
+.rp-scores.run .st-ticks.l, .rp-scores.run .st-ticks.r { animation: sc-grow .22s linear var(--d) both; }
 .rp-scores.run .st-ticks.r { animation-delay: calc(var(--d) + 180ms); }
-.rp-scores.run .sc.st { animation: st-pass .6s cubic-bezier(.12,.78,.22,1) calc(var(--d) + 420ms) both; }
-@keyframes st-pass { from { --pass: 0px; } to { --pass: 79px; } }
+.rp-scores.run .sc.st { animation: st-pass .62s cubic-bezier(.12,.78,.22,1) calc(var(--d) + 440ms) both; }
+@keyframes st-pass { from { --pass: -10px; } to { --pass: 79px; } }
 
 /* The grey guides: the back layer of the card, and on their own beat — the graph draws,
    then the guide extends, then the marker lands. Rhythm's three follow the wave left to
