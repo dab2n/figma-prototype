@@ -262,3 +262,6 @@
 .dj-open .dj-bar { pointer-events: none; }
 /* The content already ends with it, so leave room rather than letting it sit on the copy. */
 .dj-sheet .creator-content { padding-bottom: 108px; }
+
+/* Inside .dj-photo, so the fold's scale and blur come for free. */
+.dj-photo video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }

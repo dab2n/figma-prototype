@@ -119,6 +119,9 @@
 
   if (hero) {
     hero.style.backgroundImage = "url('assets/photos/" + p.photo + "')";
+    // The looping clip belongs to Sean's pack only; every other pack is a still.
+    var clip = hero.querySelector('video');
+    if (clip) clip.remove();
     // Landscape thumbs crop hard in a portrait hero; a few carry their own framing.
     if (p.pos) hero.style.backgroundPosition = p.pos;
   }

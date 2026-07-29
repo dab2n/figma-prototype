@@ -111,3 +111,7 @@
 .pack-card:nth-child(2) { animation-delay: .06s; }
 .pack-card:nth-child(3) { animation-delay: .12s; }
 @keyframes pack-slide { from { opacity: 0; transform: translateY(18px); } }
+
+/* Video thumbnails fill the same box as the background image and sit under the
+   avatars/badges, which already carry z-index 1. */
+.pack-thumb video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }

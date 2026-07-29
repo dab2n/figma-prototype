@@ -6,10 +6,10 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#8E7E65">
-<script defer src="assets/openext.js?v=858"></script>
-<script defer src="assets/packs.js?v=858"></script>
-<script defer src="assets/enter.js?v=858"></script>
-<script defer src="assets/process.js?v=858"></script>
+<script defer src="assets/openext.js?v=859"></script>
+<script defer src="assets/packs.js?v=859"></script>
+<script defer src="assets/enter.js?v=859"></script>
+<script defer src="assets/process.js?v=859"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,10 +17,10 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Sean's Final 1km Pace</title>
-<link rel="stylesheet" href="styles/main.css?v=858">
-<link rel="stylesheet" href="styles/detail.css?v=858">
-<link rel="stylesheet" href="styles/creator.css?v=858">
-<link rel="stylesheet" href="styles/enter.css?v=858">
+<link rel="stylesheet" href="styles/main.css?v=859">
+<link rel="stylesheet" href="styles/detail.css?v=859">
+<link rel="stylesheet" href="styles/creator.css?v=859">
+<link rel="stylesheet" href="styles/enter.css?v=859">
 </head>
 <body>
 <div class="phone">
@@ -31,7 +31,12 @@
   <div class="screen dj-screen" id="djScreen">
 
     <div class="dj-hero">
-      <div class="dj-photo" style="background-image:url('assets/photos/hero-sean-running.png');"></div>
+      <!-- The still stays: it is the poster, and packs.js samples it for the screen's
+           tone. The video sits inside .dj-photo rather than beside it so the fold's
+           scale and blur, which live on .dj-photo, apply to it unchanged. -->
+      <div class="dj-photo" style="background-image:url('assets/photos/hero-sean-running.png');">
+        <video src="assets/photos/sean-running.mp4" poster="assets/photos/hero-sean-running.png" autoplay muted loop playsinline></video>
+      </div>
       <div class="dj-wash"></div>
 
       <div class="status-bar on-dark"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>

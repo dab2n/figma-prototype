@@ -207,3 +207,19 @@
 .movement-collage img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 .dim { color: var(--color-neutral-600); }
+
+/* "차라락" entrance — same curve and distance as Packs, the Library and My.
+   Leaf rows, not whole sections, so the page arrives in reading order: hero, then each
+   recent row, then the movement cards. `both` holds them hidden until their turn. */
+.hero-section, .section-title, .recent-item, .movement-card {
+  animation: home-slide .42s cubic-bezier(.2,.85,.3,1) both;
+}
+.section:nth-of-type(1) .section-title { animation-delay: .06s; }
+.recent-item:nth-child(1) { animation-delay: .10s; }
+.recent-item:nth-child(2) { animation-delay: .14s; }
+.recent-item:nth-child(3) { animation-delay: .18s; }
+.section:nth-of-type(2) .section-title { animation-delay: .22s; }
+.movement-card:nth-child(1) { animation-delay: .26s; }
+.movement-card:nth-child(2) { animation-delay: .30s; }
+.movement-card:nth-child(3) { animation-delay: .34s; }
+@keyframes home-slide { from { opacity: 0; transform: translateY(18px); } }
