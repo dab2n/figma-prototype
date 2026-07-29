@@ -1,4 +1,4 @@
-@import url('./tokens.css?v=859');
+@import url('./tokens.css?v=860');
 
 /* Tell the phone which way each screen leans, so its own chrome — the gesture bar most
    of all — picks the matching side instead of always landing light. Declared per page in
@@ -77,6 +77,15 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
   height: calc(100% - 80px);
   border-radius: 40px;
   overflow: hidden auto;
+}
+
+/* Clips are decoration, never a player: no controls, and no iOS start-playback button
+   on the frames where autoplay is refused (Low Power Mode). assets/clips.js asks for
+   play() when the card is actually met; if that is refused too, the poster stays. */
+video::-webkit-media-controls,
+video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
 }
 
 /* Status bar — rendered from the reference Figma "Status Bar" SVG (light + dark) */
@@ -242,8 +251,10 @@ button { font-family: inherit; }
      (home.css sets 700px/634px at equal specificity but loads later). Without it
      the home screen stays 700px on tall phones, leaving a dead band above the
      pinned navbar. */
-  body .phone:has(> .tabbar) > .screen { height: calc(100dvh - 80px - env(safe-area-inset-bottom, 0px)); border-radius: 0 0 40px 40px; }
-  body .phone.notif-on:has(> .tabbar) > .screen { height: calc(100dvh - 80px - 66px - env(safe-area-inset-bottom, 0px)); }
+  /* Same expression as .tabbar's height — the content fills whatever is left, so the
+     page is exactly one viewport tall on any phone. */
+  body .phone:has(> .tabbar) > .screen { height: calc(100dvh - 56px - max(24px, env(safe-area-inset-bottom, 0px))); border-radius: 0 0 40px 40px; }
+  body .phone.notif-on:has(> .tabbar) > .screen { height: calc(100dvh - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px))); }
   /* No title bar on these screens, so the back/kebab row sits directly under the
      phone's own status bar instead of below the 44px ours used to occupy. */
   .app-bar-transparent { top: 0; }
@@ -263,11 +274,19 @@ button { font-family: inherit; }
      scroll over the OS status bar). `body` prefix beats .ob-bottom's padding
      shorthand in onboarding.css, which loads later. */
   .tabbar { position: fixed; left: 0; bottom: 0; width: 100vw; }
+  /* 56px of icons plus ONE gesture strip — not the design's 24px strip stacked on top
+     of the phone's own inset, which is what left a dead black band under the drawn
+     pill on iPhone (inset 34) while looking right on Galaxy (inset 0). max() takes
+     whichever strip the platform actually has, and the pill below is dropped wherever
+     the OS draws its own. */
   body .tabbar {
     box-sizing: border-box;
-    height: calc(80px + env(safe-area-inset-bottom, 0px));
-    padding-bottom: env(safe-area-inset-bottom, 0px);
+    height: calc(56px + max(24px, env(safe-area-inset-bottom, 0px)));
+    padding-bottom: 0;
   }
+  /* iOS standalone draws its own home indicator inside that inset (openext.js sets the
+     class off navigator.standalone), so ours would be a second line in the same strip. */
+  html.ios-pwa .tabbar .home-indicator { display: none; }
   /* ponytail: on Android this padding is a no-op today and the black tab bar stops
      above a light gesture bar we cannot colour. Not a bug here — the opt-in for
      drawing under it is viewport-fit=cover (Chrome 135+), which the viewport meta
