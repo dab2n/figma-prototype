@@ -1,4 +1,4 @@
-@import url('./tokens.css?v=876');
+@import url('./tokens.css?v=883');
 
 /* Tell the phone which way each screen leans, so its own chrome — the gesture bar most
    of all — picks the matching side instead of always landing light. Declared per page in
@@ -308,6 +308,11 @@ button { font-family: inherit; }
      onboarding bar / red splash / white ready screen — match the canvas to each.
      These three are single-colour full-bleed pages, so it's correct at both edges. */
   html:has(.ob-bottom)  { background: var(--color-neutral-100); }
+  /* Setup was left off this list and so kept the default black canvas under a grey
+     page — on a phone that is a dark strip between the device's status bar and the
+     app bar. Its bottom strip stays black because the step bar is fixed there and
+     paints its own, inset included. */
+  html:has(.setup-screen) { background: var(--color-neutral-100); }
   html:has(.ob-splash)  { background: var(--color-red); }
   html:has(.rts-screen) { background: #fff; }
   /* Pages with no bottom bar end in white, so the canvas behind the system gesture

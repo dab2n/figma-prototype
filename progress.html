@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=876"></script>
-<script defer src="assets/gauge.js?v=876"></script>
-<script defer src="assets/scores.js?v=876"></script>
+<script defer src="assets/openext.js?v=883"></script>
+<script defer src="assets/gauge.js?v=883"></script>
+<script defer src="assets/scores.js?v=883"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,8 +16,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Records</title>
-<link rel="stylesheet" href="styles/main.css?v=876">
-<link rel="stylesheet" href="styles/report.css?v=876">
+<link rel="stylesheet" href="styles/main.css?v=883">
+<link rel="stylesheet" href="styles/report.css?v=883">
 </head>
 <body>
 <div class="phone">
@@ -83,13 +83,14 @@
         <button data-period="half">6 Month</button>
       </div>
 
-      <!-- Node 653:8925: Packs 82, Steps 88, Active Time takes the slack. -->
+      <!-- Node 653:8925: Packs and Steps are as wide as their own number, Active
+           Time takes the slack. -->
       <div class="rp-stats">
-        <div class="rp-stat" style="flex:0 0 82px;">
+        <div class="rp-stat fit">
           <p class="lab">Packs</p>
           <div class="val"><p class="delta" id="packsDelta">+ 2</p><p class="num"><span class="pair"><span class="n" id="packsNum">6</span></span></p></div>
         </div>
-        <div class="rp-stat" style="flex:0 0 88px;">
+        <div class="rp-stat fit">
           <p class="lab">Steps</p>
           <div class="val"><p class="delta" id="stepsDelta">+ 3102</p><p class="num"><span class="pair"><span class="n" id="stepsNum">13,119</span></span></p></div>
         </div>

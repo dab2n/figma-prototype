@@ -247,6 +247,9 @@
   gap: 18px;
   align-items: center;
 }
+/* Packs and Steps are only as wide as their own number plus 20 either side — a fixed
+   88 cut "13,119" off. Active Time has no width of its own and takes what is left. */
+.rp-stat.fit { flex: 0 0 auto; padding-left: 20px; padding-right: 20px; }
 .rp-stat .lab { margin: 0; font-family: var(--font-supreme); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px; color: var(--color-neutral-500); white-space: nowrap; }
 .rp-stat .val {
   flex: 1;

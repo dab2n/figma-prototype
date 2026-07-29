@@ -20,7 +20,15 @@
   var HINT = STOP * TRAVEL;    // 64px — the 1회 진입 stop, in scroll
   var raf = 0, holding = false, idle = 0, snapping = 0;
 
-  function progress() { return Math.max(0, Math.min(1, screen.scrollTop / TRAVEL)); }
+  // The page OPENS on 1회 진입 — Explore Packs under the thumb, so the first thing the
+  // screen says is that there is more below — and rolls back down to "877 joined this
+  // week" a couple of seconds later. It is carried as an offset added to the real fold
+  // rather than as a scroll position: the scroller stays at 0 throughout, which keeps
+  // this out of the way of Chrome's own scroll reset at load, and a scroll that arrives
+  // mid-intro simply adds to a decaying offset instead of fighting a snap-back.
+  var lead = STOP;
+
+  function progress() { return Math.max(0, Math.min(1, screen.scrollTop / TRAVEL + lead)); }
 
   function paint() {
     raf = 0;
@@ -50,6 +58,45 @@
     screen.scrollTo({ top: target, behavior: 'smooth' });
     setTimeout(function () { snapping = 0; }, 500);
   }
+
+  // 2.5s of Explore Packs, then the strip rolls back down to "877 joined this week".
+  // The lead decays instead of being switched off, so a scroll arriving mid-intro blends
+  // with it rather than snapping. Timed off VISIBILITY, not load: a page opened behind
+  // another tab would otherwise spend its two seconds unseen and arrive already rolled.
+  var INTRO = 2500, DECAY = 520;
+  var intro = 0, decaying = false;
+
+  function rollDown() {
+    if (decaying) return;
+    decaying = true;
+    clearTimeout(intro); intro = 0;
+    var from = lead, t0 = 0;
+    requestAnimationFrame(function frame(t) {
+      if (!t0) t0 = t;
+      var k = Math.min(1, (t - t0) / DECAY);
+      lead = from * Math.pow(1 - k, 3);        // ease-out to nothing
+      paint();
+      if (k < 1) requestAnimationFrame(frame);
+      else { lead = 0; paint(); }
+    });
+  }
+
+  function arm() {
+    if (decaying || intro) return;
+    if (document.hidden) {
+      document.addEventListener('visibilitychange', function once() {
+        document.removeEventListener('visibilitychange', once);
+        arm();
+      });
+      return;
+    }
+    intro = setTimeout(rollDown, INTRO);
+  }
+  arm();
+  // Touch it first and the intro is over — whatever they do next is theirs.
+  ['pointerdown', 'touchstart', 'wheel', 'keydown'].forEach(function (e) {
+    screen.addEventListener(e, rollDown, { passive: true });
+  });
 
   screen.addEventListener('scroll', function () {
     if (!raf) raf = requestAnimationFrame(paint);
