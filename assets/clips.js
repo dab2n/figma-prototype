@@ -1,33 +1,77 @@
-// Looping clips play only while they are on screen.
+// Looping clips play only where and when they are actually being looked at.
 //
-// Two reasons, both mobile: a card that is scrolled past keeps a decoder busy for
-// nothing, and preload="none" means the file is not even fetched until the card is
-// about to be met — which is the whole point of the poster sitting behind it.
+// Two modes, because a list and a detail screen are not the same thing:
 //
-// It also removes the iOS play button. That button appears when autoplay is refused
-// (Low Power Mode, or a data-saver setting); calling play() from the observer asks
-// again at the moment it is actually wanted, and the CSS in main.css hides the control
-// either way.
+//   FEED (.pack-list) — one clip at a time, the way a video feed behaves. Nothing
+//     plays while the thumb is moving; when the scroll settles, the card sitting
+//     closest to the middle of the screen is the one that starts, and every other
+//     one stops. Ten decoders running at once is what makes a phone stutter, and a
+//     card flying past was never being watched anyway.
+//
+//   SOLO (everything else) — the pack hero. It plays whenever it is on screen.
+//
+// muted is set as a property, not just an attribute: iOS treats the property as the
+// autoplay permission, and losing it is what puts a start-playback button on the frame.
 (function () {
   var clips = [].slice.call(document.querySelectorAll('video[loop]'));
   if (!clips.length) return;
 
   function play(v) {
+    if (v.dataset.held === '1') return;          // paused by hand — leave it alone
+    v.muted = true;
     var p = v.play();
     if (p && p.catch) p.catch(function () {});   // refused: the poster stays, no button
   }
-  if (!('IntersectionObserver' in window)) { clips.forEach(play); return; }
+  function stop(v) { if (!v.paused) v.pause(); }
 
-  // Rooted on the scroller each clip lives in — these screens scroll inside .screen,
-  // so a viewport-rooted observer would call every card visible the whole time.
+  var feed = document.querySelector('.pack-list');
+  var inFeed = feed ? [].slice.call(feed.querySelectorAll('video[loop]')) : [];
+  var solo = clips.filter(function (v) { return inFeed.indexOf(v) === -1; });
+
+  // ── Feed ────────────────────────────────────────────────────────────────
+  if (inFeed.length) {
+    var scroller = feed.closest('.screen') || document.scrollingElement;
+    var idle = 0, current = null;
+
+    function settle() {
+      var box = scroller.getBoundingClientRect();
+      var mid = box.top + box.height / 2;
+      var best = null, bestD = Infinity;
+      inFeed.forEach(function (v) {
+        var card = v.closest('.pack-thumb') || v;
+        var r = card.getBoundingClientRect();
+        if (r.bottom < box.top || r.top > box.bottom) return;   // off screen entirely
+        // Distance from the card's centre to the screen's, but a card taller than the
+        // screen counts as centred as soon as it fills it — otherwise the 517-tall one
+        // can never win against a short neighbour.
+        var d = (r.top <= mid && r.bottom >= mid) ? 0 : Math.min(Math.abs(r.top - mid), Math.abs(r.bottom - mid));
+        if (r.height > box.height * 0.9 && d === 0) d = -1;
+        if (d < bestD) { bestD = d; best = v; }
+      });
+      if (best === current) { if (best) play(best); return; }
+      if (current) stop(current);
+      current = best;
+      if (best) play(best);
+    }
+
+    scroller.addEventListener('scroll', function () {
+      if (current) stop(current);        // moving: nothing plays
+      clearTimeout(idle);
+      idle = setTimeout(settle, 180);    // …until the thumb has been still this long
+    }, { passive: true });
+    setTimeout(settle, 120);             // and on arrival, without waiting for a scroll
+  }
+
+  // ── Solo ────────────────────────────────────────────────────────────────
+  if (!solo.length) return;
+  if (!('IntersectionObserver' in window)) { solo.forEach(play); return; }
   var byRoot = new Map();
-  clips.forEach(function (v) {
+  solo.forEach(function (v) {
     var root = v.closest('.screen') || null;
     if (!byRoot.has(root)) {
       byRoot.set(root, new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
-          if (e.isIntersecting) play(e.target);
-          else e.target.pause();
+          if (e.isIntersecting) play(e.target); else stop(e.target);
         });
       }, { root: root, rootMargin: '10% 0px', threshold: 0.1 }));
     }

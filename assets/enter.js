@@ -55,8 +55,7 @@
     var target = y < HINT * 0.45 ? 0 : y < HINT + (OPEN - HINT) * 0.42 ? HINT : OPEN;
     if (Math.abs(y - target) < 2) return;
     snapping = 1;
-    screen.scrollTo({ top: target, behavior: 'smooth' });
-    setTimeout(function () { snapping = 0; }, 500);
+    glide(target, 420);
   }
 
   // 2.5s of Explore Packs, then the strip rolls back down to "877 joined this week".
@@ -119,14 +118,82 @@
   });
 
   // Tapping a bottom bar advances one stop. Start is a real action sitting inside the
-  // 평소 bar, so links keep their own behaviour.
+  // 평소 바, so links keep their own behaviour.
   function step(e) {
     if (e.target.closest('a')) return;
     e.preventDefault();
+    var to = screen.scrollTop < HINT - 2 ? HINT : OPEN;
     snapping = 1;
-    screen.scrollTo({ top: screen.scrollTop < HINT - 2 ? HINT : OPEN, behavior: 'smooth' });
-    setTimeout(function () { snapping = 0; }, 500);
+    glide(to, 420);
   }
+
+  // scrollTo({behavior:'smooth'}) does not run on this scroller in Chrome, so every
+  // programmatic move is tweened here instead. Same easing as the roll-down.
+  function glide(to, dur) {
+    var from = screen.scrollTop, t0 = 0;
+    requestAnimationFrame(function frame(t) {
+      if (holding) { snapping = 0; return; }
+      if (!t0) t0 = t;
+      var k = Math.min(1, (t - t0) / dur);
+      screen.scrollTop = to + (from - to) * Math.pow(1 - k, 3);
+      if (k < 1) requestAnimationFrame(frame);
+      else { screen.scrollTop = to; snapping = 0; }
+    });
+  }
+
+  // The black strip is NOT inside the scroller — it is a sibling of it, pinned to the
+  // frame — so a swipe that starts on it had nothing to scroll and only a clean tap ever
+  // did anything. Dragging on it now moves the fold directly, so the whole strip works
+  // as a handle: grab it anywhere, including over the joined row and the Start button.
+  function handle(el) {
+    if (!el) return;
+    var id = null, y0 = 0, top0 = 0, moved = 0;
+    el.addEventListener('pointerdown', function (e) {
+      id = e.pointerId; y0 = e.clientY; top0 = screen.scrollTop; moved = 0;
+      holding = true;
+      rollDown();                                   // the intro is over
+      clearTimeout(idle);
+      if (el.setPointerCapture) { try { el.setPointerCapture(id); } catch (err) {} }
+    });
+    el.addEventListener('pointermove', function (e) {
+      if (id === null || e.pointerId !== id) return;
+      var dy = y0 - e.clientY;                      // up is forward
+      if (Math.abs(dy) > moved) moved = Math.abs(dy);
+      screen.scrollTop = Math.max(0, top0 + dy);
+    });
+    ['pointerup', 'pointercancel'].forEach(function (t) {
+      el.addEventListener(t, function (e) {
+        if (id === null) return;
+        id = null;
+        holding = false;
+        if (moved > 6) setTimeout(settle, 20);      // a drag: land on the nearest stop
+      });
+    });
+    // A drag that happens to end over the Start link must not follow it.
+    el.addEventListener('click', function (e) {
+      if (moved > 6) { e.preventDefault(); e.stopPropagation(); moved = 0; }
+    }, true);
+  }
+  handle(document.getElementById('djGrab'));
+  // Tap the picture itself to hold the clip, tap again to let it run. A tap only —
+  // anything with movement in it is a fold gesture and must not also toggle playback.
+  // data-held tells assets/clips.js to leave it alone when it next comes on screen.
+  (function () {
+    var photo = document.querySelector('.dj-photo');
+    var clip = photo && photo.querySelector('video');
+    if (!clip) return;
+    var x0 = 0, y0 = 0;
+    photo.addEventListener('pointerdown', function (e) { x0 = e.clientX; y0 = e.clientY; });
+    photo.addEventListener('click', function (e) {
+      if (Math.abs(e.clientX - x0) > 6 || Math.abs(e.clientY - y0) > 6) return;
+      if (clip.paused) { clip.dataset.held = '0'; clip.muted = true; var p = clip.play(); if (p && p.catch) p.catch(function () {}); }
+      else { clip.dataset.held = '1'; clip.pause(); }
+      // The playhead stops with it, which is the only thing that says it is paused —
+      // the design has no play button and is not getting one.
+      document.documentElement.classList.toggle('dj-held', clip.dataset.held === '1');
+    });
+  })();
+
   ['djGrab', 'djExplore'].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) el.addEventListener('click', step);
