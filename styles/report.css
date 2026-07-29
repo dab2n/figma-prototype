@@ -158,10 +158,13 @@
 @keyframes arc-draw { to { stroke-dashoffset: 0; } }
 .rp-landed .arc-dot, .rp-landed #arcVal, .rp-landed .arc-prog { opacity: 1; transition: opacity .3s ease; }
 .rp-landed .rp-big { opacity: 1; transform: translateY(0); }
-/* NEW Best is the last thing to arrive — after the track, the marker and the score. */
-.rp-draw .delta.best { opacity: 0; }
-.rp-landed .delta.best { animation: rp-best-in .42s cubic-bezier(.2,.85,.3,1) 1.15s both; }
-@keyframes rp-best-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+/* NEW Best already has an entrance of its own further down; on the Report it just has to
+   wait for the gauge instead of running off page load, so its clock is held here.
+   Held PAUSED rather than overridden to opacity 0 — that keyframe has no `to`, so its
+   end state is whatever the element's own opacity is, and forcing that to 0 made it
+   animate from nothing to nothing. Paused with `both` fill already shows the `from`. */
+.rp-draw .rp-stat .delta.best { animation-play-state: paused; }
+.rp-landed .rp-stat .delta.best { animation-play-state: running; animation-delay: .85s; }
 
 /* ── Body ──────────────────────────────────────────────────────────────────
    Fades out of the hero wash so there is no seam where the artwork stops. */
