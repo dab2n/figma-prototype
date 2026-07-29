@@ -36,11 +36,17 @@
     var p = progress();
     var s = Math.min(1, p / STOP);                             // 평소 → 1회 진입
     var q = Math.max(0, (p - STOP) / (1 - STOP));              // 1회 진입 → 올릴때
+    // How far the sheet has been read PAST the fold. The folded header is sticky, which
+    // is what stops the sheet slicing it — but sticky forever meant it sat pinned over
+    // the content for the rest of the page. It rides this back up and out instead, so
+    // header and sheet scroll away together once the fold is done with.
+    var over = Math.max(0, screen.scrollTop - OPEN);
     var root = document.documentElement;          // the bottom bar sits outside the scroller
     [screen, root].forEach(function (el) {
       el.style.setProperty('--p', p.toFixed(4));
       el.style.setProperty('--s', s.toFixed(4));
       el.style.setProperty('--q', q.toFixed(4));
+      el.style.setProperty('--over', over.toFixed(1) + 'px');
     });
     // Opacity alone would leave both Start buttons clickable through each other.
     root.classList.toggle('dj-open', q > 0.15);

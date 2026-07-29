@@ -34,7 +34,10 @@
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 .dj-hero {
   position: sticky;
-  top: 0;
+  /* Sticky only for as long as the fold needs it. Past the open stop --over grows with
+     the scroll and drags the sticky line up out of the frame, so the header leaves the
+     way any header leaves instead of parking over the rest of the page. */
+  top: calc(-1 * var(--over, 0px));
   height: 100%;
   /* Above the sheet, not under it. The sheet is a normal scroller and momentum carries it
      past the fold; at z-index 1 it slid OVER the folded header and sliced the creator line
@@ -184,7 +187,7 @@
    pseudo-element on .dj-hero would be clipped away by the very edge it has to sit on).
    It rides that edge the whole way, so the folded header meets the sheet on the same
    inverted corner it meets the 평소 bar on. */
-.dj-fillets { position: absolute; left: 0; right: 0; bottom: calc(80px + var(--s, 0) * 37px + var(--q, 0) * 432px); height: 0; z-index: 7; pointer-events: none; }
+.dj-fillets { position: absolute; left: 0; right: 0; bottom: calc(80px + var(--s, 0) * 37px + var(--q, 0) * 432px + var(--over, 0px)); height: 0; z-index: 7; pointer-events: none; }
 .dj-fillets span {
   position: absolute;
   bottom: 0;
@@ -263,25 +266,26 @@
    so at either rest the two rows carry no transform, no 3D context and no opacity of
    their own: they rasterise exactly as flat text, and the crease where the faces meet
    never parks on the card edge (that was the stray hairline under the frame).
-   A drum, not two hinged flaps: the third value in transform-origin puts each row's
-   rotation axis 30px BEHIND it, so turning carries it up and away around a cylinder
-   instead of folding it about its own edge. A long 340px perspective and 62 degrees of
-   turn keep the barrel wide — it should read as a page easing over the top, not as a
-   card swinging on a hinge. What sells "behind" is the fade, not the angle: each row
-   dims to nothing as it goes over and comes back up out of nothing. The strip keeps its
-   own 80px travel underneath — the rows still move up and down, the barrel only tilts
-   them on the way. */
-.dj-rolling .dj-bar { perspective: 340px; }
-.dj-rolling .dj-roll { transform-style: preserve-3d; }
+   Each row turns ON THE SPOT, about its own horizontal centre line, and stays inside the
+   black strip — the joined row tips backwards out of sight and Explore Packs tips up into
+   its place. Nothing travels: the earlier versions carried the row upward and it read as
+   the text sliding out under the card above, which is not what a slot does.
+   The strip's own 80px translate is off for the same reason. Each row is then sitting at
+   the position it rests at in its own state, which is also what makes the two boundaries
+   seamless — at s 0 and s 1 the transform is identity and the row has not moved. */
+.dj-rolling .dj-bar { perspective: 300px; }
+.dj-rolling .dj-roll { transform: none; transform-style: preserve-3d; }
 .dj-rolling .dj-roll-joined,
-.dj-rolling .dj-roll-explore { transform-origin: 50% 50% -30px; backface-visibility: hidden; }
+.dj-rolling .dj-roll-explore { backface-visibility: hidden; }
 .dj-rolling .dj-roll-joined {
-  transform: rotateX(calc(var(--s, 0) * 62deg));
-  opacity: calc(1 - var(--s, 0) * 1.1);
+  transform: rotateX(calc(var(--s, 0) * 82deg));
+  opacity: calc(1 - var(--s, 0) * 1.35);
 }
+/* Lifted onto its own resting slot first: it lives 80px lower in the flow, which is how
+   the two rest states work when nothing is turning. */
 .dj-rolling .dj-roll-explore {
-  transform: rotateX(calc((var(--s, 0) - 1) * 62deg));
-  opacity: calc(var(--s, 0) * 1.1 - 0.1);
+  transform: translateY(-80px) rotateX(calc((var(--s, 0) - 1) * 82deg));
+  opacity: calc(var(--s, 0) * 1.35 - 0.35);
 }
 .dj-roll .joined-row { padding: 0 16px; }
 
@@ -322,8 +326,10 @@
 
 /* ── Playhead ─────────────────────────────────────────────────────────────
    A stroke along the card's bottom edge, not a control floating above it: full
-   width, flush to whichever line the fold currently puts there, no handle. Gone
-   early in stage two, before the card's corners start rounding under it. */
+   width, flush to the card's bottom line, no handle.
+   It belongs to 평소 and leaves with it. Held past that it reads as a white rule ruled
+   between the card and the black below — which is exactly what it looked like sitting
+   under Explore Packs, and why that seam kept coming back. */
 .dj-progress {
   position: absolute;
   left: 0; right: 0;
@@ -331,7 +337,7 @@
   height: 5px;
   z-index: 5;
   pointer-events: none;
-  opacity: clamp(0, (1 - var(--q, 0) * 8), 1);
+  opacity: clamp(0, (1 - var(--s, 0) * 2.2), 1);
 }
 .dj-progress .track {
   display: block;
