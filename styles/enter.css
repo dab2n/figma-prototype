@@ -20,7 +20,7 @@
 
 /* Vertical only. Left as auto, the horizontal axis rubber-bands under a sideways drag
    and the 16px content margins visibly slide with it. */
-.dj-screen { background: var(--color-black); overflow-x: hidden; overscroll-behavior-x: none; }
+.dj-screen { background: var(--color-black); overflow-x: hidden; overscroll-behavior-x: none; touch-action: pan-y; }
 
 /* Arriving from the feed. The page used to cut in; it grows into the frame instead, so
    the card that was tapped reads as expanding to fill the screen. The whole frame, not
@@ -237,12 +237,23 @@
   position: absolute;
   left: 0; right: 0; bottom: 0;
   z-index: 8;
-  height: calc(80px + var(--s, 0) * 37px + env(safe-area-inset-bottom, 0px));
+  /* No safe-area term. It grew the bar UPWARD from bottom:0, so on an iPhone the bar's
+     top sat 34px above the card edge — over the fillets, which is why the inverted corner
+     disappeared there — and 34px above the in-flow Explore bar it hands over to. The
+     roll's content lives in the bar's top 52px, well clear of the home indicator, so the
+     term was never buying anything. */
+  height: calc(80px + var(--s, 0) * 37px);
   background: var(--color-black);
   overflow: hidden;
-  /* Cut, not faded: by p 0.2 the scrolling Explore bar is drawn in exactly this place
-     with exactly this content, so the swap has nothing to see. */
-  opacity: calc(1 - max(0, var(--p, 0) - 0.2) * 40);
+  /* Cut the instant the fold starts, not over the next 7px of scroll. Past q 0 the bar's
+     top stops tracking the card edge while the in-flow Explore bar keeps going, so any
+     crossfade window shows the two of them a few px apart — that was the doubled
+     "Explore Packs" with a pale line under it. At q 0 they coincide exactly, so an
+     instant cut is invisible. */
+  opacity: calc(1 - var(--q, 0) * 200);
+  /* iOS hands the gesture to its own scrolling unless the element opts out, which left
+     the strip's drag handle dead on a phone. */
+  touch-action: none;
 }
 .dj-roll { transform: translateY(calc(var(--s, 0) * -80px)); }
 .dj-roll-joined { height: 80px; padding-top: 8px; box-sizing: border-box; }
@@ -252,20 +263,26 @@
    so at either rest the two rows carry no transform, no 3D context and no opacity of
    their own: they rasterise exactly as flat text, and the crease where the faces meet
    never parks on the card edge (that was the stray hairline under the frame).
-   A real drum, not two hinged flaps: the third value in transform-origin puts each row's
-   rotation axis 45px BEHIND it, so turning it carries it up and away around a cylinder
-   instead of folding it about its own edge. 130px of perspective against a 45px radius is
-   a hard, short barrel — the departing row shrinks as it goes over the top, and the
-   arriving one swells as it comes up the front. The roll's own translate is switched off
-   here because the orbit is the movement; putting both back would move each row twice. */
-.dj-rolling .dj-bar { perspective: 130px; }
-.dj-rolling .dj-roll { transform: none; transform-style: preserve-3d; }
+   A drum, not two hinged flaps: the third value in transform-origin puts each row's
+   rotation axis 30px BEHIND it, so turning carries it up and away around a cylinder
+   instead of folding it about its own edge. A long 340px perspective and 62 degrees of
+   turn keep the barrel wide — it should read as a page easing over the top, not as a
+   card swinging on a hinge. What sells "behind" is the fade, not the angle: each row
+   dims to nothing as it goes over and comes back up out of nothing. The strip keeps its
+   own 80px travel underneath — the rows still move up and down, the barrel only tilts
+   them on the way. */
+.dj-rolling .dj-bar { perspective: 340px; }
+.dj-rolling .dj-roll { transform-style: preserve-3d; }
 .dj-rolling .dj-roll-joined,
-.dj-rolling .dj-roll-explore { transform-origin: 50% 50% -45px; backface-visibility: hidden; }
-.dj-rolling .dj-roll-joined { transform: rotateX(calc(var(--s, 0) * 90deg)); }
-/* Lifted onto the same window first — it lives 80px lower in the flow, which is how the
-   two rest states work when nothing is turning. */
-.dj-rolling .dj-roll-explore { transform: translateY(-80px) rotateX(calc((var(--s, 0) - 1) * 90deg)); }
+.dj-rolling .dj-roll-explore { transform-origin: 50% 50% -30px; backface-visibility: hidden; }
+.dj-rolling .dj-roll-joined {
+  transform: rotateX(calc(var(--s, 0) * 62deg));
+  opacity: calc(1 - var(--s, 0) * 1.1);
+}
+.dj-rolling .dj-roll-explore {
+  transform: rotateX(calc((var(--s, 0) - 1) * 62deg));
+  opacity: calc(var(--s, 0) * 1.1 - 0.1);
+}
 .dj-roll .joined-row { padding: 0 16px; }
 
 /* Start is the action on the OPEN screen, so it never scrolls away — and it stays out of
