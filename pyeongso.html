@@ -6,11 +6,11 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#8E7E65">
-<script defer src="assets/openext.js?v=883"></script>
-<script defer src="assets/clips.js?v=883"></script>
-<script defer src="assets/packs.js?v=883"></script>
-<script defer src="assets/enter.js?v=883"></script>
-<script defer src="assets/process.js?v=883"></script>
+<script defer src="assets/openext.js?v=884"></script>
+<script defer src="assets/clips.js?v=884"></script>
+<script defer src="assets/packs.js?v=884"></script>
+<script defer src="assets/enter.js?v=884"></script>
+<script defer src="assets/process.js?v=884"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,10 +18,10 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Sean's Final 1km Pace</title>
-<link rel="stylesheet" href="styles/main.css?v=883">
-<link rel="stylesheet" href="styles/detail.css?v=883">
-<link rel="stylesheet" href="styles/creator.css?v=883">
-<link rel="stylesheet" href="styles/enter.css?v=883">
+<link rel="stylesheet" href="styles/main.css?v=884">
+<link rel="stylesheet" href="styles/detail.css?v=884">
+<link rel="stylesheet" href="styles/creator.css?v=884">
+<link rel="stylesheet" href="styles/enter.css?v=884">
 </head>
 <body>
 <div class="phone">
@@ -73,6 +73,12 @@
         <span class="fire fire2"></span>
         <span class="fire fire1"></span>
       </div>
+
+      <!-- Shorts-style playhead on the card's own bottom edge. --dur is the pack's
+           stated length (packs.js), not the clip's — the clip is a short loop standing
+           in for a 7-minute session, and the bar is there to say how long the session
+           is and where you are in it. Pure CSS: one linear animation, no frame loop. -->
+      <div class="dj-progress" style="--dur:420s"><span class="track"><i><b></b></i></span></div>
     </div>
 
     <!-- Sits in the gap the hero opens up, and folds away once the sheet has arrived. -->
