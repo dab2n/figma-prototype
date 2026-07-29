@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="166" height="71" viewBox="63.61 57.74 175.96 75.26" fill="none">
+<!-- Agility. Figma geometry kept as vector — the old 166px PNG was a 1x export and fell
+     apart on a 3x phone.
+     The same arc twice: a blurred copy that shows only at the trailing left end, and a
+     sharp copy that fades out into it. The crossfade is the progressive blur Figma runs
+     along the arc, which a flat SVG export can only spell as one uniform blur. -->
+<defs>
+  <linearGradient id="agStroke" x1="230" y1="151.986" x2="113" y2="80.9862" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#A5A5A5" stop-opacity="0"/>
+    <stop offset="0.66331" stop-color="#FEC389"/>
+    <stop offset="0.929484" stop-color="#FE6E3C"/>
+    <stop offset="1" stop-color="#FA3030"/>
+  </linearGradient>
+  <filter id="agBlur" x="0" y="0" width="300" height="304" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+    <feGaussianBlur stdDeviation="6"/>
+  </filter>
+  <linearGradient id="agFade" x1="73" y1="0" x2="104" y2="0" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fff" stop-opacity="0"/>
+    <stop offset="1" stop-color="#fff"/>
+  </linearGradient>
+  <linearGradient id="agFadeInv" x1="73" y1="0" x2="104" y2="0" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#fff"/>
+    <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </linearGradient>
+  <mask id="agSharp" maskUnits="userSpaceOnUse" x="0" y="0" width="300" height="304">
+    <rect width="300" height="304" fill="url(#agFade)"/>
+  </mask>
+  <mask id="agSoft" maskUnits="userSpaceOnUse" x="0" y="0" width="300" height="304">
+    <rect width="300" height="304" fill="url(#agFadeInv)"/>
+  </mask>
+  <path id="agArc" d="M227 152C227 195.701 192.457 231 150 231C107.543 231 73 195.701 73 152C73 108.299 107.543 73 150 73C192.457 73 227 108.299 227 152Z" stroke="url(#agStroke)" stroke-width="6"/>
+</defs>
+<g mask="url(#agSoft)"><use href="#agArc" filter="url(#agBlur)"/></g>
+<g mask="url(#agSharp)"><use href="#agArc"/></g>
+</svg>
