@@ -109,6 +109,9 @@
 .stats-row .stat p { margin: 0; }
 .stats-row .stat .label { font-family: var(--font-supreme); font-size: 13px; opacity: 0.7; letter-spacing: -0.5px; margin-bottom: 6px; }
 .stats-row .stat .value { font-family: var(--font-supreme-bold); font-size: 18px; letter-spacing: -0.54px; }
+/* Packs that recommend more than one mode stack them rather than running them into
+   one line — the cell is a column, not a sentence. */
+.stats-row .stat .value + .value { margin-top: 2px; }
 .stats-row .divider { width: 1px; height: 33px; background: rgba(255,255,255,0.3); }
 
 .process-title { margin: 0 0 8px; color: var(--color-neutral-50); }

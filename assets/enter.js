@@ -63,7 +63,7 @@
   // The lead decays instead of being switched off, so a scroll arriving mid-intro blends
   // with it rather than snapping. Timed off VISIBILITY, not load: a page opened behind
   // another tab would otherwise spend its two seconds unseen and arrive already rolled.
-  var INTRO = 2500, DECAY = 520;
+  var INTRO = 1300, DECAY = 460;
   var intro = 0, decaying = false;
 
   function rollDown() {

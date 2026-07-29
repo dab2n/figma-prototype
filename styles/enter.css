@@ -267,44 +267,32 @@
 .dj-photo video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 /* ── Playhead ─────────────────────────────────────────────────────────────
-   Rides the card edge like everything else on it — 14px above whichever line the
-   fold currently puts there — and is gone by the time the card has become the
-   folded header. Inset 16 to clear the card's rounded corners. */
+   A stroke along the card's bottom edge, not a control floating above it: full
+   width, flush to whichever line the fold currently puts there, no handle. Gone
+   early in stage two, before the card's corners start rounding under it. */
 .dj-progress {
   position: absolute;
-  left: 16px; right: 16px;
-  bottom: calc(80px + var(--s, 0) * 37px + var(--q, 0) * 432px + 14px);
+  left: 0; right: 0;
+  bottom: calc(80px + var(--s, 0) * 37px + var(--q, 0) * 432px);
+  height: 5px;
   z-index: 5;
   pointer-events: none;
-  opacity: clamp(0, (1 - var(--q, 0) * 4), 1);
+  opacity: clamp(0, (1 - var(--q, 0) * 8), 1);
 }
 .dj-progress .track {
   display: block;
-  position: relative;
-  height: 3px;
-  border-radius: 2px;
-  background: rgba(255,255,255,0.30);
-  overflow: visible;
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.5);
 }
-/* Width, not scaleX: the head sits on the fill's own right edge, and a scaled parent
-   would squash it. One element changing width three or four pixels a second is not a
-   layout cost worth designing around. */
+/* Width, not scaleX: it is a gauge filling, and the animation is one property on one
+   element moving a few pixels a second. */
 .dj-progress i {
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 0;
-  border-radius: 2px;
   background: #fff;
   animation: dj-play var(--dur, 420s) linear infinite;
-}
-.dj-progress b {
-  position: absolute;
-  right: -3px; top: 50%;
-  width: 7px; height: 7px;
-  margin-top: -3.5px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 6px rgba(0,0,0,0.25);
 }
 @keyframes dj-play { from { width: 0; } to { width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .dj-progress i { animation: none; width: 8%; } }
