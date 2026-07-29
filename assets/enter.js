@@ -228,9 +228,6 @@
       if (Math.abs(e.clientX - x0) > 6 || Math.abs(e.clientY - y0) > 6) return;
       if (clip.paused) { clip.dataset.held = '0'; clip.muted = true; var p = clip.play(); if (p && p.catch) p.catch(function () {}); }
       else { clip.dataset.held = '1'; clip.pause(); }
-      // The playhead stops with it, which is the only thing that says it is paused —
-      // the design has no play button and is not getting one.
-      document.documentElement.classList.toggle('dj-held', clip.dataset.held === '1');
     });
   })();
 

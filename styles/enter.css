@@ -194,8 +194,10 @@
   width: 40px; height: 40px;
   background: var(--color-black);
 }
-.dj-fillets span:first-child { left: 0;  -webkit-mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%); mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%); }
-.dj-fillets span:last-child  { right: 0; -webkit-mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);   mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%); }
+/* The ramp is 4% of a 40px radius — 1.6px. At 1% it was 0.4px, under one device pixel on
+   anything but a 3x screen, so the curve stepped instead of easing and read as faceted. */
+.dj-fillets span:first-child { left: 0;  -webkit-mask: radial-gradient(40px at 100% 0, #0000 96%, #000 100%); mask: radial-gradient(40px at 100% 0, #0000 96%, #000 100%); }
+.dj-fillets span:last-child  { right: 0; -webkit-mask: radial-gradient(40px at 0 0, #0000 96%, #000 100%);   mask: radial-gradient(40px at 0 0, #0000 96%, #000 100%); }
 
 /* ── What rises into the gap ──────────────────────────────────────────────── */
 /* LIFT: they come up faster than the scroll, which is what makes the top area read as
@@ -329,39 +331,3 @@
 
 /* Inside .dj-photo, so the fold's scale and blur come for free. */
 .dj-photo video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-
-/* ── Playhead ─────────────────────────────────────────────────────────────
-   A stroke along the card's bottom edge, not a control floating above it: full
-   width, flush to the card's bottom line, no handle.
-   It belongs to 평소 and leaves with it. Held past that it reads as a white rule ruled
-   between the card and the black below — which is exactly what it looked like sitting
-   under Explore Packs, and why that seam kept coming back. */
-.dj-progress {
-  position: absolute;
-  left: 0; right: 0;
-  bottom: calc(80px + var(--s, 0) * 37px + var(--q, 0) * 432px);
-  height: 5px;
-  z-index: 5;
-  pointer-events: none;
-  opacity: clamp(0, (1 - var(--s, 0) * 2.2), 1);
-}
-.dj-progress .track {
-  display: block;
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.5);
-}
-/* Width, not scaleX: it is a gauge filling, and the animation is one property on one
-   element moving a few pixels a second. */
-.dj-progress i {
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 0;
-  background: #fff;
-  animation: dj-play var(--dur, 420s) linear infinite;
-}
-@keyframes dj-play { from { width: 0; } to { width: 100%; } }
-@media (prefers-reduced-motion: reduce) { .dj-progress i { animation: none; width: 8%; } }
-
-/* Tapped to hold: the playhead freezes with the picture. */
-.dj-held .dj-progress i { animation-play-state: paused; }

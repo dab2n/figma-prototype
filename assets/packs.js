@@ -198,11 +198,6 @@
     [].forEach.call(document.querySelectorAll(sel), fn);
   }
 
-  // The playhead is the PACK's length, not the clip's — same number the pack card in
-  // the list carries.
-  var prog = document.querySelector('.dj-progress');
-  if (prog && p.mins) prog.style.setProperty('--dur', (p.mins * 60) + 's');
-
   if (hero) {
     hero.style.backgroundImage = "url('assets/photos/" + p.photo + "')";
     // A pack plays its own clip if it has one; the rest are stills. Drop an mp4 in
