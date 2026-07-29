@@ -82,10 +82,11 @@
 /* top comes from main.css: 44px on the desktop mockup, 0 on a phone where our
    status bar is gone and this row belongs directly under the phone's own. */
 
-/* Copy and pills hold still through 1회 진입 (the card edge comes to them), then hold a
-   constant gap to that edge for the rest of the fold, then leave. */
+/* Copy and pills keep a constant gap to the card edge for the whole fold: the edge rises
+   37px through 1회 진입 and 432 more after it, so they ride both. They do not move
+   RELATIVE to the card — the set stays intact — they just go up with it. */
 .dj-copy, .dj-side, .dj-hero .fire-icons {
-  transform: translateY(calc(var(--q, 0) * -432px));
+  transform: translateY(calc(var(--s, 0) * -37px + var(--q, 0) * -432px));
 }
 .dj-copy, .dj-side {
   opacity: calc(1 - 3 * max(0, var(--q, 0) - 0.4));
@@ -130,7 +131,7 @@
 .dj-profile {
   position: absolute;
   left: 20px;
-  --dj-rest: calc(136px + var(--copyh, 131px));
+  --dj-rest: calc(136px + var(--copyh, 131px) + var(--s, 0) * 37px);
   bottom: calc(var(--dj-rest) + (636px - var(--dj-rest)) * var(--q, 0));
   z-index: 5;
   display: flex;
