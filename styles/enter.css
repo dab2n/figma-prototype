@@ -50,7 +50,27 @@
      Measured up from the BOTTOM, so it scales with the viewport instead of assuming 780.
      Nothing about the corners changes for the whole fold — the concave 40 junction of 평소
      is the same junction the folded header keeps, so the card only ever rises. */
-  clip-path: inset(0 0 calc(80px + var(--s, 0) * 37px + var(--q, 0) * 432px) 0);
+  --edge: calc(80px + var(--s, 0) * 37px + var(--q, 0) * 432px);
+  --fillet: 40px;
+  clip-path: inset(0 0 var(--edge) 0);
+  /* The inverted corner is CUT OUT OF THE CARD, not patched over it.
+     It used to be two 40x40 black tiles pinned to the phone frame. A tile is positioned by
+     its box; the card's edge is cut by a clip-path — two different rasterisations of the
+     same line, so every scroll frame rounded them apart and the join opened up.
+     Here it is one mask on the card itself, so there is no second thing to drift. The mask
+     is the union of: everything above the corner band, the middle column, and a disc in
+     each bottom corner. Inside a disc the card survives; outside it the black below shows
+     through — which is the black curling up into the corner. */
+  -webkit-mask-image:
+    linear-gradient(180deg, #000 calc(100% - var(--edge) - var(--fillet)), transparent 0),
+    linear-gradient(90deg, transparent var(--fillet), #000 0, #000 calc(100% - var(--fillet)), transparent 0),
+    radial-gradient(var(--fillet) at var(--fillet) calc(100% - var(--edge) - var(--fillet)), #000 96%, transparent 100%),
+    radial-gradient(var(--fillet) at calc(100% - var(--fillet)) calc(100% - var(--edge) - var(--fillet)), #000 96%, transparent 100%);
+  mask-image:
+    linear-gradient(180deg, #000 calc(100% - var(--edge) - var(--fillet)), transparent 0),
+    linear-gradient(90deg, transparent var(--fillet), #000 0, #000 calc(100% - var(--fillet)), transparent 0),
+    radial-gradient(var(--fillet) at var(--fillet) calc(100% - var(--edge) - var(--fillet)), #000 96%, transparent 100%),
+    radial-gradient(var(--fillet) at calc(100% - var(--fillet)) calc(100% - var(--edge) - var(--fillet)), #000 96%, transparent 100%);
 }
 .dj-photo {
   position: absolute;
@@ -181,23 +201,6 @@
 }
 .dj-meta .sub { margin: 0 0 10px; font-family: var(--font-supreme); font-size: 14px; letter-spacing: -0.42px; }
 
-/* Inverted (concave) radius where the card meets the black below it — the black curls up
-   into the card's bottom corners rather than the card simply rounding off. It rides the
-   card edge, so it is on the phone frame rather than inside the clipped hero (a
-   pseudo-element on .dj-hero would be clipped away by the very edge it has to sit on).
-   It rides that edge the whole way, so the folded header meets the sheet on the same
-   inverted corner it meets the 평소 bar on. */
-.dj-fillets { position: absolute; left: 0; right: 0; bottom: calc(80px + var(--s, 0) * 37px + var(--q, 0) * 432px + var(--over, 0px)); height: 0; z-index: 7; pointer-events: none; }
-.dj-fillets span {
-  position: absolute;
-  bottom: 0;
-  width: 40px; height: 40px;
-  background: var(--color-black);
-}
-/* The ramp is 4% of a 40px radius — 1.6px. At 1% it was 0.4px, under one device pixel on
-   anything but a 3x screen, so the curve stepped instead of easing and read as faceted. */
-.dj-fillets span:first-child { left: 0;  -webkit-mask: radial-gradient(40px at 100% 0, #0000 96%, #000 100%); mask: radial-gradient(40px at 100% 0, #0000 96%, #000 100%); }
-.dj-fillets span:last-child  { right: 0; -webkit-mask: radial-gradient(40px at 0 0, #0000 96%, #000 100%);   mask: radial-gradient(40px at 0 0, #0000 96%, #000 100%); }
 
 /* ── What rises into the gap ──────────────────────────────────────────────── */
 /* LIFT: they come up faster than the scroll, which is what makes the top area read as
