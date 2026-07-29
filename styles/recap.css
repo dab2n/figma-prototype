@@ -39,7 +39,7 @@
   position: absolute;
   inset: 0;
   mix-blend-mode: lighten;
-  background: linear-gradient(180deg, #050A0A 78%, #FFFFFF 100%);
+  background: linear-gradient(180deg, #050A0A 61%, #FFFFFF 80%);
   pointer-events: none;
 }
 /* The blob, full frame. Its radial runs solid #FA3030 out to 73%, then orange, peach and
@@ -79,7 +79,10 @@
 /* Sits at the design's x99 / y566, left-aligned from there rather than centred. */
 .recap-match {
   position: absolute;
-  top: 566px;
+  /* Lifted from the design's 566: the fill now reaches pure white at 80% (624px), and
+     at 566 the white number sat inside that and vanished. This keeps it entirely above
+     the white, where the design shows it. */
+  top: 496px;
   left: 99px;
   display: flex;
   flex-direction: column;
@@ -109,6 +112,10 @@
   transition: opacity .34s ease, transform .42s cubic-bezier(.2,.8,.3,1);
 }
 .recap-match.enter .recap-pct { opacity: 1; transform: translateY(0); }
+/* The score is the one thing both screens have, so it is the one thing that travels:
+   the report rises from below while this lifts into the place it holds up there,
+   the same idea as the profile carrying the pack fold. */
+.recap-pct { view-transition-name: rp-score; }
 /* Right-aligned in the width the final score needs, so the units digit never moves:
    the resting 0.0 sits in the same column 78.8 lands in, and the count does not shove
    "pts" around as it gains a digit. */

@@ -19,6 +19,11 @@
   width: 360px; height: 620px;
   z-index: 0;
   pointer-events: none;
+  /* Same blob as the recap, at this frame's size. Its core is #FA3030 out to 70% of the
+     radius, and outside the path the SVG is transparent — so the core colour goes behind
+     it to close the corners, exactly as on the recap. */
+  object-fit: cover;
+  background: #FA3030;
   /* Fades itself out into the page instead of stopping dead — the hard edge landed
      right on the top of the first card row. */
   -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
@@ -75,6 +80,9 @@
   gap: 4px;
   color: #fff;
 }
+/* Pairs with .recap-pct: arriving from the recap, the score morphs into this place
+   instead of the page simply cutting. */
+.rp-big { view-transition-name: rp-score; }
 .rp-big .sign { font-family: var(--font-supreme-bold); font-size: 22px; letter-spacing: -0.5px; padding-bottom: 12px; }
 .rp-big .n { font-family: var(--font-offbit); font-weight: 700; font-size: 60px; line-height: 1; }
 .rp-big .u { font-family: var(--font-supreme-bold); font-size: 22px; letter-spacing: -0.5px; padding-bottom: 8px; }
