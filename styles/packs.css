@@ -45,6 +45,14 @@
   font-family: var(--font-supreme-medium);
 }
 
+/* Reels, not a feed. The list comes to rest with a card centred instead of sliding past
+   a stack of them, and scroll-snap-stop: always is the part that makes it ONE card per
+   flick rather than four — without it a hard swipe skims straight over the snap points.
+   Only the cards are snap points; the app bar and the chip row scroll normally. */
+.packs-screen { scroll-snap-type: y mandatory; }
+.pack-card { scroll-snap-align: center; scroll-snap-stop: always; }
+@media (prefers-reduced-motion: reduce) { .packs-screen { scroll-snap-type: none; } }
+
 .pack-list { display: flex; flex-direction: column; gap: 12px; padding: 12px; }
 .pack-card {
   text-decoration: none;
