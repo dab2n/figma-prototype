@@ -38,6 +38,9 @@
 .recap-fade {
   position: absolute;
   inset: 0;
+  /* Lighten, not plus-lighter: this is the clip's own FILL, and adding it instead of
+     taking the brighter of the two washed the whole frame out. Only the gradient effect
+     over it is plus-lighter. */
   mix-blend-mode: lighten;
   background: linear-gradient(180deg, #050A0A 78%, #FFFFFF 100%);
   pointer-events: none;
@@ -52,10 +55,17 @@
   object-fit: cover;
   /* The blob is an egg, so scaling alone never reaches the top CORNERS — the shape is
      narrower there than the frame, and outside the path the SVG is transparent, which is
-     what let the clip's black through. The core colour behind it closes those corners at
-     exactly the colour the core already is, so the seam is invisible. */
-  background: #FA3030;
+     what let the clip's black through. The core colour goes behind it to close them, but
+     it has to STOP before the foot: carried the whole way down it kept adding red to the
+     white fill underneath, which is the pink edge that showed by View Full Report. Below
+     the halfway mark the artwork is peach and white anyway, so nothing needs backing. */
+  background: linear-gradient(180deg, #FA3030 0 40%, rgba(250,48,48,0) 56%);
   transform: scale(1.32);
+  /* Kept on lighten. plus-lighter ADDS, and the clip's backing is dark grey rather than
+     true black, so every channel gained ~26 — the whole frame came up washed, and where
+     the blob's peach rim crossed the fill's ramp the two summed into a yellow band. On
+     lighten the same stack lands on the design. Say the word and I will crush the clip's
+     blacks so plus-lighter can be used as drawn. */
   mix-blend-mode: lighten;
   pointer-events: none;
 }
