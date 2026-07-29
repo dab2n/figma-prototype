@@ -1,7 +1,6 @@
 <svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="19.4" height="19.3136" viewBox="0 0 19.4 19.3136" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="Records">
-<path id="Back card" d="M5.9 4.1V2.6C5.9 1.72 6.62 1 7.5 1H16.8C17.68 1 18.4 1.72 18.4 2.6V11.9C18.4 12.78 17.68 13.5 16.8 13.5H15.3" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-<rect id="Front card" x="1" y="5.5" width="12.8" height="12.8" rx="1.9" stroke="white" stroke-width="1.4"/>
-<path id="Lines" d="M4 9.7H10.8M4 13.8H8.2" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
+<rect id="Card" x="1.5" y="2.2" width="16.4" height="14.9" rx="2.2" stroke="white" stroke-width="1.4"/>
+<path id="Lines" d="M4.9 7.5H14.5M4.9 11.8H10.7" stroke="white" stroke-width="1.4" stroke-linecap="round"/>
 </g>
 </svg>

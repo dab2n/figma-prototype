@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=890"></script>
-<script defer src="assets/gauge.js?v=890"></script>
-<script defer src="assets/scores.js?v=890"></script>
+<script defer src="assets/openext.js?v=891"></script>
+<script defer src="assets/gauge.js?v=891"></script>
+<script defer src="assets/scores.js?v=891"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,8 +16,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Report</title>
-<link rel="stylesheet" href="styles/main.css?v=890">
-<link rel="stylesheet" href="styles/report.css?v=890">
+<link rel="stylesheet" href="styles/main.css?v=891">
+<link rel="stylesheet" href="styles/report.css?v=891">
 </head>
 <body>
 <div class="phone">
@@ -204,6 +204,34 @@ window.addEventListener('pagereveal', function (e) {
 // animating a SNAPSHOT of this page taken the moment it loaded, so anything that ran here
 // would have played out behind that snapshot and be over before the page was ever shown —
 // which is why none of it was visible.
+// Opened from the Library: the report shows THAT session instead of the one that has
+// just finished. Everything arrives in the query string, straight off the card that was
+// tapped, so the card and the report cannot disagree. Nothing here runs on the
+// post-workout path — no query, no change.
+var RP_SCORE = 78.8;
+(function () {
+  var q;
+  try { q = new URLSearchParams(location.search); } catch (e) { return; }
+  if (!q.get('t')) return;
+
+  function put(sel, v) { var el = document.querySelector(sel); if (el && v) el.textContent = v; }
+  var pill = document.querySelector('.rp-pill');
+  if (pill && q.get('t')) pill.childNodes[0].nodeValue = q.get('t') + ' ';
+  put('.rp-date span', (q.get('d') || '').replace(/\./g, '. '));
+  put('.rp-stats .rp-stat:nth-child(1) .num .n', q.get('u'));
+  put('.rp-stats .rp-stat:nth-child(2) .num .n', q.get('m'));
+  put('.rp-stats .rp-stat:nth-child(3) .num .n', q.get('k'));
+  if (q.get('s')) {
+    RP_SCORE = parseFloat(q.get('s'));
+    put('.rp-big .n', q.get('s'));
+    put('#arcVal', q.get('s'));
+  }
+  document.title = 'Newton — ' + q.get('t');
+  // A past session is a record, not a result: no "+8%" against yesterday and no NEW
+  // Best, which only mean anything the moment a workout ends.
+  [].forEach.call(document.querySelectorAll('.rp-stats .delta'), function (el) { el.remove(); });
+})();
+
 (function () {
   // On the root, not the hero: NEW Best is down in the body and waits on the same clock.
   var root = document.documentElement;
@@ -216,7 +244,7 @@ window.addEventListener('pagereveal', function (e) {
     root.classList.add('rp-rise', 'rp-play');
     setTimeout(function () {
       root.classList.add('rp-landed');
-      window.rpGauge.to(78.8, 78.8, { noCount: true });
+      window.rpGauge.to(RP_SCORE, RP_SCORE, { noCount: true });
     }, 620);
   }
   if ('onpagereveal' in window) {

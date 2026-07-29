@@ -89,7 +89,9 @@
   color: #fff;
 }
 .rp-big .sign { font-family: var(--font-supreme-bold); font-size: 22px; letter-spacing: -0.5px; padding-bottom: 12px; }
-.rp-big .n { font-family: var(--font-offbit); font-weight: 700; font-size: 60px; line-height: 1; }
+/* 72 / 110% / -2%, the same as the recap's score — it is the same number arriving on
+   the next screen, so it is set the same way. */
+.rp-big .n { font-family: var(--font-offbit); font-weight: 700; font-size: 72px; line-height: 1.1; letter-spacing: -1.44px; }
 .rp-big .u { font-family: var(--font-supreme-bold); font-size: 22px; letter-spacing: -0.5px; padding-bottom: 8px; }
 .rp-cap {
   position: absolute;
@@ -145,26 +147,25 @@
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
 }
-/* A hairline, and lit only across the top — bright from the upper left, over the crown,
-   to the upper right, and gone by the sides. A rim that runs the whole way round reads
-   as a drawn circle; glass only catches the light where it faces it. Conic, because the
-   two highlights are positions on the circumference, not ends of a linear ramp. */
+/* A hairline, lit on the diagonal: the top-left quadrant and the bottom-right one, dark
+   on the other two. That is where a lens catches light and where it lets it out, and it
+   is what stops the ring reading as a drawn circle. Conic because those are positions on
+   the circumference, not the ends of a linear ramp — 0deg is straight up, so 315 is the
+   top-left arc and 135 the bottom-right one.
+   Nothing else: the inner sheen that used to sit under the crown is gone. Blurred and
+   3px wide, it read as a second, thick, badly-drawn border rather than as light. */
 .arc-dot::before {
   padding: 0.7px;
   background: conic-gradient(from 0deg,
-    rgba(255,255,255,.92) 0deg,
-    rgba(255,255,255,.98) 38deg,
-    rgba(255,255,255,.20) 100deg,
-    rgba(255,255,255,.08) 185deg,
-    rgba(255,255,255,.20) 262deg,
-    rgba(255,255,255,.98) 322deg,
-    rgba(255,255,255,.92) 360deg);
-}
-/* The sheen just inside the crown. Kept faint — this is what was making it milky. */
-.arc-dot::after {
-  padding: 3px;
-  background: linear-gradient(180deg, rgba(255,255,255,.20) 0%, rgba(255,255,255,0) 42%);
-  filter: blur(1.5px);
+    rgba(255,255,255,.30) 0deg,
+    rgba(255,255,255,.06) 45deg,
+    rgba(255,255,255,.34) 90deg,
+    rgba(255,255,255,.96) 135deg,
+    rgba(255,255,255,.34) 180deg,
+    rgba(255,255,255,.06) 225deg,
+    rgba(255,255,255,.34) 270deg,
+    rgba(255,255,255,.98) 315deg,
+    rgba(255,255,255,.30) 360deg);
 }
 .arc-dot span {
   position: absolute;
