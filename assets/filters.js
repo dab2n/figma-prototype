@@ -29,9 +29,31 @@
     if (!scroller) return;
     clearTimeout(snapWait);
     scroller.classList.remove('snap');
-    snapWait = setTimeout(function () { scroller.classList.add('snap'); }, 760);
+    snapWait = setTimeout(function () { scroller.classList.add('snap'); }, 980);
   }
   armSnap();
+
+  // Re-arm the arrival. The animation has to be cleared and the element read back before
+  // it will play a second time — without the reflow the browser never sees a change.
+  function replay(cards) {
+    cards.forEach(function (c, i) {
+      c.style.animation = 'none';
+      void c.offsetWidth;
+      c.style.animation = '';
+      c.style.animationDelay = Math.min(i, 6) * 0.09 + 's';
+    });
+    armSnap();
+  }
+
+  // Coming BACK to Packs has to slide in too. A page restored from the back/forward
+  // cache is handed over exactly as it was left — CSS animations included, already
+  // finished — so returning from a pack showed a list that had never moved.
+  if (list) {
+    addEventListener('pageshow', function (e) {
+      if (!e.persisted) return;
+      replay([].slice.call(list.querySelectorAll('.pack-card:not([hidden])')));
+    });
+  }
 
   if (!row || !list || !drawer) return;
 
@@ -68,15 +90,7 @@
       }
     });
 
-    // Replay the entrance on what is left. The animation has to be cleared and the
-    // element read back before it can be re-armed — without the reflow the browser
-    // never sees a change and nothing plays a second time.
-    shown.forEach(function (c, i) {
-      c.style.animation = 'none';
-      void c.offsetWidth;
-      c.style.animation = '';
-      c.style.animationDelay = Math.min(i, 6) * 0.05 + 's';
-    });
+    replay(shown);          // a narrowed list arrives the same way the page did
 
     var empty = document.getElementById('packEmpty');
     if (empty) empty.hidden = shown.length > 0;

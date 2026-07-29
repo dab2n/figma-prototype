@@ -113,13 +113,17 @@
 .pack-meta { display: flex; align-items: center; gap: 4px; color: var(--color-neutral-500); }
 .pack-meta .sep { width: 2px; height: 2px; }
 
-/* "차라락" slide-in when Packs opens — same curve and distance as the Library list.
-   Only the first three are on screen at load, so only those need staggering; the rest
-   have finished long before they are scrolled to. */
-.pack-card { animation: pack-slide .42s cubic-bezier(.2,.85,.3,1) both; }
-.pack-card:nth-child(2) { animation-delay: .06s; }
-.pack-card:nth-child(3) { animation-delay: .12s; }
-@keyframes pack-slide { from { opacity: 0; transform: translateY(18px); } }
+/* "차라락" slide-in when Packs opens, and again on the way back in — see filters.js.
+   18px over .42s on a curve that front-loads was more than half spent by the first frame
+   and invisible against a card 275 to 600px tall; it read as no animation at all. Both
+   the travel and the gap between cards have to be big enough to watch them arrive one
+   after another. Five stagger slots, because snapping shows about two cards at a time. */
+.pack-card { animation: pack-slide .55s cubic-bezier(.22,.8,.3,1) both; }
+.pack-card:nth-child(2) { animation-delay: .09s; }
+.pack-card:nth-child(3) { animation-delay: .18s; }
+.pack-card:nth-child(4) { animation-delay: .27s; }
+.pack-card:nth-child(5) { animation-delay: .36s; }
+@keyframes pack-slide { from { opacity: 0; transform: translateY(44px); } }
 
 /* Video thumbnails fill the same box as the background image and sit under the
    avatars/badges, which already carry z-index 1. */
