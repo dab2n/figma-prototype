@@ -117,21 +117,45 @@
   width: 39px; height: 39px;
   border-radius: 50%;
   background: rgba(255,255,255,0.18);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
+  /* The whole point of the glass is that the track is still there underneath, only
+     softened. 4px, not more: the line is 6px thick and the disc is 39px across, so a
+     deeper blur dissolves it completely and the marker goes back to being an opaque
+     white pebble. Checked at a true 3x magnification (blur scaled with it), where the
+     band can be seen entering the disc and coming out the other side. */
+  -webkit-backdrop-filter: blur(4px) saturate(1.06);
+  backdrop-filter: blur(4px) saturate(1.06);
+  /* Thickness: light pooling just inside the top edge, and the disc casting a faint
+     shadow of its own. Any more white than this and the band stops showing through. */
+  box-shadow:
+    inset 0 1.2px 3px rgba(255,255,255,.42),
+    0 3px 10px rgba(120,20,10,.10);
   pointer-events: none;
 }
-.arc-dot::before {
+/* Two rims, not one: a bright hairline catching the light top-left and bottom-right,
+   and a wider, softer halo just inside it — a single 1px ring reads as a border, and a
+   border is what makes glass look like a flat disc with an outline. */
+.arc-dot::before,
+.arc-dot::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  padding: 1px;
-  background: linear-gradient(145deg, rgba(255,255,255,.9) 0%, rgba(255,255,255,.10) 45%, rgba(255,255,255,.65) 100%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
+}
+.arc-dot::before {
+  padding: 1.1px;
+  background: linear-gradient(145deg,
+    rgba(255,255,255,.98) 0%, rgba(255,255,255,.35) 28%,
+    rgba(255,255,255,.12) 52%, rgba(255,255,255,.55) 78%, rgba(255,255,255,.95) 100%);
+}
+.arc-dot::after {
+  padding: 4px;
+  background: linear-gradient(160deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,0) 38%,
+    rgba(255,255,255,0) 64%, rgba(255,255,255,.20) 100%);
+  filter: blur(2px);
 }
 .arc-dot span {
   position: absolute;
@@ -248,8 +272,8 @@
    in flow, so baseline alignment places it — no magic vertical constant to keep in step
    with the two font sizes. Only when the pair is alone: Active Time is "1h 43m", two
    pairs in one line, and a zero-width `h` would sit on top of the 43. */
-.rp-stat .num .pair { display: inline-flex; align-items: baseline; }
-.rp-stat .num .pair:only-child .u { display: inline-block; width: 0; min-width: 0; margin: 0 -4px 0 4px; }
+.rp-stat .num .pair { display: inline-flex; align-items: baseline; gap: 4px; }
+.rp-stat .num .pair:only-child .u { display: inline-block; width: 0; min-width: 0; margin-right: -4px; }
 .rp-stat .num .n { font-family: var(--font-offbit); font-weight: 700; font-size: 28px; line-height: 1.2; letter-spacing: -1.5px; color: var(--color-black); }
 .rp-stat .num .u { font-family: var(--font-supreme); font-size: 12px; line-height: 1.2; letter-spacing: -0.5px; color: var(--color-neutral-300); }
 
@@ -313,60 +337,40 @@
   overflow: hidden;
   background: #EEFDFB;
 }
+/* Ellipse 31265, exported with its own 34 layer blur baked in. The CSS radial it
+   replaces could not hold the shape — the design's blob is an off-centre egg, not a
+   circle, and its core (218.7, 178.2 in the artwork) is what has to land on the split. */
 .rp-balance .lb-heat {
   position: absolute;
   top: 50%;
   left: var(--heat-x, 50%);   /* starts centred; travels once the card is seen */
-  width: 300px; height: 260px;
-  margin: -130px 0 0 -150px;
-  border-radius: 50%;
-  background: radial-gradient(closest-side,
-    rgba(250,48,48,.95) 0%, rgba(254,110,60,.82) 34%, rgba(254,195,137,.55) 58%, rgba(254,195,137,0) 80%);
-  filter: blur(8px);
+  width: 326px; height: 357px;
+  margin: -172px 0 0 -218.7px;   /* puts the artwork's own core on that point */
+  background: url('../assets/photos/landing-gradient.svg') no-repeat center / 100% 100%;
   /* Two separate motions on purpose: `left` carries it to the stronger side when the
      card is reached (or when the reading changes), and the transform loop is the idle
-     undulation around wherever that is. Slow and shallow — it should read as alive,
-     not as a pulse. */
+     undulation around wherever that is. Slow, shallow, and on three different periods
+     so it never visibly repeats — the blob should look like it is flowing, not cycling. */
   transition: left 1.2s cubic-bezier(.33, 0, .2, 1);
-  /* 13s was long enough that nothing looked like it was moving at all. Half that, and
-     with twice the throw, it reads as breathing without turning into a pulse. */
-  animation: lb-drift 6.5s ease-in-out infinite alternate;
+  animation: lb-drift 19s ease-in-out infinite alternate;
 }
 @keyframes lb-drift {
-  0%   { transform: translate(-9px, -7px) scale(1); }
-  35%  { transform: translate(4px, 6px)   scale(1.075); }
-  65%  { transform: translate(11px, -4px) scale(1.02); }
-  100% { transform: translate(-2px, 9px)  scale(1.065); }
+  0%   { transform: translate(-6px, -4px) scale(1)     rotate(0deg); }
+  27%  { transform: translate(3px, 5px)   scale(1.035) rotate(1.4deg); }
+  53%  { transform: translate(8px, -3px)  scale(1.01)  rotate(-.6deg); }
+  78%  { transform: translate(-2px, 6px)  scale(1.05)  rotate(1deg); }
+  100% { transform: translate(-7px, 1px)  scale(1.02)  rotate(-1.2deg); }
 }
-/* And a ring leaving the centre of the heat, so the card has a beat of its own rather
-   than only a slow wander. Sits on the heat, under the footprints and the readings. */
-.rp-balance::before {
-  content: "";
-  position: absolute;
-  top: 50%; left: var(--heat-x, 50%);
-  width: 230px; height: 230px;
-  margin: -115px 0 0 -115px;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, transparent 54%, rgba(254,110,60,.30) 72%, transparent 86%);
-  transition: left 1.2s cubic-bezier(.33, 0, .2, 1);
-  animation: lb-ripple 3.6s cubic-bezier(.2,.6,.35,1) infinite;
-  pointer-events: none;
-}
-@keyframes lb-ripple {
-  0%   { transform: scale(.3);  opacity: 0; }
-  22%  { opacity: .9; }
-  100% { transform: scale(1.3); opacity: 0; }
-}
+/* The dotted prints, used as artwork rather than as a mask — the dots and their inner
+   shading are in the file. Group 2147228966: 71px in, 25.3 down, 195.6 across. */
 .rp-balance .lb-foot {
   position: absolute;
-  top: 25px;
-  width: 47.4px; height: 114.4px;
-  background: rgba(255,255,255,0.55);
-  -webkit-mask: url('../assets/icons/foot-print.svg') no-repeat center / contain;
-  mask: url('../assets/icons/foot-print.svg') no-repeat center / contain;
+  top: 25.3px;
+  width: 48px; height: 114.4px;
+  background: no-repeat center / contain;
 }
-.rp-balance .lb-foot.l { left: 71px; }
-.rp-balance .lb-foot.r { left: 219px; transform: scaleX(-1); }
+.rp-balance .lb-foot.l { left: 71px; background-image: url('../assets/icons/foot-l-dots.svg'); }
+.rp-balance .lb-foot.r { left: 218.6px; background-image: url('../assets/icons/foot-r-dots.svg'); }
 .rp-balance .lb-cross-h, .rp-balance .lb-cross-v { position: absolute; opacity: .75; }
 .rp-balance .lb-cross-h { left: 18px; right: 18px; top: 83px; height: 1px; background: repeating-linear-gradient(to right, #fff 0 2px, transparent 2px 5px); }
 .rp-balance .lb-cross-v { left: 168px; top: 14px; width: 1px; height: 128px; background: repeating-linear-gradient(to bottom, #fff 0 2px, transparent 2px 5px); }
@@ -477,30 +481,10 @@
 .rp-scores.run .sc.ag .sc-art { animation: sc-sweep .62s cubic-bezier(.3,.7,.3,1) var(--d) both; }
 @keyframes sc-sweep { from { --sweep: 0deg; } to { --sweep: 180deg; } }
 
-/* Beat two: the haze. The graph draws sharp, and only once it is complete do its two
-   ends go soft — a real blur, not a fade, so the middle of the curve stays readable
-   while the tails dissolve into the card. It is a backdrop-filter on a masked overlay
-   rather than a filter on the art itself, because a filter cannot be applied to part
-   of an element; anything painted above this layer (marker, number, label) is not in
-   its backdrop and so stays crisp. */
-@property --haze { syntax: '<length>'; inherits: false; initial-value: 0px; }
-.sc::after {
-  content: "";
-  position: absolute; inset: 0; z-index: 2;
-  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 12%, transparent 40%, transparent 60%, #000 88%, #000 100%);
-  mask-image: linear-gradient(90deg, #000 0, #000 12%, transparent 40%, transparent 60%, #000 88%, #000 100%);
-  -webkit-backdrop-filter: blur(var(--haze));
-  backdrop-filter: blur(var(--haze));
-  pointer-events: none;
-}
-.rp-scores.run .sc::after { animation: sc-haze .44s ease-out calc(var(--d) + 600ms) both; }
-@keyframes sc-haze { from { --haze: 0px; } to { --haze: 3.5px; } }
-
-/* Marker lands as its graph finishes; the number never counts, it rises in after — now
-   after the haze as well, so the three beats read in order. */
+/* Marker lands as its graph finishes; the number never counts, it rises in after. */
 .rp-scores.run .sc-tri { animation: sc-fade .3s ease calc(var(--d) + 400ms) both; }
 @keyframes sc-fade { to { opacity: 1; } }
-.rp-scores.run .sc-n { animation: sc-num .34s ease calc(var(--d) + 1000ms) both; }
+.rp-scores.run .sc-n { animation: sc-num .34s ease calc(var(--d) + 620ms) both; }
 @keyframes sc-num { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
 /* ── Recommendation ────────────────────────────────────────────────────────
@@ -604,10 +588,8 @@
 .rp-daynav .nav-day[disabled] { opacity: .35; cursor: default; }
 /* Nothing above should move for anyone who asked it not to — show the end state. */
 @media (prefers-reduced-motion: reduce) {
-  .rp-balance .lb-heat, .rp-balance::before { animation: none; }
-  .rp-balance::before { opacity: 0; }
+  .rp-balance .lb-heat { animation: none; }
   .rp-scores .sc-n, .rp-scores .sc-tri { opacity: 1; animation: none; }
-  .rp-scores .sc::after { animation: none; --haze: 3.5px; }
   .rp-hcard .badge svg { opacity: 1; transform: none; animation: none; }
   .rp-scores .sc-art { clip-path: none; -webkit-mask-image: none; mask-image: none; animation: none; --pass: 79px; }
   .rp-stats .rp-stat { animation: none; }
