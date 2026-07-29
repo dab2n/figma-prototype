@@ -247,6 +247,12 @@
      term was never buying anything. */
   height: calc(80px + var(--s, 0) * 37px);
   background: var(--color-black);
+  /* 2px of black painted ABOVE the top edge, costing no layout. The bar's top and the
+     card's clip edge are the same fractional y, but one is a box edge and the other a
+     clip-path — they round apart mid-drag and leave a hairline of the photo between them.
+     At either rest the height is a whole 80 or 117 and they agree, which is exactly why
+     the line only ever showed while the strip was moving. */
+  box-shadow: 0 -2px 0 var(--color-black);
   overflow: hidden;
   /* Cut the instant the fold starts, not over the next 7px of scroll. Past q 0 the bar's
      top stops tracking the card edge while the in-flow Explore bar keeps going, so any
