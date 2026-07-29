@@ -241,8 +241,15 @@
 }
 @keyframes rp-best-in { from { opacity: 0; transform: translateY(10px); } }
 .rp-stat .num { margin: 0; display: flex; align-items: baseline; gap: 6px; white-space: nowrap; }
-/* numeral + its unit letter, 2 apart */
-.rp-stat .num .pair { display: flex; align-items: baseline; gap: 2px; }
+/* The NUMERAL is what centres in the cell, not the numeral+unit group — so the pair has
+   to measure the number alone while the unit still hangs off its right edge, 4px away.
+   The unit is a zero-width box whose glyph simply overflows: it contributes nothing to
+   the width (its 4px offset is cancelled by the same negative margin) yet it is still
+   in flow, so baseline alignment places it — no magic vertical constant to keep in step
+   with the two font sizes. Only when the pair is alone: Active Time is "1h 43m", two
+   pairs in one line, and a zero-width `h` would sit on top of the 43. */
+.rp-stat .num .pair { display: inline-flex; align-items: baseline; }
+.rp-stat .num .pair:only-child .u { display: inline-block; width: 0; min-width: 0; margin: 0 -4px 0 4px; }
 .rp-stat .num .n { font-family: var(--font-offbit); font-weight: 700; font-size: 28px; line-height: 1.2; letter-spacing: -1.5px; color: var(--color-black); }
 .rp-stat .num .u { font-family: var(--font-supreme); font-size: 12px; line-height: 1.2; letter-spacing: -0.5px; color: var(--color-neutral-300); }
 
@@ -321,13 +328,34 @@
      undulation around wherever that is. Slow and shallow — it should read as alive,
      not as a pulse. */
   transition: left 1.2s cubic-bezier(.33, 0, .2, 1);
-  animation: lb-drift 13s ease-in-out infinite alternate;
+  /* 13s was long enough that nothing looked like it was moving at all. Half that, and
+     with twice the throw, it reads as breathing without turning into a pulse. */
+  animation: lb-drift 6.5s ease-in-out infinite alternate;
 }
 @keyframes lb-drift {
-  0%   { transform: translate(-5px, -4px) scale(1); }
-  35%  { transform: translate(2px, 3px)   scale(1.04); }
-  65%  { transform: translate(6px, -2px)  scale(1.01); }
-  100% { transform: translate(-1px, 5px)  scale(1.035); }
+  0%   { transform: translate(-9px, -7px) scale(1); }
+  35%  { transform: translate(4px, 6px)   scale(1.075); }
+  65%  { transform: translate(11px, -4px) scale(1.02); }
+  100% { transform: translate(-2px, 9px)  scale(1.065); }
+}
+/* And a ring leaving the centre of the heat, so the card has a beat of its own rather
+   than only a slow wander. Sits on the heat, under the footprints and the readings. */
+.rp-balance::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: var(--heat-x, 50%);
+  width: 230px; height: 230px;
+  margin: -115px 0 0 -115px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, transparent 54%, rgba(254,110,60,.30) 72%, transparent 86%);
+  transition: left 1.2s cubic-bezier(.33, 0, .2, 1);
+  animation: lb-ripple 3.6s cubic-bezier(.2,.6,.35,1) infinite;
+  pointer-events: none;
+}
+@keyframes lb-ripple {
+  0%   { transform: scale(.3);  opacity: 0; }
+  22%  { opacity: .9; }
+  100% { transform: scale(1.3); opacity: 0; }
 }
 .rp-balance .lb-foot {
   position: absolute;
@@ -386,6 +414,7 @@
   font-size: 28px; line-height: 38px; letter-spacing: -0.56px;   /* 28 / 38 / -2% */
   color: var(--color-black);
   opacity: 0;
+  z-index: 3;   /* above the haze overlay, so the numeral never picks up its blur */
 }
 .sc-l {
   position: absolute; bottom: 12px; left: 0; right: 0;
@@ -448,10 +477,30 @@
 .rp-scores.run .sc.ag .sc-art { animation: sc-sweep .62s cubic-bezier(.3,.7,.3,1) var(--d) both; }
 @keyframes sc-sweep { from { --sweep: 0deg; } to { --sweep: 180deg; } }
 
-/* Marker lands as its graph finishes; the number never counts, it rises in after. */
+/* Beat two: the haze. The graph draws sharp, and only once it is complete do its two
+   ends go soft — a real blur, not a fade, so the middle of the curve stays readable
+   while the tails dissolve into the card. It is a backdrop-filter on a masked overlay
+   rather than a filter on the art itself, because a filter cannot be applied to part
+   of an element; anything painted above this layer (marker, number, label) is not in
+   its backdrop and so stays crisp. */
+@property --haze { syntax: '<length>'; inherits: false; initial-value: 0px; }
+.sc::after {
+  content: "";
+  position: absolute; inset: 0; z-index: 2;
+  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 12%, transparent 40%, transparent 60%, #000 88%, #000 100%);
+  mask-image: linear-gradient(90deg, #000 0, #000 12%, transparent 40%, transparent 60%, #000 88%, #000 100%);
+  -webkit-backdrop-filter: blur(var(--haze));
+  backdrop-filter: blur(var(--haze));
+  pointer-events: none;
+}
+.rp-scores.run .sc::after { animation: sc-haze .44s ease-out calc(var(--d) + 600ms) both; }
+@keyframes sc-haze { from { --haze: 0px; } to { --haze: 3.5px; } }
+
+/* Marker lands as its graph finishes; the number never counts, it rises in after — now
+   after the haze as well, so the three beats read in order. */
 .rp-scores.run .sc-tri { animation: sc-fade .3s ease calc(var(--d) + 400ms) both; }
 @keyframes sc-fade { to { opacity: 1; } }
-.rp-scores.run .sc-n { animation: sc-num .34s ease calc(var(--d) + 620ms) both; }
+.rp-scores.run .sc-n { animation: sc-num .34s ease calc(var(--d) + 1000ms) both; }
 @keyframes sc-num { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
 /* ── Recommendation ────────────────────────────────────────────────────────
@@ -555,8 +604,10 @@
 .rp-daynav .nav-day[disabled] { opacity: .35; cursor: default; }
 /* Nothing above should move for anyone who asked it not to — show the end state. */
 @media (prefers-reduced-motion: reduce) {
-  .rp-balance .lb-heat { animation: none; }
+  .rp-balance .lb-heat, .rp-balance::before { animation: none; }
+  .rp-balance::before { opacity: 0; }
   .rp-scores .sc-n, .rp-scores .sc-tri { opacity: 1; animation: none; }
+  .rp-scores .sc::after { animation: none; --haze: 3.5px; }
   .rp-hcard .badge svg { opacity: 1; transform: none; animation: none; }
   .rp-scores .sc-art { clip-path: none; -webkit-mask-image: none; mask-image: none; animation: none; --pass: 79px; }
   .rp-stats .rp-stat { animation: none; }
