@@ -19,6 +19,7 @@
   var OPEN = TRAVEL;           // where a committed fold settles
   var HINT = STOP * TRAVEL;    // 64px — the 1회 진입 stop, in scroll
   var raf = 0, holding = false, idle = 0, snapping = 0;
+  var lastY = 0, dir = 0;      // which way the last scroll went; settle() reads it
 
   // The page OPENS on 1회 진입 — Explore Packs under the thumb, so the first thing the
   // screen says is that there is more below — and rolls back down to "877 joined this
@@ -43,16 +44,24 @@
     });
     // Opacity alone would leave both Start buttons clickable through each other.
     root.classList.toggle('dj-open', q > 0.15);
+    // The bottom strip only turns while it is between its two rows. Off at either rest,
+    // so the rows sit there as plain flat text with no 3D of their own — see enter.css.
+    root.classList.toggle('dj-rolling', s > 0.005 && s < 0.995);
   }
 
   // Land on a state. Past the open stop the page is an ordinary scroller and is left
-  // alone; below it the nearest stop wins, biased low so a short pull still reaches
-  // 1회 진입 rather than falling back.
+  // alone; below it the nearest stop wins, biased towards where the gesture was already
+  // heading — a short pull up still reaches 1회 진입, and a short pull DOWN still falls
+  // out of it. Biasing only one way is what made the fold feel one-directional: from
+  // 올릴때 you had to drag 140px before it would let go.
   function settle() {
     if (holding || snapping) return;
     var y = screen.scrollTop;
     if (y >= OPEN) return;
-    var target = y < HINT * 0.45 ? 0 : y < HINT + (OPEN - HINT) * 0.42 ? HINT : OPEN;
+    var back = dir < 0;
+    var a = HINT * (back ? 0.75 : 0.45);
+    var b = HINT + (OPEN - HINT) * (back ? 0.75 : 0.42);
+    var target = y < a ? 0 : y < b ? HINT : OPEN;
     if (Math.abs(y - target) < 2) return;
     snapping = 1;
     glide(target, 420);
@@ -98,6 +107,8 @@
   });
 
   screen.addEventListener('scroll', function () {
+    var d = screen.scrollTop - lastY;
+    if (d) { dir = d; lastY = screen.scrollTop; }
     if (!raf) raf = requestAnimationFrame(paint);
     // A wheel or a trackpad never sends pointerup, so settling on release alone left the
     // page parked between two states on desktop. Settling when the scrolling stops
@@ -145,10 +156,13 @@
   // frame — so a swipe that starts on it had nothing to scroll and only a clean tap ever
   // did anything. Dragging on it now moves the fold directly, so the whole strip works
   // as a handle: grab it anywhere, including over the joined row and the Start button.
-  function handle(el) {
+  function handle(el, mouseOnly) {
     if (!el) return;
     var id = null, y0 = 0, top0 = 0, moved = 0;
     el.addEventListener('pointerdown', function (e) {
+      // A finger on something INSIDE the scroller already drags the fold, natively and
+      // better; taking it over here would move it twice. Only the mouse needs help.
+      if (mouseOnly && e.pointerType !== 'mouse') return;
       id = e.pointerId; y0 = e.clientY; top0 = screen.scrollTop; moved = 0;
       holding = true;
       rollDown();                                   // the intro is over
@@ -175,6 +189,10 @@
     }, true);
   }
   handle(document.getElementById('djGrab'));
+  // The other end of the same gesture: the folded header is a handle too, so 올릴때 comes
+  // back down by grabbing the blurred profile area — the mirror of grabbing the black
+  // strip to go up. A finger already does this through the scroller; this is the mouse.
+  handle(document.querySelector('.dj-hero'), true);
   // Tap the picture itself to hold the clip, tap again to let it run. A tap only —
   // anything with movement in it is a fold gesture and must not also toggle playback.
   // data-held tells assets/clips.js to leave it alone when it next comes on screen.

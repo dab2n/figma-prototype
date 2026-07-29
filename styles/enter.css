@@ -243,26 +243,29 @@
   /* Cut, not faded: by p 0.2 the scrolling Explore bar is drawn in exactly this place
      with exactly this content, so the swap has nothing to see. */
   opacity: calc(1 - max(0, var(--p, 0) - 0.2) * 40);
-  /* …and the strip is a drum, not a sliding list. See .dj-roll below. */
-  perspective: 400px;
 }
-/* Slot machine. The two faces pivot around the SAME line — the joined row's bottom edge
-   is the Explore row's top edge — so one turns away over the top as the other turns up
-   from underneath, and the seam between them never opens. Driven by --s, so dragging
-   back down unwinds it. */
-.dj-roll { transform: translateY(calc(var(--s, 0) * -80px)); transform-style: preserve-3d; }
-.dj-roll-joined {
-  height: 80px; padding-top: 8px; box-sizing: border-box;
-  transform-origin: 50% 100%;
-  transform: rotateX(calc(var(--s, 0) * 72deg));
-  opacity: calc(1 - var(--s, 0) * 0.85);
-}
-.dj-roll-explore {
-  height: 117px; display: flex; align-items: center; justify-content: center;
-  transform-origin: 50% 0;
-  transform: rotateX(calc((var(--s, 0) - 1) * 72deg));
-  opacity: calc(0.15 + var(--s, 0) * 0.85);
-}
+.dj-roll { transform: translateY(calc(var(--s, 0) * -80px)); }
+.dj-roll-joined { height: 80px; padding-top: 8px; box-sizing: border-box; }
+.dj-roll-explore { height: 117px; display: flex; align-items: center; justify-content: center; }
+
+/* Slot machine — and ONLY while it is turning. enter.js adds .dj-rolling for 0 < s < 1,
+   so at either rest the two rows carry no transform, no 3D context and no opacity of
+   their own: they rasterise exactly as flat text, and the crease where the faces meet
+   never parks on the card edge (that was the stray hairline under the frame).
+   A real drum, not two hinged flaps: the third value in transform-origin puts each row's
+   rotation axis 45px BEHIND it, so turning it carries it up and away around a cylinder
+   instead of folding it about its own edge. 130px of perspective against a 45px radius is
+   a hard, short barrel — the departing row shrinks as it goes over the top, and the
+   arriving one swells as it comes up the front. The roll's own translate is switched off
+   here because the orbit is the movement; putting both back would move each row twice. */
+.dj-rolling .dj-bar { perspective: 130px; }
+.dj-rolling .dj-roll { transform: none; transform-style: preserve-3d; }
+.dj-rolling .dj-roll-joined,
+.dj-rolling .dj-roll-explore { transform-origin: 50% 50% -45px; backface-visibility: hidden; }
+.dj-rolling .dj-roll-joined { transform: rotateX(calc(var(--s, 0) * 90deg)); }
+/* Lifted onto the same window first — it lives 80px lower in the flow, which is how the
+   two rest states work when nothing is turning. */
+.dj-rolling .dj-roll-explore { transform: translateY(-80px) rotateX(calc((var(--s, 0) - 1) * 90deg)); }
 .dj-roll .joined-row { padding: 0 16px; }
 
 /* Start is the action on the OPEN screen, so it never scrolls away — and it stays out of
@@ -284,6 +287,16 @@
    enter.js sets .dj-open once the fold is past the crossfade. */
 .dj-open .dj-start { pointer-events: auto; }
 .dj-open .dj-bar { pointer-events: none; }
+/* Same trap, four more layers: the title/description, the bookmark and share pills and
+   the fire icons all fade to nothing over the folded header but stay in the hit path,
+   so a drag on the profile area was landing on an invisible caption and a tap was
+   toggling a description nobody can see. The photo goes with them — its tap is
+   play/pause, which means nothing once it is a blurred header. What is left under the
+   thumb is .dj-hero itself, which is inside the scroller and therefore drags the fold. */
+.dj-open .dj-copy,
+.dj-open .dj-side,
+.dj-open .dj-photo,
+.dj-open .dj-hero .fire-icons { pointer-events: none; }
 /* The content already ends with it, so leave room rather than letting it sit on the copy. */
 .dj-sheet .creator-content { padding-bottom: 108px; }
 
