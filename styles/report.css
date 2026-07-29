@@ -122,12 +122,12 @@
      deeper blur dissolves it completely and the marker goes back to being an opaque
      white pebble. Checked at a true 3x magnification (blur scaled with it), where the
      band can be seen entering the disc and coming out the other side. */
-  -webkit-backdrop-filter: blur(4px) saturate(1.06);
-  backdrop-filter: blur(4px) saturate(1.06);
+  -webkit-backdrop-filter: blur(2.6px) saturate(1.06);
+  backdrop-filter: blur(2.6px) saturate(1.06);
   /* Thickness: light pooling just inside the top edge, and the disc casting a faint
      shadow of its own. Any more white than this and the band stops showing through. */
   box-shadow:
-    inset 0 1.2px 3px rgba(255,255,255,.42),
+    inset 0 1px 2px rgba(255,255,255,.28),
     0 3px 10px rgba(120,20,10,.10);
   pointer-events: none;
 }
@@ -145,17 +145,26 @@
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask-composite: exclude;
 }
+/* A hairline, and lit only across the top — bright from the upper left, over the crown,
+   to the upper right, and gone by the sides. A rim that runs the whole way round reads
+   as a drawn circle; glass only catches the light where it faces it. Conic, because the
+   two highlights are positions on the circumference, not ends of a linear ramp. */
 .arc-dot::before {
-  padding: 1.1px;
-  background: linear-gradient(145deg,
-    rgba(255,255,255,.98) 0%, rgba(255,255,255,.35) 28%,
-    rgba(255,255,255,.12) 52%, rgba(255,255,255,.55) 78%, rgba(255,255,255,.95) 100%);
+  padding: 0.7px;
+  background: conic-gradient(from 0deg,
+    rgba(255,255,255,.92) 0deg,
+    rgba(255,255,255,.98) 38deg,
+    rgba(255,255,255,.20) 100deg,
+    rgba(255,255,255,.08) 185deg,
+    rgba(255,255,255,.20) 262deg,
+    rgba(255,255,255,.98) 322deg,
+    rgba(255,255,255,.92) 360deg);
 }
+/* The sheen just inside the crown. Kept faint — this is what was making it milky. */
 .arc-dot::after {
-  padding: 4px;
-  background: linear-gradient(160deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,0) 38%,
-    rgba(255,255,255,0) 64%, rgba(255,255,255,.20) 100%);
-  filter: blur(2px);
+  padding: 3px;
+  background: linear-gradient(180deg, rgba(255,255,255,.20) 0%, rgba(255,255,255,0) 42%);
+  filter: blur(1.5px);
 }
 .arc-dot span {
   position: absolute;

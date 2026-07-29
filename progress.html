@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=889"></script>
-<script defer src="assets/gauge.js?v=889"></script>
-<script defer src="assets/scores.js?v=889"></script>
+<script defer src="assets/openext.js?v=890"></script>
+<script defer src="assets/gauge.js?v=890"></script>
+<script defer src="assets/scores.js?v=890"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,8 +16,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Records</title>
-<link rel="stylesheet" href="styles/main.css?v=889">
-<link rel="stylesheet" href="styles/report.css?v=889">
+<link rel="stylesheet" href="styles/main.css?v=890">
+<link rel="stylesheet" href="styles/report.css?v=890">
 </head>
 <body>
 <div class="phone">
@@ -30,9 +30,10 @@
       <div class="app-bar">
         <p class="rp-title">Records</p>
         <div class="actions">
-          <!-- The old Progress|Library toggle is gone with the redesign, and this was the
-               only route into the Library — the calendar (past sessions) carries it now. -->
-          <a class="ic" href="library.html"><img class="ic-cal" src="assets/icons/appbar-calendar.svg" alt="지난 기록"></a>
+          <!-- The old Progress|Library toggle is gone with the redesign, and this is the
+               only route into the Library. A stack of cards, not a calendar: what it opens
+               is every session as a card, not a month to pick a date from. -->
+          <a class="ic" href="library.html"><img class="ic-cal" src="assets/icons/appbar-records.svg" alt="지난 기록"></a>
           <span class="ic"><img class="ic-kebab" src="assets/icons/kebab-dots.svg" alt="더보기"></span>
         </div>
       </div>
