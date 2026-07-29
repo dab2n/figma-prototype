@@ -6,10 +6,10 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#8E7E65">
-<script defer src="assets/openext.js?v=856"></script>
-<script defer src="assets/packs.js?v=856"></script>
-<script defer src="assets/enter.js?v=856"></script>
-<script defer src="assets/process.js?v=856"></script>
+<script defer src="assets/openext.js?v=857"></script>
+<script defer src="assets/packs.js?v=857"></script>
+<script defer src="assets/enter.js?v=857"></script>
+<script defer src="assets/process.js?v=857"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,10 +17,10 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Sean's Final 1km Pace</title>
-<link rel="stylesheet" href="styles/main.css?v=856">
-<link rel="stylesheet" href="styles/detail.css?v=856">
-<link rel="stylesheet" href="styles/creator.css?v=856">
-<link rel="stylesheet" href="styles/enter.css?v=856">
+<link rel="stylesheet" href="styles/main.css?v=857">
+<link rel="stylesheet" href="styles/detail.css?v=857">
+<link rel="stylesheet" href="styles/creator.css?v=857">
+<link rel="stylesheet" href="styles/enter.css?v=857">
 </head>
 <body>
 <div class="phone">
@@ -36,7 +36,9 @@
 
       <div class="status-bar on-dark"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
       <div class="app-bar-transparent">
-        <button class="icon-btn" onclick="history.back()"><img src="assets/icons/appbar-back.svg" alt="뒤로"></button>
+        <!-- A fixed destination like every other back button here: history.back() landed on
+             the setup flow whenever the pack was reached from it. -->
+        <a class="icon-btn" href="packs.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
         <button class="kebab-tan"><img src="assets/icons/kebab-dots.svg" alt="더보기"></button>
       </div>
 
