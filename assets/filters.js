@@ -17,6 +17,22 @@
   var list = document.querySelector('.pack-list');
   var drawer = document.getElementById('chipDrawer');
   var drawerChips = document.getElementById('drawerChips');
+
+  // Snap is armed only once the arrival animation has landed. A mandatory snap container
+  // re-snaps every time a snap area moves, and the entrance moves every card on every
+  // frame — so the list locked and stepped instead of sliding, which is what read as the
+  // slide-in breaking. Ahead of the filter wiring below on purpose: any page with a pack
+  // list wants this, drawer or no drawer.
+  var scroller = list && list.closest('.screen');
+  var snapWait;
+  function armSnap() {
+    if (!scroller) return;
+    clearTimeout(snapWait);
+    scroller.classList.remove('snap');
+    snapWait = setTimeout(function () { scroller.classList.add('snap'); }, 760);
+  }
+  armSnap();
+
   if (!row || !list || !drawer) return;
 
   var cards = [].slice.call(list.querySelectorAll('.pack-card'));
@@ -67,6 +83,7 @@
 
     var top = list.closest('.screen');
     if (top) top.scrollTop = 0;
+    armSnap();                          // the entrance replays, so the snap stands down
   }
 
   function paintChips() {
