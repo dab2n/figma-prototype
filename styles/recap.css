@@ -17,51 +17,44 @@
   -webkit-user-select: none;
 }
 
-/* Layering, bottom up: the clip, then the wash, then the glow — both laid over it with
-   lighten, which is the Figma blend. Lighten keeps whichever is brighter, so every black
-   pixel of the clip is replaced by the wash and the black backing can never show, while
-   the runner survives wherever it is brighter than the gradient. */
+/* Bottom up: the clip, its own white foot, then the blur blob — one lighten stack, which
+   is the Figma blend. Lighten keeps whichever is brighter, so the clip's black backing is
+   replaced wholesale by the blob and the runner survives only where he is brighter than
+   it, which is what tints him red instead of leaving him grey on red. */
 .recap-clip {
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
   object-fit: cover;
   transform: scale(1.06);
+  /* The clip is a colour photograph and the design's figure is not — his own greens and
+     pinks fought the red. Drained and lifted, he reads as the blob's own light. */
+  filter: saturate(0.28) brightness(0.86);
   pointer-events: none;
   z-index: 0;
 }
-/* The design's gradient, full frame, so nothing is left for the clip's black to fill. */
-.recap-wash {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  z-index: 1;
-  mix-blend-mode: lighten;
-  pointer-events: none;
-}
-/* The supplied blur blob, sitting where the figure runs. */
-.recap-glow {
-  position: absolute;
-  /* Scaled well past the frame and eased back, so its soft centre sits behind the
-     figure and the ring at its edge never crosses the screen. */
-  left: 50%;
-  top: 46%;
-  width: 900px;
-  transform: translate(-50%, -50%);
-  opacity: .5;
-  z-index: 2;
-  mix-blend-mode: lighten;
-  pointer-events: none;
-}
-
-/* Bottom of the frame goes hazy and white. Sits after the glow in the DOM so it lands
-   on top of the imagery but under the title, the score and the pull-up handle. */
+/* 달리기_션_흑's own fill: black to 78%, white at the foot. Under the blob, so the white
+   it adds is what the blob's pale edge then sits on. */
 .recap-fade {
   position: absolute;
   inset: 0;
   mix-blend-mode: lighten;
   background: linear-gradient(180deg, #050A0A 78%, #FFFFFF 100%);
+  pointer-events: none;
+}
+/* The blob, full frame. Its radial runs solid #FA3030 out to 73%, then orange, peach and
+   white at the rim — so covering the frame IS the background colour, and nothing else is
+   needed to make it. */
+.recap-glow {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  /* The path stops ~64px short of the frame at both ends once it is cover-fitted, and
+     outside the path the SVG is transparent — which let the clip's black corners through.
+     Scaled up until the solid core reaches the top edge; the foot is white anyway. */
+  transform: scale(1.32);
+  mix-blend-mode: lighten;
   pointer-events: none;
 }
 
@@ -104,11 +97,21 @@
   transition: opacity .45s ease, transform .5s cubic-bezier(.2,.8,.3,1);
 }
 .recap-match.done .recap-match-label { opacity: 1; transform: translateY(0); }
-.recap-pct { display: flex; align-items: baseline; gap: 6px; }
+/* The score arrives before it counts: it slides up out of near-nothing, and only once
+   it has landed does the number run. Counting during the slide read as two things
+   happening at once. */
+.recap-pct {
+  display: flex; align-items: baseline; gap: 6px;
+  opacity: .18;
+  transform: translateY(18px);
+  transition: opacity .34s ease, transform .42s cubic-bezier(.2,.8,.3,1);
+}
+.recap-match.enter .recap-pct { opacity: 1; transform: translateY(0); }
 .recap-pct .num { font-family: var(--font-offbit); font-weight: 700; font-size: 72px; line-height: 1.1; letter-spacing: -1.44px; }
 .recap-pct .unit { font-family: var(--font-supreme-bold); font-size: 18px; line-height: 1.2; letter-spacing: -0.54px; }
 
-/* Pull-up handle at the very bottom — bounces up twice on a loop, hinting "scroll up". */
+/* Pull-up handle at the very bottom. #FA3030 with a 20% white layer over it, which is
+   rgb(251,89,89) — the chevron is inline SVG so it takes the same colour from here. */
 .recap-full {
   position: absolute;
   bottom: 24px;
@@ -118,14 +121,15 @@
   align-items: center;
   gap: 4px;
   text-decoration: none;
-  animation: hint-bounce 2.6s ease-in-out 1s infinite;
+  color: #FB5959;
+  animation: hint-nudge 3.6s ease-in-out 1.2s infinite;
 }
-/* A hint, not a bounce — 4px is enough to read as "pull me up". */
-@keyframes hint-bounce {
-  0%, 46%, 100% { transform: translateY(0); }
-  14% { transform: translateY(-4px); }
-  28% { transform: translateY(0); }
-  38% { transform: translateY(-4px); }
+/* One nudge, then still. Twice in a row read as a bounce, which is too much motion for
+   something this small on a phone. */
+@keyframes hint-nudge {
+  0%, 100% { transform: translateY(0); }
+  9%  { transform: translateY(-6px); }
+  22% { transform: translateY(0); }
 }
-.recap-full img { width: 20px; height: 20px; filter: brightness(0) invert(0.55); }
-.recap-full span { font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; color: var(--color-neutral-500); }
+.recap-full svg { width: 20px; height: 20px; display: block; }
+.recap-full span { font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px; }

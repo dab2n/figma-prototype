@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=861"></script>
+<script defer src="assets/openext.js?v=862"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,19 +14,20 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Session Recap</title>
-<link rel="stylesheet" href="styles/main.css?v=861">
-<link rel="stylesheet" href="styles/recap.css?v=861">
+<link rel="stylesheet" href="styles/main.css?v=862">
+<link rel="stylesheet" href="styles/recap.css?v=862">
 </head>
 <body>
 <div class="phone">
   <div class="screen recap-screen" id="recapScreen">
     <video class="recap-clip" id="clip" src="assets/video/recap-overlay.mp4"
            muted playsinline autoplay preload="auto" disablepictureinpicture></video>
-    <img class="recap-wash" src="assets/photos/recap-bg.png" alt="">
-    <img class="recap-glow" src="assets/photos/recap-blur.svg" alt="">
-    <!-- 달리기_션_흑's own fill: black until 78%, white at the foot. Lighten, like every
-         other layer here, so the black stretch is a no-op and only the bottom lifts. -->
+    <!-- Three layers, exactly as drawn: the black clip, its own fill whitening the foot,
+         and the blur blob over both on lighten. Nothing else — the earlier full-frame
+         wash was a fourth layer the design never had, and it is what made the colour
+         read wrong. -->
     <div class="recap-fade"></div>
+    <img class="recap-glow" src="assets/photos/session-recap-blur.svg" alt="">
 
     <div class="status-bar on-dark" style="position:absolute; top:0; left:0; z-index:6;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
 
@@ -37,8 +38,10 @@
       <div class="recap-pct"><span class="num">0.0</span><span class="unit">pts</span></div>
     </div>
 
+    <!-- Chevron inlined so it takes the link's colour with the label instead of needing
+         a filter chain to fake it. -->
     <a class="recap-full" href="records.html">
-      <img src="assets/icons/explore-chevron-up.svg" alt="">
+      <svg viewBox="0 0 30 30" fill="none" aria-hidden="true"><path d="M21 19.5L15 13.5L9 19.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span>View Full Report</span>
     </a>
   </div>
@@ -57,7 +60,7 @@
   function revealScore() {
     if (scored) return;
     scored = true;
-    var target = 78.8, dur = 900, s = null;
+    var target = 78.8, dur = 520, s = null;
     requestAnimationFrame(function step(t) {
       if (s === null) s = t;
       var p = Math.min((t - s) / dur, 1);
@@ -67,9 +70,13 @@
     });
   }
 
-  // Number and clip start together.
+  // Clip starts at once; the score slides in from near-transparent first and only then
+  // runs up — the count is short so the two read as one move, not two.
   play(clip);
-  revealScore();
+  requestAnimationFrame(function () {
+    document.querySelector('.recap-match').classList.add('enter');
+    setTimeout(revealScore, 340);
+  });
 
   // Autoplay can still be refused. First touch starts it, so the screen is never left
   // sitting on a still frame.
