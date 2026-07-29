@@ -115,3 +115,28 @@
 /* Video thumbnails fill the same box as the background image and sit under the
    avatars/badges, which already carry z-index 1. */
 .pack-thumb video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* Filter drawer. Closed it has no height at all, so the list sits where it always did;
+   open, it adds exactly one chip row and everything below moves down with it. Height is
+   a fixed 48 rather than auto because a transition needs a number to animate to, and
+   the row is only ever one line. */
+.chip-drawer {
+  height: 0;
+  overflow: hidden;
+  transition: height .28s cubic-bezier(.2,.85,.3,1);
+}
+.chip-drawer.open { height: 48px; }
+.chip-drawer .chips {
+  padding: 6px 16px 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.chip-drawer .chips::-webkit-scrollbar { display: none; }
+.chip-drawer .chip { cursor: pointer; }
+/* Filtered out — hidden alone is not enough against .pack-card's own display. */
+.pack-card[hidden] { display: none; }
+.filter-row .chip { cursor: pointer; }
+/* Every combination is reachable and some of them are empty (there is no Pro basketball
+   pack), so the list says so rather than going blank. */
+.pack-empty { margin: 40px 12px; text-align: center; font-family: var(--font-supreme); font-size: 14px; letter-spacing: -0.42px; color: var(--color-neutral-400); }
+.pack-empty[hidden] { display: none; }
