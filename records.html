@@ -6,9 +6,9 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=867"></script>
-<script defer src="assets/gauge.js?v=867"></script>
-<script defer src="assets/scores.js?v=867"></script>
+<script defer src="assets/openext.js?v=868"></script>
+<script defer src="assets/gauge.js?v=868"></script>
+<script defer src="assets/scores.js?v=868"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,8 +16,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Report</title>
-<link rel="stylesheet" href="styles/main.css?v=867">
-<link rel="stylesheet" href="styles/report.css?v=867">
+<link rel="stylesheet" href="styles/main.css?v=868">
+<link rel="stylesheet" href="styles/report.css?v=868">
 </head>
 <body>
 <div class="phone">
@@ -40,24 +40,33 @@
       <p class="rp-big"><span class="n" id="gainNum">78.8</span><span class="u">pts</span></p>
       <p class="rp-cap">Movement Performance Gain</p>
 
-      <!-- Top slice of the design's 522x377 ellipse. The marker is the same ring used
-           for body-area selection (신체 영역 in the design), not a plain dot. -->
+      <!-- 궤적: the design's 522x377 ellipse cropped to the frame. Three pieces, bottom
+           up — the track, the progress line that trails the marker like a tail, and the
+           glass marker itself (an HTML element, so it can really blur what is behind it;
+           SVG has no backdrop filter). -->
+      <div class="rp-gauge-wrap">
       <svg class="rp-gauge" viewBox="0 0 360 130" fill="none" aria-hidden="true">
         <defs>
-          <linearGradient id="gaugeFade" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#fff" stop-opacity="0"/>
-            <stop offset=".2" stop-color="#fff" stop-opacity=".85"/>
-            <stop offset=".8" stop-color="#fff" stop-opacity=".85"/>
-            <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+          <!-- The track's own radial: brightest over the crown, gone by the ends. -->
+          <radialGradient id="trackFade" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="1"
+                          gradientTransform="translate(180 12) rotate(90) scale(377 324.79)">
+            <stop stop-color="#fff" stop-opacity=".85"/>
+            <stop offset=".4264" stop-color="#fff" stop-opacity="0"/>
+          </radialGradient>
+          <!-- The tail: solid at the marker, dissolved a little way behind it. -->
+          <linearGradient id="tailFade" gradientUnits="userSpaceOnUse" x1="341" y1="0" x2="19" y2="0">
+            <stop stop-color="#fff"/>
+            <stop offset=".54" stop-color="#fff" stop-opacity="0"/>
           </linearGradient>
         </defs>
-        <!-- pathLength 100 so the draw-on dash maths is just percentages. -->
-        <path class="arc-line" pathLength="100" d="M 19 64 A 261 188.5 0 0 1 341 64" stroke="url(#gaugeFade)" stroke-width="6" stroke-linecap="round"/>
-        <image class="arc-dot" id="arcRing" href="assets/icons/gauge-ring-glass.svg" x="208.5" y="7.5" width="39" height="39"/>
+        <path class="arc-line" pathLength="100" d="M 19 64 A 261 188.5 0 0 1 341 64" stroke="url(#trackFade)" stroke-width="6" stroke-linecap="round"/>
+        <path class="arc-prog" pathLength="100" d="M 19 64 A 261 188.5 0 0 1 341 64" stroke="url(#tailFade)" stroke-width="6" stroke-linecap="round" stroke-dasharray="0 100"/>
         <text id="arcVal" x="228" y="67" text-anchor="middle" fill="#fff" font-family="Supreme, sans-serif" font-size="12" opacity=".92">78.8</text>
         <text x="48"  y="90" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">0</text>
         <text x="306" y="90" text-anchor="middle" fill="#757575" font-family="Supreme, sans-serif" font-size="11">100</text>
       </svg>
+      <div class="arc-dot" id="arcRing"><span></span></div>
+      </div>
     </div>
 
     <div class="rp-body">
@@ -196,17 +205,17 @@ window.addEventListener('pagereveal', function (e) {
 // would have played out behind that snapshot and be over before the page was ever shown —
 // which is why none of it was visible.
 (function () {
-  var hero = document.querySelector('.rp-hero');
-  hero.classList.add('rp-draw');              // resting state, at once, so nothing flashes
+  // On the root, not the hero: NEW Best is down in the body and waits on the same clock.
+  var root = document.documentElement;
+  root.classList.add('rp-draw');              // resting state, at once, so nothing flashes
 
   var started = false;
   function start() {
     if (started) return;
     started = true;
-    document.documentElement.classList.add('rp-rise');
-    hero.classList.add('rp-play');
+    root.classList.add('rp-rise', 'rp-play');
     setTimeout(function () {
-      hero.classList.add('rp-landed');
+      root.classList.add('rp-landed');
       window.rpGauge.to(78.8, 78.8, { noCount: true });
     }, 620);
   }

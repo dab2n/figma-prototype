@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=867"></script>
+<script defer src="assets/openext.js?v=868"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,8 +14,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Session Recap</title>
-<link rel="stylesheet" href="styles/main.css?v=867">
-<link rel="stylesheet" href="styles/recap.css?v=867">
+<link rel="stylesheet" href="styles/main.css?v=868">
+<link rel="stylesheet" href="styles/recap.css?v=868">
 </head>
 <body>
 <div class="phone">
@@ -38,10 +38,9 @@
       <div class="recap-pct"><span class="num">0.0</span><span class="unit">pts</span></div>
     </div>
 
-    <!-- Chevron inlined so it takes the link's colour with the label instead of needing
-         a filter chain to fake it. -->
+    <!-- A plain link now: tap it and the report opens. The drag-to-commit gesture and the
+         chevron that advertised it are gone. -->
     <a class="recap-full" href="records.html">
-      <svg viewBox="0 0 30 30" fill="none" aria-hidden="true"><path d="M21 19.5L15 13.5L9 19.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span>View Full Report</span>
     </a>
   </div>
@@ -67,6 +66,12 @@
   var FADE = 0.22, LEAD = 0.12;   // short crossfade, and the restart comes a beat early
   (function fade() {
     var d = clip.duration, t = clip.currentTime;
+    // Not playing means HIDDEN, not paused-and-showing. iOS draws its own start-playback
+    // button over a video it refused to autoplay (Low Power Mode does this every time),
+    // and no amount of CSS on the shadow control reliably removes it — so the element
+    // itself goes away, leaving the gradient, which is what the frame is anyway. The
+    // first tap starts it and it comes back.
+    clip.style.visibility = clip.paused ? 'hidden' : 'visible';
     if (!d || clip.paused) clip.style.opacity = 1;   // never leave it stranded mid-fade
     else {
       // Rewinding before the last frame means the incoming fade-in has already begun by
@@ -106,48 +111,6 @@
   document.addEventListener('visibilitychange', function () {
     if (!document.hidden && clip.paused) play(clip);
   });
-})();
-
-// Grab the "View Full Report" handle and drag up: the screen follows your finger, and
-// past 60px it commits and the report slides in on the same gesture (detail-in). Let go
-// short of that and it springs back. A wheel-down still counts as the same intent.
-(function () {
-  var sc = document.getElementById('recapScreen');
-  var handle = document.querySelector('.recap-full');
-  var startY = null, dy = 0, going = false;
-  var MAX = 160, COMMIT = 60;
-
-  function go() { if (going) return; going = true; location.href = 'records.html'; }
-  function lift(px) { sc.style.transform = px ? 'translateY(' + px + 'px)' : ''; }
-
-  handle.addEventListener('pointerdown', function (e) {
-    startY = e.clientY; dy = 0;
-    handle.style.animation = 'none';           // stop the hint bounce while dragging
-    sc.style.transition = 'none';
-    handle.setPointerCapture(e.pointerId);
-  });
-  handle.addEventListener('pointermove', function (e) {
-    if (startY === null) return;
-    dy = Math.max(-MAX, Math.min(0, e.clientY - startY));
-    lift(dy);
-  });
-  function release() {
-    if (startY === null) return;
-    startY = null;
-    sc.style.transition = 'transform .32s cubic-bezier(.32,.72,0,1)';
-    if (dy <= -COMMIT) { lift(-MAX); go(); }
-    else { lift(0); handle.style.animation = ''; }
-  }
-  handle.addEventListener('pointerup', release);
-  handle.addEventListener('pointercancel', release);
-  // Tapping it (no drag) still opens the report — it is a link.
-  handle.addEventListener('click', function (e) { if (dy <= -8) e.preventDefault(); });
-
-  var lock = false;
-  sc.addEventListener('wheel', function (e) {
-    if (lock || e.deltaY <= 10) return;        // scroll down gesture = pull content up
-    lock = true; go();
-  }, { passive: true });
 })();
 
 // Same cross-document transition as Explore Packs: the full report slides up on entry

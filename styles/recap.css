@@ -12,7 +12,6 @@
      saturation — the falloff is organic, not linear. The flat colour underneath only
      covers the instant before the image decodes. */
   background: #050A0A;   /* only ever seen for an instant before the layers paint */
-  touch-action: none;
   user-select: none;
   -webkit-user-select: none;
 }
@@ -89,7 +88,11 @@
 /* Sits at the design's x99 / y566, left-aligned from there rather than centred. */
 .recap-match {
   position: absolute;
-  top: 566px;
+  /* Off the BOTTOM, not the top. Anchored at 566 from the top it sat where the design
+     puts it on a 780 frame and ran straight into the handle on a real phone, whose
+     viewport is nearer 700. 101 up from the foot is the same place on 780 and holds its
+     gap to the handle on any height. */
+  bottom: 101px;
   left: 99px;
   display: flex;
   flex-direction: column;

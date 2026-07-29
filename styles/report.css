@@ -104,7 +104,43 @@
 
 /* Gauge: the top slice of the design's 522x377 ellipse, so the curve keeps its very
    flat rise. Stroke fades out at both ends the way the artwork does. */
-.rp-gauge { position: absolute; top: 308px; left: 0; width: 360px; height: 130px; }
+.rp-gauge-wrap { position: absolute; top: 308px; left: 0; width: 360px; height: 130px; }
+.rp-gauge { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* The marker is glass: 18% white over a real blur of the wash behind it, with the rim
+   catching light top-left and bottom-right. It is HTML rather than an SVG node purely
+   because SVG has no backdrop filter — gauge.js positions it in the gauge's own
+   coordinates, which are 1:1 with pixels here. */
+.arc-dot {
+  position: absolute;
+  left: 208.5px; top: 7.5px;
+  width: 39px; height: 39px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+.arc-dot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 1px;
+  background: linear-gradient(145deg, rgba(255,255,255,.9) 0%, rgba(255,255,255,.10) 45%, rgba(255,255,255,.65) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+.arc-dot span {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 15.17px; height: 15.17px;
+  margin: -7.58px 0 0 -7.58px;
+  border-radius: 50%;
+  background: #fff;
+}
 /* The label under the marker counts the whole way, so only the headline waits — it
    joins a moment after the marker sets off and lands with it (gauge.js). */
 .rp-big .n { transition: opacity .22s ease; }
@@ -116,12 +152,16 @@
    rp-draw is the resting state and goes on straight away so nothing flashes; rp-play
    starts the clock, and waits for the page transition (see records.html). */
 .rp-draw .arc-line { stroke-dasharray: 100; stroke-dashoffset: 100; }
-.rp-draw .arc-dot, .rp-draw #arcVal { opacity: 0; }
+.rp-draw .arc-dot, .rp-draw #arcVal, .rp-draw .arc-prog { opacity: 0; }
 .rp-draw .rp-big { opacity: 0; transform: translateY(22px); transition: opacity .4s ease, transform .52s cubic-bezier(.2,.8,.3,1); }
 .rp-play .arc-line { animation: arc-draw .6s cubic-bezier(.4,0,.2,1) both; }
 @keyframes arc-draw { to { stroke-dashoffset: 0; } }
-.rp-landed .arc-dot, .rp-landed #arcVal { opacity: 1; transition: opacity .3s ease; }
+.rp-landed .arc-dot, .rp-landed #arcVal, .rp-landed .arc-prog { opacity: 1; transition: opacity .3s ease; }
 .rp-landed .rp-big { opacity: 1; transform: translateY(0); }
+/* NEW Best is the last thing to arrive — after the track, the marker and the score. */
+.rp-draw .delta.best { opacity: 0; }
+.rp-landed .delta.best { animation: rp-best-in .42s cubic-bezier(.2,.85,.3,1) 1.15s both; }
+@keyframes rp-best-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
 /* ── Body ──────────────────────────────────────────────────────────────────
    Fades out of the hero wash so there is no seam where the artwork stops. */

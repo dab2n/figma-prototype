@@ -20,15 +20,24 @@ window.rpGauge = (function () {
   function $(id) { return document.getElementById(id); }
   function ease(p) { return 1 - Math.pow(1 - p, 3); }
 
-  // Marker sits ON the curve: solve the ellipse for y at the marker's x.
+  // Marker sits ON the curve: solve the ellipse for y at the marker's x. The progress
+  // line is dashed to end exactly under the marker, so it reads as a tail being dragged
+  // along rather than a second thing that happens to move at the same time.
+  var ARC_X0 = 19, ARC_X1 = 341;
   function place(score) {
     var ring = $('arcRing'), val = $('arcVal');
     if (!ring) return;
     var x = Math.max(64, Math.min(316, ANCHOR_X + (score - ANCHOR_SCORE) * PX_PER_POINT));
     var dx = (x - ARC_CX) / ARC_RX;
     var y = ARC_TOP + ARC_RY * (1 - Math.sqrt(Math.max(0, 1 - dx * dx)));
-    ring.setAttribute('x', (x - 19.5).toFixed(1));
-    ring.setAttribute('y', (y - 19.5).toFixed(1));
+    // An HTML element, not an SVG node — it needs a real backdrop blur to read as glass.
+    ring.style.left = (x - 19.5).toFixed(1) + 'px';
+    ring.style.top = (y - 19.5).toFixed(1) + 'px';
+    var prog = document.querySelector('.arc-prog');
+    if (prog) {
+      var p = Math.max(0, Math.min(100, (x - ARC_X0) / (ARC_X1 - ARC_X0) * 100));
+      prog.setAttribute('stroke-dasharray', p.toFixed(2) + ' 100');
+    }
     val.setAttribute('x', x.toFixed(1));
     val.setAttribute('y', (y + 40).toFixed(1));
     val.textContent = score.toFixed(1);
