@@ -96,7 +96,34 @@
   text-decoration: none;
   scroll-snap-align: center;
   box-shadow: inset 0 0 20px 10px rgba(255,255,255,0.2);
+  isolation: isolate;          /* keeps the sheen below blending with the page behind */
 }
+/* Light drifting over the artwork. ::before, not ::after, so it stays UNDER the title
+   and the button — among positioned children with no z-index, DOM order decides who
+   paints on top. Oversized and moved by transform only, so the whole thing is one
+   composited layer: no repaint, no gradient re-rasterisation per frame. Two blobs on
+   different periods, because one alone reads as a slide rather than a shimmer. */
+.hero-card::before {
+  content: "";
+  position: absolute;
+  inset: -35%;
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  background:
+    radial-gradient(38% 34% at 30% 28%, rgba(255,241,216,0.95), transparent 66%),
+    radial-gradient(34% 38% at 72% 74%, rgba(255,118,70,0.80), transparent 68%);
+  /* Two periods that do not divide into each other, so the drift and the swell never
+     line up twice the same way — that is what reads as 일렁임 instead of a loop. */
+  animation: hero-sheen 9s ease-in-out infinite alternate,
+             hero-swell 6.5s ease-in-out infinite alternate;
+}
+@keyframes hero-sheen {
+  from { transform: translate3d(-9%, -7%, 0) rotate(-4deg) scale(1); }
+  to   { transform: translate3d(10%, 8%, 0) rotate(5deg) scale(1.18); }
+}
+@keyframes hero-swell { from { opacity: .5; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .hero-card::before { animation: none; } }
 .hero-text {
   position: absolute;
   top: 189px;
