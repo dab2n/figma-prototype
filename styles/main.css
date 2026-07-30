@@ -1,4 +1,4 @@
-@import url('./tokens.css?v=910');
+@import url('./tokens.css?v=911');
 
 /* Tell the phone which way each screen leans, so its own chrome — the gesture bar most
    of all — picks the matching side instead of always landing light. Declared per page in
@@ -197,9 +197,12 @@ video::-webkit-media-controls-start-playback-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 134px;
+  /* No side padding. 134px each side left a 92px content box, and the bar — a flex item
+     with the default flex-shrink — gave up 52 of its 144px to fit it. */
+  padding: 10px 0;
 }
 .tabbar .home-indicator span {
+  flex: none;
   width: 144px;
   height: 4px;
   border-radius: 2px;
