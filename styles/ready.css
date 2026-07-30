@@ -55,8 +55,8 @@
 
 /* Tapping foot — above the blur at Figma x37/y230; taps the floor twice on a loop
    (plus-darker → multiply). */
-.rts-foot { position: absolute; left: 37px; top: 230px; width: 287px; height: 327px; z-index: 2;
-  background: url('../assets/icons/tap-foot.png') center / contain no-repeat; mix-blend-mode: multiply;
+.rts-foot { position: absolute; left: 24px; top: 268px; width: 336px; height: 289px; z-index: 2;
+  background: url('../assets/icons/tap-foot.svg') center / contain no-repeat; mix-blend-mode: multiply;
   opacity: 0; animation: rts-final-in .7s cubic-bezier(.2,.7,.2,1) 3s both, foot-tap 2.6s ease-in-out 3.7s infinite; }
 @keyframes foot-tap {                                 /* gentle, small double-dip */
   0%, 62%, 100% { transform: translateY(0); }
