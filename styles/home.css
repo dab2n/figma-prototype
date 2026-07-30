@@ -97,35 +97,63 @@
   scroll-snap-align: center;
   box-shadow: inset 0 0 20px 10px rgba(255,255,255,0.2);
 }
-/* The bottom of the card, where the main colour hands over to the pale one, breathes.
-   No colour is added: this is the card's OWN art, masked to that band and drifting a
-   few pixels, so the hand-over line wavers while every hue stays exactly where the
-   artwork put it. Same shape of motion as the Landing Balance heat blob — slow,
-   shallow, five keyframes on uneven timings so it never visibly repeats.
-   The mask stays clear until 72%, below the lowest point any of the three subjects
-   reaches; overlap them and the drifting copy ghosts an arm or a ball.
-   ::before, so the title and the button sit above it untouched. */
-.hero-card::before {
-  content: "";
+/* A layer of low-lying mist over the bottom of the card. Added artwork, not the card's
+   own gradient nudged about — nudging it was invisible, which is why this exists.
+   Colour comes from each card inline (--fog), sampled from the pale tone its own
+   artwork already fades into, so the mist belongs to the card instead of washing it
+   towards white.
+   The crests have to reach ABOVE the artwork's own pale ceiling. Level with it the mist
+   is the colour that is already there and nothing shows however far it drifts; only the
+   part that rises into the red reads as mist at all.
+   Two banks on different periods and opposite drifts — one alone slides, two crossing
+   billow. Clipped to the bottom 48%, so the figure is never touched, and placed before
+   .hero-text in the markup so the title and button stay above it. */
+.hero-fog {
   position: absolute;
-  inset: 0;
+  left: 0; right: 0; bottom: 0;
+  height: 48%;
   z-index: 0;
+  overflow: hidden;
   pointer-events: none;
-  background-image: inherit;      /* each card sets its own art inline */
-  background-size: cover;
-  background-position: center;
-  -webkit-mask-image: linear-gradient(180deg, transparent 72%, #000 86%);
-  mask-image: linear-gradient(180deg, transparent 72%, #000 86%);
-  animation: hero-tide 11s ease-in-out infinite alternate;
 }
-@keyframes hero-tide {
-  0%   { transform: translate(-8px, -2px) scale(1.03) rotate(0deg); }
-  27%  { transform: translate(5px, 9px)   scale(1.09) rotate(1.4deg); }
-  53%  { transform: translate(10px, -3px) scale(1.04) rotate(-1.1deg); }
-  78%  { transform: translate(-3px, 11px) scale(1.11) rotate(1.7deg); }
-  100% { transform: translate(-10px, 2px) scale(1.06) rotate(-1.5deg); }
+.hero-fog i {
+  position: absolute;
+  left: -22%; right: -22%; bottom: -18%;
+  height: 128%;
+  will-change: transform;
 }
-@media (prefers-reduced-motion: reduce) { .hero-card::before { display: none; } }
+/* Several small crests rather than one wide dome: a single big radial is nearly
+   translation-invariant near its middle — it drifted a measured 81px and moved the
+   picture by 12 of 255. */
+.hero-fog i:nth-child(1) {
+  background:
+    radial-gradient(24% 74% at 12% 104%, rgba(var(--fog), 1), rgba(var(--fog), 0.72) 34%, rgba(var(--fog), 0) 100%),
+    radial-gradient(19% 56% at 39% 110%, rgba(var(--fog), 1), rgba(var(--fog), 0.66) 32%, rgba(var(--fog), 0) 100%),
+    radial-gradient(27% 80% at 69% 102%, rgba(var(--fog), 1), rgba(var(--fog), 0.72) 34%, rgba(var(--fog), 0) 100%),
+    radial-gradient(21% 62% at 93% 108%, rgba(var(--fog), 1), rgba(var(--fog), 0.66) 32%, rgba(var(--fog), 0) 100%);
+  animation: fog-a 17s ease-in-out infinite alternate;
+}
+.hero-fog i:nth-child(2) {
+  opacity: .8;
+  background:
+    radial-gradient(22% 86% at 25% 106%, rgba(var(--fog), 1), rgba(var(--fog), 0.7) 32%, rgba(var(--fog), 0) 100%),
+    radial-gradient(28% 64% at 55% 100%, rgba(var(--fog), 1), rgba(var(--fog), 0.7) 34%, rgba(var(--fog), 0) 100%),
+    radial-gradient(20% 78% at 83% 106%, rgba(var(--fog), 1), rgba(var(--fog), 0.7) 32%, rgba(var(--fog), 0) 100%);
+  animation: fog-b 23s ease-in-out infinite alternate;
+}
+@keyframes fog-a {
+  0%   { transform: translate(-6%, 8%)  scale(1,    0.86); }
+  34%  { transform: translate(4%, -2%)  scale(1.12, 1.08); }
+  67%  { transform: translate(-2%, 7%)  scale(1.04, 0.92); }
+  100% { transform: translate(7%, -3%)  scale(1.16, 1.13); }
+}
+@keyframes fog-b {
+  0%   { transform: translate(8%, -4%)  scale(1.18, 1.06); }
+  41%  { transform: translate(-5%, 7%)  scale(1.02, 0.84); }
+  73%  { transform: translate(3%, -5%)  scale(1.12, 1.11); }
+  100% { transform: translate(-8%, 5%)  scale(1.06, 0.9); }
+}
+@media (prefers-reduced-motion: reduce) { .hero-fog i { animation: none; } }
 .hero-text {
   position: absolute;
   top: 189px;
