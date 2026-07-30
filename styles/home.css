@@ -97,6 +97,35 @@
   scroll-snap-align: center;
   box-shadow: inset 0 0 20px 10px rgba(255,255,255,0.2);
 }
+/* The bottom of the card, where the main colour hands over to the pale one, breathes.
+   No colour is added: this is the card's OWN art, masked to that band and drifting a
+   few pixels, so the hand-over line wavers while every hue stays exactly where the
+   artwork put it. Same shape of motion as the Landing Balance heat blob — slow,
+   shallow, five keyframes on uneven timings so it never visibly repeats.
+   The mask stays clear until 72%, below the lowest point any of the three subjects
+   reaches; overlap them and the drifting copy ghosts an arm or a ball.
+   ::before, so the title and the button sit above it untouched. */
+.hero-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: inherit;      /* each card sets its own art inline */
+  background-size: cover;
+  background-position: center;
+  -webkit-mask-image: linear-gradient(180deg, transparent 72%, #000 86%);
+  mask-image: linear-gradient(180deg, transparent 72%, #000 86%);
+  animation: hero-tide 19s ease-in-out infinite alternate;
+}
+@keyframes hero-tide {
+  0%   { transform: translate(-4px, -3px) scale(1.01)  rotate(0deg); }
+  27%  { transform: translate(2px, 4px)   scale(1.035) rotate(.6deg); }
+  53%  { transform: translate(5px, -2px)  scale(1.015) rotate(-.5deg); }
+  78%  { transform: translate(-1px, 5px)  scale(1.045) rotate(.8deg); }
+  100% { transform: translate(-5px, 1px)  scale(1.025) rotate(-.7deg); }
+}
+@media (prefers-reduced-motion: reduce) { .hero-card::before { display: none; } }
 .hero-text {
   position: absolute;
   top: 189px;
