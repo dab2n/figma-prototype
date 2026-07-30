@@ -96,34 +96,30 @@
   text-decoration: none;
   scroll-snap-align: center;
   box-shadow: inset 0 0 20px 10px rgba(255,255,255,0.2);
-  isolation: isolate;          /* keeps the sheen below blending with the page behind */
+  isolation: isolate;          /* keeps the layer below blending with the page behind */
 }
-/* Light drifting over the artwork. ::before, not ::after, so it stays UNDER the title
-   and the button — among positioned children with no z-index, DOM order decides who
-   paints on top. Oversized and moved by transform only, so the whole thing is one
-   composited layer: no repaint, no gradient re-rasterisation per frame. Two blobs on
-   different periods, because one alone reads as a slide rather than a shimmer. */
+/* Only the gradient wavers. The filter is on an added colour field, NOT on the card
+   art — displacing the photo wobbled Akiyama himself, which is exactly the "card's
+   whole impression" that has to stay put. The blobs never move: no transform, no
+   opacity ramp, no drift. The wave in home.html pushes their soft edges a few pixels
+   about and that is the whole effect. ::before so it stays under the title and the
+   button, which must not ripple either. */
 .hero-card::before {
   content: "";
   position: absolute;
-  inset: -35%;
+  inset: -12%;
   z-index: 0;
   pointer-events: none;
-  mix-blend-mode: overlay;
-  background:
-    radial-gradient(38% 34% at 30% 28%, rgba(255,241,216,0.95), transparent 66%),
-    radial-gradient(34% 38% at 72% 74%, rgba(255,118,70,0.80), transparent 68%);
-  /* Two periods that do not divide into each other, so the drift and the swell never
-     line up twice the same way — that is what reads as 일렁임 instead of a loop. */
-  animation: hero-sheen 9s ease-in-out infinite alternate,
-             hero-swell 6.5s ease-in-out infinite alternate;
+  mix-blend-mode: soft-light;
+  background: repeating-linear-gradient(108deg,
+    rgba(255,255,255,0) 0 14px,
+    rgba(255,255,255,0.40) 42px,
+    rgba(255,255,255,0) 70px 84px,
+    rgba(0,0,0,0.28) 112px,
+    rgba(255,255,255,0) 154px 168px);
+  filter: url(#heroWave);
 }
-@keyframes hero-sheen {
-  from { transform: translate3d(-9%, -7%, 0) rotate(-4deg) scale(1); }
-  to   { transform: translate3d(10%, 8%, 0) rotate(5deg) scale(1.18); }
-}
-@keyframes hero-swell { from { opacity: .5; } to { opacity: 1; } }
-@media (prefers-reduced-motion: reduce) { .hero-card::before { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .hero-card::before { filter: none; } }
 .hero-text {
   position: absolute;
   top: 189px;

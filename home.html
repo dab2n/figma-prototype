@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#ffffff">
-<script defer src="assets/openext.js?v=907"></script>
+<script defer src="assets/openext.js?v=908"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,8 +14,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Home</title>
-<link rel="stylesheet" href="styles/main.css?v=907">
-<link rel="stylesheet" href="styles/home.css?v=907">
+<link rel="stylesheet" href="styles/main.css?v=908">
+<link rel="stylesheet" href="styles/home.css?v=908">
 </head>
 <body>
 <div class="phone">
@@ -29,6 +29,25 @@
         <img src="assets/icons/appbar-search.svg" alt="검색">
       </div>
     </div>
+
+    <!-- 일렁임. Fractal noise at a very low frequency pushes the gradient layer on
+         .hero-card::before around by a few pixels. The layer itself never moves, so
+         the colours stay exactly where they are and only their soft edges waver.
+         The x and y frequencies are unequal at every stop, which is what stops the
+         wave reading as an even pulse. -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <filter id="heroWave" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.009 0.016" numOctaves="1" seed="7" result="n">
+          <animate attributeName="baseFrequency"
+                   values="0.009 0.016;0.015 0.011;0.011 0.019;0.009 0.016"
+                   dur="12s" calcMode="spline"
+                   keyTimes="0;0.33;0.66;1"
+                   keySplines=".45 0 .55 1;.45 0 .55 1;.45 0 .55 1"
+                   repeatCount="indefinite"/>
+        </feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="60" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </svg>
 
     <div class="hero-section">
     <div class="hero-shadow"></div>
