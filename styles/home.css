@@ -96,30 +96,7 @@
   text-decoration: none;
   scroll-snap-align: center;
   box-shadow: inset 0 0 20px 10px rgba(255,255,255,0.2);
-  isolation: isolate;          /* keeps the layer below blending with the page behind */
 }
-/* Only the gradient wavers. The filter is on an added colour field, NOT on the card
-   art — displacing the photo wobbled Akiyama himself, which is exactly the "card's
-   whole impression" that has to stay put. The blobs never move: no transform, no
-   opacity ramp, no drift. The wave in home.html pushes their soft edges a few pixels
-   about and that is the whole effect. ::before so it stays under the title and the
-   button, which must not ripple either. */
-.hero-card::before {
-  content: "";
-  position: absolute;
-  inset: -12%;
-  z-index: 0;
-  pointer-events: none;
-  mix-blend-mode: soft-light;
-  background: repeating-linear-gradient(108deg,
-    rgba(255,255,255,0) 0 14px,
-    rgba(255,255,255,0.40) 42px,
-    rgba(255,255,255,0) 70px 84px,
-    rgba(0,0,0,0.28) 112px,
-    rgba(255,255,255,0) 154px 168px);
-  filter: url(#heroWave);
-}
-@media (prefers-reduced-motion: reduce) { .hero-card::before { filter: none; } }
 .hero-text {
   position: absolute;
   top: 189px;
