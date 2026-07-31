@@ -228,6 +228,8 @@
 .hero-btn img { width: 20px; height: 20px; filter: brightness(0) invert(1); }
 
 .section { padding: 0 12px; margin-top: 40px; }
+/* Recently Viewed → Today's Movement */
+.section + .section { margin-top: 48px; }
 .section-title {
   display: flex;
   align-items: center;
@@ -259,8 +261,11 @@
   padding-bottom: 4px;
 }
 .movement-scroll::-webkit-scrollbar { display: none; }
+/* All three cards fit the 360 frame — three 140s plus the gaps came to 436 and the
+   last one was cut off at the right edge. Widths come from the row, so the row is the
+   only place the number lives. */
 .movement-card {
-  flex: 0 0 140px;
+  flex: 0 0 calc((100% - 16px) / 3);
   text-decoration: none;
   color: inherit;
   display: flex;
@@ -269,14 +274,14 @@
 }
 .movement-card p { margin: 0; }
 .movement-photo {
-  width: 140px;
-  height: 140px;
+  width: 100%;
+  aspect-ratio: 1;
   border-radius: 16px;
   object-fit: cover;
 }
 .movement-collage {
-  width: 140px;
-  height: 140px;
+  width: 100%;
+  aspect-ratio: 1;
   border-radius: 16px;
   overflow: hidden;
   display: grid;
