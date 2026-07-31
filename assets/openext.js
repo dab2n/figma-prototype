@@ -34,6 +34,24 @@
     } catch (e) {}
   })();
 
+  // Desktop only: scale the phone down until it fits the window, so the document never
+  // needs to scroll (main.css turns document scrolling off above 400px). Set --fit to 1
+  // first and read back, so each resize measures the unscaled frame — the detail screens
+  // are not all 780 tall.
+  (function () {
+    if (!matchMedia('(min-width: 401px)').matches) return;
+    var phone = document.querySelector('.phone');
+    if (!phone) return;
+    var root = document.documentElement;
+    function fit() {
+      root.style.setProperty('--fit', '1');
+      var need = phone.getBoundingClientRect().height + 32;   // 16px of air top and bottom
+      root.style.setProperty('--fit', Math.min(1, innerHeight / need).toFixed(4));
+    }
+    fit();
+    addEventListener('resize', fit);
+  })();
+
   var open = target();
   if (!open) return;
 

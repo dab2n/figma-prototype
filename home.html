@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#ffffff">
-<script defer src="assets/openext.js?v=912"></script>
+<script defer src="assets/openext.js?v=913"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,8 +14,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Home</title>
-<link rel="stylesheet" href="styles/main.css?v=912">
-<link rel="stylesheet" href="styles/home.css?v=912">
+<link rel="stylesheet" href="styles/main.css?v=913">
+<link rel="stylesheet" href="styles/home.css?v=913">
 </head>
 <body>
 <div class="phone">
@@ -154,6 +154,11 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
+
+<!-- Web only: the report is summoned by hand instead of after 5s. Parked outside the
+     frame (fixed, off the phone's right edge) so it can never sit over the screen. -->
+<button class="side-trigger" id="reportTrigger" type="button">New Report</button>
+
 <script>
 // Report notification: for now the trigger is "5s on Home". The content frame
 // shrinks up (revealing the black strip), and "New Report" fades in. Tapping it
@@ -195,7 +200,12 @@
     });
   }
 
-  setTimeout(reveal, 5000);
+  // Phone: arrives on its own after 5s, as designed. Web: only when the side button is
+  // pressed, so a recording shows it exactly when it should.
+  if (matchMedia('(max-width: 400px)').matches) setTimeout(reveal, 5000);
+  document.getElementById('reportTrigger').addEventListener('click', function () {
+    if (phone.classList.contains('notif-on')) restore(); else reveal();
+  });
   document.getElementById('notifNew').addEventListener('click', function () {
     phone.classList.add('notif-open');
   });

@@ -1,4 +1,4 @@
-@import url('./tokens.css?v=912');
+@import url('./tokens.css?v=913');
 
 /* Tell the phone which way each screen leans, so its own chrome — the gesture bar most
    of all — picks the matching side instead of always landing light. Declared per page in
@@ -63,6 +63,9 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
   height: 100%;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  /* A screen that reaches its end must not hand the scroll on to the page behind it —
+     that chaining is what let the desktop document slide up and clip the frame. */
+  overscroll-behavior: contain;
 }
 .screen::-webkit-scrollbar { display: none; }
 .screen { scrollbar-width: none; }
@@ -359,6 +362,16 @@ button { font-family: inherit; }
      under it — otherwise the gesture bar covers them. */
   body .rts-start { bottom: calc(30px + env(safe-area-inset-bottom, 0px)); }
   body .records-content { padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* Desktop: the frame is a device sitting still, not a page. The document does not scroll
+   at all — an 860px-tall layout in a shorter window used to slide up and down and cut the
+   bottom off whatever screen was being looked at (or recorded) — and the phone shrinks to
+   fit instead of being clipped. --fit is measured in assets/openext.js; 1 until then. */
+@media (min-width: 401px) {
+  html, body { height: 100%; overflow: hidden; }
+  body { padding: 0; align-items: center; }
+  .phone { zoom: var(--fit, 1); }
 }
 
 /* Fullscreen (installed on Android): the phone draws no status bar at all, so ours comes

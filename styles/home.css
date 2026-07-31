@@ -154,6 +154,30 @@
   100% { transform: translate(-8%, 5%)  scale(1.06, 0.9); }
 }
 @media (prefers-reduced-motion: reduce) { .hero-fog i { animation: none; } }
+/* The web's stand-in for "5 seconds have passed". Hidden on a phone, where the timer
+   still fires. 196px is half the frame plus 16 — the frame only ever gets narrower
+   (main.css scales it down to fit), so the button can never reach it. */
+.side-trigger { display: none; }
+@media (min-width: 401px) {
+  .side-trigger {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: calc(50% + 196px);
+    transform: translateY(-50%);
+    padding: 12px 18px;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    background: var(--color-neutral-200);
+    color: var(--color-neutral-700);
+    font-family: var(--font-supreme-bold);
+    font-size: 14px;
+    letter-spacing: -0.3px;
+  }
+  .phone.notif-on ~ .side-trigger { background: var(--color-red); color: #fff; }
+}
+
 .hero-text {
   position: absolute;
   top: 189px;
