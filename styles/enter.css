@@ -52,29 +52,11 @@
      is the same junction the folded header keeps, so the card only ever rises. */
   --edge: calc(80px + var(--s, 0) * 37px + var(--q, 0) * 432px);
   --fillet: 40px;
-  clip-path: inset(0 0 var(--edge) 0);
-  /* The inverted corner is CUT OUT OF THE CARD, not patched over it.
-     It used to be two 40x40 black tiles pinned to the phone frame. A tile is positioned by
-     its box; the card's edge is cut by a clip-path — two different rasterisations of the
-     same line, so every scroll frame rounded them apart and the join opened up.
-     Here it is one mask on the card itself, so there is no second thing to drift. The mask
-     is the union of: everything above the corner band, the middle column, and a disc in
-     each bottom corner. Inside a disc the card survives; outside it the black below shows
-     through — which is the black curling up into the corner.
-     The disc's edge ramp is 0.6px, not the 4% (1.6px) it was: a gradient has no shape
-     antialiasing, so the ramp IS the edge. At 1.6px the arcs read soft against a bottom
-     edge that clip-path cuts to within a device pixel, and the join looked like a line
-     that stops. 0.6px lands on about one device pixel — sharp, and still not stepped. */
-  -webkit-mask-image:
-    linear-gradient(180deg, #000 calc(100% - var(--edge) - var(--fillet)), transparent 0),
-    linear-gradient(90deg, transparent var(--fillet), #000 0, #000 calc(100% - var(--fillet)), transparent 0),
-    radial-gradient(var(--fillet) at var(--fillet) calc(100% - var(--edge) - var(--fillet)), #000 calc(var(--fillet) - 0.6px), transparent var(--fillet)),
-    radial-gradient(var(--fillet) at calc(100% - var(--fillet)) calc(100% - var(--edge) - var(--fillet)), #000 calc(var(--fillet) - 0.6px), transparent var(--fillet));
-  mask-image:
-    linear-gradient(180deg, #000 calc(100% - var(--edge) - var(--fillet)), transparent 0),
-    linear-gradient(90deg, transparent var(--fillet), #000 0, #000 calc(100% - var(--fillet)), transparent 0),
-    radial-gradient(var(--fillet) at var(--fillet) calc(100% - var(--edge) - var(--fillet)), #000 calc(var(--fillet) - 0.6px), transparent var(--fillet)),
-    radial-gradient(var(--fillet) at calc(100% - var(--fillet)) calc(100% - var(--edge) - var(--fillet)), #000 calc(var(--fillet) - 0.6px), transparent var(--fillet));
+  /* One shape, one rasterisation. The bottom corners used to be a union of four gradient
+     mask layers, and a gradient has no shape antialiasing — its arc met the clip-path's
+     bottom edge at a visible angle instead of running into it. `round` on the inset draws
+     the same r40 card, antialiased as a shape, and the corner arrives flat. */
+  clip-path: inset(0 0 var(--edge) 0 round 0 0 var(--fillet) var(--fillet));
 }
 .dj-photo {
   position: absolute;

@@ -12,14 +12,18 @@
   // frame was being yanked straight to the nearest card and the move read as a jump
   // instead of a glide. Off for the duration; the targets below are snap points, so
   // turning it back on at the end moves nothing.
-  function glide(el, axis, to, dur, done) {
+  // A flick, not a crank: all of the speed is at the start and the rest is coasting.
+  var FLICK = function (k) { return 1 - Math.pow(1 - k, 4); };
+  // The carousel gets a little weight — it runs past the card and settles back.
+  var CARD  = function (k) { var u = k - 1; return 1 + 2.0 * u * u * u + 1.1 * u * u; };
+
+  function glide(el, axis, to, dur, done, ease) {
     var from = el[axis], t0 = 0;
     el.style.scrollSnapType = 'none';
     requestAnimationFrame(function frame(t) {
       if (!t0) t0 = t;
       var k = Math.min(1, (t - t0) / dur);
-      var e = k < 0.5 ? 2 * k * k : 1 - 2 * (1 - k) * (1 - k);   // ease-in-out
-      el[axis] = from + (to - from) * e;
+      el[axis] = from + (to - from) * (ease || FLICK)(k);
       if (k < 1) return requestAnimationFrame(frame);
       el.style.scrollSnapType = '';
       if (done) done();
@@ -46,12 +50,12 @@
     var t = 3000;                                   // 3s on the first card
     for (var i = 1; i < cards.length; i++) {
       (function (card) {
-        setTimeout(function () { glide(hero, 'scrollLeft', centre(hero, card, 'scrollLeft'), 700); }, t);
+        setTimeout(function () { glide(hero, 'scrollLeft', centre(hero, card, 'scrollLeft'), 620, null, CARD); }, t);
       })(cards[i]);
       t += 1600;
     }
     setTimeout(function () {
-      glide(screen, 'scrollTop', screen.scrollHeight - screen.clientHeight, 4500, function () {
+      glide(screen, 'scrollTop', screen.scrollHeight - screen.clientHeight, 2300, function () {
         setTimeout(function () { go('packs.html', 2); }, 2000);
       });
     }, t);
@@ -62,7 +66,7 @@
     var sean = screen.querySelector('.pack-card[href="pyeongso.html"]');
     screen.scrollTop = 0;
     setTimeout(function () {
-      glide(screen, 'scrollTop', centre(screen, sean, 'scrollTop'), 4000, function () {
+      glide(screen, 'scrollTop', centre(screen, sean, 'scrollTop'), 2600, function () {
         setTimeout(function () { go('pyeongso.html', 3); }, 1500);
       });
     }, 1500);
@@ -73,7 +77,7 @@
     // Watch the clip, then two taps: 평소 → 1회 진입 → 올릴때. One tap only reaches the
     // middle stop (see enter.js), which is not "raised".
     setTimeout(function () { explore.click(); }, 6000);
-    setTimeout(function () { explore.click(); }, 7200);
+    setTimeout(function () { explore.click(); }, 7600);
   }
 
   var step = sessionStorage.getItem(KEY);
@@ -82,8 +86,24 @@
   else if (step === '2') packs();
   else if (step === '3') detail();
 
-  var btn = document.getElementById('tour1');
-  // Reloading Home rather than replaying in place: the arrival animation is the page's,
-  // and a fresh load is the only thing that plays it honestly.
-  if (btn) btn.addEventListener('click', function () { go('home.html', 1); });
+  // The two web-only controls, on every page and never anywhere else on the page: a
+  // recording must not have them blink out at a page change. Home already carries its own
+  // New Report in markup because its inline script binds to it before this file runs.
+  if (matchMedia('(min-width: 401px)').matches) {
+    [['reportTrigger', 'New Report', '', function () {
+        sessionStorage.setItem('notifNow', '1');
+        location.href = 'home.html';
+      }],
+     // Reloading Home rather than replaying in place: the arrival animation is the page's,
+     // and a fresh load is the only thing that plays it honestly.
+     ['tour1', '프로토타입 1', ' tour-trigger', function () { go('home.html', 1); }]
+    ].forEach(function (b) {
+      if (document.getElementById(b[0])) return;
+      var el = document.createElement('button');
+      el.id = b[0]; el.type = 'button'; el.className = 'side-trigger' + b[2];
+      el.textContent = b[1];
+      el.addEventListener('click', b[3]);
+      document.body.appendChild(el);
+    });
+  }
 })();

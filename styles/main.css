@@ -1,4 +1,4 @@
-@import url('./tokens.css?v=918');
+@import url('./tokens.css?v=919');
 
 /* Tell the phone which way each screen leans, so its own chrome — the gesture bar most
    of all — picks the matching side instead of always landing light. Declared per page in
@@ -30,6 +30,33 @@ html:active-view-transition-type(detail-out)::view-transition-new(root) { animat
    finished by the time the page was visible. The typed detail-in/out rules above are
    more specific, so the 평소 ⇆ 올릴때 modal keeps its slide. */
 ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+
+/* Web-only side controls, parked outside the frame so they can never sit over the screen
+   and never move: 196px is half the frame plus 16, and the frame only ever gets narrower
+   (it scales down to fit). Injected on every page by assets/tour.js, so they stay put
+   across a page change instead of blinking out. Never on a phone — that is the point of
+   them: on a phone the report still arrives on its own after 5s. */
+.side-trigger { display: none; }
+@media (min-width: 401px) {
+  .side-trigger {
+    display: block;
+    position: fixed;
+    top: 50%;
+    left: calc(50% + 196px);
+    transform: translateY(-50%);
+    padding: 12px 18px;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    background: var(--color-neutral-200);
+    color: var(--color-neutral-700);
+    font-family: var(--font-supreme-bold);
+    font-size: 14px;
+    letter-spacing: -0.3px;
+  }
+  .phone.notif-on ~ #reportTrigger { background: var(--color-red); color: #fff; }
+  .tour-trigger { top: calc(50% + 52px); }
+}
 
 body {
   display: flex;

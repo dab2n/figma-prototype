@@ -141,20 +141,27 @@
     e.preventDefault();
     var to = screen.scrollTop < HINT - 2 ? HINT : OPEN;
     snapping = 1;
-    glide(to, 420);
+    // Slow, and even the whole way — this is the transition worth watching, so it eases
+    // in as well as out instead of front-loading the travel the way a release does.
+    glide(to, 1000, function (k) { return k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; });
   }
 
   // scrollTo({behavior:'smooth'}) does not run on this scroller in Chrome, so every
   // programmatic move is tweened here instead. Same easing as the roll-down.
-  function glide(to, dur) {
+  function glide(to, dur, ease) {
     var from = screen.scrollTop, t0 = 0;
     requestAnimationFrame(function frame(t) {
       if (holding) { snapping = 0; return; }
       if (!t0) t0 = t;
       var k = Math.min(1, (t - t0) / dur);
-      screen.scrollTop = to + (from - to) * Math.pow(1 - k, 3);
+      screen.scrollTop = from + (to - from) * (ease ? ease(k) : 1 - Math.pow(1 - k, 3));
+      // Paint from here, not from the scroll event. The fold is driven BY this loop, and
+      // Chrome coalesces the scroll events a programmatic scroll produces — on a long
+      // glide the card was still standing at 평소 by the time scrollTop had reached the
+      // end, because the event that would have repainted it never arrived.
+      paint();
       if (k < 1) requestAnimationFrame(frame);
-      else { screen.scrollTop = to; snapping = 0; }
+      else { screen.scrollTop = to; paint(); snapping = 0; }
     });
   }
 
