@@ -61,8 +61,12 @@
       if (best) play(best);
     }
 
+    // The clip that is already running keeps running while the thumb moves. Pausing it on
+    // the first scroll event and starting it again 180ms later is what made playback cut
+    // in and out — one flick was a stop and a start, and the start landed as a jolt. Only
+    // settle() decides who plays, and the handover there is a crossfade (.rolling), so a
+    // clip never appears or disappears on a hard edge. Still one decoder at a time.
     scroller.addEventListener('scroll', function () {
-      if (current) stop(current);        // moving: nothing plays
       clearTimeout(idle);
       idle = setTimeout(settle, 180);    // …until the thumb has been still this long
     }, { passive: true });

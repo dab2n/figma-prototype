@@ -136,10 +136,12 @@
 .pack-card:nth-child(8) { animation-delay: .49s; }
 @keyframes pack-slide { from { opacity: 0; transform: translateY(44px); } }
 
-/* A clip fades up over its own poster instead of cutting in. The poster is also the
-   thumb's background-image, so until the video is actually running there is nothing to
-   see through it — the swap used to land as a blink. */
-.pack-thumb video { opacity: 0; transition: opacity .4s ease; }
+/* A clip fades up over its own poster instead of cutting in, and the outgoing one fades
+   down over it — so handing playback from one card to the next is a dissolve, never a
+   cut. The poster is also the thumb's background-image, so there is always a picture
+   underneath and the fade has something to happen against. Held until 'playing' fires
+   (clips.js), which is why a slow first frame shows the poster rather than black. */
+.pack-thumb video { opacity: 0; transition: opacity .6s ease; }
 .pack-thumb video.rolling { opacity: 1; }
 
 /* Video thumbnails fill the same box as the background image and sit under the
