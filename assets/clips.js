@@ -66,7 +66,18 @@
       clearTimeout(idle);
       idle = setTimeout(settle, 180);    // …until the thumb has been still this long
     }, { passive: true });
-    setTimeout(settle, 120);             // and on arrival, without waiting for a scroll
+
+    // Nothing starts until the arrival animation has finished. Starting at 120ms put the
+    // clip's first frame into the top card while the cards were still sliding, and a
+    // picture changing under a moving card is what read as the card blinking. Driven off
+    // the animation itself rather than a copy of its duration, so it also covers the
+    // filter replay (filters.js re-runs the same keyframes).
+    var armed;
+    function arm() { clearTimeout(armed); armed = setTimeout(settle, 90); }
+    feed.addEventListener('animationend', function (e) {
+      if (e.animationName === 'pack-slide') arm();
+    });
+    setTimeout(arm, 1800);               // animations disabled / never fired: play anyway
   }
 
   // ── Solo ────────────────────────────────────────────────────────────────

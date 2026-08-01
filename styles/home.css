@@ -123,15 +123,30 @@
   object-fit: cover;
   mix-blend-mode: plus-lighter;
   pointer-events: none;
-  /* Figma's mask on the figure: solid over the face, gone by the time it reaches the
-     title. Without it his white vest sits straight behind "Akiyama's Ghost Step" and the
-     line is unreadable. Centre is his face in the clip's own box — card (157,63), and the
-     clip starts at (30,-13). The vertical radius lands 0 at card y≈200, ~10px into the
-     title; the horizontal one is wide enough that his shoulders stay solid.
-     plus-lighter adds luminance, so a masked-out area contributes nothing and the card's
-     own gradient is what shows through. */
-  -webkit-mask-image: radial-gradient(210px 137px at 127px 76px, #000 63%, rgba(0,0,0,0) 100%);
-  mask-image: radial-gradient(210px 137px at 127px 76px, #000 63%, rgba(0,0,0,0) 100%);
+  /* Figma's mask on the figure (2476:3553), transcribed rather than eyeballed: a 318x359
+     alpha mask placed at -29,-4 in the clip's box, holding one radial — centre (159,96.5)
+     in the mask's own box, r 262.5, opaque to 31.25% and out to nothing at 96.65%.
+     Shifted into the clip's coordinates that is centre (130, 92.5), the same circle.
+     Solid to card y≈161 and only fully gone below the card, so it is a long slow fade,
+     not a cut — the text is carried by .hero-blur below, not by this. */
+  -webkit-mask-image: radial-gradient(262.5px 262.5px at 130px 92.5px, #000 31.25%, rgba(0,0,0,0) 96.65%);
+  mask-image: radial-gradient(262.5px 262.5px at 130px 92.5px, #000 31.25%, rgba(0,0,0,0) 96.65%);
+}
+
+/* Figma's Blur layer (2476:3535) — #050A0A, 52px blur, soft-light, 279x166 at (5,149).
+   This is what actually seats the title and the Pack line: soft-light darkens the bright
+   vest behind them without touching the card's mint ending. Above the clip, below the
+   text. */
+.hero-blur {
+  position: absolute;
+  left: 5px;
+  top: 149px;
+  width: 279px;
+  height: 166px;
+  background: #050A0A;
+  filter: blur(52px);
+  mix-blend-mode: soft-light;
+  pointer-events: none;
 }
 
 /* A layer of low-lying mist over the bottom of the card. Added artwork, not the card's
