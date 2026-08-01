@@ -45,7 +45,11 @@
     var root = document.documentElement;
     function fit() {
       root.style.setProperty('--fit', '1');
-      var need = phone.getBoundingClientRect().height + 32;   // 16px of air top and bottom
+      // offsetHeight, NOT getBoundingClientRect(): the rect is the TRANSFORMED box, and
+      // the pack detail opens with a scale(.88) entrance on .phone. Measured during it the
+      // frame read 686 instead of 780, so that page settled on a bigger --fit than Home
+      // and the whole viewport appeared to zoom in on arrival.
+      var need = phone.offsetHeight + 32;                     // 16px of air top and bottom
       root.style.setProperty('--fit', Math.min(1, innerHeight / need).toFixed(4));
     }
     fit();

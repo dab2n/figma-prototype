@@ -31,12 +31,16 @@
     });
   }
 
-  // Where el has to sit in scroller for it to be centred.
+  // Where el has to sit in scroller for it to be centred — in LAYOUT coordinates.
+  // getBoundingClientRect() is scaled by the frame's `zoom` while scrollTop is not, so
+  // mixing them put the target ~5% short on a scaled-down desktop frame. Mandatory snap
+  // then yanked the card the rest of the way, and since the clip starts ~180ms after the
+  // scroll stops (clips.js), the correction read as "the card jumps when it plays".
+  // offsetTop/offsetLeft are unscaled, same space as scrollTop/scrollLeft.
   function centre(scroller, el, axis) {
-    var r = el.getBoundingClientRect(), s = scroller.getBoundingClientRect();
     return axis === 'scrollLeft'
-      ? scroller.scrollLeft + r.left - s.left - (s.width - r.width) / 2
-      : scroller.scrollTop + r.top - s.top - (s.height - r.height) / 2;
+      ? el.offsetLeft - (scroller.clientWidth - el.offsetWidth) / 2
+      : el.offsetTop - (scroller.clientHeight - el.offsetHeight) / 2;
   }
 
   function go(url, step) { sessionStorage.setItem(KEY, step); location.href = url; }
@@ -55,14 +59,10 @@
       })(cards[i]);
       t += 1600;
     }
-    setTimeout(function () {
-      // Straight on to Packs once the page has landed. The two-second wait here read as
-      // the take having stalled — long enough to look at the bottom of Home is a beat,
-      // not a pause.
-      glide(screen, 'scrollTop', screen.scrollHeight - screen.clientHeight, 1700, function () {
-        setTimeout(function () { go('packs.html', 2); }, 550);
-      });
-    }, t);
+    // Home is the carousel and nothing else. The page scroll that used to follow is gone:
+    // the frame has to hold perfectly still for the recording, and a vertical scroll on
+    // Home was the one thing still moving it.
+    setTimeout(function () { go('packs.html', 2); }, t + 1400);   // a beat on the last card
   }
 
   function packs() {

@@ -303,6 +303,11 @@
   z-index: 9;
   opacity: calc(var(--q, 0) * 5 - 1.2);
   pointer-events: none;
+  /* The Process bars it floats over are the same red, so the pill's own edge was the only
+     thing separating them. A soft drop shadow gives it the lift instead: neutral black,
+     not red, so it darkens the bars it sits on AND still reads against the dark card.
+     Two stops — a tight contact shadow and a wide diffuse one. */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.30), 0 12px 32px rgba(0, 0, 0, 0.40);
 }
 /* opacity alone leaves both Starts clickable, so the handover is a real one:
    enter.js sets .dj-open once the fold is past the crossfade. */
