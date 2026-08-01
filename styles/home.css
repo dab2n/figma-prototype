@@ -97,27 +97,32 @@
   scroll-snap-align: center;
   box-shadow: inset 0 0 20px 10px rgba(255,255,255,0.2);
 }
-/* The first card is the video one, built the way Figma builds it: a red plate with the
-   clip added on top in plus-lighter. The clip is shot on black, and plus-lighter adds
-   luminance — black adds nothing, so the backdrop simply never appears, no keying.
-   The plate is flat brand red: the card's own inset white glow and the mist below make
-   the vignette that the flattened PNG had baked in.
-   Geometry is the still's, measured: Akiyama's figure sat 229 wide with his head 14 from
-   the top, and the clip is scaled and offset so this figure lands in the same box.
-   The mask stops it 40..56% down — card y 163..235 — so it has faded out before the
-   title, which is what the blur behind the text does in the original. */
-.hero-card-live { background: var(--color-red); isolation: isolate; }
+/* The first card is the video one, built the way Figma builds it (2476:3531): the empty
+   card's own two radial fills, with the clip added on top in plus-lighter. The clip is
+   shot on black, and plus-lighter adds luminance — black adds nothing, so the backdrop
+   never appears and no keying is needed. It also means the bottom takes care of itself:
+   where the frame holds his dark shorts almost nothing is added, so the card's mint
+   ending shows through instead of being blown out.
+   Gradients transcribed from 카드.svg, ellipse axes and stops unchanged. The card's own
+   inset white glow is that file's inner shadow (erode 10 + blur 10, white 0.2) and is
+   already on .hero-card.
+   Clip geometry is Figma's, exactly: 266x473 at (30, -13) — which is the whole frame,
+   uncropped, centred on the card. */
+.hero-card-live {
+  background:
+    radial-gradient(267.32px 273.18px at 159.5px 60.1px, rgba(209,254,255,0) 88.8%, rgba(209,254,255,0.5) 100%),
+    radial-gradient(361.63px 345.5px at 160px 104.5px, #FA3030 33.17%, #FEC389 61.42%, #D1FEFF 77.58%);
+  isolation: isolate;
+}
 .hero-clip {
   position: absolute;
-  left: 64px;
-  top: -21px;
-  width: 258px;
-  height: 459px;
+  left: 30px;
+  top: -13px;
+  width: 266px;
+  height: 473px;
   object-fit: cover;
   mix-blend-mode: plus-lighter;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(#000 40%, transparent 56%);
-  mask-image: linear-gradient(#000 40%, transparent 56%);
 }
 
 /* A layer of low-lying mist over the bottom of the card. Added artwork, not the card's
