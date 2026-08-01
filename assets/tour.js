@@ -14,8 +14,9 @@
   // turning it back on at the end moves nothing.
   // A flick, not a crank: all of the speed is at the start and the rest is coasting.
   var FLICK = function (k) { return 1 - Math.pow(1 - k, 4); };
-  // The carousel gets a little weight — it runs past the card and settles back.
-  var CARD  = function (k) { var u = k - 1; return 1 + 2.0 * u * u * u + 1.1 * u * u; };
+  // The carousel is not bouncy — it eases in and out and it is over quickly, so it reads
+  // as one smooth push rather than something with weight in it.
+  var CARD  = function (k) { return k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; };
 
   function glide(el, axis, to, dur, done, ease) {
     var from = el[axis], t0 = 0;
@@ -50,7 +51,7 @@
     var t = 3000;                                   // 3s on the first card
     for (var i = 1; i < cards.length; i++) {
       (function (card) {
-        setTimeout(function () { glide(hero, 'scrollLeft', centre(hero, card, 'scrollLeft'), 620, null, CARD); }, t);
+        setTimeout(function () { glide(hero, 'scrollLeft', centre(hero, card, 'scrollLeft'), 450, null, CARD); }, t);
       })(cards[i]);
       t += 1600;
     }
@@ -69,7 +70,7 @@
       glide(screen, 'scrollTop', centre(screen, sean, 'scrollTop'), 2600, function () {
         setTimeout(function () { go('pyeongso.html', 3); }, 1500);
       });
-    }, 1500);
+    }, 3000);          // a beat longer on the feed before it starts moving
   }
 
   function detail() {

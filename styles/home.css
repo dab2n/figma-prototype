@@ -97,6 +97,29 @@
   scroll-snap-align: center;
   box-shadow: inset 0 0 20px 10px rgba(255,255,255,0.2);
 }
+/* The first card is the video one, built the way Figma builds it: a red plate with the
+   clip added on top in plus-lighter. The clip is shot on black, and plus-lighter adds
+   luminance — black adds nothing, so the backdrop simply never appears, no keying.
+   The plate is flat brand red: the card's own inset white glow and the mist below make
+   the vignette that the flattened PNG had baked in.
+   Geometry is the still's, measured: Akiyama's figure sat 229 wide with his head 14 from
+   the top, and the clip is scaled and offset so this figure lands in the same box.
+   The mask stops it 40..56% down — card y 163..235 — so it has faded out before the
+   title, which is what the blur behind the text does in the original. */
+.hero-card-live { background: var(--color-red); isolation: isolate; }
+.hero-clip {
+  position: absolute;
+  left: 64px;
+  top: -21px;
+  width: 258px;
+  height: 459px;
+  object-fit: cover;
+  mix-blend-mode: plus-lighter;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(#000 40%, transparent 56%);
+  mask-image: linear-gradient(#000 40%, transparent 56%);
+}
+
 /* A layer of low-lying mist over the bottom of the card. Added artwork, not the card's
    own gradient nudged about — nudging it was invisible, which is why this exists.
    Colour comes from each card inline (--fog), sampled from the pale tone its own
