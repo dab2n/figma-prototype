@@ -1,4 +1,4 @@
-@import url('./tokens.css?v=917');
+@import url('./tokens.css?v=918');
 
 /* Tell the phone which way each screen leans, so its own chrome — the gesture bar most
    of all — picks the matching side instead of always landing light. Declared per page in
@@ -24,10 +24,12 @@ html:active-view-transition-type(detail-in)::view-transition-new(root)  { animat
 html:active-view-transition-type(detail-out)::view-transition-old(root) { animation: none; }
 html:active-view-transition-type(detail-out)::view-transition-new(root) { animation: modal-topdown .5s cubic-bezier(.32,.72,0,1) both; z-index: 2; }
 
-/* Recording script (assets/tour.js): the screen slides in from the right INSIDE the
-   frame — the frame itself never moves, so a recording stays framed on it. */
-@keyframes tour-slide { from { transform: translateX(100%); } }
-.phone.tour-in > * { animation: tour-slide .5s cubic-bezier(.32,.72,0,1) both; }
+/* Ordinary navigation gets NO root crossfade. Every page already has its own arrival —
+   leaf rows sliding up one after another (home-slide, pack-slide, my-slide, lib-slide…)
+   — and fading a snapshot taken at load over the top of it meant the arrival was already
+   finished by the time the page was visible. The typed detail-in/out rules above are
+   more specific, so the 평소 ⇆ 올릴때 modal keeps its slide. */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 
 body {
   display: flex;

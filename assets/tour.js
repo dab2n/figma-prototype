@@ -1,28 +1,28 @@
-// 프로토타입 1 — a recording script, so every take is identical: Home slides in, the
-// hero carousel steps through its cards, the page scrolls down, then Packs, then Sean's
-// pack with the clip running and Explore Packs raised. Desktop only (that is where it
-// gets recorded); the step is carried across pages in sessionStorage.
+// 프로토타입 1 — a recording script, so every take is identical: Home arrives, the hero
+// carousel steps through its cards, the page scrolls down, then Packs, then Sean's pack
+// with the clip running and Explore Packs raised. Every leg begins with a real page
+// load, so the slide-in is the page's OWN arrival animation and nothing extra; the step
+// is carried across pages in sessionStorage.
 (function () {
   var KEY = 'tour1';
-  var phone = document.querySelector('.phone');
-  if (!phone) return;
-
-  function slideIn() {
-    phone.classList.add('tour-in');
-    setTimeout(function () { phone.classList.remove('tour-in'); }, 600);
-  }
 
   // scrollTo({behavior:'smooth'}) does not run on these scrollers in Chrome (see
   // enter.js), and a recording wants the pace chosen anyway — so every move is tweened.
+  // A mandatory snap container re-snaps after every programmatic scroll, so each tween
+  // frame was being yanked straight to the nearest card and the move read as a jump
+  // instead of a glide. Off for the duration; the targets below are snap points, so
+  // turning it back on at the end moves nothing.
   function glide(el, axis, to, dur, done) {
     var from = el[axis], t0 = 0;
+    el.style.scrollSnapType = 'none';
     requestAnimationFrame(function frame(t) {
       if (!t0) t0 = t;
       var k = Math.min(1, (t - t0) / dur);
       var e = k < 0.5 ? 2 * k * k : 1 - 2 * (1 - k) * (1 - k);   // ease-in-out
       el[axis] = from + (to - from) * e;
-      if (k < 1) requestAnimationFrame(frame);
-      else if (done) done();
+      if (k < 1) return requestAnimationFrame(frame);
+      el.style.scrollSnapType = '';
+      if (done) done();
     });
   }
 
@@ -41,7 +41,6 @@
     var hero = document.querySelector('.hero-scroll');
     screen.scrollTop = 0;
     hero.scrollLeft = 0;
-    slideIn();
 
     var cards = hero.querySelectorAll('.hero-card');
     var t = 3000;                                   // 3s on the first card
@@ -62,11 +61,7 @@
     var screen = document.querySelector('.packs-screen');
     var sean = screen.querySelector('.pack-card[href="pyeongso.html"]');
     screen.scrollTop = 0;
-    slideIn();
     setTimeout(function () {
-      // filters.js arms the mandatory y-snap at 980ms; it would pull every tween frame
-      // back to the nearest card. Dropped here, after that, for the rest of the run.
-      screen.classList.remove('snap');
       glide(screen, 'scrollTop', centre(screen, sean, 'scrollTop'), 4000, function () {
         setTimeout(function () { go('pyeongso.html', 3); }, 1500);
       });
@@ -74,7 +69,6 @@
   }
 
   function detail() {
-    slideIn();
     var explore = document.getElementById('djExplore');
     // Watch the clip, then two taps: 평소 → 1회 진입 → 올릴때. One tap only reaches the
     // middle stop (see enter.js), which is not "raised".
@@ -84,9 +78,12 @@
 
   var step = sessionStorage.getItem(KEY);
   sessionStorage.removeItem(KEY);                   // a reload is a normal page again
-  if (step === '2') packs();
+  if (step === '1') home();
+  else if (step === '2') packs();
   else if (step === '3') detail();
 
   var btn = document.getElementById('tour1');
-  if (btn) btn.addEventListener('click', home);
+  // Reloading Home rather than replaying in place: the arrival animation is the page's,
+  // and a fresh load is the only thing that plays it honestly.
+  if (btn) btn.addEventListener('click', function () { go('home.html', 1); });
 })();
