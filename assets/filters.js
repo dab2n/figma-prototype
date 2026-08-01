@@ -40,7 +40,7 @@
       c.style.animation = 'none';
       void c.offsetWidth;
       c.style.animation = '';
-      c.style.animationDelay = Math.min(i, 6) * 0.09 + 's';
+      c.style.animationDelay = Math.min(i, 7) * 0.07 + 's';
     });
     armSnap();
   }

@@ -123,6 +123,15 @@
   object-fit: cover;
   mix-blend-mode: plus-lighter;
   pointer-events: none;
+  /* Figma's mask on the figure: solid over the face, gone by the time it reaches the
+     title. Without it his white vest sits straight behind "Akiyama's Ghost Step" and the
+     line is unreadable. Centre is his face in the clip's own box — card (157,63), and the
+     clip starts at (30,-13). The vertical radius lands 0 at card y≈200, ~10px into the
+     title; the horizontal one is wide enough that his shoulders stay solid.
+     plus-lighter adds luminance, so a masked-out area contributes nothing and the card's
+     own gradient is what shows through. */
+  -webkit-mask-image: radial-gradient(210px 137px at 127px 76px, #000 63%, rgba(0,0,0,0) 100%);
+  mask-image: radial-gradient(210px 137px at 127px 76px, #000 63%, rgba(0,0,0,0) 100%);
 }
 
 /* A layer of low-lying mist over the bottom of the card. Added artwork, not the card's
@@ -211,7 +220,7 @@
   letter-spacing: -0.5px;
   color: #fafafa;
 }
-.hero-meta .dim { color: #fff; opacity: 0.9; }
+.hero-meta .dim { opacity: 0.7; }        /* Figma: same #FAFAFA at 70% */
 .hero-btn {
   position: absolute;
   bottom: 16px;

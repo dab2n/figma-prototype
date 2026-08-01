@@ -56,8 +56,11 @@
       t += 1600;
     }
     setTimeout(function () {
-      glide(screen, 'scrollTop', screen.scrollHeight - screen.clientHeight, 2300, function () {
-        setTimeout(function () { go('packs.html', 2); }, 2000);
+      // Straight on to Packs once the page has landed. The two-second wait here read as
+      // the take having stalled — long enough to look at the bottom of Home is a beat,
+      // not a pause.
+      glide(screen, 'scrollTop', screen.scrollHeight - screen.clientHeight, 1700, function () {
+        setTimeout(function () { go('packs.html', 2); }, 550);
       });
     }, t);
   }

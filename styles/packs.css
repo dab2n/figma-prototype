@@ -117,13 +117,30 @@
    18px over .42s on a curve that front-loads was more than half spent by the first frame
    and invisible against a card 275 to 600px tall; it read as no animation at all. Both
    the travel and the gap between cards have to be big enough to watch them arrive one
-   after another. Five stagger slots, because snapping shows about two cards at a time. */
-.pack-card { animation: pack-slide .55s cubic-bezier(.22,.8,.3,1) both; }
-.pack-card:nth-child(2) { animation-delay: .09s; }
-.pack-card:nth-child(3) { animation-delay: .18s; }
-.pack-card:nth-child(4) { animation-delay: .27s; }
-.pack-card:nth-child(5) { animation-delay: .36s; }
+   after another.
+   A card carries a 40px-blur shadow, and moving one without promoting it repaints that
+   shadow every frame — that stutter is what read as the cards blinking rather than
+   sliding. will-change puts each card on its own layer for the duration.
+   Eight slots, not five: with only five the sixth card onward all started together, so
+   the cascade stopped dead halfway down instead of running off the bottom of the screen. */
+.pack-card {
+  animation: pack-slide .55s cubic-bezier(.22,.8,.3,1) both;
+  will-change: transform, opacity;
+}
+.pack-card:nth-child(2) { animation-delay: .07s; }
+.pack-card:nth-child(3) { animation-delay: .14s; }
+.pack-card:nth-child(4) { animation-delay: .21s; }
+.pack-card:nth-child(5) { animation-delay: .28s; }
+.pack-card:nth-child(6) { animation-delay: .35s; }
+.pack-card:nth-child(7) { animation-delay: .42s; }
+.pack-card:nth-child(8) { animation-delay: .49s; }
 @keyframes pack-slide { from { opacity: 0; transform: translateY(44px); } }
+
+/* A clip fades up over its own poster instead of cutting in. The poster is also the
+   thumb's background-image, so until the video is actually running there is nothing to
+   see through it — the swap used to land as a blink. */
+.pack-thumb video { opacity: 0; transition: opacity .4s ease; }
+.pack-thumb video.rolling { opacity: 1; }
 
 /* Video thumbnails fill the same box as the background image and sit under the
    avatars/badges, which already carry z-index 1. */

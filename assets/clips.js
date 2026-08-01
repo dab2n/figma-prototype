@@ -24,6 +24,13 @@
   }
   function stop(v) { if (!v.paused) v.pause(); }
 
+  // .rolling fades the clip up once frames are actually coming (see packs.css). Bound
+  // here rather than in the feed block so a solo hero gets it too if it ever wants it.
+  clips.forEach(function (v) {
+    v.addEventListener('playing', function () { v.classList.add('rolling'); });
+    v.addEventListener('pause',   function () { v.classList.remove('rolling'); });
+  });
+
   var feed = document.querySelector('.pack-list');
   var inFeed = feed ? [].slice.call(feed.querySelectorAll('video[loop]')) : [];
   var solo = clips.filter(function (v) { return inFeed.indexOf(v) === -1; });
