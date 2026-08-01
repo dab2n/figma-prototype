@@ -52,8 +52,13 @@
       var need = phone.offsetHeight + 32;                     // 16px of air top and bottom
       root.style.setProperty('--fit', Math.min(1, innerHeight / need).toFixed(4));
     }
+    // Measured again after load and after the frame's own entrance animation, so a first
+    // pass that lands on a half-built page can never leave the frame at the wrong size —
+    // the whole point is that every screen is the same size on camera.
     fit();
+    addEventListener('load', fit);
     addEventListener('resize', fit);
+    phone.addEventListener('animationend', fit);
   })();
 
   var open = target();
