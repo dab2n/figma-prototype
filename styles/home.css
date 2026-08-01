@@ -175,7 +175,9 @@
     font-size: 14px;
     letter-spacing: -0.3px;
   }
-  .phone.notif-on ~ .side-trigger { background: var(--color-red); color: #fff; }
+  .phone.notif-on ~ #reportTrigger { background: var(--color-red); color: #fff; }
+  /* Second one down: starts the 프로토타입 1 recording run (assets/tour.js). */
+  .tour-trigger { top: calc(50% + 52px); }
 }
 
 .hero-text {
