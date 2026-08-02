@@ -94,7 +94,9 @@
 }
 .creator-content .top-actions .icon-circle img { width: 14px; height: 14px; }
 
-.creator-heading { color: #fff; }
+/* The sheet runs on a 48px rhythm, but Figma pulls the chip and the title together at
+   24px — they read as one block, not two sections. */
+.creator-heading { color: #fff; margin-top: -24px; }
 .creator-heading .title { margin: 0 0 8px; font-family: var(--font-supreme-bold); font-size: 26px; line-height: 1.2; letter-spacing: -1.5px; }
 .creator-heading .desc { margin: 0; font-family: var(--font-supreme); font-size: 15px; line-height: 1.4; letter-spacing: -0.5px; opacity: 0.7; }
 
@@ -112,7 +114,10 @@
 /* Packs that recommend more than one mode stack them rather than running them into
    one line — the cell is a column, not a sentence. */
 .stats-row .stat .value + .value { margin-top: 2px; }
-.stats-row .divider { width: 1px; height: 33px; background: rgba(255,255,255,0.3); }
+/* Stretched to the row instead of a fixed 33px: with a two-line Recommended cell a short
+   bar floats in the middle of the row and stops reading as a separator. The row's own
+   vertical spacing is untouched — the bar grows into space the cells already occupy. */
+.stats-row .divider { width: 1px; align-self: stretch; background: rgba(255,255,255,0.3); }
 
 .process-title { margin: 0 0 8px; color: var(--color-neutral-50); }
 /* Staircase bar chart: 18min nested top-left, bars widen top→bottom,
