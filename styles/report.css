@@ -8,6 +8,14 @@
    instead of leaving the absolutely-placed number and gauge behind. */
 
 .rp-screen { background: var(--color-neutral-100); }
+/* The bar's glyphs are white, which is right on the hero's red band and invisible the
+   moment the page scrolls that band away — everything under it is the near-white page.
+   Inverting the same asset turns all twelve white fills black; the background comes with
+   it so cards do not run under the time. .scrolled is set in scores.js. */
+.rp-screen .status-bar { background: transparent; transition: background .2s linear; }
+.rp-screen .statusbar-svg { transition: filter .2s linear; }
+.rp-screen.scrolled .status-bar { background: var(--color-neutral-100); }
+.rp-screen.scrolled .statusbar-svg { filter: invert(1); }
 
 /* ── Hero ──────────────────────────────────────────────────────────────────
    Red-to-white wash exported from the design (the frame's 블러 layer); every
@@ -401,15 +409,20 @@
      card is reached (or when the reading changes), and the transform loop is the idle
      undulation around wherever that is. Slow, shallow, and on three different periods
      so it never visibly repeats — the blob should look like it is flowing, not cycling. */
-  transition: left 1.2s cubic-bezier(.33, 0, .2, 1);
-  animation: lb-drift 19s ease-in-out infinite alternate;
+  /* Slow enough to be watched, and it settles PAST the mark and eases back — the card is
+     about balance, so the core should arrive the way weight does. 1.2s on a flat curve
+     read as the blob simply being somewhere else. */
+  transition: left 1.7s cubic-bezier(.22, .95, .3, 1);
+  animation: lb-drift 13s ease-in-out infinite alternate;
 }
+/* The idle flow, roughly doubled: at the old amplitude the drift was under the blur's own
+   softness and the blob looked parked. */
 @keyframes lb-drift {
-  0%   { transform: translate(-6px, -4px) scale(1)     rotate(0deg); }
-  27%  { transform: translate(3px, 5px)   scale(1.035) rotate(1.4deg); }
-  53%  { transform: translate(8px, -3px)  scale(1.01)  rotate(-.6deg); }
-  78%  { transform: translate(-2px, 6px)  scale(1.05)  rotate(1deg); }
-  100% { transform: translate(-7px, 1px)  scale(1.02)  rotate(-1.2deg); }
+  0%   { transform: translate(-12px, -7px) scale(1)     rotate(0deg); }
+  27%  { transform: translate(6px, 9px)    scale(1.07)  rotate(2.6deg); }
+  53%  { transform: translate(15px, -6px)  scale(1.02)  rotate(-1.2deg); }
+  78%  { transform: translate(-4px, 11px)  scale(1.09)  rotate(1.9deg); }
+  100% { transform: translate(-14px, 2px)  scale(1.04)  rotate(-2.2deg); }
 }
 /* The dotted prints, used as artwork rather than as a mask — the dots and their inner
    shading are in the file. Group 2147228966: 71px in, 25.3 down, 195.6 across. */
@@ -735,13 +748,17 @@
 /* Sections rise in once on arrival, staggered — same curve as the Packs and Library
    lists so every list screen in the app enters the same way. */
 .rp-body > .rp-seg,
-.rp-body > .rp-stats,
-.rp-body > .rp-sec { animation: rp-rise .42s cubic-bezier(.2,.85,.3,1) both; }
+.rp-body > .rp-stats { animation: rp-rise .42s cubic-bezier(.2,.85,.3,1) both; }
 .rp-body > *:nth-child(2) { animation-delay: .05s; }
 .rp-body > *:nth-child(3) { animation-delay: .10s; }
-.rp-body > *:nth-child(4) { animation-delay: .15s; }
-.rp-body > *:nth-child(5) { animation-delay: .20s; }
-.rp-body > *:nth-child(6) { animation-delay: .25s; }
+/* Everything past the first screen arrives when it is scrolled to instead. On the load
+   stagger they had all risen while the hero was still being looked at, so scrolling down
+   revealed sections that had already finished arriving. .run comes from scores.js. */
+/* opacity has to be restored on .run as well as animated: rp-rise only declares a `from`,
+   so its `to` is whatever the element's own style says — which, with 0 as the resting
+   value, meant it animated 0 to 0 and the section never appeared. */
+.rp-body > .rp-sec { opacity: 0; }
+.rp-body > .rp-sec.run { opacity: 1; animation: rp-rise .5s cubic-bezier(.2,.85,.3,1) both; }
 @keyframes rp-rise { from { opacity: 0; transform: translateY(18px); } }
 
 /* Day picker arrows. The forward arrow is dead on today — there is no tomorrow to
@@ -754,6 +771,7 @@
   .rp-scores .sc-n, .rp-scores .sc-tri { opacity: 1; animation: none; }
   .rp-hcard .badge svg { opacity: 1; transform: none; animation: none; }
   .rec-badge { opacity: 1; transform: none; animation: none; }
+  .rp-body > .rp-sec { opacity: 1; animation: none; }
   .rp-scores .sc-art { clip-path: none; -webkit-mask-image: none; mask-image: none; animation: none; }
   .rp-scores .sc.st { --pass: 79px; animation: none; }
   .rp-scores .sc-dash, .rp-scores .sc-track, .rp-scores .st-ticks { clip-path: none; animation: none; }
