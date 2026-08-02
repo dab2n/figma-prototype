@@ -16,6 +16,21 @@
 .rp-screen .statusbar-svg { transition: filter .2s linear; }
 .rp-screen.scrolled .status-bar { background: var(--color-neutral-100); }
 .rp-screen.scrolled .statusbar-svg { filter: invert(1); }
+/* The bar is opaque, so cards passing under it were cut off along a straight line at its
+   foot. A tail of the same colour carries that edge out over the next 18px instead — the
+   same treatment the Packs feed's bar has. Only when scrolled: at the top the bar is
+   transparent over the hero's red and has no edge to hide. */
+.rp-screen .status-bar::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 100%;
+  height: 18px;
+  opacity: 0;
+  transition: opacity .2s linear;
+  background: linear-gradient(180deg, var(--color-neutral-100), rgba(242,242,242,0));
+  pointer-events: none;
+}
+.rp-screen.scrolled .status-bar::after { opacity: 1; }
 
 /* ── Hero ──────────────────────────────────────────────────────────────────
    Red-to-white wash exported from the design (the frame's 블러 layer); every
