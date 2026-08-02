@@ -7,12 +7,12 @@
      before it is set shows the phone at FULL size and then snaps down. openext.js is
      deferred, which is after parsing but not reliably before the first paint — with three
      navigations in a row that flash was the viewport zooming in and out. -->
-<script>if(innerWidth>400)document.documentElement.style.setProperty("--fit",Math.min(1,innerHeight/812).toFixed(4));</script>
+<script>if(innerWidth>400){document.documentElement.style.setProperty("--fit",Math.min(1,innerHeight/812).toFixed(4));try{if(localStorage.getItem("clay"))document.documentElement.className+=" clay";}catch(e){}}</script>
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=970"></script>
+<script defer src="assets/openext.js?v=972"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,8 +20,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Welcome</title>
-<link rel="stylesheet" href="styles/main.css?v=970">
-<link rel="stylesheet" href="styles/onboarding.css?v=970">
+<link rel="stylesheet" href="styles/main.css?v=972">
+<link rel="stylesheet" href="styles/onboarding.css?v=972">
 </head>
 <body>
 <div class="phone">

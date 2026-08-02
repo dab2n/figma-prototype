@@ -92,6 +92,27 @@ html:active-view-transition-type(report-in)::view-transition-new(root) {
   }
   .phone.notif-on ~ #reportTrigger { background: var(--color-red); color: #fff; }
   .tour-trigger { top: calc(50% + 52px); }
+  .clay-trigger { top: calc(50% + 104px); }
+  html.clay .clay-trigger { background: var(--color-black); color: #fff; }
+
+  /* ── Screen-recording mode (web only) ──────────────────────────────────
+     A capture should be the UI and nothing around it: the page goes pure white,
+     the frame drops its drop shadow, and a hairline takes its place so the
+     viewport still has an edge. Flat, like a clay mockup. The UI's own shadows —
+     the cards, the carousel glow — are left alone; they are part of what is being
+     recorded. Toggled by the UI 녹화 button (assets/tour.js) and re-applied
+     before the first paint by the inline script in every page's <head>. */
+  html.clay, html.clay body { background: #fff; }
+  html.clay .phone {
+    box-shadow: none;
+    /* outline, not a ring-shaped box-shadow: Chrome follows border-radius for
+       outline, so it traces the 40px corners exactly and nothing bleeds. */
+    outline: solid var(--color-neutral-300);
+    /* `zoom` scales the outline with the frame, so on a short window the hairline was
+       thinning to under a pixel. Dividing by --fit keeps it 1.5 real pixels at any size. */
+    outline-width: calc(1.5px / var(--fit, 1));
+    outline-offset: 0;
+  }
 }
 
 body {

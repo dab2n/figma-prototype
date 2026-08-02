@@ -7,12 +7,12 @@
      before it is set shows the phone at FULL size and then snaps down. openext.js is
      deferred, which is after parsing but not reliably before the first paint — with three
      navigations in a row that flash was the viewport zooming in and out. -->
-<script>if(innerWidth>400)document.documentElement.style.setProperty("--fit",Math.min(1,innerHeight/812).toFixed(4));</script>
+<script>if(innerWidth>400){document.documentElement.style.setProperty("--fit",Math.min(1,innerHeight/812).toFixed(4));try{if(localStorage.getItem("clay"))document.documentElement.className+=" clay";}catch(e){}}</script>
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=970"></script>
+<script defer src="assets/openext.js?v=972"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,8 +20,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Where</title>
-<link rel="stylesheet" href="styles/main.css?v=970">
-<link rel="stylesheet" href="styles/onboarding.css?v=970">
+<link rel="stylesheet" href="styles/main.css?v=972">
+<link rel="stylesheet" href="styles/onboarding.css?v=972">
 </head>
 <body>
 <div class="phone">
@@ -43,17 +43,17 @@
         <div class="col">
           <div class="ob-wcard h" data-toggle>
             <p class="t">Indoors</p><p class="s">Mostly indoors</p>
-            <div class="img" style="background-image:url('assets/photos/sport-hometraining.png?v=970')"></div>
+            <div class="img" style="background-image:url('assets/photos/sport-hometraining.png?v=972')"></div>
           </div>
           <div class="ob-wcard h" data-toggle>
             <p class="t">Outdoors</p><p class="s">Parks, tracks, and<br>another spots</p>
-            <div class="img" style="background-image:url('assets/photos/sport-running.png?v=970')"></div>
+            <div class="img" style="background-image:url('assets/photos/sport-running.png?v=972')"></div>
           </div>
         </div>
         <div class="col">
           <div class="ob-wcard full" data-toggle>
             <p class="t">Both</p><p class="s">Depends on the day</p>
-            <div class="img" style="background-image:url('assets/photos/sport-marathon.png?v=970'); background-position:center 80%;"></div>
+            <div class="img" style="background-image:url('assets/photos/sport-marathon.png?v=972'); background-position:center 80%;"></div>
           </div>
         </div>
       </div>
@@ -67,6 +67,6 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/onboarding.js?v=970"></script>
+<script src="assets/onboarding.js?v=972"></script>
 </body>
 </html>

@@ -239,7 +239,16 @@
       }],
      // Reloading Home rather than replaying in place: the arrival animation is the page's,
      // and a fresh load is the only thing that plays it honestly.
-     ['tour1', '프로토타입 1', ' tour-trigger', function () { go('home.html', 1); }]
+     ['tour1', '프로토타입 1', ' tour-trigger', function () { go('home.html', 1); }],
+     // Screen-recording mode: white page, no drop shadow, a hairline round the frame —
+     // a flat clay mockup, so a capture is the UI and nothing else. Kept in localStorage
+     // rather than sessionStorage so it survives a page change AND a restart, and the
+     // inline <head> script on every page re-applies it before the first paint.
+     ['clayToggle', 'UI 녹화', ' clay-trigger', function () {
+        var on = !document.documentElement.classList.contains('clay');
+        document.documentElement.classList.toggle('clay', on);
+        try { localStorage.setItem('clay', on ? '1' : ''); } catch (e) {}
+      }]
     ].forEach(function (b) {
       if (document.getElementById(b[0])) return;
       var el = document.createElement('button');
