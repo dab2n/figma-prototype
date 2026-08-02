@@ -170,7 +170,10 @@
    The curve is front-loaded (.2,.8,.3,1): the card is most of the way down in the first
    third and spends the rest arriving, which is what makes it feel soft rather than stiff. */
 .pack-card { transition: transform .28s cubic-bezier(.2,.8,.3,1), box-shadow .28s cubic-bezier(.2,.8,.3,1); }
-.pack-card.picked { transform: scale(.962); box-shadow: 0 3px 10px 0 rgba(0,0,0,0.10); }
+/* .962 landed 13px in on a 336 card, which was too much once the press stopped being
+   cut halfway and the whole travel actually showed. .975 is 8px — read as a press,
+   not as the card changing size. */
+.pack-card.picked { transform: scale(.975); box-shadow: 0 3px 10px 0 rgba(0,0,0,0.10); }
 /* The veil is a pseudo-element over the whole card, not a filter: a filter on a box with
    a <video> in it makes iOS re-rasterise the card every frame. isolation gives it a
    stacking context to sit above that composited video in. */
