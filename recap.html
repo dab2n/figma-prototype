@@ -12,8 +12,8 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=984"></script>
-<script defer src="assets/tour.js?v=984"></script>
+<script defer src="assets/openext.js?v=985"></script>
+<script defer src="assets/tour.js?v=985"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,13 +21,13 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Session Recap</title>
-<link rel="stylesheet" href="styles/main.css?v=984">
-<link rel="stylesheet" href="styles/recap.css?v=984">
+<link rel="stylesheet" href="styles/main.css?v=985">
+<link rel="stylesheet" href="styles/recap.css?v=985">
 </head>
 <body>
 <div class="phone">
   <div class="screen recap-screen" id="recapScreen">
-    <video class="recap-clip" id="clip" src="assets/video/recap-overlay.mp4?v=984"
+    <video class="recap-clip" id="clip" src="assets/video/recap-overlay.mp4?v=985"
            muted playsinline webkit-playsinline autoplay loop preload="auto" disablepictureinpicture></video>
     <!-- Three layers, exactly as drawn: the black clip, its own fill whitening the foot,
          and the blur blob over both on lighten. Nothing else — the earlier full-frame
@@ -53,9 +53,10 @@
   </div>
 </div>
 <script>
-// One clip, and it already carries the overlap of the creator's run and the user's.
-// The screen plays it once — muted, playsinline, no controls, so it just runs on a
-// phone too — and reveals the match score once the overlap has landed.
+// One runner, looping. The clip used to dissolve the creator's run into the user's and
+// the score landed on the overlap; the second figure is cut and what is left is the
+// front runner alone, trimmed to his own stride and made to loop on himself. Muted,
+// playsinline, no controls, so it just runs on a phone too.
 (function () {
   var clip = document.getElementById('clip');
   var num = document.querySelector('.recap-pct .num');
@@ -66,46 +67,31 @@
   // the frame. Any first interaction retries, so a refusal is never permanent.
   function play(v) { v.muted = true; var p = v.play(); if (p && p.catch) p.catch(function () {}); }
 
-  // The clip is a hard cut at its own ends. Fading the last and first half-second means
-  // the runner dissolves into the red and returns out of it, so the loop has no seam.
-  // Nothing under the clip but the screen's black, and everything over it is lighten —
-  // so "faded out" is exactly the blob's own red.
-  // The seam crossfade must NOT apply to the very first pass: fading in from 0 meant the
-  // frame opened on an empty red screen with 0.0 sitting on it, and the count could not
-  // start until there was something to count over. The first pass is at full strength
-  // from its first frame; the fade only exists around the loop point.
-  var FADE = 0.22, LEAD = 0.12;   // short crossfade, and the restart comes a beat early
-  var looped = false;
-  (function fade() {
-    var d = clip.duration, t = clip.currentTime;
+  // The clip is one 0.83s stride that loops on itself — 20 frames is the runner's own
+  // cycle, and the four frames either side of the join are cross-dissolved IN THE FILE,
+  // so the native `loop` carries it with no seam and nothing here has to fade anything.
+  // (It used to dip to transparent and back around the loop point, which was the only way
+  // to hide a hard cut between two different people. There is one person now.)
+  (function frame() {
     // Not playing means HIDDEN, not paused-and-showing. iOS draws its own start-playback
     // button over a video it refused to autoplay (Low Power Mode does this every time),
     // and no amount of CSS on the shadow control reliably removes it — so the element
     // itself goes away, leaving the gradient, which is what the frame is anyway. The
     // first tap starts it and it comes back.
     clip.style.visibility = clip.paused ? 'hidden' : 'visible';
-    if (!d || clip.paused) clip.style.opacity = 1;   // never leave it stranded mid-fade
-    else {
-      // Rewinding before the last frame means the incoming fade-in has already begun by
-      // the time the outgoing one would have finished — there is never an empty moment.
-      if (t >= d - LEAD) { clip.currentTime = 0; looped = true; }
-      var inRamp = looped ? t / FADE : 1;
-      clip.style.opacity = Math.max(0, Math.min(1, inRamp, (d - LEAD - t) / FADE));
-    }
-    requestAnimationFrame(fade);
+    requestAnimationFrame(frame);
   })();
 
-  // The clip crossfades one runner into the other; sampled at 4fps they are both on
-  // screen from about 1.9s and the overlap is at its most even at 2.25s. "Outstanding
-  // Match" lands there — so the count's duration is whatever is left between now and that
-  // moment of the clip, rather than a fixed number. If the clip never started (autoplay
-  // refused) currentTime stays 0 and it simply runs the full 2.25s.
-  var MATCH = 2.25;
+  // How long the count takes. It used to be read off the clip — the two runners overlapped
+  // most evenly at 2.25s and the number landed there — but there is only one runner now
+  // and the clip is a 0.83s loop, so there is no moment in it to aim at. The duration the
+  // score was approved at is kept as a plain number.
+  var COUNT = 2250;
   function revealScore() {
     if (scored) return;
     scored = true;
     var target = 78.8, s = null;
-    var dur = Math.max(600, (MATCH - (clip.currentTime || 0)) * 1000);
+    var dur = COUNT;
     requestAnimationFrame(function step(t) {
       if (s === null) s = t;
       var p = Math.min((t - s) / dur, 1);

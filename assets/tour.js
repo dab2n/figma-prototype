@@ -177,17 +177,16 @@
       sessionStorage.setItem(KEY, '13');
       full.click();
     }
-    // Stay for the recap clip. It is 6.0s and it LOOPS, so 'ended' never fires — 70% of
-    // the first pass (4.2s) is the cue, and the clock underneath only covers a clip that
-    // never started (autoplay refused) or a browser with no timeupdate.
+    // Stay for the recap. This used to leave at 70% of the clip, which was 4.2s of a 6.0s
+    // one-pass film; the clip is now a 0.83s stride loop, so that fraction would cut at
+    // 0.6s — before the score has finished counting. The hold is the SCREEN's, not the
+    // clip's: 4.2s, the same beat, counted from the first frame that actually played.
     var clip = document.querySelector('.recap-clip');
     if (clip) {
-      var tick = function () {
-        var d = clip.duration;
-        if (d && clip.currentTime >= d * 0.70) { clip.removeEventListener('timeupdate', tick); open(); }
-      };
-      clip.addEventListener('timeupdate', tick);
-      setTimeout(open, 6500);
+      var HOLD = 4200;
+      if (clip.readyState >= 2 && !clip.paused) setTimeout(open, HOLD);
+      else clip.addEventListener('playing', function () { setTimeout(open, HOLD); }, { once: true });
+      setTimeout(open, 6000);          // autoplay refused: go anyway
     } else {
       full.addEventListener('animationstart', function () { setTimeout(open, 860); }, { once: true });
       setTimeout(open, 5000);        // animations off: go anyway
