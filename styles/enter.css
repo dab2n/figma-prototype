@@ -62,7 +62,10 @@
   position: absolute;
   inset: 0;
   background-size: cover;
-  background-position: 30% 20%;
+  /* centre, not 30%/20%: the still IS the clip's first frame now, and the video on top is
+     object-fit: cover — which is background cover centred. Any other origin here and the
+     two are framed differently, so the moment playback starts the picture shifts. */
+  background-position: center;
   transform: scale(calc(1 + 0.06 * var(--q, 0)));
   /* Only at the very end, where it becomes the blurred 올릴때 header — a full-height
      blur running the whole way would cost frames on a phone for nothing. */

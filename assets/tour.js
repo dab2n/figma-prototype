@@ -79,8 +79,10 @@
         // clock that would have to be long enough for the slowest first frame.
         var fired = 0;
         function next() { if (fired) return; fired = 1; go('pyeongso.html', 3); }
-        if (clip) clip.addEventListener('playing', function () { setTimeout(next, 300); }, { once: true });
-        setTimeout(next, 2200);        // the clip never started: go anyway
+        // A second on the live thumb before the cut, so the card is seen playing rather
+        // than merely glimpsed.
+        if (clip) clip.addEventListener('playing', function () { setTimeout(next, 1300); }, { once: true });
+        setTimeout(next, 3200);        // the clip never started: go anyway
       });
     }, 3000);          // a beat on the feed before it starts moving
   }
