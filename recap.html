@@ -12,8 +12,8 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=967"></script>
-<script defer src="assets/tour.js?v=967"></script>
+<script defer src="assets/openext.js?v=968"></script>
+<script defer src="assets/tour.js?v=968"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,13 +21,13 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Session Recap</title>
-<link rel="stylesheet" href="styles/main.css?v=967">
-<link rel="stylesheet" href="styles/recap.css?v=967">
+<link rel="stylesheet" href="styles/main.css?v=968">
+<link rel="stylesheet" href="styles/recap.css?v=968">
 </head>
 <body>
 <div class="phone">
   <div class="screen recap-screen" id="recapScreen">
-    <video class="recap-clip" id="clip" src="assets/video/recap-overlay.mp4?v=967"
+    <video class="recap-clip" id="clip" src="assets/video/recap-overlay.mp4?v=968"
            muted playsinline webkit-playsinline autoplay loop preload="auto" disablepictureinpicture></video>
     <!-- Three layers, exactly as drawn: the black clip, its own fill whitening the foot,
          and the blur blob over both on lighten. Nothing else — the earlier full-frame
@@ -70,7 +70,12 @@
   // the runner dissolves into the red and returns out of it, so the loop has no seam.
   // Nothing under the clip but the screen's black, and everything over it is lighten —
   // so "faded out" is exactly the blob's own red.
+  // The seam crossfade must NOT apply to the very first pass: fading in from 0 meant the
+  // frame opened on an empty red screen with 0.0 sitting on it, and the count could not
+  // start until there was something to count over. The first pass is at full strength
+  // from its first frame; the fade only exists around the loop point.
   var FADE = 0.22, LEAD = 0.12;   // short crossfade, and the restart comes a beat early
+  var looped = false;
   (function fade() {
     var d = clip.duration, t = clip.currentTime;
     // Not playing means HIDDEN, not paused-and-showing. iOS draws its own start-playback
@@ -83,8 +88,9 @@
     else {
       // Rewinding before the last frame means the incoming fade-in has already begun by
       // the time the outgoing one would have finished — there is never an empty moment.
-      if (t >= d - LEAD) clip.currentTime = 0;
-      clip.style.opacity = Math.max(0, Math.min(1, t / FADE, (d - LEAD - t) / FADE));
+      if (t >= d - LEAD) { clip.currentTime = 0; looped = true; }
+      var inRamp = looped ? t / FADE : 1;
+      clip.style.opacity = Math.max(0, Math.min(1, inRamp, (d - LEAD - t) / FADE));
     }
     requestAnimationFrame(fade);
   })();
@@ -109,13 +115,19 @@
     });
   }
 
-  // Clip starts at once; the score slides in from near-transparent first and only then
-  // runs up, finishing on the clip's overlap.
+  // Nothing counts until there is a picture to count over: the score waits for the clip's
+  // first decoded frame ('playing'), so 0.0 is never left sitting on an empty screen. If
+  // autoplay is refused that event never comes, so a 900ms clock starts it anyway.
   play(clip);
-  requestAnimationFrame(function () {
-    document.querySelector('.recap-match').classList.add('enter');
-    setTimeout(revealScore, 340);
-  });
+  function begin() {
+    var m = document.querySelector('.recap-match');
+    if (m.classList.contains('enter')) return;
+    m.classList.add('enter');
+    setTimeout(revealScore, 260);
+  }
+  if (clip.readyState >= 2 && !clip.paused) requestAnimationFrame(begin);
+  else clip.addEventListener('playing', function () { requestAnimationFrame(begin); }, { once: true });
+  setTimeout(begin, 900);
 
   // Autoplay can still be refused (Low Power Mode). Any first interaction starts it, and
   // so does coming back to the tab, so the screen is never left on a still frame.
