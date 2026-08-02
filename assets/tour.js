@@ -146,7 +146,7 @@
         sessionStorage.setItem(KEY, '12');
         setTimeout(function () { open.click(); }, 260);
       }, 1700);
-    }, 2600);                                       // a beat to read "New Report"
+    }, 4000);   // home.html raises the strip at 2600 — a beat to read "New Report" after
   }
 
   // Session Recap: the clip runs and the score counts up on its own, and then View Full
