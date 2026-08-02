@@ -467,6 +467,26 @@ button { font-family: inherit; }
   .phone { zoom: var(--fit, 1); }
 }
 
+/* Installed (standalone): the OS DOES draw its own status bar, and viewport-fit=cover puts
+   the page under it — so the back/kebab row and the top of every scrolling screen were
+   sitting behind the clock. Ours stays hidden (the OS one is real); the frame just takes
+   the inset as padding and every fixed height loses it too, so nothing runs under the
+   tab bar instead. env() is 0 in a browser tab, and this is scoped to standalone anyway,
+   so a tab is untouched.
+   NOT VERIFIED on a device from here — display-mode cannot be emulated in a desktop
+   Chrome window, and env() reports 0. The arithmetic is the same as the block below. */
+@media (max-width: 400px) and (display-mode: standalone) {
+  .phone { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); }
+  body .phone:has(> .tabbar) > .screen {
+    height: calc(100dvh - 56px - max(24px, env(safe-area-inset-bottom, 0px)) - env(safe-area-inset-top, 0px));
+  }
+  body .phone.notif-on:has(> .tabbar) > .screen {
+    height: calc(100dvh - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px)) - env(safe-area-inset-top, 0px));
+  }
+  .recap-screen, .records-screen, .swipe-detail, .creator-screen,
+  body .creator-screen, body .recap-screen { height: calc(100dvh - env(safe-area-inset-top, 0px)); }
+}
+
 /* Fullscreen (installed on Android): the phone draws no status bar at all, so ours comes
    back to fill that space — exactly the 44px the Figma frames budget for it. Scoped to
    the fullscreen display mode so it can never sit under a real one. */
