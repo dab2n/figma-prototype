@@ -36,25 +36,29 @@ html:active-view-transition-type(detail-out)::view-transition-new(root) { animat
    status bar — is not in the transition at all and cannot move. Set from script on both
    ends (packs.html on the tapped card, pyeongso.html on arrival) so exactly one element
    ever carries the name. */
+/* ONE duration and ONE curve for everything that moves here. They used to be .52 / .2 /
+   .34 / .22 / .46+.06s, and the eye read every mismatch as a separate beat: the feed had
+   already been replaced before the picture was half-way, so the open arrived as three
+   cuts instead of one move. Same clock, no delays — it lands as a single gesture. */
 ::view-transition-group(pack-hero) {
-  animation-duration: .52s;
-  animation-timing-function: cubic-bezier(.2,.85,.25,1);
+  animation-duration: var(--open, .5s);
+  animation-timing-function: cubic-bezier(.22,.85,.28,1);
 }
-::view-transition-old(pack-hero) { animation: vt-fade-out .2s linear both; }
-::view-transition-new(pack-hero) { animation: vt-fade-in .34s linear both; }
+::view-transition-old(pack-hero) { animation: vt-fade-out var(--open, .5s) linear both; }
+::view-transition-new(pack-hero) { animation: vt-fade-in var(--open, .5s) linear both; }
 @keyframes vt-fade-out { to { opacity: 0; } }
 @keyframes vt-fade-in { from { opacity: 0; } }
-/* The feed holds still underneath while the pack screen's ground comes up over it — a
-   short fade only, because the two things that should read as MOVING are the picture and
-   the bar, not the page. */
+/* The feed holds still underneath while the pack screen's ground comes up over it, on the
+   picture's own clock — the two things that should read as MOVING are the picture and the
+   bar, not the page, but the ground must not get there first either. */
 html:active-view-transition-type(card-open)::view-transition-old(root) { animation: none; }
 html:active-view-transition-type(card-open)::view-transition-new(root) {
-  animation: vt-fade-in .22s linear both;
+  animation: vt-fade-in var(--open, .5s) cubic-bezier(.22,.85,.28,1) both;
 }
 /* The black UI rises from under the frame. It has no counterpart on the feed, so only the
    "new" half exists and it animates on its own. */
 html:active-view-transition-type(card-open)::view-transition-new(pack-ui) {
-  animation: vt-rise .46s cubic-bezier(.2,.85,.25,1) .06s both;
+  animation: vt-rise var(--open, .5s) cubic-bezier(.22,.85,.28,1) both;
 }
 @keyframes vt-rise { from { transform: translateY(100%); opacity: 0; } }
 

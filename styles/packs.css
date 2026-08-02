@@ -144,14 +144,16 @@
 .packs-screen.snap .pack-card { will-change: auto; }
 
 /* Picked: the card presses in and its shadow tightens under it, then the detail grows out
-   of that same thumbnail. Navigation is held 200ms so the press is actually seen — see
-   the click handler in packs.html. */
-.pack-card { transition: transform .18s ease-out, box-shadow .18s ease-out, opacity .18s ease-out; }
+   of that same thumbnail. The press is deliberately LONGER than the wait before the
+   navigation (packs.html leaves at 100ms of a 260ms press) — the snapshot is taken while
+   the card is still moving, so the growth picks the motion up rather than starting over.
+   A press that finished first, then sat there, was the middle of the three beats. */
+.pack-card { transition: transform .26s cubic-bezier(.22,.85,.28,1), box-shadow .26s cubic-bezier(.22,.85,.28,1), opacity .26s cubic-bezier(.22,.85,.28,1); }
 .pack-card.picked {
-  transform: scale(.964);
+  transform: scale(.968);
   box-shadow: 0 4px 14px 0 rgba(0,0,0,0.18);
 }
-.pack-list.picking .pack-card:not(.picked) { opacity: .5; }
+.pack-list.picking .pack-card:not(.picked) { opacity: .62; }
 
 /* A clip fades up over its own poster instead of cutting in, and the outgoing one fades
    down over it — so handing playback from one card to the next is a dissolve, never a

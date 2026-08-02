@@ -323,7 +323,9 @@
   justify-content: center;
   cursor: pointer;
 }
-.kebab-tan img { width: 3.5px; height: 17.5px; transform: rotate(90deg); display: block; filter: brightness(0) invert(1); }
+/* The chip is now deliberately much brighter than the photo, so on an already-bright frame
+   white-on-white is a real possibility — the shadow is what keeps the dots readable there. */
+.kebab-tan img { width: 3.5px; height: 17.5px; transform: rotate(90deg); display: block; filter: brightness(0) invert(1) drop-shadow(0 0 2px rgba(0,0,0,0.35)); }
 
 /* ── Pack colour ───────────────────────────────────────────────────────────
    The bottom sheet and the kebab both take their fill from the hero photo, which
@@ -341,11 +343,20 @@
    which is what made the button go dull exactly when the clip was playing full-bleed and
    the frame happened to be bright. It has to be the same brightness in every state. */
 .kebab-tan {
-  /* Figma's recipe exactly: the frame's own colour at 80%, #FFFFFF 20% over it. The tint
-     comes from --pack-btn-80 (packs.js), which reads the corner this button covers rather
-     than the whole frame — averaging the whole picture is what made it grey, and no
-     amount of white on top fixes grey, it only makes it paler grey. */
-  background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)), var(--pack-btn-80, var(--pack-main-80, #736549));
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  backdrop-filter: blur(14px) saturate(140%);
+  /* Figma's recipe, but the 80% fill is taken through the BACKDROP instead of sampled and
+     painted on top. Sampling meant the button was painted the colour of the very pixels it
+     covered, so it could never be brighter than them — over the dark wall behind Sean's
+     head it came out the same tan as the photo and read as a grey blob. Brightening the
+     backdrop keeps the video's own colour (that was the point) and guarantees the button
+     sits above it in every frame, bright clip or dark. #FAFAFA 20% over that is the same
+     veil the Sean name tag wears, which is what it has to match. */
+  background: rgba(250, 250, 250, 0.22);
+  -webkit-backdrop-filter: blur(14px) brightness(1.5) saturate(1.05);
+  backdrop-filter: blur(14px) brightness(1.5) saturate(1.05);
+}
+/* No backdrop-filter: fall back to the sampled tint lightened, so it is still readable. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .kebab-tan {
+    background: linear-gradient(rgba(255,255,255,0.38), rgba(255,255,255,0.38)), var(--pack-btn-80, var(--pack-main-80, #736549));
+  }
 }
