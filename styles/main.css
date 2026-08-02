@@ -107,11 +107,12 @@ html:active-view-transition-type(report-in)::view-transition-new(root) {
     box-shadow: none;
     /* outline, not a ring-shaped box-shadow: Chrome follows border-radius for
        outline, so it traces the 40px corners exactly and nothing bleeds. */
-    outline: solid var(--color-neutral-300);
-    /* A bezel, not a hairline — thin enough and it reads as a border on a web page rather
-       than as a phone. `zoom` scales it with the frame, so it is divided by --fit to stay
-       10 real pixels whatever the window height. */
-    outline-width: calc(10px / var(--fit, 1));
+    /* #3B3B3B, and measured off the reference: its bezel is 14px on a 495px-wide phone,
+       so 10px in the FRAME's own coordinates. Left to scale with `zoom` rather than
+       pinned to real pixels — a bezel is part of the mockup, so it has to shrink with it
+       or a scaled-down frame ends up wearing one twice as heavy as the reference. 8, a
+       shade under the measured 10. */
+    outline: 8px solid #3B3B3B;
     outline-offset: 0;
   }
 }
