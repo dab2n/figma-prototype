@@ -169,21 +169,24 @@
    than as a press. It now settles in 280ms and the navigation waits for it.
    The curve is front-loaded (.2,.8,.3,1): the card is most of the way down in the first
    third and spends the rest arriving, which is what makes it feel soft rather than stiff. */
-.pack-card { transition: transform .28s cubic-bezier(.2,.8,.3,1), box-shadow .28s cubic-bezier(.2,.8,.3,1); }
-/* .962 landed 13px in on a 336 card, which was too much once the press stopped being
-   cut halfway and the whole travel actually showed. .975 is 8px — read as a press,
-   not as the card changing size. */
-.pack-card.picked { transform: scale(.975); box-shadow: 0 3px 10px 0 rgba(0,0,0,0.10); }
-/* The veil is a pseudo-element over the whole card, not a filter: a filter on a box with
-   a <video> in it makes iOS re-rasterise the card every frame. isolation gives it a
-   stacking context to sit above that composited video in. */
+/* No shrink at all: at .975 it still read as the card changing size rather than as
+   being chosen. The selection is the colour now — the card just goes a little darker.
+   The lift eases off rather than collapsing (40px of blur down to 26, not to 10), so it
+   settles slightly instead of going flat. */
+.pack-card { transition: box-shadow .28s cubic-bezier(.2,.8,.3,1); }
+.pack-card.picked { box-shadow: 0 9px 26px 1px rgba(0,0,0,0.11); }
+/* Black, not the grey it used to be: a light veil washed the picture out, which is the
+   flattening. Darkening leaves the card looking like itself, only picked out.
+   A pseudo-element rather than a filter — a filter on a box with a <video> in it makes
+   iOS re-rasterise the card every frame. isolation gives it a stacking context to sit
+   above that composited video in. */
 .pack-card { position: relative; isolation: isolate; }
 .pack-card::after {
   content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  border-radius: 40px; background: var(--color-neutral-100);
+  border-radius: 40px; background: #000;
   opacity: 0; transition: opacity .28s cubic-bezier(.2,.8,.3,1);
 }
-.pack-card.picked::after { opacity: .16; }
+.pack-card.picked::after { opacity: .10; }
 /* The siblings used to dim to .86 over the same 340ms and were caught halfway too — a
    feed of half-faded cards on the outgoing frame. The chosen card says enough on its own. */
 
