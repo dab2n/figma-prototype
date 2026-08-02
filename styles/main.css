@@ -37,13 +37,21 @@ html:active-view-transition-type(detail-out)::view-transition-new(root) { animat
    ends (packs.html on the tapped card, pyeongso.html on arrival) so exactly one element
    ever carries the name. */
 ::view-transition-group(pack-hero) {
-  animation-duration: .42s;
+  animation-duration: .52s;
   animation-timing-function: cubic-bezier(.2,.85,.25,1);
 }
-::view-transition-old(pack-hero) { animation: vt-fade-out .18s linear both; }
-::view-transition-new(pack-hero) { animation: vt-fade-in .3s linear both; }
+::view-transition-old(pack-hero) { animation: vt-fade-out .2s linear both; }
+::view-transition-new(pack-hero) { animation: vt-fade-in .34s linear both; }
 @keyframes vt-fade-out { to { opacity: 0; } }
 @keyframes vt-fade-in { from { opacity: 0; } }
+/* The rest of the pack screen has to arrive AFTER the card starts growing, or there is
+   nothing for the card to grow out of — the new page was painting complete on frame one
+   and the morph happened invisibly behind it. The feed holds still underneath while the
+   detail fades up over it, so the thumbnail reads as opening into the screen. */
+html:active-view-transition-type(card-open)::view-transition-old(root) { animation: none; }
+html:active-view-transition-type(card-open)::view-transition-new(root) {
+  animation: vt-fade-in .34s cubic-bezier(.3,.7,.3,1) .06s both;
+}
 
 /* Web-only side controls, parked outside the frame so they can never sit over the screen
    and never move: 196px is half the frame plus 16, and the frame only ever gets narrower
