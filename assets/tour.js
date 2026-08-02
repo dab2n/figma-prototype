@@ -68,12 +68,21 @@
   function packs() {
     var screen = document.querySelector('.packs-screen');
     var sean = screen.querySelector('.pack-card[href="pyeongso.html"]');
+    var clip = sean.querySelector('video');
     screen.scrollTop = 0;
     setTimeout(function () {
-      glide(screen, 'scrollTop', centre(screen, sean, 'scrollTop'), 2600, function () {
-        setTimeout(function () { go('pyeongso.html', 3); }, 800);
+      // A flick, not a crawl: FLICK puts all the travel at the start and coasts in, so a
+      // short duration reads as light rather than hurried.
+      glide(screen, 'scrollTop', centre(screen, sean, 'scrollTop'), 1000, function () {
+        // clips.js starts the centred card once the scroll has been still for 180ms.
+        // Leaving on 'playing' cuts the moment the thumb comes alive, instead of on a
+        // clock that would have to be long enough for the slowest first frame.
+        var fired = 0;
+        function next() { if (fired) return; fired = 1; go('pyeongso.html', 3); }
+        if (clip) clip.addEventListener('playing', function () { setTimeout(next, 300); }, { once: true });
+        setTimeout(next, 2200);        // the clip never started: go anyway
       });
-    }, 3000);          // a beat longer on the feed before it starts moving
+    }, 3000);          // a beat on the feed before it starts moving
   }
 
   function detail() {
