@@ -114,98 +114,72 @@
     radial-gradient(361.63px 345.5px at 160px 104.5px, #FA3030 33.17%, #FEC389 61.42%, #D1FEFF 77.58%);
   isolation: isolate;
 }
-.hero-clip {
+/* The artwork sits in a card-sized wrapper rather than carrying the mask itself, so the
+   mask stays in CARD coordinates and every card can size its own picture freely — a
+   9:16 video and a near-square still both fade out on the same circle.
+   Figma's mask on the figure (2476:3553): a 318x359 alpha mask at -29,-4 in the clip's
+   box holding one radial — centre (159,96.5) in the mask's own box, r 262.5, opaque to
+   31.25% and out to nothing at 96.65%. In card coordinates that circle is centred
+   (160, 79.5). Solid to card y≈161 and only fully gone below the card, so it is a long
+   slow fade, not a cut — the text is carried by .hero-blur below, not by this.
+   plus-lighter on the wrapper: the artwork is shot on black and additive blending adds
+   nothing for black, so the backdrop never appears and no keying is needed. */
+.hero-shot {
   position: absolute;
-  left: 30px;
-  top: -13px;
-  width: 266px;
-  height: 473px;
-  object-fit: cover;
+  inset: 0;
   mix-blend-mode: plus-lighter;
   pointer-events: none;
-  /* Figma's mask on the figure (2476:3553), transcribed rather than eyeballed: a 318x359
-     alpha mask placed at -29,-4 in the clip's box, holding one radial — centre (159,96.5)
-     in the mask's own box, r 262.5, opaque to 31.25% and out to nothing at 96.65%.
-     Shifted into the clip's coordinates that is centre (130, 92.5), the same circle.
-     Solid to card y≈161 and only fully gone below the card, so it is a long slow fade,
-     not a cut — the text is carried by .hero-blur below, not by this. */
-  -webkit-mask-image: radial-gradient(262.5px 262.5px at 130px 92.5px, #000 31.25%, rgba(0,0,0,0) 96.65%);
-  mask-image: radial-gradient(262.5px 262.5px at 130px 92.5px, #000 31.25%, rgba(0,0,0,0) 96.65%);
+  -webkit-mask-image: radial-gradient(262.5px 262.5px at 160px 79.5px, #000 31.25%, rgba(0,0,0,0) 96.65%);
+  mask-image: radial-gradient(262.5px 262.5px at 160px 79.5px, #000 31.25%, rgba(0,0,0,0) 96.65%);
+}
+/* Centred by default; each card gives its own top/width inline, because the pictures are
+   different shapes and the framing is per-picture. */
+.hero-clip {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: block;
 }
 
-/* Figma's Blur layer (2476:3535) — #050A0A, 52px blur, soft-light, 279x166 at (5,149).
-   This is what actually seats the title and the Pack line: soft-light darkens the bright
-   vest behind them without touching the card's mint ending. Above the clip, below the
-   text. */
+/* Figma's Blur layer (2476:3535) — #000000, 104 layer blur, soft-light, 279x166 at
+   (5,149), under the text container and the button. This is what seats the title and the
+   Pack line: soft-light darkens the bright vest behind them without touching the card's
+   mint ending.
+   It is also where the drift lives. Two black slabs on different periods inside one
+   blurred, soft-light parent: the union's silhouette keeps changing, so the soft dark
+   pool under the figure and behind the text breathes instead of sitting still. A single
+   slab only slides — near its middle a big blur is almost translation-invariant. */
 .hero-blur {
   position: absolute;
   left: 5px;
   top: 149px;
   width: 279px;
   height: 166px;
-  background: #050A0A;
-  filter: blur(52px);
+  filter: blur(104px);
   mix-blend-mode: soft-light;
   pointer-events: none;
 }
-
-/* A layer of low-lying mist over the bottom of the card. Added artwork, not the card's
-   own gradient nudged about — nudging it was invisible, which is why this exists.
-   Colour comes from each card inline (--fog), sampled from the pale tone its own
-   artwork already fades into, so the mist belongs to the card instead of washing it
-   towards white.
-   The crests have to reach ABOVE the artwork's own pale ceiling. Level with it the mist
-   is the colour that is already there and nothing shows however far it drifts; only the
-   part that rises into the red reads as mist at all.
-   Two banks on different periods and opposite drifts — one alone slides, two crossing
-   billow. Clipped to the bottom 48%, so the figure is never touched, and placed before
-   .hero-text in the markup so the title and button stay above it. */
-.hero-fog {
+.hero-blur i {
   position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 48%;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.hero-fog i {
-  position: absolute;
-  left: -22%; right: -22%; bottom: -18%;
-  height: 128%;
+  inset: 0;
+  background: #000;
   will-change: transform;
 }
-/* Several small crests rather than one wide dome: a single big radial is nearly
-   translation-invariant near its middle — it drifted a measured 81px and moved the
-   picture by 12 of 255. */
-.hero-fog i:nth-child(1) {
-  background:
-    radial-gradient(24% 74% at 12% 104%, rgba(var(--fog), 1), rgba(var(--fog), 0.72) 34%, rgba(var(--fog), 0) 100%),
-    radial-gradient(19% 56% at 39% 110%, rgba(var(--fog), 1), rgba(var(--fog), 0.66) 32%, rgba(var(--fog), 0) 100%),
-    radial-gradient(27% 80% at 69% 102%, rgba(var(--fog), 1), rgba(var(--fog), 0.72) 34%, rgba(var(--fog), 0) 100%),
-    radial-gradient(21% 62% at 93% 108%, rgba(var(--fog), 1), rgba(var(--fog), 0.66) 32%, rgba(var(--fog), 0) 100%);
-  animation: fog-a 17s ease-in-out infinite alternate;
+.hero-blur i:nth-child(1) { animation: blur-drift-a 17s ease-in-out infinite alternate; }
+.hero-blur i:nth-child(2) { animation: blur-drift-b 23s ease-in-out infinite alternate; }
+@keyframes blur-drift-a {
+  0%   { transform: translate(-7%, 6%)  scale(1.00, 0.88); }
+  34%  { transform: translate(5%, -3%)  scale(1.10, 1.06); }
+  67%  { transform: translate(-3%, 5%)  scale(1.04, 0.94); }
+  100% { transform: translate(8%, -4%)  scale(1.12, 1.10); }
 }
-.hero-fog i:nth-child(2) {
-  opacity: .8;
-  background:
-    radial-gradient(22% 86% at 25% 106%, rgba(var(--fog), 1), rgba(var(--fog), 0.7) 32%, rgba(var(--fog), 0) 100%),
-    radial-gradient(28% 64% at 55% 100%, rgba(var(--fog), 1), rgba(var(--fog), 0.7) 34%, rgba(var(--fog), 0) 100%),
-    radial-gradient(20% 78% at 83% 106%, rgba(var(--fog), 1), rgba(var(--fog), 0.7) 32%, rgba(var(--fog), 0) 100%);
-  animation: fog-b 23s ease-in-out infinite alternate;
+@keyframes blur-drift-b {
+  0%   { transform: translate(9%, -5%)  scale(1.14, 1.04); }
+  41%  { transform: translate(-6%, 6%)  scale(1.02, 0.86); }
+  73%  { transform: translate(4%, -4%)  scale(1.10, 1.08); }
+  100% { transform: translate(-9%, 4%)  scale(1.05, 0.92); }
 }
-@keyframes fog-a {
-  0%   { transform: translate(-6%, 8%)  scale(1,    0.86); }
-  34%  { transform: translate(4%, -2%)  scale(1.12, 1.08); }
-  67%  { transform: translate(-2%, 7%)  scale(1.04, 0.92); }
-  100% { transform: translate(7%, -3%)  scale(1.16, 1.13); }
-}
-@keyframes fog-b {
-  0%   { transform: translate(8%, -4%)  scale(1.18, 1.06); }
-  41%  { transform: translate(-5%, 7%)  scale(1.02, 0.84); }
-  73%  { transform: translate(3%, -5%)  scale(1.12, 1.11); }
-  100% { transform: translate(-8%, 5%)  scale(1.06, 0.9); }
-}
-@media (prefers-reduced-motion: reduce) { .hero-fog i { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .hero-blur i { animation: none; } }
 .hero-text {
   position: absolute;
   top: 189px;
