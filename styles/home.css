@@ -333,6 +333,13 @@
 .hero-section, .section-title, .recent-item, .movement-card {
   animation: home-slide .42s cubic-bezier(.2,.85,.3,1) both;
 }
+/* 프로토타입 2 opens on Home already built — the report notification is the subject, and
+   a page assembling itself underneath it is a competing motion. Named rather than a blunt
+   `* { animation: none }` so the notification's own reveal still runs. */
+.no-intro .hero-section,
+.no-intro .section-title,
+.no-intro .recent-item,
+.no-intro .movement-card { animation: none; }
 .section:nth-of-type(1) .section-title { animation-delay: .06s; }
 .recent-item:nth-child(1) { animation-delay: .10s; }
 .recent-item:nth-child(2) { animation-delay: .14s; }

@@ -141,15 +141,22 @@
     }, 2600);                                       // a beat to read "New Report"
   }
 
-  // Session Recap: the clip runs and the score counts up on its own. Leave it on screen
-  // long enough to watch both, then open the full report.
+  // Session Recap: the clip runs and the score counts up on its own, and then View Full
+  // Report gives its one nudge (hint-nudge, recap.css). That nudge is the screen saying
+  // "here next", so the cut follows it rather than a stopwatch — tied to the animation
+  // itself, so retiming the hint retimes the tour.
   function recap() {
-    setTimeout(function () {
-      var full = document.querySelector('.recap-full');
-      if (!full) return;
+    var full = document.querySelector('.recap-full');
+    if (!full) return;
+    var fired = 0;
+    function open() {
+      if (fired) return;
+      fired = 1;
       sessionStorage.setItem(KEY, '13');
       full.click();
-    }, 6500);
+    }
+    full.addEventListener('animationstart', function () { setTimeout(open, 860); }, { once: true });
+    setTimeout(open, 5000);          // animations off: go anyway
   }
 
   // The full report, read in stops rather than one long crawl. Each move is a flick and
@@ -166,20 +173,26 @@
     var secs = screen.querySelectorAll('.rp-sec');
     if (secs.length < 3) return;
     function topIn(el) { var t = 0; while (el && el !== screen) { t += el.offsetTop; el = el.offsetParent; } return t; }
+    // Stop 1 ends ON Landing Balance — its bottom edge parked just inside the frame.
+    // Performance Scores must stay OUT of the frame here: scores.js runs it as soon as
+    // 20% of it is on screen, so any peek at the bottom means its bars have already
+    // played by the time the next stop arrives to show them off.
     var stops = [
-      Math.max(0, topIn(secs[0]) - 24),
+      Math.max(0, topIn(secs[1]) + secs[1].offsetHeight - screen.clientHeight + 20),
       Math.max(0, topIn(secs[2]) - 120),
       screen.scrollHeight - screen.clientHeight
     ];
     var hold = [2400, 2600, 0];
     var i = 0;
+    // The hero's score and gauge land first (records.html adds rp-landed at 620ms); this
+    // leaves a beat on top of that before anything moves.
     setTimeout(function step() {
       if (i >= stops.length) { sessionStorage.removeItem(P2); return; }
       var n = i++;
       glide(screen, 'scrollTop', stops[n], n === 2 ? 1100 : 900, function () {
         setTimeout(step, hold[n]);
       });
-    }, 1200);
+    }, 2400);
   }
 
   var step = sessionStorage.getItem(KEY);

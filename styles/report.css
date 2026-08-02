@@ -12,7 +12,15 @@
 /* ── Hero ──────────────────────────────────────────────────────────────────
    Red-to-white wash exported from the design (the frame's 블러 layer); every
    text element sits on top of it as real text. */
-.rp-hero { position: relative; height: 462px; flex: none; }
+/* A red band pinned to the top of the hero. The wash above it RIDES UP into place on
+   arrival (rp-wash-rise starts it 110px low), and for those 660ms the top of the screen
+   was the page's near-white neutral — with the status bar's white glyphs on it, which is
+   why the time and battery vanished. This band never moves, so there is no frame where
+   the bar has nothing to sit on. It stops well above the gauge, so the cream is untouched. */
+.rp-hero {
+  position: relative; height: 462px; flex: none;
+  background: linear-gradient(180deg, #FA3030 0 96px, rgba(250,48,48,0) 190px);
+}
 /* 블러 (729:8538): a 513 x 528 vector turned -72.06°, whose bounding box sits at
    (-142, -177) in the frame's content box — page (-142, -133) with the 44px status row.
    Turned, that box measures 660 x 651, and the export already has the rotation baked in,
@@ -514,7 +522,6 @@
   position: absolute; z-index: 2;
   left: 0; top: 60.96px;
   width: 6px; height: 45px;
-  border-radius: 3px;
   background: linear-gradient(180deg, #FA3030 0%, #FE8C4A 100%);
   transform: translateX(var(--pass));
 }
@@ -537,9 +544,12 @@
    right, in the order the wave was drawn. */
 .sc-dash {
   position: absolute; z-index: 0; width: 2px;
-  background: repeating-linear-gradient(180deg, #DCDCDC 0 2px, transparent 2px 3.5px);
-  -webkit-mask-image: linear-gradient(180deg, #000 0 65%, transparent 96%);
-          mask-image: linear-gradient(180deg, #000 0 65%, transparent 96%);
+  background: repeating-linear-gradient(180deg, #E4E4E4 0 2px, transparent 2px 3.5px);
+  /* Faded at BOTH ends. Rhythm's guides run from y36 to y137, which puts their top under
+     the 72 and their foot on the label — a guide that meets type at full strength reads
+     as a line through it. */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22% 60%, transparent 94%);
+          mask-image: linear-gradient(180deg, transparent 0, #000 22% 60%, transparent 94%);
   clip-path: inset(0 0 100% 0);
 }
 .sc.ag .sc-dash { left: 82px; top: 71px; height: 73px; }
@@ -578,9 +588,18 @@
    centre sits at 95.4% down the art box — that is the ellipse's own centre, not the
    box's, which is why the number is not a round one. */
 @property --sweep { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+/* Two masks, intersected: the sweep that draws the arc, and a fade that ends the glow
+   inside the art box. The art is 159.33 tall at top 6.67 in a 166 card, so its bottom
+   edge IS the card wall — overflow:hidden was slicing the blur off in a straight line
+   instead of letting it die away. The arc itself sits at 33-58% of the box, well above
+   where this starts. */
 .sc.ag .sc-art {
-  -webkit-mask-image: conic-gradient(from 270deg at 50% 95.4%, #000 0deg, #000 var(--sweep), transparent var(--sweep));
-          mask-image: conic-gradient(from 270deg at 50% 95.4%, #000 0deg, #000 var(--sweep), transparent var(--sweep));
+  -webkit-mask-image: conic-gradient(from 270deg at 50% 95.4%, #000 0deg, #000 var(--sweep), transparent var(--sweep)),
+                      linear-gradient(180deg, #000 0 64%, transparent 92%);
+          mask-image: conic-gradient(from 270deg at 50% 95.4%, #000 0deg, #000 var(--sweep), transparent var(--sweep)),
+                      linear-gradient(180deg, #000 0 64%, transparent 92%);
+  -webkit-mask-composite: source-in;
+          mask-composite: intersect;
 }
 .rp-scores.run .sc.ag .sc-art { animation: sc-sweep .62s cubic-bezier(.3,.7,.3,1) var(--d) both; }
 @keyframes sc-sweep { from { --sweep: 0deg; } to { --sweep: 180deg; } }
@@ -644,7 +663,7 @@
   box-shadow: 0 0 12px rgba(0,0,0,0.12);
 }
 .rec-badge .badge-fire { width: 11px; height: 13px; display: block; flex: none; }
-.rec-info { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 16px 16px 20px; }
+.rec-info { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 20px 16px; }
 .rec-txt { flex: 1; min-width: 0; }
 .rec-title { margin: 0 0 4px; font-family: var(--font-supreme-bold); font-size: 18px; line-height: 1.2; letter-spacing: -0.54px; color: var(--color-black); }
 .rec-meta { margin: 0; font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.5px; color: var(--color-neutral-500); }
