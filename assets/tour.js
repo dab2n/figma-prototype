@@ -108,19 +108,65 @@
     }
   }
 
+  // 프로토타입 2 — the post-workout path: the report arrives on Home, it is opened, the
+  // Session Recap plays, and the full report is read all the way down.
+
+  // Home's own inline script reveals the strip when 'notifNow' is set, 700ms after
+  // landing. From there the tour just presses what a thumb would press.
+  function reportHome() {
+    setTimeout(function () {
+      var pill = document.getElementById('notifNew');
+      if (pill) pill.click();                       // 1회: strip morphs to avatar + Open
+      setTimeout(function () {
+        var open = document.querySelector('.report-open');
+        if (!open) return;
+        sessionStorage.setItem(KEY, '12');
+        open.click();                               // a real link click, so the page's own
+      }, 1700);                                     // cross-document transition still runs
+    }, 2600);                                       // a beat to read "New Report"
+  }
+
+  // Session Recap: the clip runs and the score counts up on its own. Leave it on screen
+  // long enough to watch both, then open the full report.
+  function recap() {
+    setTimeout(function () {
+      var full = document.querySelector('.recap-full');
+      if (!full) return;
+      sessionStorage.setItem(KEY, '13');
+      full.click();
+    }, 6500);
+  }
+
+  // The full report. Everything below the fold reveals as it is scrolled to (scores.js
+  // watches the scroller), so the scroll has to be slow and even — a flick would trip
+  // every observer at once and the reveals would all be over before they were on screen.
+  // Linear, in one long pass, after the arrival animation has landed.
+  function report() {
+    var screen = document.querySelector('.rp-screen');
+    if (!screen) return;
+    setTimeout(function () {
+      glide(screen, 'scrollTop', screen.scrollHeight - screen.clientHeight, 16000, null,
+            function (k) { return k; });
+    }, 2600);
+  }
+
   var step = sessionStorage.getItem(KEY);
   sessionStorage.removeItem(KEY);                   // a reload is a normal page again
   if (step === '1') home();
   else if (step === '2') packs();
   else if (step === '3') detail();
+  else if (step === '11') reportHome();
+  else if (step === '12') recap();
+  else if (step === '13') report();
 
   // The two web-only controls, on every page and never anywhere else on the page: a
   // recording must not have them blink out at a page change. Home already carries its own
-  // New Report in markup because its inline script binds to it before this file runs.
+  // trigger in markup because its inline script binds to it before this file runs — which
+  // is also why that one keeps the id reportTrigger.
   if (matchMedia('(min-width: 401px)').matches) {
-    [['reportTrigger', 'New Report', '', function () {
-        sessionStorage.setItem('notifNow', '1');
-        location.href = 'home.html';
+    [['reportTrigger', '프로토타입 2', '', function () {
+        sessionStorage.setItem('notifNow', '1');   // Home reveals the strip on landing
+        go('home.html', 11);
       }],
      // Reloading Home rather than replaying in place: the arrival animation is the page's,
      // and a fresh load is the only thing that plays it honestly.
