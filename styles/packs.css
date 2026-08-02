@@ -161,16 +161,28 @@
 .packs-screen.snap .pack-card { will-change: auto; }
 
 /* Picked: the card settles back and goes flat — its shadow drops from 40px of lift to a
-   thin contact shadow, so it reads as being pressed down onto the page rather than
-   floating above it. This is the whole selection now; the pages dissolve behind it.
-   The press runs 340ms and packs.html leaves at 170, so the outgoing snapshot catches the
-   card still going down and the dissolve continues from there. */
-.pack-card { transition: transform .34s cubic-bezier(.25,.6,.3,1), box-shadow .34s cubic-bezier(.25,.6,.3,1), opacity .34s cubic-bezier(.25,.6,.3,1); }
-.pack-card.picked {
-  transform: scale(.978);
-  box-shadow: 0 3px 10px 0 rgba(0,0,0,0.10);
+   thin contact shadow and a matte veil takes the gloss off the picture, so it reads as
+   being pressed down onto the page rather than floating above it.
+   The press has to LAND before the pages dissolve. It used to run 340ms while packs.html
+   left at 170, so the outgoing snapshot froze the card exactly halfway down — a still
+   frame of something mid-move, which is what read as the screen having broken rather
+   than as a press. It now settles in 280ms and the navigation waits for it.
+   The curve is front-loaded (.2,.8,.3,1): the card is most of the way down in the first
+   third and spends the rest arriving, which is what makes it feel soft rather than stiff. */
+.pack-card { transition: transform .28s cubic-bezier(.2,.8,.3,1), box-shadow .28s cubic-bezier(.2,.8,.3,1); }
+.pack-card.picked { transform: scale(.962); box-shadow: 0 3px 10px 0 rgba(0,0,0,0.10); }
+/* The veil is a pseudo-element over the whole card, not a filter: a filter on a box with
+   a <video> in it makes iOS re-rasterise the card every frame. isolation gives it a
+   stacking context to sit above that composited video in. */
+.pack-card { position: relative; isolation: isolate; }
+.pack-card::after {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  border-radius: 40px; background: var(--color-neutral-100);
+  opacity: 0; transition: opacity .28s cubic-bezier(.2,.8,.3,1);
 }
-.pack-list.picking .pack-card:not(.picked) { opacity: .86; }
+.pack-card.picked::after { opacity: .16; }
+/* The siblings used to dim to .86 over the same 340ms and were caught halfway too — a
+   feed of half-faded cards on the outgoing frame. The chosen card says enough on its own. */
 
 /* A clip fades up over its own poster instead of cutting in, and the outgoing one fades
    down over it — so handing playback from one card to the next is a dissolve, never a

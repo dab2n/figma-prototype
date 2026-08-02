@@ -98,11 +98,25 @@
   function detail() {
     var explore = document.getElementById('djExplore');
     var clip = document.querySelector('.dj-photo video');
+    var screen = document.getElementById('djScreen');
+    // The last thing 프로토타입 1 does: read on down to "More Packs from Sean". That is
+    // the final section (only the Start button sits under it, and enter.css has already
+    // taken the fold's 249px of dead scroll back out of the flow), so the end of the
+    // scroller is the shot — no measuring past the fold's transform, no undoing the
+    // frame's zoom, and nothing to re-point if the sheet is edited.
+    function tail() {
+      if (screen) glide(screen, 'scrollTop', screen.scrollHeight - screen.clientHeight, 1300);
+    }
     // Two taps: 평소 → 1회 진입 → 올릴때. One tap only reaches the middle stop (see
     // enter.js), which is not "raised".
     function raise() {
       explore.click();
-      setTimeout(function () { explore.click(); }, 1600);
+      setTimeout(function () {
+        explore.click();
+        // enter.js's own step glide runs 1000ms; a second after it lands, not a second
+        // after the tap, or the two tweens would be writing scrollTop at once.
+        setTimeout(tail, 2000);
+      }, 1600);
     }
     // The clip is what the viewer is watching, so it decides when to move on — but not a
     // whole pass: the sheet comes up a little over halfway through, while the clip is
