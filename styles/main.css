@@ -31,6 +31,20 @@ html:active-view-transition-type(detail-out)::view-transition-new(root) { animat
    more specific, so the 평소 ⇆ 올릴때 modal keeps its slide. */
 ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 
+/* The one thread between a feed card and the screen it opens: the thumbnail travels and
+   grows into the pack's photo. Only that element is named, so the root — and with it the
+   status bar — is not in the transition at all and cannot move. Set from script on both
+   ends (packs.html on the tapped card, pyeongso.html on arrival) so exactly one element
+   ever carries the name. */
+::view-transition-group(pack-hero) {
+  animation-duration: .42s;
+  animation-timing-function: cubic-bezier(.2,.85,.25,1);
+}
+::view-transition-old(pack-hero) { animation: vt-fade-out .18s linear both; }
+::view-transition-new(pack-hero) { animation: vt-fade-in .3s linear both; }
+@keyframes vt-fade-out { to { opacity: 0; } }
+@keyframes vt-fade-in { from { opacity: 0; } }
+
 /* Web-only side controls, parked outside the frame so they can never sit over the screen
    and never move: 196px is half the frame plus 16, and the frame only ever gets narrower
    (it scales down to fit). Injected on every page by assets/tour.js, so they stay put

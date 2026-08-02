@@ -308,10 +308,14 @@
   opacity: calc(var(--q, 0) * 5 - 1.2);
   pointer-events: none;
   /* The Process bars it floats over are the same red, so the pill's own edge was the only
-     thing separating them. A soft drop shadow gives it the lift instead: neutral black,
-     not red, so it darkens the bars it sits on AND still reads against the dark card.
-     Two stops — a tight contact shadow and a wide diffuse one. */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.30), 0 12px 32px rgba(0, 0, 0, 0.40);
+     thing separating them. It sits on frosted glass now: the fill is let down to 0.82 so
+     there is something for a backdrop filter to show through, and what is behind the pill
+     is blurred and dimmed. That is what separates it — the shadow is kept, but only as a
+     contact edge, since a shadow alone was doing all the work and doing it flatly. */
+  background: rgba(250, 48, 48, 0.82);
+  -webkit-backdrop-filter: blur(18px) saturate(130%) brightness(0.88);
+          backdrop-filter: blur(18px) saturate(130%) brightness(0.88);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.24), 0 10px 28px rgba(0, 0, 0, 0.28);
 }
 /* opacity alone leaves both Starts clickable, so the handover is a real one:
    enter.js sets .dj-open once the fold is past the crossfade. */
