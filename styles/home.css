@@ -149,8 +149,12 @@
   inset: 0;
   mix-blend-mode: plus-lighter;
   pointer-events: none;
-  -webkit-mask-image: radial-gradient(262.5px 262.5px at 160px 79.5px, #000 31.25%, rgba(0,0,0,0) 96.65%);
-  mask-image: radial-gradient(262.5px 262.5px at 160px 79.5px, #000 31.25%, rgba(0,0,0,0) 96.65%);
+  /* Figma's stops are the defaults. A card whose artwork stays bright all the way down
+     tightens the fade instead of dimming the whole figure: the head and shoulders keep
+     their weight, and the picture is gone by the time the title starts, which is what
+     card 1 gets for free because Akiyama's frame darkens there on its own. */
+  -webkit-mask-image: radial-gradient(262.5px 262.5px at 160px 79.5px, #000 var(--mask-in, 31.25%), rgba(0,0,0,0) var(--mask-out, 96.65%));
+  mask-image: radial-gradient(262.5px 262.5px at 160px 79.5px, #000 var(--mask-in, 31.25%), rgba(0,0,0,0) var(--mask-out, 96.65%));
 }
 /* Centred by default; each card gives its own top/width inline, because the pictures are
    different shapes and the framing is per-picture. */
@@ -159,6 +163,13 @@
   left: 50%;
   transform: translateX(-50%);
   display: block;
+  /* plus-lighter only ever adds, so a bright subject clips to white and takes the title
+     with it — soft-light black cannot pull a near-white base back down (its result is
+     base², which is 0.96 at base 0.98). The fix has to happen BEFORE the additive step.
+     Each card sets its own value so the figure lands in the same luminance range as the
+     Figma original: Akiyama's clip reads 106 mean behind the text band, and a card whose
+     artwork reads brighter than that is scaled to match. */
+  filter: brightness(var(--clip-bright, 1));
 }
 
 /* Figma's Blur layer (2476:3535) — #000000, 104 layer blur, soft-light, 279x166 at

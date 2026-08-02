@@ -107,10 +107,13 @@
 .pack-stack img:last-child { margin-right: 0; }
 .pack-dots { position: absolute; right: 16px; bottom: 16px; z-index: 1; }
 .pack-dots img { width: 10px; }
-/* Info container: fixed 78px tall, 16 top / 20 bottom margins, 4px title→meta gap */
+/* Info container: fixed 78px tall, 16 top / 20 bottom margins. Figma: title 18/22,
+   meta 13/16, 4px between them — 22 + 4 + 16 = the 42px the padding leaves. The line
+   heights are stated in px rather than left on the 1.2 token (21.6 / 15.6), because the
+   4px gap only reads as 4 if the boxes above and below it are the designed height. */
 .pack-info { height: 78px; box-sizing: border-box; padding: 16px 16px 20px; }
-.pack-info p { margin: 0 0 4px; color: var(--color-black); }
-.pack-meta { display: flex; align-items: center; gap: 4px; color: var(--color-neutral-500); }
+.pack-info .pack-name { margin: 0 0 4px; color: var(--color-black); line-height: 22px; }
+.pack-meta { display: flex; align-items: center; gap: 4px; line-height: 16px; color: var(--color-neutral-500); }
 .pack-meta .sep { width: 2px; height: 2px; }
 
 /* "차라락" slide-in when Packs opens, and again on the way back in — see filters.js.
