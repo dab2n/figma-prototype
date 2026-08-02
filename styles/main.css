@@ -44,14 +44,19 @@ html:active-view-transition-type(detail-out)::view-transition-new(root) { animat
 ::view-transition-new(pack-hero) { animation: vt-fade-in .34s linear both; }
 @keyframes vt-fade-out { to { opacity: 0; } }
 @keyframes vt-fade-in { from { opacity: 0; } }
-/* The rest of the pack screen has to arrive AFTER the card starts growing, or there is
-   nothing for the card to grow out of — the new page was painting complete on frame one
-   and the morph happened invisibly behind it. The feed holds still underneath while the
-   detail fades up over it, so the thumbnail reads as opening into the screen. */
+/* The feed holds still underneath while the pack screen's ground comes up over it — a
+   short fade only, because the two things that should read as MOVING are the picture and
+   the bar, not the page. */
 html:active-view-transition-type(card-open)::view-transition-old(root) { animation: none; }
 html:active-view-transition-type(card-open)::view-transition-new(root) {
-  animation: vt-fade-in .34s cubic-bezier(.3,.7,.3,1) .06s both;
+  animation: vt-fade-in .22s linear both;
 }
+/* The black UI rises from under the frame. It has no counterpart on the feed, so only the
+   "new" half exists and it animates on its own. */
+html:active-view-transition-type(card-open)::view-transition-new(pack-ui) {
+  animation: vt-rise .46s cubic-bezier(.2,.85,.25,1) .06s both;
+}
+@keyframes vt-rise { from { transform: translateY(100%); opacity: 0; } }
 
 /* Web-only side controls, parked outside the frame so they can never sit over the screen
    and never move: 196px is half the frame plus 16, and the frame only ever gets narrower

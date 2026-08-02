@@ -93,13 +93,8 @@
   background-position: center;
   text-decoration: none;
   scroll-snap-align: center;
-  /* Softer and further out than a straight translation of the Figma rect. Measured at the
-     card's bottom edge, where the pale mint fill meets the coral: the rect version stepped
-     57.8 (of 765) in one row and the tight box-shadow 51.5 — both read as the glow being
-     switched on. Half the alpha over a wider blur brings that to 29.2, so the card fades
-     into the page instead of ending on a line. */
   box-shadow: inset 0 0 20px 10px rgba(255,255,255,0.2),
-              0 22px 76px -30px rgba(168,76,59,0.5);
+              0 17px 54px -24px rgba(168,76,59,0.78);
 }
 /* The first card is the video one, built the way Figma builds it (2476:3531): the empty
    card's own two radial fills, with the clip added on top in plus-lighter. The clip is
@@ -141,7 +136,7 @@
    box-shadow list is restated — the outer coral glow has to come along with it. */
 .hero-card-2, .hero-card-3 {
   box-shadow: inset 0 0 20px 10px rgba(255,255,255,0.3),
-              0 22px 76px -30px rgba(168,76,59,0.5);
+              0 17px 54px -24px rgba(168,76,59,0.78);
 }
 /* The artwork sits in a card-sized wrapper rather than carrying the mask itself, so the
    mask stays in CARD coordinates and every card can size its own picture freely — a
