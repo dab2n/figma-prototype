@@ -341,10 +341,11 @@
    which is what made the button go dull exactly when the clip was playing full-bleed and
    the frame happened to be bright. It has to be the same brightness in every state. */
 .kebab-tan {
-  /* The veil is heavier than Figma's 20% because the pack colour underneath is 80% OPAQUE,
-     where the Sean pill is nothing but white on the photo. At 20% the button read dull
-     next to it; 34% lands the two within a few levels of each other on a light frame. */
-  background: linear-gradient(rgba(250,250,250,0.34), rgba(250,250,250,0.34)), var(--pack-main-80, #736549);
+  /* Figma's recipe exactly: the frame's own colour at 80%, #FFFFFF 20% over it. The tint
+     comes from --pack-btn-80 (packs.js), which reads the corner this button covers rather
+     than the whole frame — averaging the whole picture is what made it grey, and no
+     amount of white on top fixes grey, it only makes it paler grey. */
+  background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)), var(--pack-btn-80, var(--pack-main-80, #736549));
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   backdrop-filter: blur(14px) saturate(140%);
 }

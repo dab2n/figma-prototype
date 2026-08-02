@@ -160,6 +160,25 @@
       var el = document.querySelector('.swipe-detail, .dj-screen') || document.body;
       el.style.setProperty('--pack-main', 'rgb(' + r + ',' + gr + ',' + b + ')');
       el.style.setProperty('--pack-main-80', 'rgba(' + r + ',' + gr + ',' + b + ',0.8)');
+
+      // The kebab gets its own reading. Two reasons the frame average will not do for it:
+      // it sits in the TOP RIGHT, which can be a different part of the picture entirely,
+      // and the mean of a whole photograph is nearly neutral — averaging is what turns a
+      // warm road into grey. So sample the corner it actually covers and push the chroma
+      // back out from that patch's own luminance, which restores the colour the eye reads
+      // in the frame without inventing a hue that is not there.
+      var br = 0, bg = 0, bb = 0, bk = 0;
+      for (var y = 0; y < n * 0.38; y++) {
+        for (var x = Math.floor(n * 0.55); x < n; x++) {
+          var j = (y * n + x) * 4;
+          br += d[j]; bg += d[j + 1]; bb += d[j + 2]; bk++;
+        }
+      }
+      br /= bk; bg /= bk; bb /= bk;
+      var bl = 0.2126 * br + 0.7152 * bg + 0.0722 * bb;
+      var chroma = function (v) { return Math.max(0, Math.min(255, Math.round(bl + (v - bl) * 1.8))); };
+      el.style.setProperty('--pack-btn-80',
+        'rgba(' + chroma(br) + ',' + chroma(bg) + ',' + chroma(bb) + ',0.8)');
       el.style.setProperty('--pack-deep', 'rgb(' + deep(r) + ',' + deep(gr) + ',' + deep(b) + ')');
       // 0.40, not 0.5: a photograph's average almost never clears mid-grey, so 0.5 calls
       // everything dark. Calibrated on the pack this screen shipped with — Sean's tan
