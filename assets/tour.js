@@ -96,12 +96,12 @@
       explore.click();
       setTimeout(function () { explore.click(); }, 1600);
     }
-    // The clip is what the viewer is watching, so it decides when to move on: the moment
-    // it has played through once, the sheet comes up. It loops, so 'ended' never fires —
-    // the playhead jumping backwards IS the end of a pass. A fixed wait is the fallback
-    // if the clip never starts.
+    // The clip is what the viewer is watching, so it decides when to move on — but not a
+    // whole pass: the sheet comes up a little over halfway through, while the clip is
+    // still running, so the two moves overlap instead of queueing. Tied to the clip's own
+    // duration rather than a stopwatch, so swapping the footage keeps the pacing.
     if (clip) {
-      var last = 0, fired = 0;
+      var fired = 0;
       var done = function () {
         if (fired) return;
         fired = 1;
@@ -109,13 +109,13 @@
         raise();
       };
       var tick = function () {
-        if (clip.currentTime < last - 0.3) done();
-        last = clip.currentTime;
+        var d = clip.duration;
+        if (d && clip.currentTime >= d * 0.55) done();
       };
       clip.addEventListener('timeupdate', tick);
-      setTimeout(done, 12000);
+      setTimeout(done, 6000);          // the clip never started: go anyway
     } else {
-      setTimeout(raise, 5000);
+      setTimeout(raise, 3500);
     }
   }
 

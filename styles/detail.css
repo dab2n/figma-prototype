@@ -341,7 +341,10 @@
    which is what made the button go dull exactly when the clip was playing full-bleed and
    the frame happened to be bright. It has to be the same brightness in every state. */
 .kebab-tan {
-  background: linear-gradient(rgba(250,250,250,0.2), rgba(250,250,250,0.2)), var(--pack-main-80, #736549);
+  /* The veil is heavier than Figma's 20% because the pack colour underneath is 80% OPAQUE,
+     where the Sean pill is nothing but white on the photo. At 20% the button read dull
+     next to it; 34% lands the two within a few levels of each other on a light frame. */
+  background: linear-gradient(rgba(250,250,250,0.34), rgba(250,250,250,0.34)), var(--pack-main-80, #736549);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   backdrop-filter: blur(14px) saturate(140%);
 }
