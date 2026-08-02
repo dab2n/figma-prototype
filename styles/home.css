@@ -51,7 +51,10 @@
 
 /* App bar: 66px tall (logo centered with 16px above/below), sitting flush against
    the card container below it (gap 0) — Figma home 108:16691. */
-.app-bar { height: 66px; box-sizing: border-box; padding: 16px; }
+/* Above the carousel's scroll box, which now overlaps it by 30px of transparent padding
+   so the scroller's clip edge is nowhere near the cards. Without this the search and plus
+   icons would be sitting under a scroll container and stop taking taps. */
+.app-bar { height: 66px; box-sizing: border-box; padding: 16px; position: relative; z-index: 2; }
 
 /* The coral glow belongs to the CARDS, not to the slot they sit in. It used to be one
    blurred rect parked behind the carousel, so swiping left left the shadow behind and the
@@ -69,14 +72,17 @@
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  /* 20px sides so the first (Akiyama) card sits centered in the 360 viewport on load;
-     top 0 so the card container is flush against the app bar (Figma gap 0) */
+  /* 20px sides so the first (Akiyama) card sits centered in the 360 viewport on load. */
   padding: 0 20px 0;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  /* Room for each card's glow, taken back with a negative margin so nothing below moves.
-     A horizontal scroller clips vertically too, and without this the shadow was sliced
-     off at the card's own bottom edge. */
+  /* Room for each card's glow, taken back with a negative margin so nothing moves. A
+     horizontal scroller clips VERTICALLY too, and its clip edge used to sit exactly on
+     the card's top edge (Figma gap 0) — the carousel was boxed in against the app bar
+     above and the section below, and any glow met a straight container line instead of
+     air. 30 above and 60 below puts that line well clear of the card on both sides. */
+  padding-top: 30px;
+  margin-top: -30px;
   padding-bottom: 60px;
   margin-bottom: -60px;
 }
@@ -88,13 +94,23 @@
   width: 319px;
   height: 326px;
   border-radius: 40px;
+  /* Figma's corner smoothing. A plain 40px arc meets the straight edge with a visible
+     kink; a squircle blends the curvature into it. The overflow clip and the box-shadow
+     both follow the corner shape, so the picture and the glow take the same outline.
+     Browsers without corner-shape simply keep the 40px radius. */
+  corner-shape: squircle;
   overflow: hidden;
   background-size: cover;
   background-position: center;
   text-decoration: none;
   scroll-snap-align: center;
+  /* Two shadows, not one: the Figma rect (17/54/-24) IS the glow, but on its own it stops
+     dead about 20px under the card — a compact smudge with an edge. The second is the
+     same colour spread twice as far and half as strong, purely to give the first one a
+     tail to fade into, so the blur runs out instead of ending. */
   box-shadow: inset 0 0 20px 10px rgba(255,255,255,0.2),
-              0 17px 54px -24px rgba(168,76,59,0.78);
+              0 17px 54px -24px rgba(168,76,59,0.78),
+              0 26px 96px -34px rgba(168,76,59,0.42);
 }
 /* The first card is the video one, built the way Figma builds it (2476:3531): the empty
    card's own two radial fills, with the clip added on top in plus-lighter. The clip is
@@ -136,7 +152,8 @@
    box-shadow list is restated — the outer coral glow has to come along with it. */
 .hero-card-2, .hero-card-3 {
   box-shadow: inset 0 0 20px 10px rgba(255,255,255,0.3),
-              0 17px 54px -24px rgba(168,76,59,0.78);
+              0 17px 54px -24px rgba(168,76,59,0.78),
+              0 26px 96px -34px rgba(168,76,59,0.42);
 }
 /* The artwork sits in a card-sized wrapper rather than carrying the mask itself, so the
    mask stays in CARD coordinates and every card can size its own picture freely — a

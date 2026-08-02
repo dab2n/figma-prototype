@@ -1,4 +1,16 @@
 .packs-screen { background: var(--color-neutral-50); padding-bottom: 8px; }
+/* The sticky status bar and the list share one colour (#FAFAFA), but the cards throw a
+   40px shadow that greys the background around them and the opaque bar cuts that gradient
+   off with a straight line — which reads as the bar being a different, cleaner tone than
+   the page. The tail lets the shadow run out under the bar instead of stopping at it. */
+.packs-screen > .status-bar::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 100%;
+  height: 14px;
+  background: linear-gradient(180deg, var(--color-neutral-50), rgba(250,250,250,0));
+  pointer-events: none;
+}
 
 .filter-row {
   display: flex;
@@ -61,12 +73,14 @@
   display: block;
   background: #fff;
   border-radius: 40px;
+  corner-shape: squircle;                 /* Figma corner smoothing — see home.css */
   padding: 4px;
   box-shadow: 0 14px 40px 2px rgba(0,0,0,0.12);
 }
 .pack-thumb {
   position: relative;
   border-radius: 38px;
+  corner-shape: squircle;
   background-size: cover;
   background-position: center;
   padding: 16px;
@@ -83,6 +97,7 @@
   position: absolute;
   inset: 0;
   border-radius: 38px;
+  corner-shape: squircle;
   background: rgba(0,0,0,0.35);
 }
 .pack-thumb-top { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; }
@@ -146,7 +161,7 @@
 /* Picked: the card settles back and goes flat — its shadow drops from 40px of lift to a
    thin contact shadow, so it reads as being pressed down onto the page rather than
    floating above it. This is the whole selection now; the pages dissolve behind it.
-   The press runs 340ms and packs.html leaves at 140, so the outgoing snapshot catches the
+   The press runs 340ms and packs.html leaves at 170, so the outgoing snapshot catches the
    card still going down and the dissolve continues from there. */
 .pack-card { transition: transform .34s cubic-bezier(.25,.6,.3,1), box-shadow .34s cubic-bezier(.25,.6,.3,1), opacity .34s cubic-bezier(.25,.6,.3,1); }
 .pack-card.picked {

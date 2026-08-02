@@ -41,10 +41,10 @@ html:active-view-transition-type(detail-out)::view-transition-new(root) { animat
    the background mid-way. The root is the ONLY thing in the transition, so the status bar
    is not in it and cannot move. */
 html:active-view-transition-type(card-open)::view-transition-old(root) {
-  animation: vt-fade-out .42s linear both;
+  animation: vt-fade-out .58s cubic-bezier(.4,0,.25,1) both;
 }
 html:active-view-transition-type(card-open)::view-transition-new(root) {
-  animation: vt-fade-in .42s linear both;
+  animation: vt-fade-in .58s cubic-bezier(.4,0,.25,1) both;
 }
 @keyframes vt-fade-out { to { opacity: 0; } }
 @keyframes vt-fade-in { from { opacity: 0; } }
