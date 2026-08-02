@@ -5,6 +5,10 @@
 // is carried across pages in sessionStorage.
 (function () {
   var KEY = 'tour1';
+  // Set for the whole of 프로토타입 2 and read by recap/records before their own scripts
+  // run: that flow arrives on each screen plainly, with no slide. 프로토타입 1 keeps its
+  // slide-ins, so the flag is per-flow rather than "a tour is running".
+  var P2 = 'tourP2';
 
   // scrollTo({behavior:'smooth'}) does not run on these scrollers in Chrome (see
   // enter.js), and a recording wants the pace chosen anyway — so every move is tweened.
@@ -132,8 +136,8 @@
         var open = document.querySelector('.report-open');
         if (!open) return;
         sessionStorage.setItem(KEY, '12');
-        open.click();                               // a real link click, so the page's own
-      }, 1700);                                     // cross-document transition still runs
+        open.click();
+      }, 1700);
     }, 2600);                                       // a beat to read "New Report"
   }
 
@@ -148,17 +152,34 @@
     }, 6500);
   }
 
-  // The full report. Everything below the fold reveals as it is scrolled to (scores.js
-  // watches the scroller), so the scroll has to be slow and even — a flick would trip
-  // every observer at once and the reveals would all be over before they were on screen.
-  // Linear, in one long pass, after the arrival animation has landed.
+  // The full report, read in stops rather than one long crawl. Each move is a flick and
+  // each stop is a beat long enough to watch what that stop reveals (scores.js fires its
+  // observers as sections come into the scroller):
+  //   1 — Session Highlights and Landing Balance framed together
+  //   2 — Performance Scores, so its bars run while they are being looked at
+  //   3 — on to the end of the report
+  // Positions are read off the sections themselves, so editing the report cannot leave
+  // the tour scrolling to a place that no longer means anything.
   function report() {
     var screen = document.querySelector('.rp-screen');
     if (!screen) return;
-    setTimeout(function () {
-      glide(screen, 'scrollTop', screen.scrollHeight - screen.clientHeight, 16000, null,
-            function (k) { return k; });
-    }, 2600);
+    var secs = screen.querySelectorAll('.rp-sec');
+    if (secs.length < 3) return;
+    function topIn(el) { var t = 0; while (el && el !== screen) { t += el.offsetTop; el = el.offsetParent; } return t; }
+    var stops = [
+      Math.max(0, topIn(secs[0]) - 24),
+      Math.max(0, topIn(secs[2]) - 120),
+      screen.scrollHeight - screen.clientHeight
+    ];
+    var hold = [2400, 2600, 0];
+    var i = 0;
+    setTimeout(function step() {
+      if (i >= stops.length) { sessionStorage.removeItem(P2); return; }
+      var n = i++;
+      glide(screen, 'scrollTop', stops[n], n === 2 ? 1100 : 900, function () {
+        setTimeout(step, hold[n]);
+      });
+    }, 1200);
   }
 
   var step = sessionStorage.getItem(KEY);
@@ -177,6 +198,7 @@
   if (matchMedia('(min-width: 401px)').matches) {
     [['reportTrigger', '프로토타입 2', '', function () {
         sessionStorage.setItem('notifNow', '1');   // Home reveals the strip on landing
+        sessionStorage.setItem(P2, '1');
         go('home.html', 11);
       }],
      // Reloading Home rather than replaying in place: the arrival animation is the page's,
