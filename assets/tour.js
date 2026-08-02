@@ -159,17 +159,17 @@
       sessionStorage.setItem(KEY, '13');
       full.click();
     }
-    // Stay for the recap clip. It is 6.0s and it LOOPS, so 'ended' never fires — 92% of
-    // the first pass is the cue, and the clock underneath only covers a clip that never
-    // started (autoplay refused) or a browser with no timeupdate.
+    // Stay for the recap clip. It is 6.0s and it LOOPS, so 'ended' never fires — 70% of
+    // the first pass (4.2s) is the cue, and the clock underneath only covers a clip that
+    // never started (autoplay refused) or a browser with no timeupdate.
     var clip = document.querySelector('.recap-clip');
     if (clip) {
       var tick = function () {
         var d = clip.duration;
-        if (d && clip.currentTime >= d * 0.92) { clip.removeEventListener('timeupdate', tick); open(); }
+        if (d && clip.currentTime >= d * 0.70) { clip.removeEventListener('timeupdate', tick); open(); }
       };
       clip.addEventListener('timeupdate', tick);
-      setTimeout(open, 8500);
+      setTimeout(open, 6500);
     } else {
       full.addEventListener('animationstart', function () { setTimeout(open, 860); }, { once: true });
       setTimeout(open, 5000);        // animations off: go anyway

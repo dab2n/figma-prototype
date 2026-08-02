@@ -2,11 +2,17 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<!-- The frame is a fixed 360x780; 812 is that plus 16px of air top and bottom.
+     Inline and parser-blocking ON PURPOSE: --fit falls back to 1, so any frame painted
+     before it is set shows the phone at FULL size and then snaps down. openext.js is
+     deferred, which is after parsing but not reliably before the first paint — with three
+     navigations in a row that flash was the viewport zooming in and out. -->
+<script>if(innerWidth>400)document.documentElement.style.setProperty("--fit",Math.min(1,innerHeight/812).toFixed(4));</script>
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=960"></script>
+<script defer src="assets/openext.js?v=961"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,8 +20,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Goal</title>
-<link rel="stylesheet" href="styles/main.css?v=960">
-<link rel="stylesheet" href="styles/onboarding.css?v=960">
+<link rel="stylesheet" href="styles/main.css?v=961">
+<link rel="stylesheet" href="styles/onboarding.css?v=961">
 </head>
 <body>
 <div class="phone">
@@ -34,11 +40,11 @@
 
     <div class="ob-body" data-single>
       <div class="ob-list">
-        <div class="ob-row" data-toggle><p class="t">Running</p><div class="img" style="background-image:url('assets/photos/sport-running.png?v=960')"></div></div>
-        <div class="ob-row" data-toggle><p class="t">Follow cool moves</p><div class="img" style="background-image:url('assets/photos/sport-dance.png?v=960')"></div></div>
-        <div class="ob-row" data-toggle><p class="t">Recovery, Care</p><div class="img" style="background-image:url('assets/photos/sport-hometraining.png?v=960')"></div></div>
-        <div class="ob-row" data-toggle><p class="t">Build Sport Skills</p><div class="img" style="background-image:url('assets/photos/sport-boxing.png?v=960')"></div></div>
-        <div class="ob-row" data-toggle><p class="t">Play with Friends</p><div class="img" style="background-image:url('assets/photos/sport-badminton.png?v=960')"></div></div>
+        <div class="ob-row" data-toggle><p class="t">Running</p><div class="img" style="background-image:url('assets/photos/sport-running.png?v=961')"></div></div>
+        <div class="ob-row" data-toggle><p class="t">Follow cool moves</p><div class="img" style="background-image:url('assets/photos/sport-dance.png?v=961')"></div></div>
+        <div class="ob-row" data-toggle><p class="t">Recovery, Care</p><div class="img" style="background-image:url('assets/photos/sport-hometraining.png?v=961')"></div></div>
+        <div class="ob-row" data-toggle><p class="t">Build Sport Skills</p><div class="img" style="background-image:url('assets/photos/sport-boxing.png?v=961')"></div></div>
+        <div class="ob-row" data-toggle><p class="t">Play with Friends</p><div class="img" style="background-image:url('assets/photos/sport-badminton.png?v=961')"></div></div>
       </div>
     </div>
   </div>
@@ -50,6 +56,6 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/onboarding.js?v=960"></script>
+<script src="assets/onboarding.js?v=961"></script>
 </body>
 </html>

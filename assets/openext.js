@@ -48,9 +48,11 @@
     // reset to 1 first, and that reset is what made the viewport flinch: every re-fit
     // pushed the frame to full size for one layout. The frame is a fixed 360x780 device;
     // nothing in the page can change its height, so one measurement holds for the session.
-    var need = 0;
+    // 812, the same constant the inline <head> setter uses — they must not disagree, or
+    // the frame would change size the moment this file arrived. The frame is a fixed
+    // 360x780 device; offsetHeight is only read as a check that it still is.
+    var need = phone.offsetHeight + 32;                       // 16px of air top and bottom
     function fit() {
-      if (!need) need = phone.offsetHeight + 32;              // 16px of air top and bottom
       root.style.setProperty('--fit', Math.min(1, innerHeight / need).toFixed(4));
     }
     fit();
