@@ -16,7 +16,7 @@
       total: 16, bars: [['5min', 'PRIME'], ['8min', 'DRIVE'], ['You Can Choose', 'SPRINT!']],
       info: ['Some Experience', 'Power · Turnover', 'Track', 'Creator'],
       also: ['interval', 'legburn'], more: ['sprinter', 'bolt', 'strength'],
-      photo: 'recent-running.png', author: 'Kanni', avatar: 'packs-profile-kanni.png',
+      photo: 'recent-running.jpg', author: 'Kanni', avatar: 'packs-profile-kanni.png',
       title: 'Sprint Without Limits',
       desc: 'Break the ceiling you keep hitting at top speed. Kanni rebuilds your drive phase and arm carriage first, then holds that form under fatigue so the last 20m stops falling apart.'
     },
@@ -40,7 +40,7 @@
       total: 20, bars: [['6min', 'WARM'], ['11min', 'DRILL'], ['You Can Choose', 'SHOOT!']],
       info: ['Basics Recommended', 'Balance · Footwork', 'Indoor Court', 'Creator'],
       also: ['basketball', 'ladder'], more: ['boxing', 'basketball', 'ladder'],
-      photo: 'rec-curry.png', author: 'Janghoon', avatar: 'packs-avatar1.png',
+      photo: 'rec-curry.jpg', author: 'Janghoon', avatar: 'packs-avatar1.png',
       title: "Curry's Step Back",
       desc: 'Create the half metre you need to get the shot off. Footwork into the step back, then the balance to land square and rise without drifting sideways.'
     },
@@ -52,7 +52,7 @@
       total: 24, bars: [['7min', 'MOBILISE'], ['13min', 'LOAD'], ['You Can Choose', 'HOLD!']],
       info: ['Some Experience', 'Stability · Strength', 'Gym', 'Skilled'],
       also: ['ladder', 'legburn'], more: ['interval', 'legburn', 'sprint'],
-      photo: 'rec-strength.png', author: 'Daniel', avatar: 'packs-avatar2.png',
+      photo: 'rec-strength.jpg', author: 'Daniel', avatar: 'packs-avatar2.png',
       title: 'Strength for Agility',
       desc: 'Agility fails where strength runs out. Single-leg work and controlled decelerations build the base that lets you change direction late without losing the line.'
     },
@@ -64,7 +64,7 @@
       total: 15, bars: [['4min', 'LOOSEN'], ['9min', 'PATTERN'], ['You Can Choose', 'PLAY!']],
       info: ['Anyone', 'Rhythm · Coordination', 'Indoor', 'Creator'],
       also: ['basketball', 'tennis'], more: ['tennis', 'basketball', 'curry'],
-      photo: 'rec-ladder.png', author: 'Sojin', avatar: 'packs-avatar3.png',
+      photo: 'rec-ladder.jpg', author: 'Sojin', avatar: 'packs-avatar3.png',
       title: 'Ladder Footwork',
       desc: 'Quick feet that survive contact with a real game. Ladder patterns first, then the same patterns with a ball and a defender in front of you.'
     },
@@ -76,7 +76,7 @@
       total: 13, bars: [['4min', 'PRIME'], ['7min', 'PUSH'], ['You Can Choose', 'GO!']],
       info: ['Some Experience', 'Reaction · Power', 'Track', 'Creator'],
       also: ['sprint', 'interval'], more: ['sprint', 'bolt', 'legburn'],
-      photo: 'pack-sprinter.png', author: 'Kanni', avatar: 'packs-profile-kanni.png',
+      photo: 'pack-sprinter.jpg', author: 'Kanni', avatar: 'packs-profile-kanni.png',
       title: 'Sprint Starts',
       desc: 'The first three steps decide the race more than the next thirty. Set-up, shin angle and the push that follows, drilled until it stops being a decision.'
     },
@@ -88,7 +88,7 @@
       total: 32, bars: [['8min', 'EASE IN'], ['20min', 'REPS'], ['You Can Choose', 'COOL!']],
       info: ['Some Experience', 'Endurance · Pacing', 'Outdoor', 'Skilled'],
       also: ['legburn', 'sprint'], more: ['strength', 'legburn', 'sprinter'],
-      photo: 'pack-interval.png', author: 'Daniel', avatar: 'packs-avatar2.png',
+      photo: 'pack-interval.jpg', author: 'Daniel', avatar: 'packs-avatar2.png',
       title: 'Interval Push',
       desc: 'Hard efforts with honest recoveries. Learn to hold the target pace on the fourth rep as cleanly as the first, and to read when to back off instead of blowing up.'
     },
@@ -100,7 +100,7 @@
       total: 14, bars: [['3min', 'PREP'], ['9min', 'BURN'], ['You Can Choose', 'FINISH!']],
       info: ['Anyone', 'Endurance · Control', 'Anywhere', 'Creator'],
       also: ['strength', 'interval'], more: ['basketball', 'strength', 'ladder'],
-      photo: 'pack-legburn.png', author: 'Jiwoo', avatar: 'packs-avatar4.png',
+      photo: 'pack-legburn.jpg', author: 'Jiwoo', avatar: 'packs-avatar4.png',
       title: 'Leg Burn Set',
       desc: 'A short set that finds the point where your legs stop cooperating, then keeps the form together past it. Built to be repeated at the end of any session.'
     },
@@ -112,7 +112,7 @@
       total: 26, bars: [['6min', 'SHADOW'], ['14min', 'COMBOS'], ['You Can Choose', 'SPAR!']],
       info: ['Basics Recommended', 'Timing · Angles', 'Indoor', 'Pro Coach'],
       also: ['ladder', 'strength'], more: ['curry', 'basketball', 'ladder'],
-      photo: 'movement-boxing.png', author: 'Janghoon', avatar: 'packsx-avatar-a.png',
+      photo: 'movement-boxing.jpg', author: 'Janghoon', avatar: 'packsx-avatar-a.png',
       title: 'Southpaw Drill',
       desc: 'Working against the other stance without reaching. Angle out of the lead hand, keep the rear foot loaded, and land the counter on the way past.'
     },
@@ -124,7 +124,7 @@
       total: 27, bars: [['7min', 'RALLY IN'], ['16min', 'DEPTH'], ['You Can Choose', 'POINT!']],
       info: ['Some Experience', 'Depth · Recovery', 'Outdoor Court', 'Creator'],
       also: ['ladder', 'basketball'], more: ['ladder', 'curry', 'basketball'],
-      photo: 'recent-tennis.png', author: 'Sojin', avatar: 'packsx-avatar-b.png',
+      photo: 'recent-tennis.jpg', author: 'Sojin', avatar: 'packsx-avatar-b.png',
       title: 'Baseline Rally',
       desc: 'Depth before power. Recover to the middle every ball, take the high one early, and hold the rally until the short one you can actually attack shows up.'
     },
@@ -136,7 +136,7 @@
       total: 19, bars: [['5min', 'SLIDE'], ['12min', 'CLOSEOUT'], ['You Can Choose', 'RUN IT!']],
       info: ['Basics Recommended', 'Footwork · Balance', 'Indoor Court', 'Skilled'],
       also: ['curry', 'ladder'], more: ['legburn', 'curry', 'boxing'],
-      photo: 'recent-basketball.png', author: 'Jiwoo', avatar: 'packsx-avatar-c.png',
+      photo: 'recent-basketball.jpg', author: 'Jiwoo', avatar: 'packsx-avatar-c.png',
       title: 'Court Footwork',
       desc: 'The steps between the highlights. Closeouts, drop steps and the slide that keeps your hips in front, drilled at the speed the game is actually played at.'
     }

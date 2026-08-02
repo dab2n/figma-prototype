@@ -12,9 +12,9 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=975"></script>
-<script defer src="assets/gauge.js?v=975"></script>
-<script defer src="assets/scores.js?v=975"></script>
+<script defer src="assets/openext.js?v=976"></script>
+<script defer src="assets/gauge.js?v=976"></script>
+<script defer src="assets/scores.js?v=976"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -22,8 +22,8 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Records</title>
-<link rel="stylesheet" href="styles/main.css?v=975">
-<link rel="stylesheet" href="styles/report.css?v=975">
+<link rel="stylesheet" href="styles/main.css?v=976">
+<link rel="stylesheet" href="styles/report.css?v=976">
 </head>
 <body>
 <div class="phone">
@@ -126,21 +126,21 @@
         <div class="rp-scores" id="rpScores">
           <div class="sc ag" style="--i:0">
             <p class="sc-n" id="scAgility">51</p>
-            <img class="sc-art" src="assets/photos/score-agility.png?v=975" alt="">
+            <img class="sc-art" src="assets/photos/score-agility.png?v=976" alt="">
             <span class="sc-dash"></span>
             <span class="sc-tri"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M2.8 2.4 H9.2 L6 7.4 Z" fill="#FA3030" stroke="#FA3030" stroke-width="2.4" stroke-linejoin="round"/></svg></span>
             <p class="sc-l">Agility</p>
           </div>
           <div class="sc en" style="--i:1">
             <p class="sc-n" id="scEndurance">61</p>
-            <img class="sc-art" src="assets/photos/score-endurance.png?v=975" alt="">
+            <img class="sc-art" src="assets/photos/score-endurance.png?v=976" alt="">
             <span class="sc-track"></span>
             <span class="sc-tri"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M2.8 2.4 H9.2 L6 7.4 Z" fill="#FA3030" stroke="#FA3030" stroke-width="2.4" stroke-linejoin="round"/></svg></span>
             <p class="sc-l">Endurance</p>
           </div>
           <div class="sc rh" style="--i:2">
             <p class="sc-n" id="scRhythm">72</p>
-            <img class="sc-art" src="assets/photos/score-rhythm.png?v=975" alt="">
+            <img class="sc-art" src="assets/photos/score-rhythm.png?v=976" alt="">
             <span class="sc-dash a"></span><span class="sc-dash b"></span><span class="sc-dash c"></span>
             <p class="sc-l">Rhythm</p>
           </div>
@@ -159,21 +159,21 @@
             <!-- Framed away from the badge: the figure's head sits at 15% down its own frame, which
                  is exactly where the top-right chip is, so the shot is pushed in and panned right
                  until the two are clear of each other and the whole stride still fits. -->
-            <div class="rec-thumb" style="background-image:url('assets/photos/rec-curry-step.png?v=975');"><span class="rec-badge"><img class="badge-fire" src="assets/icons/badge-fire.svg" alt="">Boosts Agility</span></div>
+            <div class="rec-thumb" style="background-image:url('assets/photos/rec-curry-step.jpg?v=976');"><span class="rec-badge"><img class="badge-fire" src="assets/icons/badge-fire.svg" alt="">Boosts Agility</span></div>
             <div class="rec-info">
               <div class="rec-txt"><p class="rec-title">Curry's Step Back</p><p class="rec-meta">Pro Pack · 7m</p></div>
               <span class="rec-start">Start now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
             </div>
           </a>
           <a class="rec-card" href="pyeongso.html">
-            <div class="rec-thumb rec-dark" style="background-image:url('assets/photos/rec-strength.png?v=975');"><span class="rec-badge">HOT</span></div>
+            <div class="rec-thumb rec-dark" style="background-image:url('assets/photos/rec-strength.jpg?v=976');"><span class="rec-badge">HOT</span></div>
             <div class="rec-info">
               <div class="rec-txt"><p class="rec-title">Strength Exercise to Improve Agility</p><p class="rec-meta">Pro Pack · 7m</p></div>
               <span class="rec-start">Start now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
             </div>
           </a>
           <a class="rec-card" href="pyeongso.html">
-            <div class="rec-thumb rec-dark" style="background-image:url('assets/photos/rec-ladder.png?v=975');"><span class="rec-badge">New</span></div>
+            <div class="rec-thumb rec-dark" style="background-image:url('assets/photos/rec-ladder.jpg?v=976');"><span class="rec-badge">New</span></div>
             <div class="rec-info">
               <div class="rec-txt"><p class="rec-title">ladder Footwork Drills</p><p class="rec-meta">Pro Pack · 7m</p></div>
               <span class="rec-start">Start now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
@@ -217,15 +217,15 @@
   // Recommendations rotate with the record being viewed. Thumbnails come from the
   // project's own sport photography rather than new stock, so the art direction holds.
   var RECS = [
-    ['rec-curry-step.png',   "Curry's Step Back",   'Pro Pack · 7m',     'Boosts Agility', '',         'curry'],
-    ['rec-strength.png',     'Strength for Agility', 'Pro Pack · 7m',    'HOT',            'rec-dark', 'strength'],
-    ['rec-ladder.png',       'Ladder Footwork',     'Pro Pack · 7m',     'New',            'rec-dark', 'ladder'],
-    ['pack-sprinter.png',    'Sprint Starts',       'Pro Pack · 9m',     'Boosts Speed',   'rec-dark', 'sprinter'],
-    ['pack-interval.png',    'Interval Push',       'Creator Pack · 12m', 'HOT',           'rec-dark', 'interval'],
-    ['pack-legburn.png',     'Leg Burn Set',        'Pro Pack · 8m',     'New',            'rec-dark', 'legburn'],
-    ['movement-boxing.png',  'Southpaw Drill',      'Pro Pack · 10m',    'Boosts Rhythm',  'rec-dark', 'boxing'],
-    ['recent-tennis.png',    'Baseline Rally',      'Creator Pack · 11m', 'New',           'rec-dark', 'tennis'],
-    ['recent-basketball.png', 'Court Footwork',     'Pro Pack · 6m',     'Boosts Balance', 'rec-dark', 'basketball']
+    ['rec-curry-step.jpg',   "Curry's Step Back",   'Pro Pack · 7m',     'Boosts Agility', '',         'curry'],
+    ['rec-strength.jpg',     'Strength for Agility', 'Pro Pack · 7m',    'HOT',            'rec-dark', 'strength'],
+    ['rec-ladder.jpg',       'Ladder Footwork',     'Pro Pack · 7m',     'New',            'rec-dark', 'ladder'],
+    ['pack-sprinter.jpg',    'Sprint Starts',       'Pro Pack · 9m',     'Boosts Speed',   'rec-dark', 'sprinter'],
+    ['pack-interval.jpg',    'Interval Push',       'Creator Pack · 12m', 'HOT',           'rec-dark', 'interval'],
+    ['pack-legburn.jpg',     'Leg Burn Set',        'Pro Pack · 8m',     'New',            'rec-dark', 'legburn'],
+    ['movement-boxing.jpg',  'Southpaw Drill',      'Pro Pack · 10m',    'Boosts Rhythm',  'rec-dark', 'boxing'],
+    ['recent-tennis.jpg',    'Baseline Rally',      'Creator Pack · 11m', 'New',           'rec-dark', 'tennis'],
+    ['recent-basketball.jpg', 'Court Footwork',     'Pro Pack · 6m',     'Boosts Balance', 'rec-dark', 'basketball']
   ];
 
   var $ = function (id) { return document.getElementById(id); };
