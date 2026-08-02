@@ -145,15 +145,18 @@
 
 /* Picked: the card presses in and its shadow tightens under it, then the detail grows out
    of that same thumbnail. The press is deliberately LONGER than the wait before the
-   navigation (packs.html leaves at 100ms of a 260ms press) — the snapshot is taken while
+   navigation (packs.html leaves at 100ms of a 340ms press) — the snapshot is taken while
    the card is still moving, so the growth picks the motion up rather than starting over.
    A press that finished first, then sat there, was the middle of the three beats. */
-.pack-card { transition: transform .26s cubic-bezier(.22,.85,.28,1), box-shadow .26s cubic-bezier(.22,.85,.28,1), opacity .26s cubic-bezier(.22,.85,.28,1); }
+.pack-card { transition: transform .34s cubic-bezier(.25,.6,.3,1), box-shadow .34s cubic-bezier(.25,.6,.3,1), opacity .34s cubic-bezier(.25,.6,.3,1); }
 .pack-card.picked {
-  transform: scale(.968);
-  box-shadow: 0 4px 14px 0 rgba(0,0,0,0.18);
+  /* Barely there on purpose: this only has to say "this one", and the growth right after
+     is the real motion. .968 with the siblings dropping to .62 read as the card being
+     yanked backwards — a whole gesture of its own competing with the open. */
+  transform: scale(.988);
+  box-shadow: 0 9px 26px 1px rgba(0,0,0,0.14);
 }
-.pack-list.picking .pack-card:not(.picked) { opacity: .62; }
+.pack-list.picking .pack-card:not(.picked) { opacity: .86; }
 
 /* A clip fades up over its own poster instead of cutting in, and the outgoing one fades
    down over it — so handing playback from one card to the next is a dissolve, never a

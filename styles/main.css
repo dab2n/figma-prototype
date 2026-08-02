@@ -44,8 +44,23 @@ html:active-view-transition-type(detail-out)::view-transition-new(root) { animat
   animation-duration: var(--open, .5s);
   animation-timing-function: cubic-bezier(.22,.85,.28,1);
 }
-::view-transition-old(pack-hero) { animation: vt-fade-out var(--open, .5s) linear both; }
-::view-transition-new(pack-hero) { animation: vt-fade-in var(--open, .5s) linear both; }
+/* The UA gives both snapshots `inline-size: 100%; block-size: auto`, so they keep their
+   own aspect ratio while the GROUP's box grows. The card thumb is 288x453 (0.64) and the
+   full photo is 360x780 (0.46) — at the end the old snapshot was only 100%x~63% of the
+   frame, which is why the card appeared to stop part-way up and dissolve there instead of
+   reaching the top. Filling the group box is what carries it all the way out. */
+::view-transition-old(pack-hero), ::view-transition-new(pack-hero) {
+  block-size: 100%;
+  object-fit: cover;
+}
+/* And it does not start letting go until it has ARRIVED. The children run .8s against the
+   group's .5s: the card holds full strength for the whole growth, the group parks at the
+   full frame, and only then do the two dissolve into each other over the last .3s. A fade
+   that ran alongside the growth is what made the card disappear part-way up. */
+::view-transition-old(pack-hero) { animation: vt-hand-off .8s linear both; }
+::view-transition-new(pack-hero) { animation: vt-take-over .8s linear both; }
+@keyframes vt-hand-off { 0%, 62.5% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes vt-take-over { 0%, 62.5% { opacity: 0; } 100% { opacity: 1; } }
 @keyframes vt-fade-out { to { opacity: 0; } }
 @keyframes vt-fade-in { from { opacity: 0; } }
 /* The feed holds still underneath while the pack screen's ground comes up over it, on the
