@@ -205,6 +205,11 @@
    moment. Records (progress.html) has none of these classes and is unaffected.
    rp-draw is the resting state and goes on straight away so nothing flashes; rp-play
    starts the clock, and waits for the page transition (see records.html). */
+/* rp-draw is set by an inline script in records.html's <head>, BEFORE the body is parsed
+   — it used to be set at the end of the body, and on a heavy arrival the first painted
+   frame showed the headline at full size before the class landed and hid it again. That
+   is why the number appeared, vanished, and came back. It stays a class rather than the
+   default because Records (progress.html) shares this file and reveals none of it. */
 .rp-draw .arc-line { stroke-dasharray: 100; stroke-dashoffset: 100; }
 .rp-draw .arc-dot, .rp-draw #arcVal, .rp-draw .arc-prog { opacity: 0; }
 .rp-draw .rp-big { opacity: 0; transform: translateY(22px); transition: opacity .4s ease, transform .52s cubic-bezier(.2,.8,.3,1); }
@@ -360,8 +365,10 @@
    or gone — by the time anyone looked at them. */
 .rp-pair.run .rp-hcard .badge.up svg   { animation: arrow-up-in .46s cubic-bezier(.2,.85,.3,1) .12s both; }
 .rp-pair.run .rp-hcard .badge.down svg { animation: arrow-down-in .46s cubic-bezier(.2,.85,.3,1) .26s both; }
-@keyframes arrow-up-in   { from { opacity: 0; transform: translate(-7px, 7px); } }
-@keyframes arrow-down-in { from { opacity: 0; transform: translate(-7px, -7px); } }
+/* Explicit end frames. With only a `from`, the `to` is the element's OWN opacity — which
+   is 0 while it waits for .run, so the arrows animated 0 to 0 and never appeared. */
+@keyframes arrow-up-in   { from { opacity: 0; transform: translate(-7px, 7px); }  to { opacity: 1; transform: none; } }
+@keyframes arrow-down-in { from { opacity: 0; transform: translate(-7px, -7px); } to { opacity: 1; transform: none; } }
 .rp-hcard .desc { margin: 0; font-family: var(--font-supreme); font-size: 13px; line-height: 16px; letter-spacing: -0.3px; color: #A3A3A3; }
 
 /* Landing Balance. The heat is a CSS blob, not baked artwork, so its red core sits
@@ -389,25 +396,15 @@
      card is reached (or when the reading changes), and the transform loop is the idle
      undulation around wherever that is. Slow, shallow, and on three different periods
      so it never visibly repeats — the blob should look like it is flowing, not cycling. */
-  /* Slow enough to be watched, and it settles PAST the mark and eases back — the card is
-     about balance, so the core should arrive the way weight does. 1.2s on a flat curve
-     read as the blob simply being somewhere else. */
-  /* Invisible until the card is reached, then it fades up WHILE it travels — the move
-     alone was too slight to notice, but a core that materialises as it slides off centre
-     is impossible to miss. .run comes from the section observer in scores.js. */
-  opacity: 0;
-  transition: left 1.7s cubic-bezier(.22, .95, .3, 1), opacity 1.5s ease-out;
-  animation: lb-drift 13s ease-in-out infinite alternate;
+  transition: left 1.2s cubic-bezier(.33, 0, .2, 1);
+  animation: lb-drift 19s ease-in-out infinite alternate;
 }
-.rp-sec.run .rp-balance .lb-heat { opacity: 1; }
-/* The idle flow, roughly doubled: at the old amplitude the drift was under the blur's own
-   softness and the blob looked parked. */
 @keyframes lb-drift {
-  0%   { transform: translate(-12px, -7px) scale(1)     rotate(0deg); }
-  27%  { transform: translate(6px, 9px)    scale(1.07)  rotate(2.6deg); }
-  53%  { transform: translate(15px, -6px)  scale(1.02)  rotate(-1.2deg); }
-  78%  { transform: translate(-4px, 11px)  scale(1.09)  rotate(1.9deg); }
-  100% { transform: translate(-14px, 2px)  scale(1.04)  rotate(-2.2deg); }
+  0%   { transform: translate(-6px, -4px) scale(1)     rotate(0deg); }
+  27%  { transform: translate(3px, 5px)   scale(1.035) rotate(1.4deg); }
+  53%  { transform: translate(8px, -3px)  scale(1.01)  rotate(-.6deg); }
+  78%  { transform: translate(-2px, 6px)  scale(1.05)  rotate(1deg); }
+  100% { transform: translate(-7px, 1px)  scale(1.02)  rotate(-1.2deg); }
 }
 /* The dotted prints, used as artwork rather than as a mask — the dots and their inner
    shading are in the file. Group 2147228966: 71px in, 25.3 down, 195.6 across. */
@@ -460,11 +457,7 @@
   background: #fff;
   border-radius: 20px;
   overflow: hidden;
-  /* One card at a time. At 200ms the four graphs were all drawing at once and only the
-     numbers came in single file; 620 is a shade under a card's own run (~960ms), so each
-     card's graph starts as the one before it lands its score. */
-  --d: calc(var(--i) * 620ms);
-  opacity: 0;
+  --d: calc(var(--i) * 200ms);
 }
 .sc-n {
   position: absolute; top: 12px; left: 0; right: 0;
@@ -543,18 +536,9 @@
    The wipe is on the two default banks only. Run it on .hot as well and its end frame —
    inset(0 0 0 0) — outranks the --pass clip below, which painted the whole left bank red
    before the bar had moved at all. .hot is driven by --pass and nothing else. */
-/* The card itself arrives first, then its contents run. Grid order is top-left,
-   top-right, bottom-left, bottom-right — the same order --i counts in. */
-.rp-scores.run .sc { animation: sc-card-in .42s cubic-bezier(.2,.85,.3,1) var(--d) both; }
-@keyframes sc-card-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-.rp-scores.run .st-ticks.l, .rp-scores.run .st-ticks.r { animation: sc-grow .22s linear calc(var(--d) + 140ms) both; }
-.rp-scores.run .st-ticks.r { animation-delay: calc(var(--d) + 300ms); }
-/* st-pass has to stay on the CARD: --pass inherits, and .st-ticks.hot is a sibling of the
-   bar, not a child of it. So Stability carries both animations — the arrival and the pass. */
-.rp-scores.run .sc.st {
-  animation: sc-card-in .42s cubic-bezier(.2,.85,.3,1) var(--d) both,
-             st-pass .58s cubic-bezier(.12,.78,.22,1) calc(var(--d) + 300ms) both;
-}
+.rp-scores.run .st-ticks.l, .rp-scores.run .st-ticks.r { animation: sc-grow .22s linear var(--d) both; }
+.rp-scores.run .st-ticks.r { animation-delay: calc(var(--d) + 180ms); }
+.rp-scores.run .sc.st { animation: st-pass .62s cubic-bezier(.12,.78,.22,1) calc(var(--d) + 440ms) both; }
 @keyframes st-pass { from { --pass: -10px; } to { --pass: 79px; } }
 
 /* The grey guides: the back layer of the card, and on their own beat — the graph draws,
@@ -575,19 +559,24 @@
    the ridge peaks at card x 80.7, y 79.8. The guide is 1.4 wide, so left = 80.7 - 0.7.
    It starts BELOW the marker and fades in over the first 12% — above the triangle it must
    not exist at all. z-index 0 keeps it the back layer, under the arc. */
+/* Read off 653:8027: the guide runs card y 66 to 156, starting under the marker and
+   dying out just above the label. Its x is the dome's apex, 80.7 measured off the art,
+   less half the 1.4 stroke. z-index 0 keeps it the back layer, under the arc. */
 .sc.ag .sc-dash {
-  left: 80px; top: 66px; height: 78px;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12% 55%, transparent 90%);
-          mask-image: linear-gradient(180deg, transparent 0, #000 12% 55%, transparent 90%);
+  left: 80px; top: 66px; height: 90px;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 6% 55%, transparent 95%);
+          mask-image: linear-gradient(180deg, transparent 0, #000 6% 55%, transparent 95%);
 }
 /* Rhythm's three run down onto the wave and the label, so their lower halves go early. */
 /* The wave's three crests sit at card x 34.7 / 82.7 / 130.0, tops at y 67.1 — measured
    off the artwork, not eyeballed. left = crest - 0.7 (half the 1.4 stroke), so each guide
    runs down the exact centre of its hump. */
+/* 653:8027 again: y 43 to 126, so they start just under the 72 and pass THROUGH the
+   crests rather than beginning below them. Lower half faded hard, as asked. */
 .sc.rh .sc-dash {
-  top: 63px; height: 77px;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 10% 46%, transparent 80%);
-          mask-image: linear-gradient(180deg, transparent 0, #000 10% 46%, transparent 80%);
+  top: 43px; height: 83px;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8% 50%, transparent 88%);
+          mask-image: linear-gradient(180deg, transparent 0, #000 8% 50%, transparent 88%);
 }
 .sc.rh .sc-dash.a { left: 34px; }
 .sc.rh .sc-dash.b { left: 82px; }
@@ -603,9 +592,9 @@
   clip-path: inset(0 100% 0 0);
 }
 .rp-scores.run .sc-dash,
-.rp-scores.run .sc-track { animation: sc-grow .3s cubic-bezier(.3,.7,.3,1) calc(var(--d) + 400ms) both; }
-.rp-scores.run .sc.rh .sc-dash.b { animation-delay: calc(var(--d) + 460ms); }
-.rp-scores.run .sc.rh .sc-dash.c { animation-delay: calc(var(--d) + 520ms); }
+.rp-scores.run .sc-track { animation: sc-grow .38s cubic-bezier(.3,.7,.3,1) calc(var(--d) + 560ms) both; }
+.rp-scores.run .sc.rh .sc-dash.b { animation-delay: calc(var(--d) + 660ms); }
+.rp-scores.run .sc.rh .sc-dash.c { animation-delay: calc(var(--d) + 760ms); }
 @keyframes sc-grow { to { clip-path: inset(0 0 0 0); } }
 
 /* Marker: drawn, not baked, so it stays crisp over the blurred art. */
@@ -614,12 +603,12 @@
 /* Centred on what each one marks, and parked just clear of it: the dome's apex (x 80.7,
    y 79.8) and the endurance bar's tip (x 111.7, bar top y 90.8). The glyph's point is
    8.2px down the 9.97 box, so `top` is the point's y minus that. */
-.sc.ag .sc-tri { left: 75.2px; top: 65.6px; }
-.sc.en .sc-tri { left: 106.2px; top: 77.8px; }
+.sc.ag .sc-tri { left: 75.2px; top: 53.6px; }
+.sc.en .sc-tri { left: 102.5px; top: 72.6px; }
 
 /* Left-to-right wipe for the bar and the wave. */
 .sc.en .sc-art, .sc.rh .sc-art { clip-path: inset(0 100% 0 0); }
-.rp-scores.run .sc.en .sc-art, .rp-scores.run .sc.rh .sc-art { animation: sc-wipe .55s cubic-bezier(.3,.7,.3,1) calc(var(--d) + 140ms) both; }
+.rp-scores.run .sc.en .sc-art, .rp-scores.run .sc.rh .sc-art { animation: sc-wipe .6s cubic-bezier(.3,.7,.3,1) var(--d) both; }
 @keyframes sc-wipe { to { clip-path: inset(0 0 0 0); } }
 
 /* Agility instead sweeps around the dome's centre, so the arc appears to be drawn. The
@@ -651,14 +640,14 @@
   -webkit-mask-composite: source-in;
           mask-composite: intersect;
 }
-.rp-scores.run .sc.ag .sc-art { animation: sc-sweep .55s cubic-bezier(.3,.7,.3,1) calc(var(--d) + 140ms) both; }
+.rp-scores.run .sc.ag .sc-art { animation: sc-sweep .62s cubic-bezier(.3,.7,.3,1) var(--d) both; }
 @keyframes sc-sweep { from { --sweep: 0deg; } to { --sweep: 180deg; } }
 
 /* Order per card: graph draws, guide extends, then the marker drops in quickly on the
    guide's heel. The number never counts, it rises in last. */
-.rp-scores.run .sc-tri { animation: sc-fade .22s ease calc(var(--d) + 560ms) both; }
+.rp-scores.run .sc-tri { animation: sc-fade .24s ease calc(var(--d) + 880ms) both; }
 @keyframes sc-fade { to { opacity: 1; } }
-.rp-scores.run .sc-n { animation: sc-num .3s ease calc(var(--d) + 660ms) both; }
+.rp-scores.run .sc-n { animation: sc-num .34s ease calc(var(--d) + 1020ms) both; }
 @keyframes sc-num { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
 /* ── Recommendation ────────────────────────────────────────────────────────
@@ -792,7 +781,6 @@
   .rec-badge { opacity: 1; transform: none; animation: none; }
   .rp-body > .rp-sec { opacity: 1; animation: none; }
   .rp-scores .sc-art { clip-path: none; -webkit-mask-image: none; mask-image: none; animation: none; }
-  .rp-scores .sc { opacity: 1; transform: none; animation: none; }
   .rp-scores .sc.st { --pass: 79px; animation: none; }
   .rp-scores .sc-dash, .rp-scores .sc-track, .rp-scores .st-ticks { clip-path: none; animation: none; }
   .rp-scores .st-ticks.hot { clip-path: inset(0 calc(100% - 80.8px) 0 0); }

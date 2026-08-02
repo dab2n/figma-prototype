@@ -3,12 +3,8 @@
   // The heat starts centred and only travels once the card is actually on screen, so
   // the move toward the stronger foot is something you watch rather than something
   // that already happened before you got there.
-  // Gain 100, not 65: a 25/32 split is a 12% lean, which at 65 moved the core 27px in a
-  // 336px card — inside the blob's own blur, so nothing appeared to happen. At 100 the
-  // same reading is a 41px travel and the lean is legible. The mapping is still linear in
-  // the split, so the card is not lying about which side is heavier or by how much.
   var seen = false, pending = null;
-  function target(l, r) { return (50 + ((r - l) / (l + r)) * 100).toFixed(1) + '%'; }
+  function target(l, r) { return (50 + ((r - l) / (l + r)) * 65).toFixed(1) + '%'; }
   function paint(l, r) {
     document.querySelectorAll('.rp-balance').forEach(function (el) {
       el.style.setProperty('--heat-x', target(l, r));
