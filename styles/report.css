@@ -749,6 +749,7 @@
   justify-content: flex-end;
   align-items: flex-start;
 }
+.rec-thumb { -webkit-mask-image: -webkit-radial-gradient(#fff, #000); }   /* see packs.css */
 .rec-thumb.rec-dark::before { content: ""; position: absolute; inset: 0; border-radius: 38px; background: rgba(0,0,0,0.2); }
 .rec-badge {
   position: relative;

@@ -89,16 +89,21 @@
      and a Gaussian is still faintly painting out at ~1.5 sigma — so the 96px tail carries
      roughly 70px past its shadow rect, not the 48 that half-the-radius suggests. 60px of
      room cut it, and THAT was the straight edge under the carousel.
-     pointer-events is handed to the cards, because this padding now lies over the app bar
-     and over Recently Viewed, and a scroll container sitting on top of them would eat
-     their taps. */
+     This padding lies over the app bar and over Recently Viewed, so both of those are
+     raised above it instead (z-index, below) — they have no background of their own, so
+     the glow still shows THROUGH them and their taps still land.
+     It used to be pointer-events: none here with auto on the cards, which works in
+     Chrome but stops iOS panning the scroller at all: WebKit will not pan a scroll
+     container that does not take pointer events, whatever its children say. That is why
+     the home carousel did nothing on an iPhone. */
   padding-top: 60px;
   margin-top: -60px;
   padding-bottom: 120px;
   margin-bottom: -120px;
-  pointer-events: none;
 }
-.hero-scroll > * { pointer-events: auto; }
+/* Everything after the carousel sits over its padding. No backgrounds on these, so the
+   glow reads through them exactly as before. */
+.screen > .app-bar, .screen > section { position: relative; z-index: 2; }
 .hero-scroll::-webkit-scrollbar { display: none; }
 
 .hero-card {
@@ -112,6 +117,12 @@
   background-position: center;
   text-decoration: none;
   scroll-snap-align: center;
+  /* iOS will not clip a composited child — a <video> is always one — to a parent's
+     border-radius unless that parent is a stacking context of its own. Without this the
+     clip escaped and the cards read as square-cornered on an iPhone. It is also what
+     scopes plus-lighter to the card rather than to whatever is behind it; card 1 had it
+     for that reason and 2 and 3 did not. */
+  isolation: isolate;
   /* Two shadows, not one: the Figma rect (17/54/-24) IS the glow, but on its own it stops
      dead about 20px under the card — a compact smudge with an edge. The second is the
      same colour spread twice as far and half as strong, purely to give the first one a
@@ -135,7 +146,6 @@
   background:
     radial-gradient(267.32px 273.18px at 159.5px 60.1px, rgba(209,254,255,0) 88.8%, rgba(209,254,255,0.5) 100%),
     radial-gradient(361.63px 345.5px at 160px 104.5px, #FA3030 33.17%, #FEC389 61.42%, #D1FEFF 77.58%);
-  isolation: isolate;
 }
 /* Cards 2 and 3 are their own colourways, not tints of card 1 — transcribed from Figma
    2496:280 and 2496:294. Same overlay in both (the D1FEFF radial, stop alpha .9 on a 50%
@@ -172,10 +182,15 @@
    (160, 79.5). Solid to card y≈161 and only fully gone below the card, so it is a long
    slow fade, not a cut — the text is carried by .hero-blur below, not by this.
    plus-lighter on the wrapper: the artwork is shot on black and additive blending adds
-   nothing for black, so the backdrop never appears and no keying is needed. */
+   nothing for black, so the backdrop never appears and no keying is needed.
+   Its own rounded clip as well as the card's: on iOS the <video> inside is composited and
+   escapes the card's border-radius, and this wrapper is masked (so WebKit rasterises it)
+   which makes its overflow clip stick where the card's does not. */
 .hero-shot {
   position: absolute;
   inset: 0;
+  border-radius: 40px;
+  overflow: hidden;
   mix-blend-mode: plus-lighter;
   pointer-events: none;
   /* Figma's stops are the defaults. A card whose artwork stays bright all the way down

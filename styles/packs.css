@@ -89,6 +89,11 @@
   align-items: flex-end;   /* joined-avatar stack sits bottom-right (Figma) */
   overflow: hidden;
 }
+/* iOS does not clip a composited child — every one of these holds a <video> — to a
+   parent's border-radius. The radial-gradient mask is the WebKit-specific way to force
+   the radius to be applied as a real mask. Safe here because the card, not the thumb,
+   carries the shadow, so nothing outside the box is being clipped away. */
+.pack-thumb { -webkit-mask-image: -webkit-radial-gradient(#fff, #000); }
 .pack-thumb-top { width: 100%; }
 .pack-thumb-dark::before {
   content: "";

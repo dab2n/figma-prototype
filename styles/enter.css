@@ -154,7 +154,11 @@
   position: absolute;
   left: 20px;
   --dj-rest: calc(136px + var(--copyh, 131px) + var(--s, 0) * 37px);
-  bottom: calc(var(--dj-rest) + (636px - var(--dj-rest)) * var(--q, 0));
+  /* 100% - 144px, not a flat 636: 636 IS 780 - 144, so it only lands 144 into the header
+     on a frame that happens to be 780 tall. A phone's is 100dvh — on an iPhone that is
+     nearer 745 with the browser bar, which put the avatar ~35px high while .dj-meta below
+     it stayed pinned at top 154, and the two collided. */
+  bottom: calc(var(--dj-rest) + (100% - 144px - var(--dj-rest)) * var(--q, 0));
   z-index: 5;
   display: flex;
   align-items: center;
