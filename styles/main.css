@@ -30,6 +30,11 @@ html:active-view-transition-type(detail-out)::view-transition-new(root) { animat
    finished by the time the page was visible. The typed detail-in/out rules above are
    more specific, so the 평소 ⇆ 올릴때 modal keeps its slide. */
 ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+/* The GROUP is separate from the two snapshots, and its default animation morphs the box
+   between the old and new sizes — if two pages ever snapshot at different sizes that
+   morph is a visible scale of the whole frame. Nothing here should ever resize the root,
+   so the group is pinned; the typed rules above animate the snapshots, not the box. */
+::view-transition-group(root) { animation: none; }
 
 /* Feed card -> pack screen. The thumbnail used to be named and morphed into the detail
    photo; that is gone. A card and a full-bleed pack screen are not the same picture in

@@ -38,17 +38,24 @@
     }
   }
 
-  // The score block animates when it is scrolled to, not on load. .screen is the
-  // scroller, so it is the observer root.
-  var blocks = [document.getElementById('rpScores')].filter(Boolean);
+  // Anything that should play WHEN IT IS LOOKED AT rather than on a clock from page load
+  // gets .run here: the score block, the Session Highlights arrows, the Recommendation
+  // chips. On a fixed delay they had all finished — or were mid-loop — before the report
+  // had been scrolled that far. .screen is the scroller, so it is the observer root.
+  var blocks = [].slice.call(document.querySelectorAll('#rpScores, .rp-pair, .rec-scroll'));
+  if (!blocks.length) return;
   if (!window.IntersectionObserver) { blocks.forEach(function (b) { b.classList.add('run'); }); return; }
+  // The recommendation row waits until it is nearly all the way on screen. At 0.2 it
+  // tripped while the Performance Scores stop was being read — 42% of it is showing
+  // there — and the chips had already slid in by the time the row was scrolled to.
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       if (!e.isIntersecting) return;
+      if (e.intersectionRatio < (e.target.classList.contains('rec-scroll') ? 0.75 : 0.2)) return;
       e.target.classList.add('run');
       io.unobserve(e.target);
     });
-  }, { root: blocks[0].closest('.screen'), threshold: 0.2 });
+  }, { root: blocks[0].closest('.screen'), threshold: [0.2, 0.5, 0.75, 0.95] });
   blocks.forEach(function (b) { io.observe(b); });
 })();
 

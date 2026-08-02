@@ -40,11 +40,15 @@
      colour they already are, stopping before the falloff so it never tints the cream. */
   background: linear-gradient(180deg, #FA3030 0 26%, rgba(250,48,48,0) 42%);
 }
-/* Arriving from the recap, the wash rides up into place instead of cutting. Held off
+/* Arriving from the recap, the wash comes DOWN into place instead of cutting. Held off
    until the page transition has finished — during it the browser is animating a snapshot
-   taken at load, so anything that ran here would already be over by the time it shows. */
-.rp-rise .rp-hero-bg { animation: rp-wash-rise .66s cubic-bezier(.2,.8,.25,1) both; }
-@keyframes rp-wash-rise { from { transform: translateY(110px); } }
+   taken at load, so anything that ran here would already be over by the time it shows.
+   The offset is the RESTING state (.rp-draw, set before the first paint), not just the
+   animation's from-frame: with it only in the keyframe the wash sat at rest for a frame,
+   jumped 110px the instant .rp-rise landed, and glided back. That jump was the 둠칫. */
+.rp-draw .rp-hero-bg { transform: translateY(-110px); }
+.rp-rise .rp-hero-bg { animation: rp-wash-fall .72s cubic-bezier(.2,.8,.25,1) both; }
+@keyframes rp-wash-fall { from { transform: translateY(-110px); } to { transform: none; } }
 /* z-index only. This used to also set `position: relative`, which outranked the
    absolute placement below (`.rp-hero > *:not(...)` beats a bare `.rp-big`) and dropped
    the number, caption and gauge back into flow, each shoved down by its own `top`. */
@@ -339,16 +343,19 @@
 }
 .rp-hcard .badge.up { background: var(--color-red); }
 .rp-hcard .badge.down { background: var(--color-neutral-200); }
-.rp-hcard .badge svg { width: 32px; height: 32px; display: block; }
+.rp-hcard .badge svg { width: 32px; height: 32px; display: block; opacity: 0; }
 /* Each arrow enters along the direction it points, a beat after the card settles, and
    then keeps going that way: it travels on out of the badge, and the next one has
    already come in behind it. Both halves of the loop move the SAME way — the return
    leg happens at opacity 0, so the arrow is never seen sliding backwards. The second
    animation is declared last, so it owns transform once it starts. */
-.rp-hcard .badge.up svg   { animation: arrow-up-in .42s cubic-bezier(.2,.85,.3,1) .5s both,
-                                       arrow-up-run 2.6s ease-in-out 1.1s infinite; }
-.rp-hcard .badge.down svg { animation: arrow-down-in .42s cubic-bezier(.2,.85,.3,1) .62s both,
-                                       arrow-down-run 2.6s ease-in-out 1.22s infinite; }
+/* Gated on .run, which scores.js adds when the pair is scrolled to. On a fixed delay
+   from page load the whole loop had already run and the arrows were sitting mid-cycle —
+   or gone — by the time anyone looked at them. */
+.rp-pair.run .rp-hcard .badge.up svg   { animation: arrow-up-in .42s cubic-bezier(.2,.85,.3,1) .12s both,
+                                                    arrow-up-run 2.6s ease-in-out .72s infinite; }
+.rp-pair.run .rp-hcard .badge.down svg { animation: arrow-down-in .42s cubic-bezier(.2,.85,.3,1) .24s both,
+                                                    arrow-down-run 2.6s ease-in-out .84s infinite; }
 @keyframes arrow-up-in   { from { opacity: 0; transform: translate(-7px, 7px); } }
 @keyframes arrow-down-in { from { opacity: 0; transform: translate(-7px, -7px); } }
 /* ↗ — rest, drift up-right and out, reappear from down-left, back to rest. */
@@ -543,20 +550,30 @@
    then the guide extends, then the marker lands. Rhythm's three follow the wave left to
    right, in the order the wave was drawn. */
 .sc-dash {
-  position: absolute; z-index: 0; width: 2px;
-  background: repeating-linear-gradient(180deg, #E4E4E4 0 2px, transparent 2px 3.5px);
-  /* Faded at BOTH ends. Rhythm's guides run from y36 to y137, which puts their top under
-     the 72 and their foot on the label — a guide that meets type at full strength reads
-     as a line through it. */
+  position: absolute; z-index: 0; width: 1.4px;                 /* Figma stroke 1.4 */
+  background: repeating-linear-gradient(180deg, #E4E4E4 0 1.8px, transparent 1.8px 3.6px);
+  /* Faded at BOTH ends — a guide that meets type at full strength reads as a line through
+     it. How much of each end goes is per card, below. */
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 22% 60%, transparent 94%);
           mask-image: linear-gradient(180deg, transparent 0, #000 22% 60%, transparent 94%);
   clip-path: inset(0 0 100% 0);
 }
-.sc.ag .sc-dash { left: 82px; top: 71px; height: 73px; }
-.sc.rh .sc-dash { top: 36px; height: 101px; }
-.sc.rh .sc-dash.a { left: 35px; }
-.sc.rh .sc-dash.b { left: 83px; }
-.sc.rh .sc-dash.c { left: 130px; }
+/* Agility's guide starts ABOVE the dome (the arc sits at y59-99) rather than inside it,
+   and its top fade is short so it is actually visible up there. */
+.sc.ag .sc-dash {
+  left: 82.3px; top: 44px; height: 100px;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8% 62%, transparent 96%);
+          mask-image: linear-gradient(180deg, transparent 0, #000 8% 62%, transparent 96%);
+}
+/* Rhythm's three run down onto the wave and the label, so their lower halves go early. */
+.sc.rh .sc-dash {
+  top: 36px; height: 101px;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 24% 44%, transparent 80%);
+          mask-image: linear-gradient(180deg, transparent 0, #000 24% 44%, transparent 80%);
+}
+.sc.rh .sc-dash.a { left: 35.3px; }
+.sc.rh .sc-dash.b { left: 83.3px; }
+.sc.rh .sc-dash.c { left: 130.3px; }
 /* Endurance's guide is the remainder of the track, so it runs sideways. */
 .sc-track {
   position: absolute; z-index: 0;
@@ -574,10 +591,11 @@
 @keyframes sc-grow { to { clip-path: inset(0 0 0 0); } }
 
 /* Marker: drawn, not baked, so it stays crisp over the blurred art. */
-.sc-tri { position: absolute; z-index: 3; width: 8px; height: 7.25px; opacity: 0; }
+.sc-tri { position: absolute; z-index: 3; width: 11px; height: 9.97px; opacity: 0; }
 .sc-tri svg { display: block; width: 100%; height: 100%; }
-.sc.ag .sc-tri { left: 78px; top: 55px; }
-.sc.en .sc-tri { left: 104px; top: 74px; }
+/* Grown from 8x7.25; left/top pulled back by half the growth so the point stays put. */
+.sc.ag .sc-tri { left: 76.5px; top: 53.6px; }
+.sc.en .sc-tri { left: 102.5px; top: 72.6px; }
 
 /* Left-to-right wipe for the bar and the wave. */
 .sc.en .sc-art, .sc.rh .sc-art { clip-path: inset(0 100% 0 0); }
@@ -618,10 +636,14 @@
    (360-308)/2, so a centred card rests exactly at scrollLeft 0, 316 and the end. */
 .rec-scroll {
   display: flex; gap: 8px; overflow-x: auto;
-  margin: 0 -12px; padding: 0 26px 4px;
+  /* 12px, matching .rp-sec — the first card's left edge lines up with the heading above
+     it. It was 26 ((360-308)/2) to CENTRE a card; snapping to start instead is what lets
+     the row keep one-card-per-flick while sitting on the section's own margin. */
+  margin: 0 -12px; padding: 0 12px 4px;
+  scroll-padding-left: 12px;
   scroll-snap-type: x mandatory;
 }
-.rec-card { scroll-snap-align: center; scroll-snap-stop: always; }
+.rec-card { scroll-snap-align: start; scroll-snap-stop: always; }
 @media (prefers-reduced-motion: reduce) { .rec-scroll { scroll-snap-type: none; } }
 /* No entrance here on purpose: .rec-scroll is a horizontal scroller, so its overflow
    clips vertically too and a rising card gets its top sliced off mid-animation. */
@@ -663,6 +685,13 @@
   box-shadow: 0 0 12px rgba(0,0,0,0.12);
 }
 .rec-badge .badge-fire { width: 11px; height: 13px; display: block; flex: none; }
+/* The chip arrives when the row is scrolled to, sliding in from the card's right edge.
+   .run comes from scores.js, the same hook the score block and the highlight pair use. */
+.rec-badge { opacity: 0; }
+.rec-scroll.run .rec-badge { animation: rec-chip-in .46s cubic-bezier(.2,.85,.3,1) both; }
+.rec-scroll.run .rec-card:nth-child(2) .rec-badge { animation-delay: .09s; }
+.rec-scroll.run .rec-card:nth-child(3) .rec-badge { animation-delay: .18s; }
+@keyframes rec-chip-in { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
 .rec-info { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 20px 16px; }
 .rec-txt { flex: 1; min-width: 0; }
 .rec-title { margin: 0 0 4px; font-family: var(--font-supreme-bold); font-size: 18px; line-height: 1.2; letter-spacing: -0.54px; color: var(--color-black); }
@@ -724,6 +753,7 @@
   .rp-balance .lb-heat { animation: none; }
   .rp-scores .sc-n, .rp-scores .sc-tri { opacity: 1; animation: none; }
   .rp-hcard .badge svg { opacity: 1; transform: none; animation: none; }
+  .rec-badge { opacity: 1; transform: none; animation: none; }
   .rp-scores .sc-art { clip-path: none; -webkit-mask-image: none; mask-image: none; animation: none; }
   .rp-scores .sc.st { --pass: 79px; animation: none; }
   .rp-scores .sc-dash, .rp-scores .sc-track, .rp-scores .st-ticks { clip-path: none; animation: none; }
