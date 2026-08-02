@@ -71,17 +71,41 @@
     screen.scrollTop = 0;
     setTimeout(function () {
       glide(screen, 'scrollTop', centre(screen, sean, 'scrollTop'), 2600, function () {
-        setTimeout(function () { go('pyeongso.html', 3); }, 1500);
+        setTimeout(function () { go('pyeongso.html', 3); }, 800);
       });
     }, 3000);          // a beat longer on the feed before it starts moving
   }
 
   function detail() {
     var explore = document.getElementById('djExplore');
-    // Watch the clip, then two taps: 평소 → 1회 진입 → 올릴때. One tap only reaches the
-    // middle stop (see enter.js), which is not "raised".
-    setTimeout(function () { explore.click(); }, 6000);
-    setTimeout(function () { explore.click(); }, 7600);
+    var clip = document.querySelector('.dj-photo video');
+    // Two taps: 평소 → 1회 진입 → 올릴때. One tap only reaches the middle stop (see
+    // enter.js), which is not "raised".
+    function raise() {
+      explore.click();
+      setTimeout(function () { explore.click(); }, 1600);
+    }
+    // The clip is what the viewer is watching, so it decides when to move on: the moment
+    // it has played through once, the sheet comes up. It loops, so 'ended' never fires —
+    // the playhead jumping backwards IS the end of a pass. A fixed wait is the fallback
+    // if the clip never starts.
+    if (clip) {
+      var last = 0, fired = 0;
+      var done = function () {
+        if (fired) return;
+        fired = 1;
+        clip.removeEventListener('timeupdate', tick);
+        raise();
+      };
+      var tick = function () {
+        if (clip.currentTime < last - 0.3) done();
+        last = clip.currentTime;
+      };
+      clip.addEventListener('timeupdate', tick);
+      setTimeout(done, 12000);
+    } else {
+      setTimeout(raise, 5000);
+    }
   }
 
   var step = sessionStorage.getItem(KEY);

@@ -102,12 +102,20 @@
 
 .stats-row {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   gap: 4px;
   padding: 0 8px;
 }
-.stats-row .stat { flex: 1; text-align: center; color: #fff; }
+/* Every cell is a full-height column with its label pinned to the top, so Sport, Joined
+   and Recommended line up regardless of how many values sit under them. The values then
+   take the auto margins above and below, which centres them in what is left — Running and
+   877 land on the middle of the two-line Pace On / Boost On block. */
+.stats-row .stat { flex: 1; text-align: center; color: #fff; display: flex; flex-direction: column; }
+/* .label + .value, not :first-of-type — the label is a <p> too, so :first-of-type never
+   matched a value and only the bottom margin was doing anything. */
+.stats-row .stat .label + .value { margin-top: auto; }
+.stats-row .stat .value:last-child { margin-bottom: auto; }
 .stats-row .stat p { margin: 0; }
 .stats-row .stat .label { font-family: var(--font-supreme); font-size: 13px; opacity: 0.7; letter-spacing: -0.5px; margin-bottom: 6px; }
 .stats-row .stat .value { font-family: var(--font-supreme-bold); font-size: 18px; letter-spacing: -0.54px; }
