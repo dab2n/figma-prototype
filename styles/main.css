@@ -53,14 +53,15 @@ html:active-view-transition-type(detail-out)::view-transition-new(root) { animat
   block-size: 100%;
   object-fit: cover;
 }
-/* And it does not start letting go until it has ARRIVED. The children run .8s against the
-   group's .5s: the card holds full strength for the whole growth, the group parks at the
-   full frame, and only then do the two dissolve into each other over the last .3s. A fade
-   that ran alongside the growth is what made the card disappear part-way up. */
-::view-transition-old(pack-hero) { animation: vt-hand-off .8s linear both; }
-::view-transition-new(pack-hero) { animation: vt-take-over .8s linear both; }
-@keyframes vt-hand-off { 0%, 62.5% { opacity: 1; } 100% { opacity: 0; } }
-@keyframes vt-take-over { 0%, 62.5% { opacity: 0; } 100% { opacity: 1; } }
+/* A plain, even cross-dissolve on the group's own clock. Holding the old card opaque
+   until it arrived and dissolving afterwards sounded right and looked terrible: the
+   growth ended, and for 300ms a frozen full-size copy of the CARD — its badges, its
+   avatars, its caption — sat on top of a detail page that had already finished arriving.
+   Nothing was moving, so it read as the animation breaking in the middle.
+   Same easing on both halves means their opacities sum to 1 at every instant: no dip to
+   the background, no held frame, just one continuous handover while the box travels. */
+::view-transition-old(pack-hero) { animation: vt-fade-out var(--open, .5s) linear both; }
+::view-transition-new(pack-hero) { animation: vt-fade-in var(--open, .5s) linear both; }
 @keyframes vt-fade-out { to { opacity: 0; } }
 @keyframes vt-fade-in { from { opacity: 0; } }
 /* The feed holds still underneath while the pack screen's ground comes up over it, on the
