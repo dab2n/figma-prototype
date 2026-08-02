@@ -22,14 +22,12 @@
    and the 16px content margins visibly slide with it. */
 .dj-screen { background: var(--color-black); overflow-x: hidden; overscroll-behavior-x: none; touch-action: pan-y; }
 
-/* Arriving from the feed. The page used to cut in; it grows into the frame instead, so
-   the card that was tapped reads as expanding to fill the screen. The whole frame, not
-   its parts — anything less and the bottom bar arrives on a different beat from the hero.
-   backwards, not both: the transform is gone once it lands, so nothing downstream
-   inherits a containing block it did not ask for. */
-@keyframes dj-enter { from { opacity: 0; transform: scale(0.88); } }
-.phone:has(> .dj-screen) { animation: dj-enter .4s cubic-bezier(.2,.85,.25,1) backwards; }
-@media (prefers-reduced-motion: reduce) { .phone:has(> .dj-screen) { animation: none; } }
+/* No entrance on the frame. This page used to arrive with `opacity: 0; scale(0.88)` on
+   .phone, which is the DEVICE — so the status bar grew with everything else and the whole
+   screen washed out to the page's white on the way in. A status bar has to be the one
+   thing that never moves, and the wash was the "blink" this transition kept showing.
+   The page arrives as itself; the fold's own intro (Explore This Pack rolling down) is
+   the motion this screen is supposed to have. */
 
 /* ── Hero ────────────────────────────────────────────────────────────────── */
 .dj-hero {

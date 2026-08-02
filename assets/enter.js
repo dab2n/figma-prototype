@@ -65,9 +65,17 @@
     var y = screen.scrollTop;
     if (y >= OPEN) return;
     var back = dir < 0;
-    var a = HINT * (back ? 0.75 : 0.45);
-    var b = HINT + (OPEN - HINT) * (back ? 0.75 : 0.42);
-    var target = y < a ? 0 : y < b ? HINT : OPEN;
+    var target;
+    if (hintDone) {
+      // 1회 진입 is the arrival HINT and nothing more. Once it has rolled away there are
+      // two states left, 평소 and 올릴때, so a pull up from "877 joined this week" runs
+      // straight through instead of catching on a stop that is no longer being offered.
+      target = y < OPEN * (back ? 0.55 : 0.3) ? 0 : OPEN;
+    } else {
+      var a = HINT * (back ? 0.75 : 0.45);
+      var b = HINT + (OPEN - HINT) * (back ? 0.75 : 0.42);
+      target = y < a ? 0 : y < b ? HINT : OPEN;
+    }
     if (Math.abs(y - target) < 2) return;
     snapping = 1;
     glide(target, 420);
@@ -78,7 +86,7 @@
   // with it rather than snapping. Timed off VISIBILITY, not load: a page opened behind
   // another tab would otherwise spend its two seconds unseen and arrive already rolled.
   var INTRO = 1300, DECAY = 460;
-  var intro = 0, decaying = false;
+  var intro = 0, decaying = false, hintDone = false;
 
   function rollDown() {
     if (decaying) return;
@@ -91,7 +99,7 @@
       lead = from * Math.pow(1 - k, 3);        // ease-out to nothing
       paint();
       if (k < 1) requestAnimationFrame(frame);
-      else { lead = 0; paint(); }
+      else { lead = 0; paint(); hintDone = true; }   // the hint has had its turn
     });
   }
 
@@ -139,7 +147,9 @@
   function step(e) {
     if (e.target.closest('a')) return;
     e.preventDefault();
-    var to = screen.scrollTop < HINT - 2 ? HINT : OPEN;
+    // Same two-state rule as settle(): once the hint has gone, a tap opens the sheet
+    // outright rather than parking on a stop nobody is being shown any more.
+    var to = (hintDone || screen.scrollTop >= HINT - 2) ? OPEN : HINT;
     snapping = 1;
     // Slow, and even the whole way — this is the transition worth watching, so it eases
     // in as well as out instead of front-loading the travel the way a release does.
