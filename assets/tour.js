@@ -82,7 +82,11 @@
         // Leaving on 'playing' cuts the moment the thumb comes alive, instead of on a
         // clock that would have to be long enough for the slowest first frame.
         var fired = 0;
-        function next() { if (fired) return; fired = 1; go('pyeongso.html', 3); }
+        // TAP the card, don't jump to its href: the page's own click handler is what
+        // names the thumbnail as the travelling element and plays the press. Setting
+        // location.href straight from here skipped both, which is why the cut to the
+        // detail had no card-opening in it at all.
+        function next() { if (fired) return; fired = 1; sessionStorage.setItem(KEY, 3); sean.click(); }
         // A second on the live thumb before the cut, so the card is seen playing rather
         // than merely glimpsed.
         if (clip) clip.addEventListener('playing', function () { setTimeout(next, 1300); }, { once: true });

@@ -43,22 +43,21 @@
     var phone = document.querySelector('.phone');
     if (!phone) return;
     var root = document.documentElement;
+    // Measured ONCE, on the first call, while --fit is still its initial 1 — offsetHeight
+    // is reported in the zoomed coordinate space, so a later re-read would need --fit
+    // reset to 1 first, and that reset is what made the viewport flinch: every re-fit
+    // pushed the frame to full size for one layout. The frame is a fixed 360x780 device;
+    // nothing in the page can change its height, so one measurement holds for the session.
+    var need = 0;
     function fit() {
-      root.style.setProperty('--fit', '1');
-      // offsetHeight, NOT getBoundingClientRect(): the rect is the TRANSFORMED box, and
-      // the pack detail opens with a scale(.88) entrance on .phone. Measured during it the
-      // frame read 686 instead of 780, so that page settled on a bigger --fit than Home
-      // and the whole viewport appeared to zoom in on arrival.
-      var need = phone.offsetHeight + 32;                     // 16px of air top and bottom
+      if (!need) need = phone.offsetHeight + 32;              // 16px of air top and bottom
       root.style.setProperty('--fit', Math.min(1, innerHeight / need).toFixed(4));
     }
-    // Measured again after load and after the frame's own entrance animation, so a first
-    // pass that lands on a half-built page can never leave the frame at the wrong size —
-    // the whole point is that every screen is the same size on camera.
     fit();
-    addEventListener('load', fit);
     addEventListener('resize', fit);
-    phone.addEventListener('animationend', fit);
+    // No 'load' / 'animationend' re-fit: those fired on every intro animation (8 pack
+    // cards, the whole Home cascade), and each one forced a synchronous relayout of the
+    // zoomed frame mid-animation — the stutter on the way into Packs.
   })();
 
   var open = target();

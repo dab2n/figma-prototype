@@ -138,6 +138,20 @@
 .pack-card:nth-child(7) { animation-delay: .42s; }
 .pack-card:nth-child(8) { animation-delay: .49s; }
 @keyframes pack-slide { from { opacity: 0; transform: translateY(44px); } }
+/* Hand the layers back once the entrance has landed (.snap is added then, see
+   filters.js). Eight cards held on their own composited layer for the whole session was
+   memory the scroll had to drag around. */
+.packs-screen.snap .pack-card { will-change: auto; }
+
+/* Picked: the card presses in and its shadow tightens under it, then the detail grows out
+   of that same thumbnail. Navigation is held 200ms so the press is actually seen — see
+   the click handler in packs.html. */
+.pack-card { transition: transform .18s ease-out, box-shadow .18s ease-out, opacity .18s ease-out; }
+.pack-card.picked {
+  transform: scale(.964);
+  box-shadow: 0 4px 14px 0 rgba(0,0,0,0.18);
+}
+.pack-list.picking .pack-card:not(.picked) { opacity: .5; }
 
 /* A clip fades up over its own poster instead of cutting in, and the outgoing one fades
    down over it — so handing playback from one card to the next is a dissolve, never a
