@@ -48,15 +48,16 @@
      colour they already are, stopping before the falloff so it never tints the cream. */
   background: linear-gradient(180deg, #FA3030 0 26%, rgba(250,48,48,0) 42%);
 }
-/* Arriving from the recap, the wash comes DOWN into place instead of cutting. Held off
+/* Arriving from the recap, the wash RIDES UP into place: on the recap it fills the screen,
+   and here it has travelled up to sit as the band at the top. Held off
    until the page transition has finished — during it the browser is animating a snapshot
    taken at load, so anything that ran here would already be over by the time it shows.
    The offset is the RESTING state (.rp-draw, set before the first paint), not just the
    animation's from-frame: with it only in the keyframe the wash sat at rest for a frame,
    jumped 110px the instant .rp-rise landed, and glided back. That jump was the 둠칫. */
-.rp-draw .rp-hero-bg { transform: translateY(-110px); }
-.rp-rise .rp-hero-bg { animation: rp-wash-fall .72s cubic-bezier(.2,.8,.25,1) both; }
-@keyframes rp-wash-fall { from { transform: translateY(-110px); } to { transform: none; } }
+.rp-draw .rp-hero-bg { transform: translateY(140px); }
+.rp-rise .rp-hero-bg { animation: rp-wash-rise .72s cubic-bezier(.2,.8,.25,1) both; }
+@keyframes rp-wash-rise { from { transform: translateY(140px); } to { transform: none; } }
 /* z-index only. This used to also set `position: relative`, which outranked the
    absolute placement below (`.rp-hero > *:not(...)` beats a bare `.rp-big`) and dropped
    the number, caption and gauge back into flow, each shoved down by its own `top`. */
@@ -489,9 +490,13 @@
 /* Starts OFF the card, not at x 0: the bar has to arrive, so it must not be sitting at
    the left edge waiting for its cue. 6px wide at -10px puts it fully outside the clip. */
 @property --pass { syntax: '<length>'; inherits: true; initial-value: -10px; }
+/* ONE field, wall to wall. It used to be two banks with a 14px hole where the bar parks,
+   so before the bar arrived there was a gap in the pattern and the bar looked like it was
+   being slotted into a space left for it. The pitch is unbroken now and the bar simply
+   passes over it. */
 .st-ticks {
   position: absolute; z-index: 1;
-  top: 67.96px; width: 77.6px; height: 32px;
+  left: -1.8px; top: 67.96px; width: 169.6px; height: 32px;
   color: #FFE7D0;
   clip-path: inset(0 100% 0 0);
 }
@@ -500,25 +505,17 @@
   background: repeating-linear-gradient(90deg, currentColor 0 1.6px, transparent 1.6px 7.6px);
 }
 .st-ticks::after { filter: blur(1.6px); }
-.st-ticks.l, .st-ticks.hot { left: -1.8px; }
-.st-ticks.r { left: 90.2px; }
-/* The bar only ever reaches x 79, which is the gap, so the red bank is the left one. */
+/* Everything the bar has already passed is red. */
 .st-ticks.hot { color: #FCACAC; }
-.st-ticks.l::before, .st-ticks.hot::before {
-  -webkit-mask-image: linear-gradient(90deg, transparent 0 8px, #000 18px);
-          mask-image: linear-gradient(90deg, transparent 0 8px, #000 18px);
+/* The sharp copy stops short of both walls; the blurred copy carries the last few ticks
+   out through them, so the blur belongs to the walls and not to the field. */
+.st-ticks::before {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0 8px, #000 18px, #000 calc(100% - 18px), transparent calc(100% - 8px));
+          mask-image: linear-gradient(90deg, transparent 0 8px, #000 18px, #000 calc(100% - 18px), transparent calc(100% - 8px));
 }
-.st-ticks.l::after, .st-ticks.hot::after {
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6px 13px, transparent 21px);
-          mask-image: linear-gradient(90deg, transparent 0, #000 6px 13px, transparent 21px);
-}
-.st-ticks.r::before {
-  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 18px), transparent calc(100% - 8px));
-          mask-image: linear-gradient(90deg, #000 calc(100% - 18px), transparent calc(100% - 8px));
-}
-.st-ticks.r::after {
-  -webkit-mask-image: linear-gradient(90deg, transparent calc(100% - 21px), #000 calc(100% - 13px) calc(100% - 6px), transparent 100%);
-          mask-image: linear-gradient(90deg, transparent calc(100% - 21px), #000 calc(100% - 13px) calc(100% - 6px), transparent 100%);
+.st-ticks::after {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6px 13px, transparent 21px, transparent calc(100% - 21px), #000 calc(100% - 13px) calc(100% - 6px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 6px 13px, transparent 21px, transparent calc(100% - 21px), #000 calc(100% - 13px) calc(100% - 6px), transparent 100%);
 }
 .st-bar {
   position: absolute; z-index: 2;
@@ -533,11 +530,10 @@
 /* Stability's order: every tick flicks in left to right in the DEFAULT colour, then the
    bar comes in from off the left edge, eases onto its mark, and turns the field red
    behind it as it goes.
-   The wipe is on the two default banks only. Run it on .hot as well and its end frame —
+   The wipe is on the default field only. Run it on .hot as well and its end frame —
    inset(0 0 0 0) — outranks the --pass clip below, which painted the whole left bank red
    before the bar had moved at all. .hot is driven by --pass and nothing else. */
-.rp-scores.run .st-ticks.l, .rp-scores.run .st-ticks.r { animation: sc-grow .22s linear var(--d) both; }
-.rp-scores.run .st-ticks.r { animation-delay: calc(var(--d) + 180ms); }
+.rp-scores.run .st-ticks.f { animation: sc-grow .34s linear var(--d) both; }
 .rp-scores.run .sc.st { animation: st-pass .62s cubic-bezier(.12,.78,.22,1) calc(var(--d) + 440ms) both; }
 @keyframes st-pass { from { --pass: -10px; } to { --pass: 79px; } }
 
@@ -559,24 +555,26 @@
    the ridge peaks at card x 80.7, y 79.8. The guide is 1.4 wide, so left = 80.7 - 0.7.
    It starts BELOW the marker and fades in over the first 12% — above the triangle it must
    not exist at all. z-index 0 keeps it the back layer, under the arc. */
-/* Read off 653:8027: the guide runs card y 66 to 156, starting under the marker and
-   dying out just above the label. Its x is the dome's apex, 80.7 measured off the art,
-   less half the 1.4 stroke. z-index 0 keeps it the back layer, under the arc. */
+/* Agility reads 51 — the middle — so the marker and its guide sit on the CARD's centre
+   line, x 83, not on wherever the artwork's ridge happens to peak. The guide runs y 66 to
+   156 (653:8027) with a gap punched where the arc crosses it at y 80-89: the graph is
+   opaque in the design and the export is not, so the guide is cut rather than showing
+   through it. */
 .sc.ag .sc-dash {
-  left: 80px; top: 66px; height: 90px;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 6% 55%, transparent 95%);
-          mask-image: linear-gradient(180deg, transparent 0, #000 6% 55%, transparent 95%);
+  left: 82.3px; top: 66px; height: 90px;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8% 11%, transparent 16% 26%, #000 31% 58%, transparent 96%);
+          mask-image: linear-gradient(180deg, transparent 0, #000 8% 11%, transparent 16% 26%, #000 31% 58%, transparent 96%);
 }
 /* Rhythm's three run down onto the wave and the label, so their lower halves go early. */
 /* The wave's three crests sit at card x 34.7 / 82.7 / 130.0, tops at y 67.1 — measured
    off the artwork, not eyeballed. left = crest - 0.7 (half the 1.4 stroke), so each guide
    runs down the exact centre of its hump. */
-/* 653:8027 again: y 43 to 126, so they start just under the 72 and pass THROUGH the
-   crests rather than beginning below them. Lower half faded hard, as asked. */
+/* 653:8027 again: y 43 to 126, so they start just under the 72. Same gap treatment where
+   each crest crosses (y 67-78), so the wave reads as solid in front of them. */
 .sc.rh .sc-dash {
   top: 43px; height: 83px;
-  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8% 50%, transparent 88%);
-          mask-image: linear-gradient(180deg, transparent 0, #000 8% 50%, transparent 88%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 8% 26%, transparent 31% 41%, #000 46% 62%, transparent 88%);
+          mask-image: linear-gradient(180deg, transparent 0, #000 8% 26%, transparent 31% 41%, #000 46% 62%, transparent 88%);
 }
 .sc.rh .sc-dash.a { left: 34px; }
 .sc.rh .sc-dash.b { left: 82px; }
@@ -603,8 +601,10 @@
 /* Centred on what each one marks, and parked just clear of it: the dome's apex (x 80.7,
    y 79.8) and the endurance bar's tip (x 111.7, bar top y 90.8). The glyph's point is
    8.2px down the 9.97 box, so `top` is the point's y minus that. */
-.sc.ag .sc-tri { left: 75.2px; top: 53.6px; }
-.sc.en .sc-tri { left: 102.5px; top: 72.6px; }
+/* Centred on what each one marks: Agility on the card's own centre (83), Endurance on the
+   bar's end, measured off the artwork at card x 111.7. Half the 11px glyph is 5.5. */
+.sc.ag .sc-tri { left: 77.5px; top: 53.6px; }
+.sc.en .sc-tri { left: 106.2px; top: 72.6px; }
 
 /* Left-to-right wipe for the bar and the wave. */
 .sc.en .sc-art, .sc.rh .sc-art { clip-path: inset(0 100% 0 0); }
@@ -660,11 +660,18 @@
   /* 12px, matching .rp-sec — the first card's left edge lines up with the heading above
      it. It was 26 ((360-308)/2) to CENTRE a card; snapping to start instead is what lets
      the row keep one-card-per-flick while sitting on the section's own margin. */
-  margin: 0 -12px; padding: 0 12px 4px;
+  margin: 0 -12px -20px; padding: 0 12px 24px;
   scroll-padding-left: 12px;
   scroll-snap-type: x mandatory;
 }
 .rec-card { scroll-snap-align: start; scroll-snap-stop: always; }
+/* Same arrival as the sections. The row's own padding-bottom (taken back with a negative
+   margin) is what gives a rising card somewhere to rise FROM — a horizontal scroller
+   clips vertically too. */
+.rec-scroll .rec-card { opacity: 0; }
+.rec-scroll.run .rec-card { opacity: 1; animation: rp-rise .5s cubic-bezier(.2,.85,.3,1) both; }
+.rec-scroll.run .rec-card:nth-child(2) { animation-delay: .08s; }
+.rec-scroll.run .rec-card:nth-child(3) { animation-delay: .16s; }
 @media (prefers-reduced-motion: reduce) { .rec-scroll { scroll-snap-type: none; } }
 /* No entrance here on purpose: .rec-scroll is a horizontal scroller, so its overflow
    clips vertically too and a rising card gets its top sliced off mid-animation. */
@@ -713,17 +720,26 @@
 .rec-scroll.run .rec-card:nth-child(2) .rec-badge { animation-delay: .09s; }
 .rec-scroll.run .rec-card:nth-child(3) .rec-badge { animation-delay: .18s; }
 @keyframes rec-chip-in { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
-.rec-info { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 20px 16px; }
-.rec-txt { flex: 1; min-width: 0; }
-.rec-title { margin: 0 0 4px; font-family: var(--font-supreme-bold); font-size: 18px; line-height: 1.2; letter-spacing: -0.54px; color: var(--color-black); }
-.rec-meta { margin: 0; font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.5px; color: var(--color-neutral-500); }
+/* 653:8191, straight off the frame: info 300x78, 16px padding; the text column is 160
+   wide with the title at 18/22 and the meta row 16 tall, 4 between them; the button is a
+   fixed 108x36 parked at x176 (so 16 from the right wall). */
+/* gap 0, not 16: the frame puts the button at x176, which is exactly 16 (the padding) +
+   160 (the text column). Any gap pushes the row's min-content past 300 and the card's
+   automatic minimum size widens it past 308. */
+.rec-info { display: flex; align-items: flex-start; gap: 0; height: 78px; box-sizing: border-box; padding: 16px; }
+.rec-txt { flex: 0 0 160px; width: 160px; min-width: 0; }
+.rec-title { margin: 0 0 4px; font-family: var(--font-supreme-bold); font-size: 18px; line-height: 22px; letter-spacing: -0.54px; color: var(--color-black); }
+.rec-meta { margin: 0; font-family: var(--font-supreme); font-size: 13px; line-height: 16px; letter-spacing: -0.5px; color: var(--color-neutral-500); }
 .rec-start {
-  flex-shrink: 0;
-  display: flex; align-items: center; gap: 4px;
+  flex: none;
+  width: 108px; height: 36px;
+  box-sizing: border-box;
+  margin-top: 3px;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
   background: var(--color-red);
   color: #fff;
   border-radius: 999px;
-  padding: 6px 12px 6px 16px;
+  padding: 0;
   font-family: var(--font-supreme-bold);
   font-size: 14px;
   letter-spacing: -0.5px;
@@ -767,6 +783,12 @@
    value, meant it animated 0 to 0 and the section never appeared. */
 .rp-body > .rp-sec { opacity: 0; }
 .rp-body > .rp-sec.run { opacity: 1; animation: rp-rise .5s cubic-bezier(.2,.85,.3,1) both; }
+/* The first section is already on screen when the report lands, so hiding it left a
+   headed-but-empty gap that read as a broken page. Its title stays put and only the two
+   cards under it arrive. Every section below keeps the whole-block slide. */
+.rp-body > .rp-sec:first-of-type { opacity: 1; animation: none; }
+.rp-body > .rp-sec:first-of-type .rp-pair { opacity: 0; }
+.rp-body > .rp-sec:first-of-type.run .rp-pair { opacity: 1; animation: rp-rise .5s cubic-bezier(.2,.85,.3,1) both; }
 @keyframes rp-rise { from { opacity: 0; transform: translateY(18px); } }
 
 /* Day picker arrows. The forward arrow is dead on today — there is no tomorrow to

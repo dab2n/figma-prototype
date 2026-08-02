@@ -60,6 +60,10 @@
      the halfway mark the artwork is peach and white anyway, so nothing needs backing. */
   background: linear-gradient(180deg, #FA3030 0 40%, rgba(250,48,48,0) 56%);
   transform: scale(1.32);
+  /* Pressing Open drops the wash in from above before anything else moves — the screen
+     fills top to bottom, and only then does the score arrive. .recap-in is set on arrival
+     (recap.html); the resting transform has to be restated in the keyframe or the scale
+     would be dropped for the duration. */
   /* Kept on lighten. plus-lighter ADDS, and the clip's backing is dark grey rather than
      true black, so every channel gained ~26 — the whole frame came up washed, and where
      the blob's peach rim crossed the fill's ramp the two summed into a yellow band. On
@@ -68,6 +72,12 @@
   mix-blend-mode: lighten;
   pointer-events: none;
 }
+
+html.recap-in .recap-glow, html.recap-in .recap-fade { animation: recap-wash-down .42s cubic-bezier(.35,.9,.35,1) both; }
+@keyframes recap-wash-down { from { transform: translateY(-108%) scale(1.32); } to { transform: translateY(0) scale(1.32); } }
+/* .recap-fade has no scale of its own, so it gets its own keyframe. */
+html.recap-in .recap-fade { animation-name: recap-fade-down; }
+@keyframes recap-fade-down { from { transform: translateY(-108%); } to { transform: none; } }
 
 /* Everything else on the screen sits above the clip. */
 .recap-screen > *:not(.recap-clip) { z-index: 2; }
