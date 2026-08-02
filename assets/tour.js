@@ -139,8 +139,12 @@
       setTimeout(function () {
         var open = document.querySelector('.report-open');
         if (!open) return;
+        // A recording has no cursor and no finger, so the button has to say it was
+        // pressed: it darkens for a beat, then the page changes. Only this flow reaches
+        // here, so it is 프로토타입 2 only by construction.
+        open.classList.add('picked');
         sessionStorage.setItem(KEY, '12');
-        open.click();
+        setTimeout(function () { open.click(); }, 260);
       }, 1700);
     }, 2600);                                       // a beat to read "New Report"
   }
@@ -199,7 +203,9 @@
       Math.max(0, topIn(secs[2]) - 120),
       screen.scrollHeight - screen.clientHeight
     ];
-    var hold = [2400, 2600, 0];
+    // Landing Balance is one short move, so its stop does not need the dwell that
+    // Performance Scores does, where four cards animate in turn.
+    var hold = [1400, 2600, 0];
     var i = 0;
     // The hero's score and gauge land first (records.html adds rp-landed at 620ms); this
     // leaves a beat on top of that before anything moves.

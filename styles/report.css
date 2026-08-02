@@ -657,6 +657,9 @@
    (360-308)/2, so a centred card rests exactly at scrollLeft 0, 316 and the end. */
 .rec-scroll {
   display: flex; gap: 8px; overflow-x: auto;
+  /* Each card is its own height: the default stretch made the one-line card as tall as
+     the wrapped ones and left a band of empty white under its button. */
+  align-items: flex-start;
   /* 12px, matching .rp-sec — the first card's left edge lines up with the heading above
      it. It was 26 ((360-308)/2) to CENTRE a card; snapping to start instead is what lets
      the row keep one-card-per-flick while sitting on the section's own margin. */
@@ -713,28 +716,25 @@
   box-shadow: 0 0 12px rgba(0,0,0,0.12);
 }
 .rec-badge .badge-fire { width: 11px; height: 13px; display: block; flex: none; }
-/* The chip arrives when the row is scrolled to, sliding in from the card's right edge.
-   .run comes from scores.js, the same hook the score block and the highlight pair use. */
-.rec-badge { opacity: 0; }
-.rec-scroll.run .rec-badge { animation: rec-chip-in .46s cubic-bezier(.2,.85,.3,1) both; }
-.rec-scroll.run .rec-card:nth-child(2) .rec-badge { animation-delay: .09s; }
-.rec-scroll.run .rec-card:nth-child(3) .rec-badge { animation-delay: .18s; }
-@keyframes rec-chip-in { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: none; } }
+
 /* 653:8191, straight off the frame: info 300x78, 16px padding; the text column is 160
    wide with the title at 18/22 and the meta row 16 tall, 4 between them; the button is a
    fixed 108x36 parked at x176 (so 16 from the right wall). */
-/* gap 0, not 16: the frame puts the button at x176, which is exactly 16 (the padding) +
-   160 (the text column). Any gap pushes the row's min-content past 300 and the card's
-   automatic minimum size widens it past 308. */
-.rec-info { display: flex; align-items: flex-start; gap: 0; height: 78px; box-sizing: border-box; padding: 16px; }
-.rec-txt { flex: 0 0 160px; width: 160px; min-width: 0; }
+/* 16 on the sides and top, 20 at the foot, 20 minimum between the text and the button.
+   No fixed height: a title that wraps to two lines makes the container — and the card —
+   taller by exactly that line. One line comes out at 16 + 22 + 4 + 16 + 20 = 78, which is
+   the frame's own height (653:8191).
+   flex-basis 0 on the text column, not 160: its min-content would otherwise set the card's
+   automatic minimum size and push the card past 308. */
+.rec-info { display: flex; align-items: flex-start; gap: 20px; padding: 16px 16px 20px; }
+.rec-txt { flex: 1 1 0; min-width: 0; }
 .rec-title { margin: 0 0 4px; font-family: var(--font-supreme-bold); font-size: 18px; line-height: 22px; letter-spacing: -0.54px; color: var(--color-black); }
 .rec-meta { margin: 0; font-family: var(--font-supreme); font-size: 13px; line-height: 16px; letter-spacing: -0.5px; color: var(--color-neutral-500); }
 .rec-start {
   flex: none;
   width: 108px; height: 36px;
   box-sizing: border-box;
-  margin-top: 3px;
+  margin-top: 3px;   /* the frame parks it at y19 in a 78 box, 3 below the text's top */
   display: flex; align-items: center; justify-content: center; gap: 4px;
   background: var(--color-red);
   color: #fff;

@@ -48,6 +48,10 @@
   font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px;
 }
 .report-open img { width: 18px; height: 18px; filter: brightness(0) invert(1); }
+/* Set by tour.js just before it navigates: with no cursor on screen the recording needs
+   the button to show it was pressed. */
+.report-open { transition: filter .18s ease, transform .18s ease; }
+.report-open.picked { filter: brightness(.78); transform: scale(.96); }
 
 /* App bar: 66px tall (logo centered with 16px above/below), sitting flush against
    the card container below it (gap 0) — Figma home 108:16691. */

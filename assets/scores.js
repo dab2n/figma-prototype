@@ -45,17 +45,16 @@
   var blocks = [].slice.call(document.querySelectorAll('#rpScores, .rp-pair, .rec-scroll, .rp-body > .rp-sec'));
   if (!blocks.length) return;
   if (!window.IntersectionObserver) { blocks.forEach(function (b) { b.classList.add('run'); }); return; }
-  // The recommendation row waits until it is nearly all the way on screen. At 0.2 it
-  // tripped while the Performance Scores stop was being read — 42% of it is showing
-  // there — and the chips had already slid in by the time the row was scrolled to.
+  // One threshold for everything, including the recommendation row: it is already ~40%
+  // on screen at the Performance Scores stop and the two are read together, so they
+  // should arrive together.
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       if (!e.isIntersecting) return;
-      if (e.intersectionRatio < (e.target.classList.contains('rec-scroll') ? 0.75 : 0.2)) return;
       e.target.classList.add('run');
       io.unobserve(e.target);
     });
-  }, { root: blocks[0].closest('.screen'), threshold: [0.2, 0.5, 0.75, 0.95] });
+  }, { root: blocks[0].closest('.screen'), threshold: 0.2 });
   blocks.forEach(function (b) { io.observe(b); });
 
   // Once the hero's red band has scrolled past, the status bar is sitting on the page's
