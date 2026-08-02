@@ -178,14 +178,17 @@
 .dj-meta {
   position: absolute;
   left: 0; right: 0;
-  top: 165px;
+  /* Figma: 10 from the avatar down to the creator line, and 20 from the Sean pill down to
+     the sheet. The avatar's folded bottom is a fixed 144 into the hero and the header ends
+     at 231 (the clip-path edge at s=q=1), so those two gaps pin this block exactly. */
+  top: 154px;
   z-index: 5;
   text-align: center;
   color: #fff;
   opacity: calc(var(--q, 0) * 3.5 - 2.4);
   pointer-events: none;
 }
-.dj-meta .sub { margin: 0 0 10px; font-family: var(--font-supreme); font-size: 14px; letter-spacing: -0.42px; }
+.dj-meta .sub { margin: 0 0 13px; font-family: var(--font-supreme); font-size: 14px; letter-spacing: -0.42px; }
 
 
 /* ── What rises into the gap ──────────────────────────────────────────────── */

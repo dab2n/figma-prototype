@@ -26,9 +26,14 @@
 
   // .rolling fades the clip up once frames are actually coming (see packs.css). Bound
   // here rather than in the feed block so a solo hero gets it too if it ever wants it.
+  //
+  // It is never taken away again. Every card's poster is its own ARTWORK, not a frame of
+  // its clip — measured, the two differ by 44 to 118 of 255 — so fading back on pause
+  // swapped the picture a second time, and a card that scrolled in and then out changed
+  // twice. That is the blink. Paused now means "holds its last frame", so each card
+  // changes picture once, on the way in, and never changes back.
   clips.forEach(function (v) {
     v.addEventListener('playing', function () { v.classList.add('rolling'); });
-    v.addEventListener('pause',   function () { v.classList.remove('rolling'); });
   });
 
   var feed = document.querySelector('.pack-list');
