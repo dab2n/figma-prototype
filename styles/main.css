@@ -54,6 +54,19 @@ html:active-view-transition-type(card-open)::view-transition-new(root) {
 @keyframes vt-fade-out { to { opacity: 0; } }
 @keyframes vt-fade-in { from { opacity: 0; } }
 
+/* Session Recap -> the full report. The recap is a full-bleed red screen and the report
+   opens on the same wash, so the two dissolve rather than one sliding over the other —
+   a slide put a hard edge between two frames that are nearly the same picture. Same
+   easing on both halves, so their opacities sum to 1 and nothing shows through. */
+/* .45, not .58: the arriving snapshot is frozen for the whole transition, so every extra
+   frame is one the report spends standing still before its own wash rises. */
+html:active-view-transition-type(report-in)::view-transition-old(root) {
+  animation: vt-fade-out .45s cubic-bezier(.4,0,.25,1) both;
+}
+html:active-view-transition-type(report-in)::view-transition-new(root) {
+  animation: vt-fade-in .45s cubic-bezier(.4,0,.25,1) both;
+}
+
 /* Web-only side controls, parked outside the frame so they can never sit over the screen
    and never move: 196px is half the frame plus 16, and the frame only ever gets narrower
    (it scales down to fit). Injected on every page by assets/tour.js, so they stay put

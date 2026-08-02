@@ -212,6 +212,10 @@
    is why the number appeared, vanished, and came back. It stays a class rather than the
    default because Records (progress.html) shares this file and reveals none of it. */
 .rp-draw .arc-line { stroke-dasharray: 100; stroke-dashoffset: 100; }
+/* Two clearly different weights, because they are two beats: the track draws itself in
+   first as a faint guide, and the tail that follows the marker is the one with substance.
+   At the artwork's own 0.85 the two were near enough the same line. */
+.arc-line { stroke-opacity: .42; }
 .rp-draw .arc-dot, .rp-draw #arcVal, .rp-draw .arc-prog { opacity: 0; }
 .rp-draw .rp-big { opacity: 0; transform: translateY(22px); transition: opacity .4s ease, transform .52s cubic-bezier(.2,.8,.3,1); }
 .rp-play .arc-line { animation: arc-draw .6s cubic-bezier(.4,0,.2,1) both; }
