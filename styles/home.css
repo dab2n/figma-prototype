@@ -80,12 +80,21 @@
      horizontal scroller clips VERTICALLY too, and its clip edge used to sit exactly on
      the card's top edge (Figma gap 0) — the carousel was boxed in against the app bar
      above and the section below, and any glow met a straight container line instead of
-     air. 30 above and 60 below puts that line well clear of the card on both sides. */
-  padding-top: 30px;
-  margin-top: -30px;
-  padding-bottom: 60px;
-  margin-bottom: -60px;
+     air.
+     60/120 rather than 30/60: a box-shadow blur radius B is a Gaussian with sigma B/2,
+     and a Gaussian is still faintly painting out at ~1.5 sigma — so the 96px tail carries
+     roughly 70px past its shadow rect, not the 48 that half-the-radius suggests. 60px of
+     room cut it, and THAT was the straight edge under the carousel.
+     pointer-events is handed to the cards, because this padding now lies over the app bar
+     and over Recently Viewed, and a scroll container sitting on top of them would eat
+     their taps. */
+  padding-top: 60px;
+  margin-top: -60px;
+  padding-bottom: 120px;
+  margin-bottom: -120px;
+  pointer-events: none;
 }
+.hero-scroll > * { pointer-events: auto; }
 .hero-scroll::-webkit-scrollbar { display: none; }
 
 .hero-card {
@@ -94,11 +103,6 @@
   width: 319px;
   height: 326px;
   border-radius: 40px;
-  /* Figma's corner smoothing. A plain 40px arc meets the straight edge with a visible
-     kink; a squircle blends the curvature into it. The overflow clip and the box-shadow
-     both follow the corner shape, so the picture and the glow take the same outline.
-     Browsers without corner-shape simply keep the 40px radius. */
-  corner-shape: squircle;
   overflow: hidden;
   background-size: cover;
   background-position: center;
