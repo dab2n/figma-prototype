@@ -12,7 +12,12 @@
    moment the page scrolls that band away — everything under it is the near-white page.
    Inverting the same asset turns all twelve white fills black; the background comes with
    it so cards do not run under the time. .scrolled is set in scores.js. */
-.rp-screen .status-bar { background: transparent; transition: background .2s linear; }
+/* Red, not transparent: the wash (.rp-hero-bg) is what covers this strip, and while it is
+   travelling into place its top edge is below y0 — the page's own near-white showed
+   through above the status bar for those few hundred ms and read as a broken frame. The
+   hero's band is #FA3030 here anyway, so a fixed red under the bar is simply what is
+   already meant to be there. */
+.rp-screen .status-bar { background: #FA3030; transition: background .2s linear; }
 .rp-screen .statusbar-svg { transition: filter .2s linear; }
 .rp-screen.scrolled .status-bar { background: var(--color-neutral-100); }
 .rp-screen.scrolled .statusbar-svg { filter: invert(1); }
@@ -70,9 +75,9 @@
    The offset is the RESTING state (.rp-draw, set before the first paint), not just the
    animation's from-frame: with it only in the keyframe the wash sat at rest for a frame,
    jumped 110px the instant .rp-rise landed, and glided back. That jump was the 둠칫. */
-.rp-draw .rp-hero-bg { transform: translateY(140px); }
+.rp-draw .rp-hero-bg { transform: translateY(110px); }
 .rp-rise .rp-hero-bg { animation: rp-wash-rise .72s cubic-bezier(.2,.8,.25,1) both; }
-@keyframes rp-wash-rise { from { transform: translateY(140px); } to { transform: none; } }
+@keyframes rp-wash-rise { from { transform: translateY(110px); } to { transform: none; } }
 /* z-index only. This used to also set `position: relative`, which outranked the
    absolute placement below (`.rp-hero > *:not(...)` beats a bare `.rp-big`) and dropped
    the number, caption and gauge back into flow, each shoved down by its own `top`. */
@@ -232,6 +237,17 @@
    At the artwork's own 0.85 the two were near enough the same line. */
 .arc-line { stroke-opacity: .42; }
 .rp-draw .arc-dot, .rp-draw #arcVal, .rp-draw .arc-prog { opacity: 0; }
+/* Nothing on the gauge exists before the gauge does. The caption comes up as the track
+   draws, and the two end labels slide in after it has finished — left first, then right,
+   the direction the track was drawn in. */
+.rp-draw .rp-cap, .rp-draw .arc-end { opacity: 0; }
+.rp-play .rp-cap { animation: rp-cap-in .42s cubic-bezier(.2,.85,.3,1) .12s both; }
+@keyframes rp-cap-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.arc-end { transform-box: fill-box; transform-origin: center; }
+.rp-play .arc-end.l { animation: arc-end-l .38s cubic-bezier(.2,.85,.3,1) .62s both; }
+.rp-play .arc-end.r { animation: arc-end-r .38s cubic-bezier(.2,.85,.3,1) .76s both; }
+@keyframes arc-end-l { from { opacity: 0; transform: translateX(-7px); } to { opacity: 1; transform: none; } }
+@keyframes arc-end-r { from { opacity: 0; transform: translateX(7px); }  to { opacity: 1; transform: none; } }
 .rp-draw .rp-big { opacity: 0; transform: translateY(22px); transition: opacity .4s ease, transform .52s cubic-bezier(.2,.8,.3,1); }
 .rp-play .arc-line { animation: arc-draw .6s cubic-bezier(.4,0,.2,1) both; }
 @keyframes arc-draw { to { stroke-dashoffset: 0; } }
