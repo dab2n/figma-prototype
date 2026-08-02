@@ -11,7 +11,7 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#F2F2F2">
+<meta name="theme-color" content="#B6957A">
 <script defer src="assets/openext.js?v=980"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -19,54 +19,52 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>Newton — Where</title>
+<title>Newton — Side Scan</title>
 <link rel="stylesheet" href="styles/main.css?v=980">
 <link rel="stylesheet" href="styles/onboarding.css?v=980">
+<link rel="stylesheet" href="styles/scan.css?v=980">
 </head>
 <body>
 <div class="phone">
-  <div class="screen ob-screen" style="display:flex; flex-direction:column;">
+  <!-- .wide is in the markup, not added by script: the camera is already full
+       screen when this page arrives, so the cut from the intro is continuous. -->
+  <div class="screen ob-screen scan-screen wide" data-stage="side">
     <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
 
+    <div class="scan-cam">
+      <span class="scan-shot" style="background-image:url('assets/photos/scan-side.jpg?v=980')"></span>
+      <span class="scan-dim"></span>
+    </div>
+    <div class="scan-wash"></div>
+    <img class="scan-sil" src="assets/icons/scan-side-sil.svg?v=980" alt="">
+
     <div class="ob-appbar">
-      <a class="back" href="onboarding-goal.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
-      <a class="skip" href="scan-intro.html">Skip</a>
+      <a class="back" href="scan-front.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
+      <a class="skip" href="scan-ready.html">Skip</a>
     </div>
 
-    <div class="ob-title">
-      <h1>Where do you<br>usually work out?</h1>
-      <p>We’ll set the best default mode for you.</p>
-    </div>
-
-    <div class="ob-body" data-single>
-      <div class="ob-where">
-        <div class="col">
-          <div class="ob-wcard h" data-toggle>
-            <p class="t">Indoors</p><p class="s">Mostly indoors</p>
-            <div class="img" style="background-image:url('assets/photos/sport-hometraining.png?v=980')"></div>
-          </div>
-          <div class="ob-wcard h" data-toggle>
-            <p class="t">Outdoors</p><p class="s">Parks, tracks, and<br>another spots</p>
-            <div class="img" style="background-image:url('assets/photos/sport-running.png?v=980')"></div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="ob-wcard full" data-toggle>
-            <p class="t">Both</p><p class="s">Depends on the day</p>
-            <div class="img" style="background-image:url('assets/photos/sport-marathon.png?v=980'); background-position:center 80%;"></div>
-          </div>
-        </div>
+    <div class="ob-title scan-title">
+      <div class="t-guide">
+        <h1>Turn to the side,<br>full body visible</h1>
+        <p>Your whole body should be visible, head to toe</p>
+      </div>
+      <div class="t-scan">
+        <h1>Scanning<br><span class="scan-pct">0%</span></h1>
       </div>
     </div>
   </div>
 
-  <nav class="tabbar ob-bottom">
+  <nav class="tabbar ob-bottom scan-bottom">
     <div class="sb-row">
-      <a class="ob-next" href="scan-intro.html">Next <img src="assets/icons/arrow-right-lg.svg" alt=""></a>
+      <div class="scan-steps">
+        <span class="st"><i>1</i>Front</span>
+        <span class="st on"><i>2</i>Side</span>
+      </div>
+      <a class="ob-next" href="scan-ready.html">Next <img src="assets/icons/arrow-right-lg.svg" alt=""></a>
     </div>
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/onboarding.js?v=980"></script>
+<script src="assets/scan.js?v=980"></script>
 </body>
 </html>

@@ -10,8 +10,8 @@
 <script>if(innerWidth>400){document.documentElement.style.setProperty("--fit",Math.min(1,innerHeight/812).toFixed(4));try{if(localStorage.getItem("clay"))document.documentElement.className+=" clay";}catch(e){}}</script>
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#FA3030">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F2F2F2">
 <script defer src="assets/openext.js?v=980"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
@@ -19,25 +19,46 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<title>Newton — Welcome</title>
+<title>Newton — Body Profile</title>
 <link rel="stylesheet" href="styles/main.css?v=980">
 <link rel="stylesheet" href="styles/onboarding.css?v=980">
+<link rel="stylesheet" href="styles/scan.css?v=980">
 </head>
 <body>
 <div class="phone">
-  <div class="screen ob-splash">
-    <div class="status-bar on-dark"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
+  <div class="screen ob-screen scan-screen" data-stage="intro">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
 
-    <p class="ob-turn">Now, Your Turn!</p>
-    <div class="ob-logo"><img src="assets/icons/newton-logo.svg" alt="Newton"></div>
+    <div class="scan-cam">
+      <span class="scan-shot" style="background-image:url('assets/photos/scan-front.jpg?v=980')"></span>
+      <span class="scan-dim"></span>
+    </div>
+    <div class="scan-wash"></div>
 
-    <div class="ob-cta">
-      <a class="ob-get" href="onboarding-sport.html">Get Started <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></a>
-      <a class="ob-account" href="home.html">Already have an account</a>
+    <div class="ob-appbar">
+      <a class="back" href="onboarding-where.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
+      <a class="skip" href="scan-ready.html">Skip</a>
     </div>
 
-    <div class="home-indicator"><span></span></div>
+    <div class="ob-title scan-title">
+      <div class="t-guide">
+        <h1>Let’s set up your<br>body profile.</h1>
+        <p>Prop your phone up at eye level</p>
+      </div>
+    </div>
   </div>
+
+  <nav class="tabbar ob-bottom scan-bottom">
+    <div class="sb-row">
+      <div class="scan-steps">
+        <span class="st"><i>1</i>Front</span>
+        <span class="st"><i>2</i>Side</span>
+      </div>
+      <a class="ob-next" href="scan-front.html">Next <img src="assets/icons/arrow-right-lg.svg" alt=""></a>
+    </div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
 </div>
+<script src="assets/scan.js?v=980"></script>
 </body>
 </html>
