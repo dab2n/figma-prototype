@@ -457,7 +457,9 @@
      card is reached (or when the reading changes), and the transform loop is the idle
      undulation around wherever that is. Slow, shallow, and on three different periods
      so it never visibly repeats — the blob should look like it is flowing, not cycling. */
-  animation: lb-drift 11s ease-in-out infinite alternate;
+  /* 6s, not 11: the tour stops on this card for a couple of seconds, and at 11 that was
+     a sixth of one pass — the blob was technically moving and read as parked. */
+  animation: lb-drift 6s ease-in-out infinite alternate;
   /* The travel alone is a 27px slide inside a blob whose own blur is wider than that, so
      it never read as motion. The wash now ARRIVES: invisible until the card is scrolled
      to, then it comes up over 900ms while it slides off centre. */
@@ -465,17 +467,25 @@
   transition: left 1.2s cubic-bezier(.33, 0, .2, 1), opacity .9s ease-out;
 }
 .rp-sec.run .rp-balance .lb-heat { opacity: 1; }
-/* It has to look like it is flowing, not parked. The amplitude is roughly tripled and the
+/* It has to look like it is flowing, not parked. The travel is wider again (~1.5x) and the
    scale breathes on a different beat from the drift, so the blob's outline never settles
-   into a shape you can recognise coming back. */
+   into a shape you can recognise coming back. The card is 336x166 and the blob is 326x357
+   with its own heavy blur, so even at this amplitude no edge of it ever enters the frame. */
 @keyframes lb-drift {
-  0%   { transform: translate(-18px, -10px) scale(1.00, 1.06) rotate(0deg); }
-  18%  { transform: translate(-4px, 9px)    scale(1.10, 0.96) rotate(2.8deg); }
-  37%  { transform: translate(14px, -8px)   scale(1.04, 1.12) rotate(-2.2deg); }
-  56%  { transform: translate(20px, 6px)    scale(0.96, 1.02) rotate(3.4deg); }
-  74%  { transform: translate(2px, 13px)    scale(1.12, 0.94) rotate(-1.6deg); }
-  100% { transform: translate(-16px, -2px)  scale(1.02, 1.08) rotate(2.4deg); }
+  0%   { transform: translate(-28px, -15px) scale(1.00, 1.09) rotate(0deg); }
+  18%  { transform: translate(-6px, 14px)   scale(1.15, 0.94) rotate(4.2deg); }
+  37%  { transform: translate(22px, -12px)  scale(1.06, 1.18) rotate(-3.3deg); }
+  56%  { transform: translate(31px, 9px)    scale(0.94, 1.03) rotate(5.1deg); }
+  74%  { transform: translate(3px, 20px)    scale(1.18, 0.91) rotate(-2.4deg); }
+  100% { transform: translate(-25px, -3px)  scale(1.03, 1.12) rotate(3.6deg); }
 }
+/* The two readings arrive with the wash rather than being there before it — left first,
+   then right, the order the crosshair is read in. */
+.rp-balance .lb-read { opacity: 0; }
+.rp-sec.run .rp-balance .lb-read { opacity: 1; animation: lb-read-in .5s cubic-bezier(.2,.85,.3,1) both; }
+.rp-sec.run .rp-balance .lb-read.l { animation-delay: .34s; }
+.rp-sec.run .rp-balance .lb-read.r { animation-delay: .5s; }
+@keyframes lb-read-in { from { opacity: 0; transform: translateY(10px); } }
 /* The dotted prints, used as artwork rather than as a mask — the dots and their inner
    shading are in the file. Group 2147228966: 71px in, 25.3 down, 195.6 across. */
 .rp-balance .lb-foot {
@@ -787,6 +797,13 @@
   box-shadow: 0 0 12px rgba(0,0,0,0.12);
 }
 .rec-badge .badge-fire { width: 11px; height: 13px; display: block; flex: none; }
+/* A chip that belongs to its own picture rather than a white one laid on top: the shot's
+   dominant colour at 80% with a #ffffff 20% layer over it — the same two-layer build the
+   Packs badges use. --tint is per card, set in the markup from the file's own pixels. */
+.rec-badge-tint {
+  background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)),
+              rgba(var(--tint), 0.8);
+}
 
 /* 653:8191, straight off the frame: info 300x78, 16px padding; the text column is 160
    wide with the title at 18/22 and the meta row 16 tall, 4 between them; the button is a
@@ -869,6 +886,7 @@
 /* Nothing above should move for anyone who asked it not to — show the end state. */
 @media (prefers-reduced-motion: reduce) {
   .rp-balance .lb-heat { animation: none; opacity: 1; }
+  .rp-balance .lb-read { opacity: 1; animation: none; }
   .rp-scores .sc-n, .rp-scores .sc-tri { opacity: 1; animation: none; }
   .rp-hcard .badge svg { opacity: 1; transform: none; animation: none; }
   .rec-badge { opacity: 1; transform: none; animation: none; }

@@ -220,9 +220,11 @@
       Math.max(0, topIn(secs[2]) - 120),
       screen.scrollHeight - screen.clientHeight
     ];
-    // Landing Balance is one short move, so its stop does not need the dwell that
-    // Performance Scores does, where four cards animate in turn.
-    var hold = [1400, 2600, 0];
+    // Landing Balance used to get the short stop of the two, on the grounds that only one
+    // thing arrives there. It is not one thing: the wash comes up, slides to the heavier
+    // side over 1.2s, and then has to be seen FLOWING, and the two readings land after it.
+    // 2400 is that whole sequence plus a beat of the drift on its own.
+    var hold = [2400, 2600, 0];
     var i = 0;
     // Nothing moves until NEW Best has arrived and been seen. The report's entrance waits
     // for the page transition (records.html), so it starts ~450ms after this clock does;
