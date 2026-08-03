@@ -60,7 +60,12 @@
   position: absolute;
   top: -133px;
   left: -142px;
-  width: 660px; height: 651px;
+  /* Stretched down from the export's 651: at 651 the wash had already gone to the page's
+     near-white by the time it reached the gauge, so the arc — white on near-white — read
+     as a stub around the marker instead of a full sweep. The box is pulled DOWNWARD only
+     (top is untouched), which moves the falloff past the arc without opening a gap at the
+     top of the frame. */
+  width: 660px; height: 730px;
   object-fit: fill;
   z-index: 0;
   pointer-events: none;
