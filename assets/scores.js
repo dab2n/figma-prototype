@@ -4,7 +4,10 @@
   // the move toward the stronger foot is something you watch rather than something
   // that already happened before you got there.
   var seen = false, pending = null;
-  function target(l, r) { return (50 + ((r - l) / (l + r)) * 65).toFixed(1) + '%'; }
+  // 130, not 65. The gap here is 25 vs 32, which at 65 moved the core 27px inside a blob
+  // whose own blur is wider than that — technically off centre, visually parked. 130 makes
+  // it about 54px of a 336px card: it starts in the middle and you watch it go right.
+  function target(l, r) { return (50 + ((r - l) / (l + r)) * 130).toFixed(1) + '%'; }
   function paint(l, r) {
     document.querySelectorAll('.rp-balance').forEach(function (el) {
       el.style.setProperty('--heat-x', target(l, r));
@@ -29,7 +32,11 @@
           if (v) paint(v[0], v[1]);
           bo.disconnect();
         });
-      }, { root: card.closest('.screen'), threshold: 0.35 });
+      // 0.9, not 0.35: at a third on screen this fired while the page was still scrolling,
+      // so the core had already finished travelling by the time the card came to rest and
+      // there was nothing left to watch. It now starts from the middle with the card
+      // sitting still.
+      }, { root: card.closest('.screen'), threshold: 0.9 });
       bo.observe(card);
     } else {
       seen = true;

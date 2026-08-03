@@ -60,11 +60,15 @@ html:active-view-transition-type(card-open)::view-transition-new(root) {
    easing on both halves, so their opacities sum to 1 and nothing shows through. */
 /* .45, not .58: the arriving snapshot is frozen for the whole transition, so every extra
    frame is one the report spends standing still before its own wash rises. */
-html:active-view-transition-type(report-in)::view-transition-old(root) {
-  animation: vt-fade-out .45s cubic-bezier(.4,0,.25,1) both;
-}
+/* The OLD half does not fade. Two snapshots crossfading are composited, not added: at the
+   midpoint both sit at ~50% over the page behind them and the frame washes out — on this
+   pair, two red screens, that came out as a white flash that read as a fault. The recap
+   stays put at full strength and the report simply arrives on top of it, so the colour
+   never leaves and what moves is the report's own wash rising into place. */
+html:active-view-transition-type(report-in)::view-transition-old(root) { animation: none; }
 html:active-view-transition-type(report-in)::view-transition-new(root) {
   animation: vt-fade-in .45s cubic-bezier(.4,0,.25,1) both;
+  z-index: 2;
 }
 
 /* Web-only side controls, parked outside the frame so they can never sit over the screen
