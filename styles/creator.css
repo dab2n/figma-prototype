@@ -150,7 +150,9 @@
 }
 .process-graph .big-number .num { font-family: var(--font-offbit); font-weight: 700; font-size: 60px; line-height: 0.95; letter-spacing: 0; }
 .process-graph .big-number .unit { font-family: var(--font-supreme-bold); font-size: 18px; opacity: 0.6; letter-spacing: -0.54px; margin-top: 13px; }
-.process-graph .bars { display: flex; flex-direction: column; gap: 4px; height: 100%; }
+/* 2px between bars, per Figma. Nothing else moves: the bars are flex:1 in a
+   height:100% column, so the 4px the gaps give back is shared out among them. */
+.process-graph .bars { display: flex; flex-direction: column; gap: 2px; height: 100%; }
 .process-graph .bar {
   border-radius: 12px;
   display: flex;

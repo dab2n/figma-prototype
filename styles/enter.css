@@ -331,13 +331,13 @@
   left: 0; right: 0;
   bottom: 0;
   /* 200 reached well above the button and the softening was readable a third of the way
-     up the sheet; 150 puts the top of the ramp just over the pill. */
-  height: 150px;
+     up the sheet; 120 keeps the ramp inside the button's own row. */
+  height: 120px;
   z-index: 7;                       /* under .dj-bar and .dj-start, over the sheet */
   pointer-events: none;
   opacity: calc(var(--q, 0) * 5 - 1.2);
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 58%);
           mask-image: linear-gradient(180deg, transparent 0, #000 58%);
 }
