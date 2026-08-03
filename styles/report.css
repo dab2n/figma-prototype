@@ -135,9 +135,9 @@
   color: #fff;
 }
 .rp-big .sign { font-family: var(--font-supreme-bold); font-size: 22px; letter-spacing: -0.5px; padding-bottom: 12px; }
-/* 72 / 110% / -2%, the same as the recap's score — it is the same number arriving on
-   the next screen, so it is set the same way. */
-.rp-big .n { font-family: var(--font-offbit); font-weight: 700; font-size: 72px; line-height: 1.1; letter-spacing: -1.44px; }
+/* 54 / 110% / -2%, per Figma. It used to be 72 to match the recap's score — same number,
+   next screen — but the report is the sized-down one, so only this end moved. */
+.rp-big .n { font-family: var(--font-offbit); font-weight: 700; font-size: 54px; line-height: 1.1; letter-spacing: -1.08px; }
 .rp-big .u { font-family: var(--font-supreme-bold); font-size: 22px; letter-spacing: -0.5px; padding-bottom: 8px; }
 .rp-cap {
   position: absolute;
