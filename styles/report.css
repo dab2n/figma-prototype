@@ -273,6 +273,19 @@
 .rp-draw .rp-stat .delta.best { animation-play-state: paused; }
 .rp-landed .rp-stat .delta.best { animation-play-state: running; animation-delay: .85s; }
 
+/* Same hold for the metric row, and for the wash's rise (.rp-rise, top of this file) —
+   they are ONE arrival and have to start on one clock. The row's animations ran on page
+   load, which on the Report is behind the transition's frozen snapshot, so the cards were
+   already settled by the time the page was shown and the wash then slid up on its own a
+   beat later. Both now start when start() does (records.html), so the cards rise and the
+   gradient comes up with them.
+   Held with play-state rather than by moving the animation onto .rp-rise: Records
+   (progress.html) has none of these classes and its row must still arrive normally. */
+.rp-draw .rp-body > .rp-stats,
+.rp-draw .rp-stats .rp-stat { animation-play-state: paused; }
+.rp-rise .rp-body > .rp-stats,
+.rp-rise .rp-stats .rp-stat { animation-play-state: running; }
+
 /* ── Body ──────────────────────────────────────────────────────────────────
    Fades out of the hero wash so there is no seam where the artwork stops. */
 /* No top padding: .rp-hero is exactly as tall as the design's hero (462px once the
