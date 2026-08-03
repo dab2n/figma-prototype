@@ -319,11 +319,12 @@
 
 /* Figma 829:13834 / blur.svg — the veil the Start button sits on. Content scrolling into
    the bottom of the frame is blurred, ramping in from nothing so there is no edge where
-   it starts; the button is above it and untouched.
-   The svg is a 585x277 box holding one ellipse of #F2F2F2 at 14% stop alpha on a 20% fill,
-   under a 30.72 Gaussian. Everything below is that, scaled to the 360 frame (x0.6154):
-   the light is 165x55 at the box's middle, and its blur is 18.9 — which as a CSS radial
-   is simply a very soft, very faint bloom. It is subtle by design; the blur does the work.
+   it starts; the button is above it and untouched. The blur is the whole effect.
+   The svg also carries a soft #F2F2F2 bloom (165x55 at the box's middle, 2.8% alpha),
+   which was reproduced here as a radial and has been removed: this band only ever sits on
+   the pack sheet, which is #0A0A0A, and 2.8% white over near-black is not a subtle
+   warmth — it measured as a +5 lift over rgb(6,10,11) and read as a white smudge behind
+   the button on an otherwise flat black. A light bloom needs something light to bloom on.
    Tied to --q like the button, so 평소 keeps the hero's own blurred band and nothing else. */
 .dj-blur {
   position: absolute;
@@ -339,11 +340,6 @@
           backdrop-filter: blur(5px);
   -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 58%);
           mask-image: linear-gradient(180deg, transparent 0, #000 58%);
-}
-.dj-blur::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: radial-gradient(165px 55px at 50% 52%, rgba(242,242,242,0.028) 15%, rgba(242,242,242,0) 100%);
 }
 /* opacity alone leaves both Starts clickable, so the handover is a real one:
    enter.js sets .dj-open once the fold is past the crossfade. */
