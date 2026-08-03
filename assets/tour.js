@@ -222,22 +222,23 @@
     ];
     // Landing Balance used to get the short stop of the two, on the grounds that only one
     // thing arrives there. It is not one thing: the wash comes up, slides to the heavier
-    // side over 1.2s, and then has to be seen FLOWING, and the two readings land after it.
-    // 2400 is that whole sequence plus a beat of the drift on its own.
-    var hold = [2400, 2600, 0];
+    // side over 1s, and then has to be seen FLOWING, and the two readings land with it.
+    // 2000 is that whole sequence plus a beat of the drift on its own; Performance Scores
+    // gets 2200 for its four cards. Both trimmed 400ms to bring the film under 20s.
+    var hold = [2000, 2200, 0];
     var i = 0;
     // Nothing moves until NEW Best has arrived and been seen. The report's entrance waits
     // for the page transition (records.html), so it starts ~450ms after this clock does;
     // the wash leads by 350, rp-landed is 1000ms after THAT, NEW Best 850ms later over
-    // 500ms — fully in at about 3.15s. This leaves it alone on screen for the best part of
-    // a second before the page starts to travel.
+    // 500ms — fully in at about 3.15s. This leaves it alone on screen for half a second
+    // and then goes.
     setTimeout(function step() {
       if (i >= stops.length) { sessionStorage.removeItem(P2); return; }
       var n = i++;
       glide(screen, 'scrollTop', stops[n], n === 2 ? 1100 : 900, function () {
         setTimeout(step, hold[n]);
       });
-    }, 4050);
+    }, 3700);
   }
 
   var step = sessionStorage.getItem(KEY);
