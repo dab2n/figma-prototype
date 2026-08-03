@@ -12,8 +12,8 @@
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=996"></script>
-<script defer src="assets/tour.js?v=996"></script>
+<script defer src="assets/openext.js?v=998"></script>
+<script defer src="assets/tour.js?v=998"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,13 +21,13 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Session Recap</title>
-<link rel="stylesheet" href="styles/main.css?v=996">
-<link rel="stylesheet" href="styles/recap.css?v=996">
+<link rel="stylesheet" href="styles/main.css?v=998">
+<link rel="stylesheet" href="styles/recap.css?v=998">
 </head>
 <body>
 <div class="phone">
   <div class="screen recap-screen" id="recapScreen">
-    <video class="recap-clip" id="clip" src="assets/video/recap-overlay.mp4?v=996"
+    <video class="recap-clip" id="clip" src="assets/video/recap-overlay.mp4?v=998"
            muted playsinline webkit-playsinline autoplay loop preload="auto" disablepictureinpicture></video>
     <!-- Three layers, exactly as drawn: the black clip, its own fill whitening the foot,
          and the blur blob over both on lighten. Nothing else — the earlier full-frame
@@ -83,8 +83,8 @@
   // at a steady pace — so this is chosen, not derived. 1400, down from 2250: the ease-out
   // spends most of the run near the target anyway, so the shorter version reads as the
   // same move done briskly rather than as a rush. The score lands at 260 + 1400 = 1.66s
-  // from the first played frame, and tour.js leaves at 2.3s (see recap() there) — a beat
-  // to read "Outstanding Match", no dead air after it.
+  // from the first played frame, and "Outstanding Match" with it; tour.js presses View
+  // Full Report a second later (see recap() there), and the fade below takes it out.
   var COUNT = 1400;
   function revealScore() {
     if (scored) return;
@@ -113,6 +113,24 @@
   if (clip.readyState >= 2 && !clip.paused) requestAnimationFrame(begin);
   else clip.addEventListener('playing', function () { requestAnimationFrame(begin); }, { once: true });
   setTimeout(begin, 900);
+
+  // On the way out the clip fades where it stands (.recap-leaving, recap.css) and the
+  // navigation waits for it. Straight through the link, the outgoing snapshot froze the
+  // runner mid-stride and then dissolved that still — the motion stopped dead before the
+  // picture did. Here it is a handler on the link rather than anything in the tour, so
+  // the same thing happens whether a thumb pressed it or 프로토타입 2 did.
+  (function () {
+    var full = document.querySelector('.recap-full');
+    if (!full) return;
+    full.addEventListener('click', function (e) {
+      if (document.documentElement.classList.contains('recap-leaving')) return;
+      e.preventDefault();
+      document.documentElement.classList.add('recap-leaving');
+      // 460 of the 500ms fade: the last 40ms is under 10% opacity and the page change
+      // itself dissolves, so waiting for the full stop only adds dead time.
+      setTimeout(function () { location.href = full.href; }, 460);
+    });
+  })();
 
   // Autoplay can still be refused (Low Power Mode). Any first interaction starts it, and
   // so does coming back to the tab, so the screen is never left on a still frame.

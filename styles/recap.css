@@ -31,7 +31,13 @@
   filter: saturate(0.28) brightness(0.86);
   pointer-events: none;
   z-index: 0;
+  /* Leaving for the report: the runner fades out WHERE HE IS and still running, rather
+     than being frozen by the outgoing snapshot and cut. What is left under him is the
+     fill and the blob, which is the red the report opens on — so the two screens meet on
+     the same colour and the page change has nothing left to hide. */
+  transition: opacity .5s ease;
 }
+.recap-leaving .recap-clip { opacity: 0; }
 /* 달리기_션_흑's own fill: black to 78%, white at the foot. Under the blob, so the white
    it adds is what the blob's pale edge then sits on. */
 .recap-fade {

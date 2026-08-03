@@ -178,19 +178,19 @@
       full.click();
     }
     // Stay for the recap — the SCREEN's beat, not the clip's, counted from the first frame
-    // that actually played. The count now lands at 1.66s (260ms in, 1400ms of counting —
-    // see recap.html), so 2.3s leaves about two-thirds of a second on the finished score
-    // and then goes. It used to be 4.2s against a 2.25s count, which was a second and a
-    // half of the screen sitting still before anything happened.
+    // that actually played. The count lands at 1.66s (260ms in, 1400ms of counting — see
+    // recap.html) and "Outstanding Match" with it; a second on the finished score, then
+    // this fires. The link's own handler fades the runner out over the next 460ms before
+    // the page changes, so the exit is not in this number.
     var clip = document.querySelector('.recap-clip');
     if (clip) {
-      var HOLD = 2300;
+      var HOLD = 2660;
       if (clip.readyState >= 2 && !clip.paused) setTimeout(open, HOLD);
       else clip.addEventListener('playing', function () { setTimeout(open, HOLD); }, { once: true });
-      // Autoplay refused: go anyway. 3600, in step with the shorter hold — recap.html
-      // starts the count on its own 900ms clock in that case, so the score has still
-      // landed (900 + 260 + 1400 = 2.56s) well before this fires.
-      setTimeout(open, 3600);
+      // Autoplay refused: go anyway. In step with the hold — recap.html starts the count
+      // on its own 900ms clock in that case, so the score has still landed
+      // (900 + 260 + 1400 = 2.56s) with a beat to spare before this fires.
+      setTimeout(open, 4000);
     } else {
       full.addEventListener('animationstart', function () { setTimeout(open, 860); }, { once: true });
       setTimeout(open, 5000);        // animations off: go anyway
@@ -224,15 +224,18 @@
     // Performance Scores does, where four cards animate in turn.
     var hold = [1400, 2600, 0];
     var i = 0;
-    // The hero's score and gauge land first (records.html adds rp-landed at 620ms); this
-    // leaves a beat on top of that before anything moves.
+    // Nothing moves until NEW Best has arrived and been seen. The report's entrance waits
+    // for the page transition (records.html), so it starts ~450ms after this clock does;
+    // rp-landed is 1000ms after that, NEW Best 850ms after THAT over 500ms — fully in at
+    // about 2.8s. This leaves it alone on screen for the best part of a second before the
+    // page starts to travel. (It used to go at 2.4s, which was while it was still moving.)
     setTimeout(function step() {
       if (i >= stops.length) { sessionStorage.removeItem(P2); return; }
       var n = i++;
       glide(screen, 'scrollTop', stops[n], n === 2 ? 1100 : 900, function () {
         setTimeout(step, hold[n]);
       });
-    }, 2400);
+    }, 3700);
   }
 
   var step = sessionStorage.getItem(KEY);

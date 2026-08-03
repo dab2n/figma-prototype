@@ -248,14 +248,16 @@
 .arc-line { stroke-opacity: .42; }
 .rp-draw .arc-dot, .rp-draw #arcVal, .rp-draw .arc-prog { opacity: 0; }
 /* Nothing on the gauge exists before the gauge does. The caption comes up as the track
-   draws, and the two end labels slide in after it has finished — left first, then right,
-   the direction the track was drawn in. */
+   draws, and the two end labels RIDE THAT DRAW — 0 as the line leaves the left end, 100
+   as it reaches the right — so the scale arrives as one thing with the track it belongs
+   to. They used to wait until after it had finished (.62/.76), which put them on top of
+   the marker's beat instead and left the track drawing to nothing at either end. */
 .rp-draw .rp-cap, .rp-draw .arc-end { opacity: 0; }
 .rp-play .rp-cap { animation: rp-cap-in .42s cubic-bezier(.2,.85,.3,1) .12s both; }
 @keyframes rp-cap-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .arc-end { transform-box: fill-box; transform-origin: center; }
-.rp-play .arc-end.l { animation: arc-end-l .38s cubic-bezier(.2,.85,.3,1) .62s both; }
-.rp-play .arc-end.r { animation: arc-end-r .38s cubic-bezier(.2,.85,.3,1) .76s both; }
+.rp-play .arc-end.l { animation: arc-end-l .38s cubic-bezier(.2,.85,.3,1) .16s both; }
+.rp-play .arc-end.r { animation: arc-end-r .38s cubic-bezier(.2,.85,.3,1) .46s both; }
 @keyframes arc-end-l { from { opacity: 0; transform: translateX(-7px); } to { opacity: 1; transform: none; } }
 @keyframes arc-end-r { from { opacity: 0; transform: translateX(7px); }  to { opacity: 1; transform: none; } }
 .rp-draw .rp-big { opacity: 0; transform: translateY(22px); transition: opacity .4s ease, transform .52s cubic-bezier(.2,.8,.3,1); }
