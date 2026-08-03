@@ -177,16 +177,20 @@
       sessionStorage.setItem(KEY, '13');
       full.click();
     }
-    // Stay for the recap. This used to leave at 70% of the clip, which was 4.2s of a 6.0s
-    // one-pass film; the clip is now a 0.83s stride loop, so that fraction would cut at
-    // 0.6s — before the score has finished counting. The hold is the SCREEN's, not the
-    // clip's: 4.2s, the same beat, counted from the first frame that actually played.
+    // Stay for the recap — the SCREEN's beat, not the clip's, counted from the first frame
+    // that actually played. The count now lands at 1.66s (260ms in, 1400ms of counting —
+    // see recap.html), so 2.3s leaves about two-thirds of a second on the finished score
+    // and then goes. It used to be 4.2s against a 2.25s count, which was a second and a
+    // half of the screen sitting still before anything happened.
     var clip = document.querySelector('.recap-clip');
     if (clip) {
-      var HOLD = 4200;
+      var HOLD = 2300;
       if (clip.readyState >= 2 && !clip.paused) setTimeout(open, HOLD);
       else clip.addEventListener('playing', function () { setTimeout(open, HOLD); }, { once: true });
-      setTimeout(open, 6000);          // autoplay refused: go anyway
+      // Autoplay refused: go anyway. 3600, in step with the shorter hold — recap.html
+      // starts the count on its own 900ms clock in that case, so the score has still
+      // landed (900 + 260 + 1400 = 2.56s) well before this fires.
+      setTimeout(open, 3600);
     } else {
       full.addEventListener('animationstart', function () { setTimeout(open, 860); }, { once: true });
       setTimeout(open, 5000);        // animations off: go anyway
