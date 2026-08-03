@@ -173,6 +173,16 @@
 .bar-stretch { flex: 1; width: 54%;  margin-left: auto; --start: 26%; background: linear-gradient(270deg, #D1FEFF 0%, #FEC389 6.5%, #FE6E3C 16.8%, #FA3030 41.7%); }
 .bar-learn   { flex: 1; width: 67%;  margin-left: auto; --start: 28%; background: linear-gradient(90deg, #FA3030 58.3%, #FE6E3C 83%, #FEC389 93.5%, #D1FEFF 100%); }
 .bar-run     { flex: 1; width: 100%; margin-left: auto; --start: 47%; background: var(--color-neutral-700); }
+/* 20 outside / 18 where a bar sits in a corner of the graph area / 12 everywhere else.
+   A bar in a corner has to follow the card's curve or the two arcs fight; a 12 inside a
+   20 leaves the bar looking squarer than the box it is in, which is what read as wrong.
+   Only the corners that actually meet one: the bars are right-aligned, so STRETCH owns
+   the top right and RUN — the only full-width bar — owns both bottom corners. LEARN
+   touches no corner and stays 12 all round.
+   Scoped to .process-graph so these outrank the blanket `.process-graph .bar` above —
+   a bare .bar-run loses to it and the corners stayed at 12. */
+.process-graph .bar-stretch { border-top-right-radius: 18px; }
+.process-graph .bar-run { border-bottom-left-radius: 18px; border-bottom-right-radius: 18px; }
 
 /* Resting state until the card is actually looked at (assets/process.js adds .animate
    when it scrolls into view). --start is the stub width: narrow, but wide enough to
