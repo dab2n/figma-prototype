@@ -15,10 +15,10 @@ document.documentElement.className+=" rp-draw";</script>
 <meta name="viewport" content="width=360, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=1001"></script>
-<script defer src="assets/tour.js?v=1001"></script>
-<script defer src="assets/gauge.js?v=1001"></script>
-<script defer src="assets/scores.js?v=1001"></script>
+<script defer src="assets/openext.js?v=1002"></script>
+<script defer src="assets/tour.js?v=1002"></script>
+<script defer src="assets/gauge.js?v=1002"></script>
+<script defer src="assets/scores.js?v=1002"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -26,8 +26,8 @@ document.documentElement.className+=" rp-draw";</script>
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Report</title>
-<link rel="stylesheet" href="styles/main.css?v=1001">
-<link rel="stylesheet" href="styles/report.css?v=1001">
+<link rel="stylesheet" href="styles/main.css?v=1002">
+<link rel="stylesheet" href="styles/report.css?v=1002">
 </head>
 <body>
 <div class="phone">
@@ -137,21 +137,21 @@ document.documentElement.className+=" rp-draw";</script>
         <div class="rp-scores" id="rpScores">
           <div class="sc ag" style="--i:0">
             <p class="sc-n">51</p>
-            <img class="sc-art" src="assets/photos/score-agility.png?v=1001" alt="">
+            <img class="sc-art" src="assets/photos/score-agility.png?v=1002" alt="">
             <span class="sc-dash"></span>
             <span class="sc-tri"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M2.8 2.4 H9.2 L6 7.4 Z" fill="#FA3030" stroke="#FA3030" stroke-width="2.4" stroke-linejoin="round"/></svg></span>
             <p class="sc-l">Agility</p>
           </div>
           <div class="sc en" style="--i:1">
             <p class="sc-n">61</p>
-            <img class="sc-art" src="assets/photos/score-endurance.png?v=1001" alt="">
+            <img class="sc-art" src="assets/photos/score-endurance.png?v=1002" alt="">
             <span class="sc-track"></span>
             <span class="sc-tri"><svg viewBox="0 0 12 9" aria-hidden="true"><path d="M2.8 2.4 H9.2 L6 7.4 Z" fill="#FA3030" stroke="#FA3030" stroke-width="2.4" stroke-linejoin="round"/></svg></span>
             <p class="sc-l">Endurance</p>
           </div>
           <div class="sc rh" style="--i:2">
             <p class="sc-n">72</p>
-            <img class="sc-art" src="assets/photos/score-rhythm.png?v=1001" alt="">
+            <img class="sc-art" src="assets/photos/score-rhythm.png?v=1002" alt="">
             <span class="sc-dash a"></span><span class="sc-dash b"></span><span class="sc-dash c"></span>
             <p class="sc-l">Rhythm</p>
           </div>
@@ -172,14 +172,14 @@ document.documentElement.className+=" rp-draw";</script>
                  until the two are clear of each other and the whole stride still fits. -->
             <!-- --tint is the shot's own dominant colour, quantised off the file:
                  rgb(204,156,108) is 12.7% of its pixels, the court's warm wood. -->
-            <div class="rec-thumb" style="background-image:url('assets/photos/rec-curry-step.jpg?v=1001');"><span class="rec-badge rec-badge-tint" style="--tint:204,156,108"><img class="badge-fire" src="assets/icons/badge-fire.svg" alt="">Boosts Agility</span></div>
+            <div class="rec-thumb" style="background-image:url('assets/photos/rec-curry-step.jpg?v=1002');"><span class="rec-badge rec-badge-tint" style="--tint:204,156,108"><img class="badge-fire" src="assets/icons/badge-fire.svg" alt="">Boosts Agility</span></div>
             <div class="rec-info">
               <div class="rec-txt"><p class="rec-title">Curry's Step Back</p><p class="rec-meta">Pro Pack · 7m</p></div>
               <span class="rec-start">Start now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
             </div>
           </a>
           <a class="rec-card" href="pyeongso.html?pack=strength">
-            <div class="rec-thumb rec-dark" style="background-image:url('assets/photos/rec-strength.jpg?v=1001');"><span class="rec-badge">HOT</span></div>
+            <div class="rec-thumb rec-dark" style="background-image:url('assets/photos/rec-strength.jpg?v=1002');"><span class="rec-badge">HOT</span></div>
             <div class="rec-info">
               <!-- One line, like the card to its left: the text column is 140px and the
                    old title measured 300, so it wrapped and made this card 22px taller
@@ -189,7 +189,7 @@ document.documentElement.className+=" rp-draw";</script>
             </div>
           </a>
           <a class="rec-card" href="pyeongso.html?pack=ladder">
-            <div class="rec-thumb rec-dark" style="background-image:url('assets/photos/rec-ladder.jpg?v=1001');"><span class="rec-badge">New</span></div>
+            <div class="rec-thumb rec-dark" style="background-image:url('assets/photos/rec-ladder.jpg?v=1002');"><span class="rec-badge">New</span></div>
             <div class="rec-info">
               <div class="rec-txt"><p class="rec-title">ladder Footwork Drills</p><p class="rec-meta">Pro Pack · 7m</p></div>
               <span class="rec-start">Start now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
@@ -271,15 +271,22 @@ var RP_SCORE = 78.8;
   function start() {
     if (started) return;
     started = true;
-    root.classList.add('rp-rise', 'rp-play');
-    // 1000, not 620. The track takes 600ms to draw and the marker's tail used to set off
-    // 20ms after it landed — two beats with no gap between them, so they read as one
-    // thing arriving. The extra 380ms is the gap: the track and its 0/100 finish and are
-    // READ, and only then does the tail sweep out along it.
+    // The WASH GOES FIRST and everything else follows it. rp-rise carries the gradient's
+    // 720ms slide up; rp-play is what releases the metric row, the caption, the track and
+    // its 0/100. Landing them all on one frame made the page arrive already busy — the
+    // gradient had not travelled anywhere before the rest started moving. LEAD is the
+    // gap: half the wash's move, so it is visibly on its way and not yet finished.
+    var LEAD = 350;
+    root.classList.add('rp-rise');
+    setTimeout(function () { root.classList.add('rp-play'); }, LEAD);
+    // 1000 after rp-play, not 620. The track takes 600ms to draw and the marker's tail
+    // used to set off 20ms after it landed — two beats with no gap between them, so they
+    // read as one thing arriving. The extra 380ms is the gap: the track and its 0/100
+    // finish and are READ, and only then does the tail sweep out along it.
     setTimeout(function () {
       root.classList.add('rp-landed');
       window.rpGauge.to(RP_SCORE, RP_SCORE, { noCount: true });
-    }, 1000);
+    }, LEAD + 1000);
   }
   // The load fallback used to fire unconditionally, and it WON: pagereveal happens first
   // but its promise resolves 450ms later, while load lands within a few frames of it. So

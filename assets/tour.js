@@ -228,16 +228,16 @@
     var i = 0;
     // Nothing moves until NEW Best has arrived and been seen. The report's entrance waits
     // for the page transition (records.html), so it starts ~450ms after this clock does;
-    // rp-landed is 1000ms after that, NEW Best 850ms after THAT over 500ms — fully in at
-    // about 2.8s. This leaves it alone on screen for the best part of a second before the
-    // page starts to travel. (It used to go at 2.4s, which was while it was still moving.)
+    // the wash leads by 350, rp-landed is 1000ms after THAT, NEW Best 850ms later over
+    // 500ms — fully in at about 3.15s. This leaves it alone on screen for the best part of
+    // a second before the page starts to travel.
     setTimeout(function step() {
       if (i >= stops.length) { sessionStorage.removeItem(P2); return; }
       var n = i++;
       glide(screen, 'scrollTop', stops[n], n === 2 ? 1100 : 900, function () {
         setTimeout(step, hold[n]);
       });
-    }, 3700);
+    }, 4050);
   }
 
   var step = sessionStorage.getItem(KEY);

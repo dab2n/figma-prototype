@@ -273,18 +273,17 @@
 .rp-draw .rp-stat .delta.best { animation-play-state: paused; }
 .rp-landed .rp-stat .delta.best { animation-play-state: running; animation-delay: .85s; }
 
-/* Same hold for the metric row, and for the wash's rise (.rp-rise, top of this file) —
-   they are ONE arrival and have to start on one clock. The row's animations ran on page
-   load, which on the Report is behind the transition's frozen snapshot, so the cards were
-   already settled by the time the page was shown and the wash then slid up on its own a
-   beat later. Both now start when start() does (records.html), so the cards rise and the
-   gradient comes up with them.
-   Held with play-state rather than by moving the animation onto .rp-rise: Records
-   (progress.html) has none of these classes and its row must still arrive normally. */
+/* Same hold for the metric row. Its animations ran on page load, which on the Report is
+   behind the transition's frozen snapshot, so the cards were already settled by the time
+   the page was shown and the wash then slid up on its own a beat later.
+   Released on .rp-play, not .rp-rise: the wash gets its 350ms head start (records.html)
+   and the row comes in behind it, along with the caption and the gauge's track.
+   Held with play-state rather than by moving the animation onto the class: Records
+   (progress.html) has none of these and its row must still arrive normally. */
 .rp-draw .rp-body > .rp-stats,
 .rp-draw .rp-stats .rp-stat { animation-play-state: paused; }
-.rp-rise .rp-body > .rp-stats,
-.rp-rise .rp-stats .rp-stat { animation-play-state: running; }
+.rp-play .rp-body > .rp-stats,
+.rp-play .rp-stats .rp-stat { animation-play-state: running; }
 
 /* ── Body ──────────────────────────────────────────────────────────────────
    Fades out of the hero wash so there is no seam where the artwork stops. */
@@ -461,10 +460,14 @@
      a sixth of one pass — the blob was technically moving and read as parked. */
   animation: lb-drift 6s ease-in-out infinite alternate;
   /* The travel alone is a 27px slide inside a blob whose own blur is wider than that, so
-     it never read as motion. The wash now ARRIVES: invisible until the card is scrolled
-     to, then it comes up over 900ms while it slides off centre. */
+     it never read as motion. The wash ARRIVES: invisible until the card is scrolled to,
+     then it comes up while it slides off centre.
+     Both are front-loaded now and the fade is half what it was. At .9s ease-out the blob
+     was still coming up when the readings had already landed, and the old ease-IN travel
+     curve put its movement in the second half — so the motion started well after the
+     numbers did. It has to begin with them. */
   opacity: 0;
-  transition: left 1.2s cubic-bezier(.33, 0, .2, 1), opacity .9s ease-out;
+  transition: left 1s cubic-bezier(.2, .8, .3, 1), opacity .45s ease-out;
 }
 .rp-sec.run .rp-balance .lb-heat { opacity: 1; }
 /* It has to look like it is flowing, not parked. The travel is wider again (~1.5x) and the
@@ -479,12 +482,13 @@
   74%  { transform: translate(3px, 20px)    scale(1.18, 0.91) rotate(-2.4deg); }
   100% { transform: translate(-25px, -3px)  scale(1.03, 1.12) rotate(3.6deg); }
 }
-/* The two readings arrive with the wash rather than being there before it — left first,
-   then right, the order the crosshair is read in. */
+/* The two readings arrive WITH the wash's move, not after it — left first, then right,
+   the order the crosshair is read in. The left one is on the same clock as the travel
+   above so the blob is visibly sliding while the number comes up under it. */
 .rp-balance .lb-read { opacity: 0; }
 .rp-sec.run .rp-balance .lb-read { opacity: 1; animation: lb-read-in .5s cubic-bezier(.2,.85,.3,1) both; }
-.rp-sec.run .rp-balance .lb-read.l { animation-delay: .34s; }
-.rp-sec.run .rp-balance .lb-read.r { animation-delay: .5s; }
+.rp-sec.run .rp-balance .lb-read.l { animation-delay: .04s; }
+.rp-sec.run .rp-balance .lb-read.r { animation-delay: .18s; }
 @keyframes lb-read-in { from { opacity: 0; transform: translateY(10px); } }
 /* The dotted prints, used as artwork rather than as a mask — the dots and their inner
    shading are in the file. Group 2147228966: 71px in, 25.3 down, 195.6 across. */
@@ -803,6 +807,9 @@
 .rec-badge-tint {
   background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)),
               rgba(var(--tint), 0.8);
+  /* neutral-600 was chosen against a white chip; on the tan it measures under 3:1 and
+     the label went soft. Near-black against the rendered rgb(205,168,131) is about 8:1. */
+  color: #141A1A;
 }
 
 /* 653:8191, straight off the frame: info 300x78, 16px padding; the text column is 160
