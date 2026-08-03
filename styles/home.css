@@ -33,7 +33,7 @@
   /* Same curve and the same beat as the frame it rises into (home.html's reveal), so the
      strip and its label read as one thing settling rather than two. */
   transform: translateY(12px);
-  transition: transform .6s cubic-bezier(.32,.72,0,1) .1s;
+  transition: transform 1s cubic-bezier(.32,.72,0,1) .12s;
 }
 .phone.notif-on .notif-new { transform: none; }
 .notif-dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; }
