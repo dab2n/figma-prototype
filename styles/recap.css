@@ -31,11 +31,15 @@
   filter: saturate(0.28) brightness(0.86);
   pointer-events: none;
   z-index: 0;
-  /* Leaving for the report: the runner fades out WHERE HE IS and still running, rather
-     than being frozen by the outgoing snapshot and cut. What is left under him is the
-     fill and the blob, which is the red the report opens on — so the two screens meet on
-     the same colour and the page change has nothing left to hide. */
-  transition: opacity .5s ease;
+  /* Leaving for the report: the runner goes TRANSPARENT where he is and still running,
+     rather than being frozen by the outgoing snapshot and cut. What shows through him is
+     the fill and the blob, which is the red the report opens on — so the two screens meet
+     on the same colour.
+     .9s against a 300ms wait before the page changes (recap.html), which is the point: he
+     is only about 40% of the way out when the pages start to cross, so he is still there,
+     visibly thinning, AS the report arrives. Faded all the way first, the screen just sat
+     empty for a moment and the two things read as separate events. */
+  transition: opacity .9s ease;
 }
 .recap-leaving .recap-clip { opacity: 0; }
 /* 달리기_션_흑's own fill: black to 78%, white at the foot. Under the blob, so the white
