@@ -95,7 +95,13 @@
     if (e.viewTransition && isStep(to)) e.viewTransition.skipTransition();
   });
   window.addEventListener('pagereveal', function (e) {
-    var from = (e.activation && e.activation.from && e.activation.from.url) || '';
+    // document.referrer as the fallback: PageRevealEvent.activation comes back null in
+  // some navigations (measured — `act=false` on a plain same-origin link navigation),
+  // and with no `from` this guard bailed, the type was never added, and the transition
+  // ran under the untyped `animation: none` rule — a hard cut where the design has a
+  // half-second dissolve. The referrer is the same URL and is always there for a
+  // same-origin link navigation.
+  var from = (e.activation && e.activation.from && e.activation.from.url) || document.referrer || '';
     if (e.viewTransition && isStep(from)) e.viewTransition.skipTransition();
   });
 

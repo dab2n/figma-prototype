@@ -18,6 +18,17 @@
    Below 0.2 the Explore bar is simply behind the 평소 bar. Change one constant and every
    other one has to move with it. */
 
+/* THE ARRIVAL STATE, in CSS. enter.js opens the page on 1회 진입 (`lead = STOP`, so
+   p 0.2 / s 1 / q 0) — but it is a deferred script, and until it has run its first paint
+   every var(--s, 0) below falls back to 평소. That first frame is real: the bottom bar
+   showed "877 joined this week" and then flipped to Explore Packs a frame or two later.
+   It is worse than a flicker on a cross-document view transition, which freezes the
+   incoming document's FIRST frame for the length of the fade — the wrong bar then sits
+   there for the whole half second.
+   Declared, not defaulted per-var: enter.js writes these as inline styles, which outrank
+   a stylesheet, so this only ever describes the state before the first paint. */
+:root, .dj-screen { --p: 0.2; --s: 1; --q: 0; }
+
 /* Vertical only. Left as auto, the horizontal axis rubber-bands under a sideways drag
    and the 16px content margins visibly slide with it. */
 .dj-screen { background: var(--color-black); overflow-x: hidden; overscroll-behavior-x: none; touch-action: pan-y; }
