@@ -42,14 +42,18 @@ html:active-view-transition-type(detail-out)::view-transition-new(root) { animat
    stretched copy of the card sitting over the new page. The card says it was chosen (see
    .pack-card.picked in packs.css) and the two pages simply dissolve.
 
-   Both halves share one easing, so their opacities sum to 1 at every instant: no dip to
-   the background mid-way. The root is the ONLY thing in the transition, so the status bar
-   is not in it and cannot move. */
-html:active-view-transition-type(card-open)::view-transition-old(root) {
-  animation: vt-fade-out .58s cubic-bezier(.4,0,.25,1) both;
-}
+   The old half does NOT fade — the same reason report-in stopped fading its own (see
+   below). Matched easings do not save a crossfade: the two snapshots are COMPOSITED, so
+   at the midpoint the canvas behind them shows through both. Measured on the clay export,
+   the white margin round the frame sank 255 -> 210 -> 255 across 40 frames, which is the
+   surround going grey and back for half a second. The old page simply stays put at full
+   strength and the new one arrives on top of it, so nothing behind is ever visible.
+   The root is the ONLY thing in the transition, so the status bar is not in it and
+   cannot move. */
+html:active-view-transition-type(card-open)::view-transition-old(root) { animation: none; }
 html:active-view-transition-type(card-open)::view-transition-new(root) {
   animation: vt-fade-in .58s cubic-bezier(.4,0,.25,1) both;
+  z-index: 2;
 }
 @keyframes vt-fade-out { to { opacity: 0; } }
 @keyframes vt-fade-in { from { opacity: 0; } }
