@@ -235,7 +235,13 @@
     setTimeout(function step() {
       if (i >= stops.length) { sessionStorage.removeItem(P2); return; }
       var n = i++;
-      glide(screen, 'scrollTop', stops[n], n === 2 ? 1100 : 900, function () {
+      // One reading speed, not one duration. A fixed 900ms made the three legs run at
+      // 491, 676 and 179 px/s — the middle one crossed most of a 700px frame in a
+      // second, which is why the report read as being yanked past rather than scrolled.
+      // 0.30 px/ms is a pace you can actually follow, and it is now the same on all
+      // three; the clamps only keep a very short or very long leg sane.
+      var far = Math.abs(stops[n] - screen.scrollTop);
+      glide(screen, 'scrollTop', stops[n], Math.max(600, Math.min(2200, Math.round(far / 0.30))), function () {
         setTimeout(step, hold[n]);
       });
     }, 3700);

@@ -452,36 +452,17 @@
   width: 326px; height: 357px;
   margin: -172px 0 0 -218.7px;   /* puts the artwork's own core on that point */
   background: url('../assets/photos/landing-gradient.svg') no-repeat center / 100% 100%;
-  /* Two separate motions on purpose: `left` carries it to the stronger side when the
-     card is reached (or when the reading changes), and the transform loop is the idle
-     undulation around wherever that is. Slow, shallow, and on three different periods
-     so it never visibly repeats — the blob should look like it is flowing, not cycling. */
-  /* 6s, not 11: the tour stops on this card for a couple of seconds, and at 11 that was
-     a sixth of one pass — the blob was technically moving and read as parked. */
-  animation: lb-drift 6s ease-in-out infinite alternate;
-  /* The travel alone is a 27px slide inside a blob whose own blur is wider than that, so
-     it never read as motion. The wash ARRIVES: invisible until the card is scrolled to,
-     then it comes up while it slides off centre.
-     Both are front-loaded now and the fade is half what it was. At .9s ease-out the blob
-     was still coming up when the readings had already landed, and the old ease-IN travel
-     curve put its movement in the second half — so the motion started well after the
-     numbers did. It has to begin with them. */
+  /* ONE motion: it arrives centred, sits there for a beat, then goes right. There used
+     to be an idle `lb-drift` loop on top of the travel, running `alternate` — so the
+     blob walked back the way it came every 6s, and during the travel the two motions
+     fought. That reversal is what read as the wash wobbling instead of moving.
+     The 350ms delay is the beat at the centre: the blob has to be SEEN in the middle
+     before it leaves, or the move has nothing to be measured against. Fade is shorter
+     than the travel so it is fully up while it is still going. */
   opacity: 0;
-  transition: left 1s cubic-bezier(.2, .8, .3, 1), opacity .45s ease-out;
+  transition: left 1.3s cubic-bezier(.2, .8, .3, 1) .35s, opacity .45s ease-out;
 }
 .rp-sec.run .rp-balance .lb-heat { opacity: 1; }
-/* It has to look like it is flowing, not parked. The travel is wider again (~1.5x) and the
-   scale breathes on a different beat from the drift, so the blob's outline never settles
-   into a shape you can recognise coming back. The card is 336x166 and the blob is 326x357
-   with its own heavy blur, so even at this amplitude no edge of it ever enters the frame. */
-@keyframes lb-drift {
-  0%   { transform: translate(-28px, -15px) scale(1.00, 1.09) rotate(0deg); }
-  18%  { transform: translate(-6px, 14px)   scale(1.15, 0.94) rotate(4.2deg); }
-  37%  { transform: translate(22px, -12px)  scale(1.06, 1.18) rotate(-3.3deg); }
-  56%  { transform: translate(31px, 9px)    scale(0.94, 1.03) rotate(5.1deg); }
-  74%  { transform: translate(3px, 20px)    scale(1.18, 0.91) rotate(-2.4deg); }
-  100% { transform: translate(-25px, -3px)  scale(1.03, 1.12) rotate(3.6deg); }
-}
 /* The two readings arrive WITH the wash's move, not after it — left first, then right,
    the order the crosshair is read in. The left one is on the same clock as the travel
    above so the blob is visibly sliding while the number comes up under it. */
