@@ -431,12 +431,15 @@
 /* Gated on .run, which scores.js adds when the pair is scrolled to. On a fixed delay
    from page load the whole loop had already run and the arrows were sitting mid-cycle —
    or gone — by the time anyone looked at them. */
-/* On the section's clock, not an observer's — Session Highlights is already on screen
-   when the report lands, so it comes in with the metric row above it. The card settles at
-   .30 + .42 = .72s, so the arrows start just before that and the whole thing reads as one
-   arrival. See the section rule near the bottom of the file. */
-.rp-play .rp-hcard .badge.up svg   { animation: arrow-up-in .46s cubic-bezier(.2,.85,.3,1) .66s both; }
-.rp-play .rp-hcard .badge.down svg { animation: arrow-down-in .46s cubic-bezier(.2,.85,.3,1) .78s both; }
+/* The arrows keep their own trigger even though the section around them now arrives with
+   the metric row. The two are not the same moment: the section's HEADING is on screen
+   when the report lands, but the pair of cards is entirely below the fold — measured, 0%
+   of it is in view at rest — so putting the arrows on the load clock spent them where
+   nobody could see them, and by the time the page scrolled down they were already
+   sitting there. .run comes from scores.js when the pair is scrolled to, so they play
+   once, on the way in. */
+.rp-pair.run .rp-hcard .badge.up svg   { animation: arrow-up-in .46s cubic-bezier(.2,.85,.3,1) .12s both; }
+.rp-pair.run .rp-hcard .badge.down svg { animation: arrow-down-in .46s cubic-bezier(.2,.85,.3,1) .26s both; }
 /* Explicit end frames. With only a `from`, the `to` is the element's OWN opacity — which
    is 0 while it waits for .run, so the arrows animated 0 to 0 and never appeared. */
 @keyframes arrow-up-in   { from { opacity: 0; transform: translate(-7px, 7px); }  to { opacity: 1; transform: none; } }
