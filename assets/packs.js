@@ -11,7 +11,7 @@
     sprint: {
       mins: 7,
       clip: 'clip-sprint.mp4',
-      type: 'Creator Pack', sub: 'Sprint Coach · 96K subscribers',
+      type: 'Creator', sub: 'Sprint Coach · 96K subscribers',
       sport: 'Sprint', joined: '412', rec: ['Boost'],
       total: 16, bars: [['5min', 'PRIME'], ['8min', 'DRIVE'], ['You Can Choose', 'SPRINT!']],
       info: ['Some Experience', 'Power · Turnover', 'Track', 'Creator'],
@@ -23,10 +23,10 @@
     bolt: {
       mins: 7,
       clip: 'clip-bolt.mp4',
-      type: 'Pro Pack', sub: 'Olympic Sprinter · 2.1M subscribers',
+      type: 'Pro', sub: 'Olympic Sprinter · 2.1M subscribers',
       sport: 'Sprint', joined: '5,204', rec: ['Boost', 'Pace On'],
       total: 21, bars: [['6min', 'SET-UP'], ['9min', 'BLOCKS'], ['You Can Choose', 'RACE!']],
-      info: ['Advanced', 'Power · Reaction', 'Track', 'Pro Athlete'],
+      info: ['Advanced', 'Power · Reaction', 'Track', 'Pro'],
       also: ['sprint', 'sprinter'], more: ['sprint', 'interval', 'legburn'],
       photo: 'packs-card3-thumb.png', author: 'Usain Bolt', avatar: 'packs-avatar-usainbolt.png',
       title: "Usain Bolt's Sprint Masterclass",
@@ -35,7 +35,7 @@
     curry: {
       mins: 11,
       clip: 'clip-curry.mp4',
-      type: 'Creator Pack', sub: 'Skills Creator · 318K subscribers',
+      type: 'Creator', sub: 'Skills Creator · 318K subscribers',
       sport: 'Basketball', joined: '1,146', rec: ['Balance'],
       total: 20, bars: [['6min', 'WARM'], ['11min', 'DRILL'], ['You Can Choose', 'SHOOT!']],
       info: ['Basics Recommended', 'Balance · Footwork', 'Indoor Court', 'Creator'],
@@ -47,10 +47,10 @@
     strength: {
       mins: 14,
       clip: 'clip-strength.mp4',
-      type: 'Skilled Pack', sub: 'S&C Coach · 74K subscribers',
+      type: 'Skilled User', sub: 'S&C Coach · 74K subscribers',
       sport: 'Strength', joined: '638', rec: ['Safe', 'Balance'],
       total: 24, bars: [['7min', 'MOBILISE'], ['13min', 'LOAD'], ['You Can Choose', 'HOLD!']],
-      info: ['Some Experience', 'Stability · Strength', 'Gym', 'Skilled'],
+      info: ['Some Experience', 'Stability · Strength', 'Gym', 'Skilled User'],
       also: ['ladder', 'legburn'], more: ['interval', 'legburn', 'sprint'],
       photo: 'rec-strength.jpg', author: 'Daniel', avatar: 'packs-avatar2.png',
       title: 'Strength for Agility',
@@ -59,7 +59,7 @@
     ladder: {
       mins: 8,
       clip: 'clip-ladder.mp4',
-      type: 'Creator Pack', sub: 'Footwork Creator · 129K subscribers',
+      type: 'Creator', sub: 'Footwork Creator · 129K subscribers',
       sport: 'Agility', joined: '902', rec: ['Rhythm'],
       total: 15, bars: [['4min', 'LOOSEN'], ['9min', 'PATTERN'], ['You Can Choose', 'PLAY!']],
       info: ['Anyone', 'Rhythm · Coordination', 'Indoor', 'Creator'],
@@ -71,7 +71,7 @@
     sprinter: {
       mins: 6,
       clip: 'clip-sprinter.mp4',
-      type: 'Creator Pack', sub: 'Sprint Coach · 96K subscribers',
+      type: 'Creator', sub: 'Sprint Coach · 96K subscribers',
       sport: 'Sprint', joined: '355', rec: ['Boost'],
       total: 13, bars: [['4min', 'PRIME'], ['7min', 'PUSH'], ['You Can Choose', 'GO!']],
       info: ['Some Experience', 'Reaction · Power', 'Track', 'Creator'],
@@ -83,10 +83,10 @@
     interval: {
       mins: 22,
       clip: 'clip-interval.mp4',
-      type: 'Skilled Pack', sub: 'S&C Coach · 74K subscribers',
+      type: 'Skilled User', sub: 'S&C Coach · 74K subscribers',
       sport: 'Running', joined: '1,507', rec: ['Pace On', 'Safe'],
       total: 32, bars: [['8min', 'EASE IN'], ['20min', 'REPS'], ['You Can Choose', 'COOL!']],
-      info: ['Some Experience', 'Endurance · Pacing', 'Outdoor', 'Skilled'],
+      info: ['Some Experience', 'Endurance · Pacing', 'Outdoor', 'Skilled User'],
       also: ['legburn', 'sprint'], more: ['strength', 'legburn', 'sprinter'],
       photo: 'pack-interval.jpg', author: 'Daniel', avatar: 'packs-avatar2.png',
       title: 'Interval Push',
@@ -95,7 +95,7 @@
     legburn: {
       mins: 9,
       clip: 'clip-legburn.mp4',
-      type: 'Creator Pack', sub: 'Home Training Creator · 205K subscribers',
+      type: 'Creator', sub: 'Home Training Creator · 205K subscribers',
       sport: 'Legs', joined: '2,388', rec: ['Safe'],
       total: 14, bars: [['3min', 'PREP'], ['9min', 'BURN'], ['You Can Choose', 'FINISH!']],
       info: ['Anyone', 'Endurance · Control', 'Anywhere', 'Creator'],
@@ -107,10 +107,10 @@
     boxing: {
       mins: 16,
       clip: 'clip-boxing.mp4',
-      type: 'Pro Pack', sub: 'Skills Creator · 318K subscribers',
+      type: 'Pro', sub: 'Skills Creator · 318K subscribers',
       sport: 'Boxing', joined: '774', rec: ['Boost', 'Balance'],
       total: 26, bars: [['6min', 'SHADOW'], ['14min', 'COMBOS'], ['You Can Choose', 'SPAR!']],
-      info: ['Basics Recommended', 'Timing · Angles', 'Indoor', 'Pro Coach'],
+      info: ['Basics Recommended', 'Timing · Angles', 'Indoor', 'Pro'],
       also: ['ladder', 'strength'], more: ['curry', 'basketball', 'ladder'],
       photo: 'movement-boxing.jpg', author: 'Janghoon', avatar: 'packsx-avatar-a.png',
       title: 'Southpaw Drill',
@@ -119,7 +119,7 @@
     tennis: {
       mins: 18,
       clip: 'clip-tennis.mp4',
-      type: 'Creator Pack', sub: 'Footwork Creator · 129K subscribers',
+      type: 'Creator', sub: 'Footwork Creator · 129K subscribers',
       sport: 'Tennis', joined: '486', rec: ['Pace On'],
       total: 27, bars: [['7min', 'RALLY IN'], ['16min', 'DEPTH'], ['You Can Choose', 'POINT!']],
       info: ['Some Experience', 'Depth · Recovery', 'Outdoor Court', 'Creator'],
@@ -131,10 +131,10 @@
     basketball: {
       mins: 12,
       clip: 'clip-basketball.mp4',
-      type: 'Skilled Pack', sub: 'Home Training Creator · 205K subscribers',
+      type: 'Skilled User', sub: 'Home Training Creator · 205K subscribers',
       sport: 'Basketball', joined: '1,033', rec: ['Balance', 'Rhythm'],
       total: 19, bars: [['5min', 'SLIDE'], ['12min', 'CLOSEOUT'], ['You Can Choose', 'RUN IT!']],
-      info: ['Basics Recommended', 'Footwork · Balance', 'Indoor Court', 'Skilled'],
+      info: ['Basics Recommended', 'Footwork · Balance', 'Indoor Court', 'Skilled User'],
       also: ['curry', 'ladder'], more: ['legburn', 'curry', 'boxing'],
       photo: 'recent-basketball.jpg', author: 'Jiwoo', avatar: 'packsx-avatar-c.png',
       title: 'Court Footwork',
@@ -292,7 +292,7 @@
     if (title) title.textContent = t.title;
     var meta = a.querySelectorAll('.meta span');
     if (meta.length >= 2) {
-      meta[0].textContent = (t.type || '').replace(' Pack', '');
+      meta[0].textContent = t.type || '';
       meta[meta.length - 1].textContent = t.mins + 'm';
     }
   }

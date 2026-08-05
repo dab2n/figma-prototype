@@ -3,7 +3,7 @@
 // Three independent filters, read off each card's own data- attributes:
 //   env    All / Outdoor / Indoor   — one of them is always on
 //   sport  Running, Sprint, …       — off until a chip in the drawer is picked
-//   type   Creator / Pro / Skilled  — same
+//   type   Creator / Pro / Skilled User — same
 //
 // Sports and Pack Type do not filter by themselves; they open a drawer under the chip
 // row. The drawer takes real height in the flow, so opening it pushes the list down
