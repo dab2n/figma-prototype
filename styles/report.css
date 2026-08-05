@@ -463,7 +463,7 @@
      teleporting, and it is most of what read as stiff. Pre-blurred there is no filter to
      run. landing-gradient.svg stays in the repo as the source; re-bake at 2x if it
      changes. */
-  background: url('../assets/photos/landing-gradient.png?v=1023') no-repeat center / 100% 100%;
+  background: url('../assets/photos/landing-gradient.png?v=1024') no-repeat center / 100% 100%;
   opacity: 0;
   /* Composited from the first frame, not from the frame it is revealed on. Chrome does
      not raster a fully transparent element, so the layer was being created at the moment
@@ -488,28 +488,29 @@
      each breath is a different size from the one before it. Nothing translates, nothing
      reverses direction, and it is all transform, so it is composited. */
   transition: opacity .7s ease-out;
-  animation: lb-spread 7s cubic-bezier(.45, 0, .55, 1) infinite,
-             lb-swell 11s cubic-bezier(.45, 0, .55, 1) infinite;
+  animation: lb-spread 5s cubic-bezier(.45, 0, .55, 1) infinite,
+             lb-swell 8s cubic-bezier(.45, 0, .55, 1) infinite;
 }
 .rp-sec.run .rp-balance .lb-heat { opacity: 1; }
-/* The spread, 7s. 9% of a 326px blob is ~15px of halo either side of the core, and it
-   crosses that in 3.5 seconds — slow enough that no frame looks like it is moving, big
-   enough that two seconds apart are visibly different. Slightly less vertically than
-   horizontally so it opens along the foot rather than as a circle.
-   Sine-shaped easing, not ease-in-out: no flat spot at either end, so it is never not
-   breathing. */
+/* The spread, 5s. Not 7 — the period has to be measured against how long the card is
+   actually on screen. At 7s a 2-second look covers 103 degrees of the sine, and if those
+   land on a peak you see 38% of the amplitude: measured off the export, 5px of halo, and
+   5px under a 68px blur is nothing. At 5s the same 2 seconds cover 144 degrees, so the
+   worst phase still shows 69% of it and a good one shows all of it. Sine-shaped easing,
+   not ease-in-out: no flat spot at either end, so it is never not breathing. Slightly
+   less vertically than horizontally, so it opens along the foot rather than as a circle. */
 @keyframes lb-spread {
   0%   { scale: 1 1; }
-  50%  { scale: 1.09 1.055; }
+  50%  { scale: 1.10 1.06; }
   100% { scale: 1 1; }
 }
-/* The counter-swell, 11s, on `transform` so it multiplies with the one above instead of
-   replacing it. This is what stops the breath being a metronome: 7 and 11 put their
-   peaks together once every 77 seconds, so the size the halo reaches is different on
-   every pass and the rhythm never becomes a rhythm you can count. */
+/* The counter-swell, 8s, on `transform` so it multiplies with the one above instead of
+   replacing it. This is what stops the breath being a metronome: 5 and 8 put their peaks
+   together once every 40 seconds — twice the length of the whole film — so within it no
+   two breaths reach the same size. */
 @keyframes lb-swell {
   0%   { transform: scale(1); }
-  50%  { transform: scale(0.955); }
+  50%  { transform: scale(0.95); }
   100% { transform: scale(1); }
 }
 /* The two readings arrive WITH the wash's move, not after it — left first, then right,
