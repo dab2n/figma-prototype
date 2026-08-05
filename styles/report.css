@@ -802,13 +802,18 @@
 }
 .rec-badge .badge-fire { width: 11px; height: 13px; display: block; flex: none; }
 /* A chip that belongs to its own picture rather than a white one laid on top: the shot's
-   dominant colour at 80% with a #ffffff 20% layer over it — the same two-layer build the
-   Packs badges use. --tint is per card, set in the markup from the file's own pixels. */
+   colour at 80% with a #ffffff 20% layer over it — the same two-layer build the Packs
+   badges use. --tint is per card, set in the markup from that file's own pixels.
+   HUE comes from the photo, LIGHTNESS does not. The dominant colour raw fails on a dark
+   shot — the boxing frame quantises to rgb(40,34,38), which renders a chip of 83,78,81
+   and drops the label to 2.2:1. So each --tint is the file's dominant colour rotated to
+   HSL L 0.688, the lightness the first approved chip already had. Every chip then lands
+   between 7.3:1 and 9.1:1 against the ink below, and a warm court still reads warm. */
 .rec-badge-tint {
   background: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)),
               rgba(var(--tint), 0.8);
   /* neutral-600 was chosen against a white chip; on the tan it measures under 3:1 and
-     the label went soft. Near-black against the rendered rgb(205,168,131) is about 8:1. */
+     the label went soft. Near-black against the rendered rgb(223,178,128) is 9.1:1. */
   color: #141A1A;
 }
 

@@ -283,7 +283,11 @@
 }
 .hero-meta {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  /* 4, not the 8 this row used to carry: with the dot between them every meta row in the
+     app is now built the same way — tier, 4, dot, 4, length. Its own asset rather than a
+     filtered grey one, because this is the only meta row that sits on a photograph. */
+  gap: 4px;
   justify-content: center;
   margin-top: 8px;                 /* title → Pack line */
   font-family: var(--font-supreme);
@@ -293,6 +297,7 @@
   color: #fafafa;
 }
 .hero-meta .dim { color: #fff; opacity: 0.9; }
+.hero-meta .sep { width: 3px; height: 3px; }
 .hero-btn {
   position: absolute;
   bottom: 16px;

@@ -53,7 +53,7 @@
       info: ['Some Experience', 'Stability · Strength', 'Gym', 'Skilled User'],
       also: ['ladder', 'legburn'], more: ['interval', 'legburn', 'sprint'],
       photo: 'rec-strength.jpg', author: 'Daniel', avatar: 'packs-avatar2.png',
-      title: 'Strength for Agility',
+      title: 'Agility Strength',
       desc: 'Agility fails where strength runs out. Single-leg work and controlled decelerations build the base that lets you change direction late without losing the line.'
     },
     ladder: {
