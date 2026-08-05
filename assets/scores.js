@@ -49,13 +49,36 @@
   // One threshold for everything, including the recommendation row: it is already ~40%
   // on screen at the Performance Scores stop and the two are read together, so they
   // should arrive together.
+  // Revealed when the scroll SETTLES, not the instant 20% of the block is on screen.
+  // A reveal is a big first paint — four score cards, their artwork, the recommendation
+  // photos — and firing it mid-scroll put that paint on top of the scroll's own work.
+  // Measured on the report: a 225ms main-thread stall inside the glide, and a 250ms hole
+  // in the screen recording on top of it, both landing exactly on the Performance Scores
+  // reveal. That is the stutter. Off the scroll there is nothing to compete with, and it
+  // reads better anyway — you arrive, and then the section builds in front of you.
+  var scroller = blocks[0].closest('.screen');
+  var due = [], settle;
+  function flush() {
+    due.forEach(function (el) { el.classList.add('run'); });
+    due = [];
+  }
+  if (scroller) {
+    scroller.addEventListener('scroll', function () {
+      clearTimeout(settle);
+      settle = setTimeout(flush, 120);
+    }, { passive: true });
+  }
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       if (!e.isIntersecting) return;
-      e.target.classList.add('run');
       io.unobserve(e.target);
+      due.push(e.target);
+      // Already still — nothing is going to fire a scroll event, so go now. 120ms is the
+      // same window the listener uses, so a block reached mid-glide waits for the stop.
+      clearTimeout(settle);
+      settle = setTimeout(flush, 120);
     });
-  }, { root: blocks[0].closest('.screen'), threshold: 0.2 });
+  }, { root: scroller, threshold: 0.2 });
   blocks.forEach(function (b) { io.observe(b); });
 
   // Once the hero's red band has scrolled past, the status bar is sitting on the page's

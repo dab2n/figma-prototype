@@ -225,7 +225,10 @@
     // side over 1s, and then has to be seen FLOWING, and the two readings land with it.
     // 2000 is that whole sequence plus a beat of the drift on its own; Performance Scores
     // gets 2200 for its four cards. Both trimmed 400ms to bring the film under 20s.
-    var hold = [2000, 2200, 0];
+    // 2600 on Performance Scores: the four cards stagger 150ms apart and the last one's
+    // number is still rising 920 + 700ms after that, so the build runs 2.07s. 2200 cut
+    // the last number off as the page moved on.
+    var hold = [2000, 2600, 0];
     var i = 0;
     // Nothing moves until NEW Best has arrived and been seen. The report's entrance waits
     // for the page transition (records.html), so it starts ~450ms after this clock does;
