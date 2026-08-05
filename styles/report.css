@@ -455,7 +455,15 @@
   translate: var(--heat-shift, 0px);      /* the travel, once the card is seen */
   width: 326px; height: 357px;
   margin: -172px 0 0 -218.7px;   /* puts the artwork's own core on that point */
-  background: url('../assets/photos/landing-gradient.svg') no-repeat center / 100% 100%;
+  /* The PNG, not the SVG it was exported as. That file is one path under an
+     feGaussianBlur of stdDeviation 17 — a CPU filter, and at the export's 4x scale it is a
+     68px blur over 1304x1428. Chrome skips painting it while the card is still hidden, so
+     the whole raster came due the instant the wash was revealed and MOVED: a measured
+     253ms with no frames, in which the core jumped 606px -> 757px. That is the wash
+     teleporting, and it is most of what read as stiff. Pre-blurred there is no filter to
+     run. landing-gradient.svg stays in the repo as the source; re-bake at 2x if it
+     changes. */
+  background: url('../assets/photos/landing-gradient.png?v=1019') no-repeat center / 100% 100%;
   /* Two motions, and they do not fight because they are on different properties: `left`
      carries the core from the centre to the stronger foot, `transform` is the flow it
      has while it goes.
