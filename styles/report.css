@@ -463,7 +463,7 @@
      teleporting, and it is most of what read as stiff. Pre-blurred there is no filter to
      run. landing-gradient.svg stays in the repo as the source; re-bake at 2x if it
      changes. */
-  background: url('../assets/photos/landing-gradient.png?v=1019') no-repeat center / 100% 100%;
+  background: url('../assets/photos/landing-gradient.png?v=1020') no-repeat center / 100% 100%;
   /* Two motions, and they do not fight because they are on different properties: `left`
      carries the core from the centre to the stronger foot, `transform` is the flow it
      has while it goes.
@@ -477,13 +477,20 @@
      .5s of delay is the beat in the middle — by then the wash is ~70% up, so it is
      clearly SEEN at centre before it goes. .5 + 1.4 = 1.9s, inside the tour's 2s hold. */
   opacity: 0;
+  /* Composited from the first frame, not from the frame it is revealed on. Chrome does
+     not raster a fully transparent element, so the layer was being created at the moment
+     the card was revealed mid-scroll — and creating a layer re-creates the screencast's
+     capture surface, which is a measured 259ms of NO FRAMES in the export while the page
+     itself never missed a rAF (1171 frames, zero gaps over 60ms). That hole is what the
+     wash teleporting through its own travel was. */
+  will-change: opacity, translate, transform;
   /* `translate` and `transform` are separate properties that compose, so the travel and
      the flow can each have their own timing without touching each other. The travel used
      to be on `left`, which is layout: every frame relaid out and repainted a 326x357
      blurred image, and the screencast simply lost 255ms in the middle of the move — the
      core jumped from 606px to 757px with nothing between. On `translate` it is a
      compositor transform and the move is continuous. */
-  transition: translate 1.4s cubic-bezier(.32, .72, 0, 1) .5s, opacity .7s ease-out;
+  transition: translate 1.4s cubic-bezier(.32, .72, 0, 1) .35s, opacity .7s ease-out;
   animation: lb-flow 14s linear infinite;
 }
 .rp-sec.run .rp-balance .lb-heat { opacity: 1; }

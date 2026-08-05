@@ -24,6 +24,22 @@
   };
   var card = document.querySelector('.rp-balance');
   if (card) {
+    // The travel waits for the SCROLL to stop, not just for the card to be 90% on screen.
+    // Two reasons, and they are the same reason. It is meant to be watched leaving the
+    // centre, which you cannot do while the whole card is still sliding up past you. And
+    // in a screen recording the scroll is exactly when the capture has no headroom left —
+    // measured, the page never missed a rAF but the screencast dropped a 259ms hole in
+    // mid-glide, and the travel was landing inside it, so the core jumped 151px in one
+    // frame. Off the scroll it plays into an idle capture.
+    var quiet;
+    function whenStill(go) {
+      var sc = card.closest('.screen');
+      if (!sc) return go();
+      var arm = function () { clearTimeout(quiet); quiet = setTimeout(fire, 150); };
+      function fire() { sc.removeEventListener('scroll', arm); go(); }
+      sc.addEventListener('scroll', arm, { passive: true });
+      arm();
+    }
     var read = function () {
       var l = parseFloat(card.dataset.left), r = parseFloat(card.dataset.right);
       return (isFinite(l) && isFinite(r) && l + r > 0) ? [l, r] : null;
@@ -34,7 +50,7 @@
           if (!e.isIntersecting) return;
           seen = true;
           var v = pending || read();
-          if (v) paint(v[0], v[1]);
+          if (v) whenStill(function () { paint(v[0], v[1]); });
           bo.disconnect();
         });
       // 0.9, not 0.35: at a third on screen this fired while the page was still scrolling,
