@@ -75,14 +75,20 @@
   // fade-out tail smearing the app bar underneath it. That is the broken-looking strip at
   // the top.
   //
-  // 206 and 46 up from the hero's foot are where those two readings fall. Read off the
-  // hero rather than written down, so editing its height cannot leave this behind.
+  // The range is measured on the SEAM — the strip of page directly under the bar, which
+  // is the edge you actually see it against, not the wash hidden behind it. Off the frame
+  // that seam is red at 300 (r-g 111), warm at 380 (31), and neutral by 420 (8): 206 and
+  // 86 up from the hero's foot. The end used to be at 46 up, which is 40px past where the
+  // seam settles — so at the report's first stop the crossover was still 11% short and
+  // the bar sat there as a pale pink strip over a neutral page.
+  // Read off the hero rather than written down, so editing its height cannot leave this
+  // behind.
   var screen = blocks[0].closest('.rp-screen');
   if (!screen) return;
   var meta = document.querySelector('meta[name="theme-color"]');
   var hero = screen.querySelector('.rp-hero');
   var foot = hero ? hero.offsetTop + hero.offsetHeight : 0;
-  var lo = hero ? foot - 206 : 0, hi = hero ? foot - 46 : 24;
+  var lo = hero ? foot - 206 : 0, hi = hero ? foot - 86 : 24;
   var dark = false;
   screen.addEventListener('scroll', function () {
     var p = Math.max(0, Math.min(1, (screen.scrollTop - lo) / (hi - lo)));
