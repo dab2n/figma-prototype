@@ -225,10 +225,7 @@
     // side over 1s, and then has to be seen FLOWING, and the two readings land with it.
     // 2000 is that whole sequence plus a beat of the drift on its own; Performance Scores
     // gets 2200 for its four cards. Both trimmed 400ms to bring the film under 20s.
-    // 2200 on Landing Balance, not 2000: the wash waits 150ms for the scroll to go quiet,
-    // holds another 350 at centre, then takes 1.6s to travel. That is 2.1s of motion, and
-    // it has to finish before the page moves on or the move is cut off mid-glide.
-    var hold = [2200, 2200, 0];
+    var hold = [2000, 2200, 0];
     var i = 0;
     // Nothing moves until NEW Best has arrived and been seen. The report's entrance waits
     // for the page transition (records.html), so it starts ~450ms after this clock does;
