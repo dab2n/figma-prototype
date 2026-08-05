@@ -4,13 +4,18 @@
   // the move toward the stronger foot is something you watch rather than something
   // that already happened before you got there.
   var seen = false, pending = null;
-  // 130, not 65. The gap here is 25 vs 32, which at 65 moved the core 27px inside a blob
-  // whose own blur is wider than that — technically off centre, visually parked. 130 makes
-  // it about 54px of a 336px card: it starts in the middle and you watch it go right.
-  function target(l, r) { return (50 + ((r - l) / (l + r)) * 130).toFixed(1) + '%'; }
+  // 1.30, not 0.65. The gap here is 25 vs 32, which at 0.65 moved the core 27px inside a
+  // blob whose own blur is wider than that — technically off centre, visually parked. 1.30
+  // makes it about 54px of a 336px card: it starts in the middle and you watch it go right.
+  //
+  // A px OFFSET fed to `translate`, not a percentage fed to `left`. Same 54px either way,
+  // but `left` is a layout property: every frame of the travel relaid out and repainted a
+  // 326x357 blurred image, and the screencast lost 255ms in the middle of it — the wash
+  // jumped from 606 to 757 with nothing in between. `translate` is composited.
+  function shift(el, l, r) { return ((r - l) / (l + r) * 1.30 * el.clientWidth).toFixed(1) + 'px'; }
   function paint(l, r) {
     document.querySelectorAll('.rp-balance').forEach(function (el) {
-      el.style.setProperty('--heat-x', target(l, r));
+      el.style.setProperty('--heat-shift', shift(el, l, r));
     });
   }
   window.rpBalanceReveal = function (l, r) {

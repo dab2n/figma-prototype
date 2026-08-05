@@ -435,7 +435,7 @@
 .rp-hcard .desc { margin: 0; font-family: var(--font-supreme); font-size: 13px; line-height: 16px; letter-spacing: -0.3px; color: #A3A3A3; }
 
 /* Landing Balance. The heat is a CSS blob, not baked artwork, so its red core sits
-   where the Left/Right split puts it (--heat-x, set from the readings) and can drift.
+   where the Left/Right split puts it (--heat-shift, set from the readings) and can drift.
    Footprints are the design's silhouette used as a mask; crosshair and dots are CSS;
    the readings are live text. */
 .rp-balance {
@@ -451,7 +451,8 @@
 .rp-balance .lb-heat {
   position: absolute;
   top: 50%;
-  left: var(--heat-x, 50%);   /* starts centred; travels once the card is seen */
+  left: 50%;                              /* the centre, and it stays the centre */
+  translate: var(--heat-shift, 0px);      /* the travel, once the card is seen */
   width: 326px; height: 357px;
   margin: -172px 0 0 -218.7px;   /* puts the artwork's own core on that point */
   background: url('../assets/photos/landing-gradient.svg') no-repeat center / 100% 100%;
@@ -468,7 +469,13 @@
      .5s of delay is the beat in the middle — by then the wash is ~70% up, so it is
      clearly SEEN at centre before it goes. .5 + 1.4 = 1.9s, inside the tour's 2s hold. */
   opacity: 0;
-  transition: left 1.4s cubic-bezier(.32, .72, 0, 1) .5s, opacity .7s ease-out;
+  /* `translate` and `transform` are separate properties that compose, so the travel and
+     the flow can each have their own timing without touching each other. The travel used
+     to be on `left`, which is layout: every frame relaid out and repainted a 326x357
+     blurred image, and the screencast simply lost 255ms in the middle of the move — the
+     core jumped from 606px to 757px with nothing between. On `translate` it is a
+     compositor transform and the move is continuous. */
+  transition: translate 1.4s cubic-bezier(.32, .72, 0, 1) .5s, opacity .7s ease-out;
   animation: lb-flow 14s linear infinite;
 }
 .rp-sec.run .rp-balance .lb-heat { opacity: 1; }
