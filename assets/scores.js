@@ -1,21 +1,16 @@
 // Landing Balance heat position + Performance Scores entrance.
 (function () {
-  // The heat is placed off the reading, warm side toward the stronger foot. It used to
-  // start centred and travel there once the card was reached; that move was the thing
-  // nobody could stop noticing, which on a heat map is backwards — it should read as a
-  // state, not as an event. It is simply in the right place when it fades up.
+  // The heat starts centred and only travels once the card is actually on screen, so
+  // the move toward the stronger foot is something you watch rather than something
+  // that already happened before you got there.
   var seen = false, pending = null;
-  // 1.30, not 0.65. The gap here is 25 vs 32, which at 0.65 put the core 27px off centre
-  // inside a blob whose own blur is wider than that — off centre by the numbers, centred
-  // to the eye. 1.30 makes it about 54px of a 336px card, which reads.
-  //
-  // A px offset fed to `translate` rather than a percentage fed to `left`: `left` is a
-  // layout property and this element is a 326x357 blurred image, so anything that touches
-  // it relays out and repaints. `translate` is composited.
-  function shift(el, l, r) { return ((r - l) / (l + r) * 1.30 * el.clientWidth).toFixed(1) + 'px'; }
+  // 130, not 65. The gap here is 25 vs 32, which at 65 moved the core 27px inside a blob
+  // whose own blur is wider than that — technically off centre, visually parked. 130 makes
+  // it about 54px of a 336px card: it starts in the middle and you watch it go right.
+  function target(l, r) { return (50 + ((r - l) / (l + r)) * 130).toFixed(1) + '%'; }
   function paint(l, r) {
     document.querySelectorAll('.rp-balance').forEach(function (el) {
-      el.style.setProperty('--heat-shift', shift(el, l, r));
+      el.style.setProperty('--heat-x', target(l, r));
     });
   }
   window.rpBalanceReveal = function (l, r) {
@@ -28,71 +23,79 @@
       var l = parseFloat(card.dataset.left), r = parseFloat(card.dataset.right);
       return (isFinite(l) && isFinite(r) && l + r > 0) ? [l, r] : null;
     };
-    // No observer. There was one, held at threshold 0.9 so the travel would start with
-    // the card sitting still — but there is no travel to time any more, only a position,
-    // and a position can be set now. The card's own reveal still waits to be scrolled to;
-    // that is .rp-sec.run in report.css and it is a different thing.
-    seen = true;
-    var v0 = read();
-    if (v0) paint(v0[0], v0[1]);
+    if (window.IntersectionObserver) {
+      var bo = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          seen = true;
+          var v = pending || read();
+          if (v) paint(v[0], v[1]);
+          bo.disconnect();
+        });
+      // 0.9, not 0.35: at a third on screen this fired while the page was still scrolling,
+      // so the core had already finished travelling by the time the card came to rest and
+      // there was nothing left to watch. It now starts from the middle with the card
+      // sitting still.
+      }, { root: card.closest('.screen'), threshold: 0.9 });
+      bo.observe(card);
+    } else {
+      seen = true;
+      var v0 = read();
+      if (v0) paint(v0[0], v0[1]);
+    }
   }
 
   // Anything that should play WHEN IT IS LOOKED AT rather than on a clock from page load
   // gets .run here: the score block, the Landing Balance wash, the Recommendation chips.
   // Session Highlights is NOT in this list — its heading is on screen at rest, so it
-  // arrives with the metric row above it instead (see .rp-play in report.css). On a fixed
-  // delay from page load these had all finished — or were mid-loop — before the report had
-  // been scrolled that far. .screen is the scroller, so it is the observer root.
+  // arrives with the metric row above it instead (see .rp-play in report.css). On a fixed delay they had all finished — or were mid-loop — before the report
+  // had been scrolled that far. .screen is the scroller, so it is the observer root.
   var blocks = [].slice.call(document.querySelectorAll('#rpScores, .rec-scroll, .rp-body > .rp-sec'));
   if (!blocks.length) return;
   if (!window.IntersectionObserver) { blocks.forEach(function (b) { b.classList.add('run'); }); return; }
   // One threshold for everything, including the recommendation row: it is already ~40%
   // on screen at the Performance Scores stop and the two are read together, so they
   // should arrive together.
-  // Revealed when the scroll SETTLES, not the instant 20% of the block is on screen.
-  // A reveal is a big first paint — four score cards, their artwork, the recommendation
-  // photos — and firing it mid-scroll put that paint on top of the scroll's own work.
-  // Measured on the report: a 225ms main-thread stall inside the glide, and a 250ms hole
-  // in the screen recording on top of it, both landing exactly on the Performance Scores
-  // reveal. That is the stutter. Off the scroll there is nothing to compete with, and it
-  // reads better anyway — you arrive, and then the section builds in front of you.
-  var scroller = blocks[0].closest('.screen');
-  var due = [], settle;
-  function flush() {
-    due.forEach(function (el) { el.classList.add('run'); });
-    due = [];
-  }
-  if (scroller) {
-    scroller.addEventListener('scroll', function () {
-      clearTimeout(settle);
-      settle = setTimeout(flush, 120);
-    }, { passive: true });
-  }
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       if (!e.isIntersecting) return;
+      e.target.classList.add('run');
       io.unobserve(e.target);
-      due.push(e.target);
-      // Already still — nothing is going to fire a scroll event, so go now. 120ms is the
-      // same window the listener uses, so a block reached mid-glide waits for the stop.
-      clearTimeout(settle);
-      settle = setTimeout(flush, 120);
     });
-  }, { root: scroller, threshold: 0.2 });
+  }, { root: blocks[0].closest('.screen'), threshold: 0.2 });
   blocks.forEach(function (b) { io.observe(b); });
 
-  // Once the hero's red band has scrolled past, the status bar is sitting on the page's
-  // own near-white and its white glyphs are gone. 24px is the moment the bar leaves the
-  // band. theme-color follows it, so the phone's own bar changes with ours.
+  // The status bar takes the colour of whatever is actually behind it, tracked
+  // continuously rather than switched at a threshold.
+  //
+  // It used to flip at scrollTop > 24. But the wash artwork sits behind the bar and
+  // scrolls with the page, and measured off the frame it is still SOLID red at 300
+  // (rgb 251,95,76) and only reaches the page's neutral at 470 (rgb 245,240,237). So for
+  // 400px of scroll a near-white bar with dark glyphs sat on a red hero, with its 18px
+  // fade-out tail smearing the app bar underneath it. That is the broken-looking strip at
+  // the top.
+  //
+  // 206 and 46 up from the hero's foot are where those two readings fall. Read off the
+  // hero rather than written down, so editing its height cannot leave this behind.
   var screen = blocks[0].closest('.rp-screen');
   if (!screen) return;
   var meta = document.querySelector('meta[name="theme-color"]');
+  var hero = screen.querySelector('.rp-hero');
+  var foot = hero ? hero.offsetTop + hero.offsetHeight : 0;
+  var lo = hero ? foot - 206 : 0, hi = hero ? foot - 46 : 24;
   var dark = false;
   screen.addEventListener('scroll', function () {
-    var d = screen.scrollTop > 24;
+    var p = Math.max(0, Math.min(1, (screen.scrollTop - lo) / (hi - lo)));
+    screen.style.setProperty('--bar', p.toFixed(3));
+    // The glyphs cross over faster than the background does. A half-inverted white glyph
+    // is grey, and grey on the mid pink is the one moment nothing reads — so it is taken
+    // through in a quarter of the range instead of over all of it: white while the strip
+    // is still red-dominant, dark once it is light, and about 40px of scroll between.
+    screen.style.setProperty('--barg', Math.max(0, Math.min(1, (p - 0.4) / 0.25)).toFixed(3));
+    var d = p > 0.5;
     if (d === dark) return;
     dark = d;
-    screen.classList.toggle('scrolled', d);
+    screen.classList.toggle('scrolled', d);      // still there for anything keyed to it
     if (meta) meta.setAttribute('content', d ? '#F2F2F2' : '#FA3030');
   }, { passive: true });
 })();

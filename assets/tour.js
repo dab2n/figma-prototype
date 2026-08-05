@@ -225,10 +225,7 @@
     // side over 1s, and then has to be seen FLOWING, and the two readings land with it.
     // 2000 is that whole sequence plus a beat of the drift on its own; Performance Scores
     // gets 2200 for its four cards. Both trimmed 400ms to bring the film under 20s.
-    // 2600 on Performance Scores: the four cards stagger 150ms apart and the last one's
-    // number is still rising 920 + 700ms after that, so the build runs 2.07s. 2200 cut
-    // the last number off as the page moved on.
-    var hold = [2000, 2600, 0];
+    var hold = [2000, 2200, 0];
     var i = 0;
     // Nothing moves until NEW Best has arrived and been seen. The report's entrance waits
     // for the page transition (records.html), so it starts ~450ms after this clock does;
@@ -238,13 +235,7 @@
     setTimeout(function step() {
       if (i >= stops.length) { sessionStorage.removeItem(P2); return; }
       var n = i++;
-      // One reading speed, not one duration. A fixed 900ms made the three legs run at
-      // 491, 676 and 179 px/s — the middle one crossed most of a 700px frame in a
-      // second, which is why the report read as being yanked past rather than scrolled.
-      // 0.30 px/ms is a pace you can actually follow, and it is now the same on all
-      // three; the clamps only keep a very short or very long leg sane.
-      var far = Math.abs(stops[n] - screen.scrollTop);
-      glide(screen, 'scrollTop', stops[n], Math.max(600, Math.min(2200, Math.round(far / 0.30))), function () {
+      glide(screen, 'scrollTop', stops[n], n === 2 ? 1100 : 900, function () {
         setTimeout(step, hold[n]);
       });
     }, 3700);
