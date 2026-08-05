@@ -46,10 +46,11 @@
   }
 
   // Anything that should play WHEN IT IS LOOKED AT rather than on a clock from page load
-  // gets .run here: the score block, the Session Highlights arrows, the Recommendation
-  // chips. On a fixed delay they had all finished — or were mid-loop — before the report
+  // gets .run here: the score block, the Landing Balance wash, the Recommendation chips.
+  // Session Highlights is NOT in this list — its heading is on screen at rest, so it
+  // arrives with the metric row above it instead (see .rp-play in report.css). On a fixed delay they had all finished — or were mid-loop — before the report
   // had been scrolled that far. .screen is the scroller, so it is the observer root.
-  var blocks = [].slice.call(document.querySelectorAll('#rpScores, .rp-pair, .rec-scroll, .rp-body > .rp-sec'));
+  var blocks = [].slice.call(document.querySelectorAll('#rpScores, .rec-scroll, .rp-body > .rp-sec'));
   if (!blocks.length) return;
   if (!window.IntersectionObserver) { blocks.forEach(function (b) { b.classList.add('run'); }); return; }
   // One threshold for everything, including the recommendation row: it is already ~40%

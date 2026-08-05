@@ -285,6 +285,9 @@
 .rp-play .rp-body > .rp-stats,
 .rp-play .rp-stats .rp-stat { animation-play-state: running; }
 
+/* Session Highlights arrives on this same clock — see the section-reveal rules near the
+   bottom of the file, which is where it has to live to beat them in the cascade. */
+
 /* ── Body ──────────────────────────────────────────────────────────────────
    Fades out of the hero wash so there is no seam where the artwork stops. */
 /* No top padding: .rp-hero is exactly as tall as the design's hero (462px once the
@@ -420,11 +423,11 @@
 /* Each arrow enters along the direction it points, once, when the pair is scrolled to.
    The travel-out-and-return loop is gone: on a report that is read once it just kept
    flickering in the corner of the eye. */
-/* Gated on .run, which scores.js adds when the pair is scrolled to. On a fixed delay
-   from page load the whole loop had already run and the arrows were sitting mid-cycle —
-   or gone — by the time anyone looked at them. */
-.rp-pair.run .rp-hcard .badge.up svg   { animation: arrow-up-in .46s cubic-bezier(.2,.85,.3,1) .12s both; }
-.rp-pair.run .rp-hcard .badge.down svg { animation: arrow-down-in .46s cubic-bezier(.2,.85,.3,1) .26s both; }
+/* On the section's clock, not an observer's. The card lands at .30 + .42 = .72, so the
+   arrows start just before it settles and the whole thing reads as one arrival rather
+   than as a card that fills itself in later. */
+.rp-play .rp-hcard .badge.up svg   { animation: arrow-up-in .46s cubic-bezier(.2,.85,.3,1) .66s both; }
+.rp-play .rp-hcard .badge.down svg { animation: arrow-down-in .46s cubic-bezier(.2,.85,.3,1) .78s both; }
 /* Explicit end frames. With only a `from`, the `to` is the element's OWN opacity — which
    is 0 while it waits for .run, so the arrows animated 0 to 0 and never appeared. */
 @keyframes arrow-up-in   { from { opacity: 0; transform: translate(-7px, 7px); }  to { opacity: 1; transform: none; } }
@@ -452,17 +455,40 @@
   width: 326px; height: 357px;
   margin: -172px 0 0 -218.7px;   /* puts the artwork's own core on that point */
   background: url('../assets/photos/landing-gradient.svg') no-repeat center / 100% 100%;
-  /* ONE motion: it arrives centred, sits there for a beat, then goes right. There used
-     to be an idle `lb-drift` loop on top of the travel, running `alternate` — so the
-     blob walked back the way it came every 6s, and during the travel the two motions
-     fought. That reversal is what read as the wash wobbling instead of moving.
-     The 350ms delay is the beat at the centre: the blob has to be SEEN in the middle
-     before it leaves, or the move has nothing to be measured against. Fade is shorter
-     than the travel so it is fully up while it is still going. */
+  /* Two motions, and they do not fight because they are on different properties: `left`
+     carries the core from the centre to the stronger foot, `transform` is the flow it
+     has while it goes.
+     The old loop ran `alternate`, which means it played BACKWARDS every other pass — the
+     blob walked back the way it came and that is what read as wobbling. Taking it out
+     fixed the wobble and left the wash rigid: it slid once and then froze, which a heat
+     map should never do. lb-flow is a CLOSED circuit instead — 0% and 100% are the same
+     frame, so it runs forever without ever reversing or stepping.
+     The travel curve is the app's own settle (home.html's notification strip): it leaves
+     the centre with intent and eases the last few pixels rather than stopping dead.
+     .5s of delay is the beat in the middle — by then the wash is ~70% up, so it is
+     clearly SEEN at centre before it goes. .5 + 1.4 = 1.9s, inside the tour's 2s hold. */
   opacity: 0;
-  transition: left 1.3s cubic-bezier(.2, .8, .3, 1) .35s, opacity .45s ease-out;
+  transition: left 1.4s cubic-bezier(.32, .72, 0, 1) .5s, opacity .7s ease-out;
+  animation: lb-flow 14s linear infinite;
 }
 .rp-sec.run .rp-balance .lb-heat { opacity: 1; }
+/* An ellipse walked at constant speed, with the scale breathing on the same circuit.
+   Eight stops so `linear` has no corners to show, ±13px on a 326px blob whose own blur
+   is wider than the travel — you read it as the heat shifting under the foot, never as
+   the picture moving. `linear` on purpose: ease-in-out at every stop would pulse, and a
+   pulse is a rhythm the eye locks onto. 14s is slow enough that the couple of seconds
+   the tour spends here is one gentle drift in a single direction. */
+@keyframes lb-flow {
+  0%     { transform: translate(0, 0)       scale(1.00, 1.00); }
+  12.5%  { transform: translate(8px, -5px)  scale(1.03, 0.99); }
+  25%    { transform: translate(13px, 2px)  scale(1.05, 1.02); }
+  37.5%  { transform: translate(9px, 9px)   scale(1.02, 1.05); }
+  50%    { transform: translate(0, 13px)    scale(0.99, 1.06); }
+  62.5%  { transform: translate(-9px, 9px)  scale(0.97, 1.04); }
+  75%    { transform: translate(-13px, 1px) scale(0.96, 1.01); }
+  87.5%  { transform: translate(-8px, -6px) scale(0.98, 0.98); }
+  100%   { transform: translate(0, 0)       scale(1.00, 1.00); }
+}
 /* The two readings arrive WITH the wash's move, not after it — left first, then right,
    the order the crosshair is read in. The left one is on the same clock as the travel
    above so the blob is visibly sliding while the number comes up under it. */
@@ -864,12 +890,25 @@
    value, meant it animated 0 to 0 and the section never appeared. */
 .rp-body > .rp-sec { opacity: 0; }
 .rp-body > .rp-sec.run { opacity: 1; animation: rp-rise .5s cubic-bezier(.2,.85,.3,1) both; }
-/* The first section is already on screen when the report lands, so hiding it left a
-   headed-but-empty gap that read as a broken page. Its title stays put and only the two
-   cards under it arrive. Every section below keeps the whole-block slide. */
+/* The first section is already on screen when the page lands, so hiding it left a
+   headed-but-empty gap that read as a broken page. On Records (progress.html) that is
+   Landing Balance, and it simply stays put. */
 .rp-body > .rp-sec:first-of-type { opacity: 1; animation: none; }
-.rp-body > .rp-sec:first-of-type .rp-pair { opacity: 0; }
-.rp-body > .rp-sec:first-of-type.run .rp-pair { opacity: 1; animation: rp-rise .5s cubic-bezier(.2,.85,.3,1) both; }
+/* On the Report it is Session Highlights, and it does not stay put — it comes in ON THE
+   SAME CLOCK as the metric row above it. .30s continues that row's own .06/.14/.22
+   stagger, so the four read as one arrival. Holding back only its two cards was the
+   half-measure this replaces: the heading appeared on time and then sat over an empty
+   white card until the section was scrolled to.
+   Down here rather than next to the metric row's rules because the `opacity: 0` reveal
+   above has the same specificity, so this has to come after it to win. And opacity has
+   to be restated: rp-stat-in declares only a `from`, so its `to` is the element's own
+   opacity — 0 — and the section would animate from nothing to nothing. */
+.rp-body > .rp-sec:first-of-type:has(> .rp-pair) {
+  opacity: 1;
+  animation: rp-stat-in .42s cubic-bezier(.2,.85,.3,1) .30s both;
+}
+.rp-draw .rp-body > .rp-sec:first-of-type:has(> .rp-pair) { animation-play-state: paused; }
+.rp-play .rp-body > .rp-sec:first-of-type:has(> .rp-pair) { animation-play-state: running; }
 @keyframes rp-rise { from { opacity: 0; transform: translateY(18px); } }
 
 /* Day picker arrows. The forward arrow is dead on today — there is no tomorrow to
@@ -883,7 +922,8 @@
   .rp-scores .sc-n, .rp-scores .sc-tri { opacity: 1; animation: none; }
   .rp-hcard .badge svg { opacity: 1; transform: none; animation: none; }
   .rec-badge { opacity: 1; transform: none; animation: none; }
-  .rp-body > .rp-sec { opacity: 1; animation: none; }
+  .rp-body > .rp-sec,
+  .rp-body > .rp-sec:first-of-type:has(> .rp-pair) { opacity: 1; animation: none; }
   .rp-scores .sc-art { clip-path: none; -webkit-mask-image: none; mask-image: none; animation: none; }
   .rp-scores .sc.st { --pass: 79px; animation: none; }
   .rp-scores .sc-dash, .rp-scores .sc-track, .rp-scores .st-ticks { clip-path: none; animation: none; }
