@@ -5,9 +5,16 @@
 <script>if(innerWidth>400){document.documentElement.style.setProperty("--fit",Math.min(1,innerHeight/812).toFixed(4));try{if(localStorage.getItem("clay"))document.documentElement.className+=" clay";}catch(e){}}</script>
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
+<!-- The four faces every screen actually renders in. Preloaded because font-display:swap
+     draws the fallback first and re-lays the text out when the real one lands — on the
+     phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Regular.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Bold.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Medium.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1031"></script>
+<script defer src="assets/openext.js?v=1032"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,9 +22,9 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Try the flows</title>
-<link rel="stylesheet" href="styles/main.css?v=1031">
-<link rel="stylesheet" href="styles/onboarding.css?v=1031">
-<link rel="stylesheet" href="styles/flows.css?v=1031">
+<link rel="stylesheet" href="styles/main.css?v=1032">
+<link rel="stylesheet" href="styles/onboarding.css?v=1032">
+<link rel="stylesheet" href="styles/flows.css?v=1032">
 </head>
 <body>
 <div class="phone">
@@ -37,19 +44,19 @@
           <span class="fl-step">01</span>
           <p class="fl-t">First Setup</p>
           <span class="fl-sub">Onboarding · Body scan · Home</span>
-          <span class="fl-img" style="background-image:url('assets/photos/sport-running.png?v=1031')"></span>
+          <span class="fl-img" style="background-image:url('assets/photos/sport-running.png?v=1032')"></span>
         </a>
         <a class="fl-row" href="home.html">
           <span class="fl-step">02</span>
           <p class="fl-t">Explore Home</p>
           <span class="fl-sub">Home · Packs · Pack detail</span>
-          <span class="fl-img" style="background-image:url('assets/photos/sport-basketball.png?v=1031')"></span>
+          <span class="fl-img" style="background-image:url('assets/photos/sport-basketball.png?v=1032')"></span>
         </a>
         <a class="fl-row" href="setup-location.html">
           <span class="fl-step">03</span>
           <p class="fl-t">Start a Workout</p>
           <span class="fl-sub">Setup · Devices · Ready</span>
-          <span class="fl-img" style="background-image:url('assets/photos/sport-marathon.png?v=1031')"></span>
+          <span class="fl-img" style="background-image:url('assets/photos/sport-marathon.png?v=1032')"></span>
         </a>
         <!-- Home is where this flow starts, but only with the strip: home.html's own inline
              script reveals it 1.8s after landing when notifNow is set, which is the same
@@ -59,7 +66,7 @@
           <span class="fl-step">04</span>
           <p class="fl-t">Session Report</p>
           <span class="fl-sub">New on Home · Recap · Report</span>
-          <span class="fl-img" style="background-image:url('assets/photos/sport-hometraining.png?v=1031')"></span>
+          <span class="fl-img" style="background-image:url('assets/photos/sport-hometraining.png?v=1032')"></span>
         </a>
       </div>
     </div>

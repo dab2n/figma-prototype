@@ -10,9 +10,16 @@
 <script>if(innerWidth>400){document.documentElement.style.setProperty("--fit",Math.min(1,innerHeight/812).toFixed(4));try{if(localStorage.getItem("clay"))document.documentElement.className+=" clay";}catch(e){}}</script>
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
+<!-- The four faces every screen actually renders in. Preloaded because font-display:swap
+     draws the fallback first and re-lays the text out when the real one lands — on the
+     phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Regular.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Bold.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Medium.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1031"></script>
+<script defer src="assets/openext.js?v=1032"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,10 +27,10 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Settings</title>
-<link rel="stylesheet" href="styles/main.css?v=1031">
-<link rel="stylesheet" href="styles/settings.css?v=1031">
-<script defer src="assets/idle.js?v=1031"></script>
-<script defer src="assets/flows.js?v=1031"></script>
+<link rel="stylesheet" href="styles/main.css?v=1032">
+<link rel="stylesheet" href="styles/settings.css?v=1032">
+<script defer src="assets/idle.js?v=1032"></script>
+<script defer src="assets/flows.js?v=1032"></script>
 </head>
 <body>
 <div class="phone">
@@ -72,7 +79,7 @@
           <div class="set-row"><span class="set-k">Help &amp; Support</span><i class="chv"></i></div>
           <!-- The build the phone is actually running. Bumped with every ?v= so an
                installed PWA showing an old number is a stale cache, not a bad deploy. -->
-          <div class="set-row"><span class="set-k">Build</span><span class="set-v" id="buildNo">1031</span></div>
+          <div class="set-row"><span class="set-k">Build</span><span class="set-v" id="buildNo">1032</span></div>
         </div>
       </div>
     </div>

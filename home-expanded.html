@@ -10,9 +10,16 @@
 <script>if(innerWidth>400){document.documentElement.style.setProperty("--fit",Math.min(1,innerHeight/812).toFixed(4));try{if(localStorage.getItem("clay"))document.documentElement.className+=" clay";}catch(e){}}</script>
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
+<!-- The four faces every screen actually renders in. Preloaded because font-display:swap
+     draws the fallback first and re-lays the text out when the real one lands — on the
+     phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Regular.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Bold.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Medium.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#ffffff">
-<script defer src="assets/openext.js?v=1031"></script>
+<script defer src="assets/openext.js?v=1032"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,10 +27,10 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Home (Expanded)</title>
-<link rel="stylesheet" href="styles/main.css?v=1031">
-<link rel="stylesheet" href="styles/home.css?v=1031">
-<script defer src="assets/idle.js?v=1031"></script>
-<script defer src="assets/flows.js?v=1031"></script>
+<link rel="stylesheet" href="styles/main.css?v=1032">
+<link rel="stylesheet" href="styles/home.css?v=1032">
+<script defer src="assets/idle.js?v=1032"></script>
+<script defer src="assets/flows.js?v=1032"></script>
 </head>
 <body>
 <div class="phone">
@@ -31,7 +38,7 @@
     <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
 
     <div class="app-bar">
-      <img class="logo" src="assets/photos/logo-newton-brand.png?v=1031" alt="Newton">
+      <img class="logo" src="assets/photos/logo-newton-brand.png?v=1032" alt="Newton">
       <div class="actions">
         <img src="assets/icons/appbar-bell.svg" alt="알림">
         <img src="assets/icons/appbar-search.svg" alt="검색">
@@ -41,24 +48,24 @@
     <div class="hero-section">
     <div class="hero-shadow"></div>
     <div class="hero-scroll">
-      <a class="hero-card" href="pyeongso.html" style="background-image:url('assets/photos/cardbg-akiyama.png?v=1031');">
+      <a class="hero-card" href="pyeongso.html" style="background-image:url('assets/photos/cardbg-akiyama.png?v=1032');">
         <div class="hero-text">
           <p class="hero-title">Akiyama's Ghost Step</p>
-          <div class="hero-meta"><span>Pro</span><img class="sep" src="assets/icons/dot-sep-white.svg?v=1031" alt=""><span class="dim">11 min</span></div>
+          <div class="hero-meta"><span>Pro</span><img class="sep" src="assets/icons/dot-sep-white.svg?v=1032" alt=""><span class="dim">11 min</span></div>
         </div>
         <span class="hero-btn" style="--btn:#FA3030;">View Now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
       </a>
-      <a class="hero-card" href="pyeongso.html" style="background-image:url('assets/photos/cardbg-sean.png?v=1031');">
+      <a class="hero-card" href="pyeongso.html" style="background-image:url('assets/photos/cardbg-sean.png?v=1032');">
         <div class="hero-text">
           <p class="hero-title">Sean's Pace Strategy</p>
-          <div class="hero-meta"><span>Creator</span><img class="sep" src="assets/icons/dot-sep-white.svg?v=1031" alt=""><span class="dim">18 min</span></div>
+          <div class="hero-meta"><span>Creator</span><img class="sep" src="assets/icons/dot-sep-white.svg?v=1032" alt=""><span class="dim">18 min</span></div>
         </div>
         <span class="hero-btn" style="--btn:#FB552F;">View Now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
       </a>
-      <a class="hero-card" href="pyeongso.html" style="background-image:url('assets/photos/cardbg-curry.png?v=1031');">
+      <a class="hero-card" href="pyeongso.html" style="background-image:url('assets/photos/cardbg-curry.png?v=1032');">
         <div class="hero-text">
           <p class="hero-title">Curry's Step Back</p>
-          <div class="hero-meta"><span>Pro</span><img class="sep" src="assets/icons/dot-sep-white.svg?v=1031" alt=""><span class="dim">23 min</span></div>
+          <div class="hero-meta"><span>Pro</span><img class="sep" src="assets/icons/dot-sep-white.svg?v=1032" alt=""><span class="dim">23 min</span></div>
         </div>
         <span class="hero-btn" style="--btn:#8A1A00;">View Now <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
       </a>
@@ -72,7 +79,7 @@
       </div>
       <div class="recent-list">
         <a class="recent-item" href="pyeongso.html">
-          <img class="recent-thumb" src="assets/photos/home-dribble.png?v=1031" alt="">
+          <img class="recent-thumb" src="assets/photos/home-dribble.png?v=1032" alt="">
           <div class="recent-info">
             <p class="t-body-bold">Basketball Basic Dribble</p>
             <div class="recent-meta t-caption-regular">
@@ -82,7 +89,7 @@
           <img class="play" src="assets/icons/play-btn1.svg" alt="재생">
         </a>
         <a class="recent-item" href="pyeongso.html">
-          <img class="recent-thumb" src="assets/photos/home-running.png?v=1031" alt="">
+          <img class="recent-thumb" src="assets/photos/home-running.png?v=1032" alt="">
           <div class="recent-info">
             <p class="t-body-bold">Running Intervals</p>
             <div class="recent-meta t-caption-regular">
@@ -92,7 +99,7 @@
           <img class="play" src="assets/icons/play-btn1.svg" alt="재생">
         </a>
         <a class="recent-item" href="pyeongso.html">
-          <img class="recent-thumb" src="assets/photos/home-tennis.png?v=1031" alt="">
+          <img class="recent-thumb" src="assets/photos/home-tennis.png?v=1032" alt="">
           <div class="recent-info">
             <p class="t-body-bold">The Tennis Skill</p>
             <div class="recent-meta t-caption-regular">
@@ -112,21 +119,21 @@
       <div class="movement-scroll">
         <a class="movement-card" href="pyeongso.html">
           <div class="movement-collage">
-            <img src="assets/photos/movement-collage1.png?v=1031" alt="">
-            <img src="assets/photos/movement-collage2.png?v=1031" alt="">
-            <img src="assets/photos/movement-collage3.png?v=1031" alt="">
-            <img src="assets/photos/movement-collage4.png?v=1031" alt="">
+            <img src="assets/photos/movement-collage1.png?v=1032" alt="">
+            <img src="assets/photos/movement-collage2.png?v=1032" alt="">
+            <img src="assets/photos/movement-collage3.png?v=1032" alt="">
+            <img src="assets/photos/movement-collage4.png?v=1032" alt="">
           </div>
           <p class="t-body-bold">Basketball Highlight</p>
           <p class="t-caption-regular dim">Pro</p>
         </a>
         <a class="movement-card" href="pyeongso.html">
-          <img class="movement-photo" src="assets/photos/movement-boxing.jpg?v=1031" alt="">
+          <img class="movement-photo" src="assets/photos/movement-boxing.jpg?v=1032" alt="">
           <p class="t-body-bold">Boxing Basic Jab Combo</p>
           <p class="t-caption-regular dim">Skilled User</p>
         </a>
         <a class="movement-card" href="pyeongso.html">
-          <img class="movement-photo" src="assets/photos/movement-basicsteps.png?v=1031" alt="">
+          <img class="movement-photo" src="assets/photos/movement-basicsteps.png?v=1032" alt="">
           <p class="t-body-bold">Basic Steps For Beginner</p>
           <p class="t-caption-regular dim">Creator</p>
         </a>

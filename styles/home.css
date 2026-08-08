@@ -7,8 +7,15 @@
 /* Concrete px endpoints so the shrink animates — Chrome freezes height
    transitions between calc(%) values. The phone is a fixed 780 (700 content
    + 80 navbar); the notification takes a 66px strip above the navbar. */
-.phone:has(> .tabbar) > .screen { height: 700px; }
-.phone.notif-on:has(> .tabbar) > .screen { height: 634px; }
+/* The 780 frame's two heights, and ONLY there. Unqualified they tie main.css's phone
+   rules on specificity (0,4,1 either way) and win on load order, which pinned the content
+   frame to 700/634 on a phone whose viewport is 800+ — the frame's rounded foot ended up
+   below the pinned navbar, so the concave junction was off-screen and the edge read flat.
+   On a phone the height comes from the viewport (main.css), as it should. */
+@media (min-width: 401px) {
+  .phone:has(> .tabbar) > .screen { height: 700px; }
+  .phone.notif-on:has(> .tabbar) > .screen { height: 634px; }
+}
 .notif-bar {
   position: absolute;
   left: 0; right: 0;
@@ -125,6 +132,10 @@
   background-position: center;
   text-decoration: none;
   scroll-snap-align: center;
+  /* One card per swipe. Without this a flick on a phone sails past two or three cards at
+     once — mandatory snap only says WHERE it may stop, not that it has to stop at the
+     next one. Packs and the report carousels already carry it; the hero did not. */
+  scroll-snap-stop: always;
   /* iOS will not clip a composited child — a <video> is always one — to a parent's
      border-radius unless that parent is a stacking context of its own. Without this the
      clip escaped and the cards read as square-cornered on an iPhone. It is also what

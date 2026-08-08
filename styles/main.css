@@ -190,6 +190,23 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
   /* A screen that reaches its end must not hand the scroll on to the page behind it —
      that chaining is what let the desktop document slide up and clip the frame. */
   overscroll-behavior: contain;
+  /* `overflow: hidden` plus `border-radius` is a clip Chrome does not always honour —
+     the same failure that put the phone's own bottom corners back as squares. On the
+     Galaxy it let the recent list paint straight through the frame's rounded foot and
+     over the navbar: the concave junction disappeared, and what leaked past it is the
+     glitching. `contain: paint` is a promise, not a hint — descendants are clipped to
+     this box, radius and all — and it lets the compositor skip everything scrolled out
+     of view, which is the cheaper way to draw this page anyway. */
+  contain: paint;
+  /* The black behind the concave junction, carried BY the frame rather than by a band
+     pinned to the phone. A spread shadow follows this element's own border-radius, so
+     wherever the foot lands — 700 on the mockup, 634 with the notification strip up,
+     whatever 100dvh works out to on a given phone with its address bar in or out — the
+     black is exactly behind it. The band underneath had to guess that number, and on the
+     Galaxy it guessed wrong: the junction came out flat, or with the page's own grey
+     showing through it. Outside the phone this is clipped away by .phone's overflow, so
+     screens with no navbar, which fill the frame, never show it. */
+  box-shadow: 0 0 0 60px var(--color-black);
 }
 .screen::-webkit-scrollbar { display: none; }
 .screen { scrollbar-width: none; }
