@@ -198,15 +198,6 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
      this box, radius and all — and it lets the compositor skip everything scrolled out
      of view, which is the cheaper way to draw this page anyway. */
   contain: paint;
-  /* The black behind the concave junction, carried BY the frame rather than by a band
-     pinned to the phone. A spread shadow follows this element's own border-radius, so
-     wherever the foot lands — 700 on the mockup, 634 with the notification strip up,
-     whatever 100dvh works out to on a given phone with its address bar in or out — the
-     black is exactly behind it. The band underneath had to guess that number, and on the
-     Galaxy it guessed wrong: the junction came out flat, or with the page's own grey
-     showing through it. Outside the phone this is clipped away by .phone's overflow, so
-     screens with no navbar, which fill the frame, never show it. */
-  box-shadow: 0 0 0 60px var(--color-black);
 }
 .screen::-webkit-scrollbar { display: none; }
 .screen { scrollbar-width: none; }
@@ -219,7 +210,6 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
    — one shared rule, auto-applied to every page with a .tabbar. */
 .phone:has(> .tabbar) > .screen {
   height: calc(100% - 80px);
-  border-radius: 40px;
   overflow: hidden auto;
 }
 
@@ -308,6 +298,41 @@ video::-webkit-media-controls-start-playback-button {
   background: var(--color-black);
   border-radius: 0;              /* flat top; the phone frame rounds the bottom to 40 */
 }
+/* ── The concave junction ──────────────────────────────────────────────────────
+   Drawn ON TOP of the frame, not cut out of it. The frame used to round its own
+   foot and let the black behind show through the corners, and that is a rounded
+   clip on a scrolling, video-bearing layer — the one thing Chrome keeps dropping
+   here. On the Galaxy it dropped intermittently: sometimes the junction, sometimes
+   the whole corner, and what leaked through it was the glitching.
+   Two masked fillets instead, the same pair detail.css uses for the pack sheet:
+   a 40px black square at each of the bar's top corners with a quarter circle taken
+   out of it. They sit above the frame, so nothing has to be clipped at all, and
+   they are anchored to the BAR — so they land on the junction whatever height the
+   frame works out to.
+   The fill follows the bar it belongs to: the onboarding and setup bars are the
+   same grey as their screens, so theirs simply do not read. */
+.tabbar { --bar-fill: var(--color-black); }
+.tabbar.ob-bottom { --bar-fill: var(--color-neutral-100); }
+.tabbar::before,
+.tabbar::after {
+  content: "";
+  position: absolute;          /* absolute, so it is not a flex item of the bar */
+  bottom: 100%;
+  width: 40px; height: 40px;
+  background: var(--bar-fill);
+  pointer-events: none;
+}
+.tabbar::before {
+  left: 0;
+  -webkit-mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%);
+          mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%);
+}
+.tabbar::after {
+  right: 0;
+  -webkit-mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);
+          mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);
+}
+
 .tabbar .tabs {
   display: flex;
   align-items: center;
@@ -400,7 +425,7 @@ button { font-family: inherit; }
      pinned navbar. */
   /* Same expression as .tabbar's height — the content fills whatever is left, so the
      page is exactly one viewport tall on any phone. */
-  body .phone:has(> .tabbar) > .screen { height: calc(100dvh - 56px - max(24px, env(safe-area-inset-bottom, 0px))); border-radius: 0 0 40px 40px; }
+  body .phone:has(> .tabbar) > .screen { height: calc(100dvh - 56px - max(24px, env(safe-area-inset-bottom, 0px))); }
   body .phone.notif-on:has(> .tabbar) > .screen { height: calc(100dvh - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px))); }
   /* No title bar on these screens, so the back/kebab row sits directly under the
      phone's own status bar instead of below the 44px ours used to occupy. */

@@ -13,53 +13,36 @@
 .fl-body { flex: 1; overflow-y: auto; scrollbar-width: none; padding: 0 12px 24px; }
 .fl-body::-webkit-scrollbar { display: none; }
 
-.fl-list { display: flex; flex-direction: column; gap: 4px; }
+/* Two up, near square. No artwork — the sport silhouettes said nothing about which
+   flow a card opens, and a title plus the screens it walks through says all of it. */
+.fl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 
-/* .ob-row's card, one per flow: 20px radius, white, and the silhouette bottom-right under
-   a multiply blend, exactly as the sport rows in onboarding carry theirs. A row rather
-   than a 2x2 of squares because a caption is the useful part here — it is what tells you
-   which screens a flow actually walks through, and a square card has no line for it. */
-.fl-row {
+.fl-card {
   position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
-  height: 128px;
+  aspect-ratio: 1;
   padding: 16px;
   border-radius: 20px;
-  overflow: hidden;
   background: #fff;
   text-decoration: none;
   cursor: pointer;
 }
 .fl-step {
-  position: relative; z-index: 2;
-  display: block;
   font-family: var(--font-supreme-bold); font-size: 12px; line-height: 1.2; letter-spacing: -0.5px;
   color: var(--color-red);
 }
 .fl-t {
-  position: relative; z-index: 2;
   margin: 8px 0 0;
   font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px;
   color: var(--color-black);
 }
+/* Pinned to the foot so all four captions line up whether the title takes one line
+   or two. */
 .fl-sub {
-  position: relative; z-index: 2;
-  display: block;
-  margin-top: 6px;
-  font-family: var(--font-supreme); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px;
+  margin-top: auto;
+  font-family: var(--font-supreme); font-size: 12px; line-height: 1.3; letter-spacing: -0.5px;
   color: var(--color-neutral-500);
 }
-/* Right-anchored and contained, the way .ob-row places its own artwork. Held to the right
-   third so it never runs under the caption — these strings are longer than a sport name. */
-.fl-img {
-  position: absolute;
-  top: 0; bottom: 0; right: 8px;
-  width: 116px;
-  background-position: right center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  mix-blend-mode: multiply;
-  pointer-events: none;
-}
-.fl-row:active { background: var(--color-neutral-50); }
+.fl-card:active { background: var(--color-neutral-50); }
