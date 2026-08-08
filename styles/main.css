@@ -163,13 +163,19 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
    The black is only ever structural at the foot, where the content frame's rounded bottom
    meets the flat-topped navbar and the concave junction reveals it. So it lives there and
    nowhere else. No radius on the band: .phone's own overflow clips it to the frame's
-   corners, which keeps it right on a phone too, where that radius is 0. The height only
-   has to clear the junction — everything above it is behind an opaque screen. */
+   corners, which keeps it right on a phone too, where that radius is 0.
+   Anchored top AND bottom rather than given a height. A fixed 160 was measured against
+   one state and Home has another: with the notification strip up the content frame is
+   634 tall, so its rounded bottom corners sit at 594..634 while the band only started at
+   620 — and the 26px the band missed showed the page's own grey through the concave
+   junction, which is the white ground that read as a fault. 60 is below the 40px top arc,
+   so the seam this rule exists to avoid stays avoided, and everything between there and
+   the frame's foot is behind an opaque screen whatever height it takes. */
 .phone:has(> .tabbar)::before {
   content: "";
   position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 160px;
+  left: 0; right: 0;
+  top: 60px; bottom: 0;
   background: var(--color-black);
   pointer-events: none;
 }
@@ -555,3 +561,37 @@ button { font-family: inherit; }
 @media (min-width: 401px) {
   .flow-exit { top: 0; height: 30px; }
 }
+
+/* ── "Back to the start" notice ────────────────────────────────────────────────
+   Shown by assets/idle.js after ten still seconds, three seconds before it goes.
+   Inside .phone for the same reason the exit dot is: on desktop the frame is a
+   360x780 box in the middle of the page and `fixed` would pin this to the browser.
+   Nothing new in it — the card is the app's: white, 20px radius, 16/13px Supreme,
+   over the scrim the pack sheet already uses. */
+.idle-note {
+  position: absolute;
+  inset: 0;
+  z-index: 950;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 32px;
+  background: rgba(5, 10, 10, 0.42);
+  animation: idle-in .22s ease both;
+}
+@keyframes idle-in { from { opacity: 0; } }
+.idle-card {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 20px;
+  border-radius: 20px;
+  background: #fff;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  animation: idle-card-in .28s cubic-bezier(.2,.85,.3,1) both;
+}
+@keyframes idle-card-in { from { opacity: 0; transform: translateY(8px) scale(.97); } }
+.idle-t { margin: 0; font-family: var(--font-supreme-bold); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-black); }
+.idle-s { margin: 4px 0 0; font-family: var(--font-supreme); font-size: 13px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-500); }
+.idle-s b { font-family: var(--font-supreme-bold); color: var(--color-red); }
+.idle-h { margin: 12px 0 0; font-family: var(--font-supreme); font-size: 12px; line-height: 1.2; letter-spacing: -0.5px; color: var(--color-neutral-400); }
