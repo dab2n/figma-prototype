@@ -124,5 +124,21 @@
       place(here);                          // land instantly, no motion
     }
     window.addEventListener('resize', function () { place(-active.offsetLeft); });
+    // Measure again once the real face has landed. offsetLeft is taken while the row is
+    // still set in the fallback — font-display: swap paints that first — and Supreme is
+    // narrower, so the row was shifted by more than the active title actually starts at
+    // and its first letters ended up off the left edge of the strip. On a desktop the
+    // font is usually already cached, which is why this only showed on the phone.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () { place(-active.offsetLeft); });
+    }
+    // And once more when the arrival slide has finished, and again coming back out of the
+    // bfcache. place() is one line of arithmetic against a live offsetLeft, so re-running
+    // it costs nothing and it is the only thing that can put the row right if anything —
+    // a late face, a focus scroll, a restored page — moved it.
+    steps.addEventListener('transitionend', function (e) {
+      if (e.propertyName === 'translate') place(-active.offsetLeft);
+    });
+    window.addEventListener('pageshow', function () { place(-active.offsetLeft); });
   }
 })();
