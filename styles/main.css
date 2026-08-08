@@ -333,6 +333,31 @@ video::-webkit-media-controls-start-playback-button {
           mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);
 }
 
+/* When the report strip is up it sits BETWEEN the frame and the navbar, so the junction
+   moves up 66px with the frame's foot and the bar's own pair is left drawing a curve
+   against nothing. The strip carries the pair instead, and the bar's stands down. */
+.notif-bar::before,
+.notif-bar::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  width: 40px; height: 40px;
+  background: var(--color-black);
+  pointer-events: none;
+}
+.notif-bar::before {
+  left: 0;
+  -webkit-mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%);
+          mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%);
+}
+.notif-bar::after {
+  right: 0;
+  -webkit-mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);
+          mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);
+}
+.phone.notif-on .tabbar::before,
+.phone.notif-on .tabbar::after { display: none; }
+
 .tabbar .tabs {
   display: flex;
   align-items: center;

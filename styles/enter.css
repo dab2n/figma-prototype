@@ -90,7 +90,10 @@
   height: 62%;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(108,94,67,0.42) 0%, rgba(210,183,130,0.78) 100%);
+  /* Sampled from the bottom third of this pack's own frame by packs.js. The pair below
+     is Sean's, kept as the fallback so the markup's own pack looks the same as it
+     always did if the sample never lands. */
+  background: linear-gradient(180deg, var(--pack-wash-a, rgba(108,94,67,0.42)) 0%, var(--pack-wash-b, rgba(210,183,130,0.78)) 100%);
   -webkit-backdrop-filter: blur(30px);
   backdrop-filter: blur(30px);
   /* Reaches full strength early (40%, not 70%) — that is most of the difference in

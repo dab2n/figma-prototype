@@ -8,8 +8,22 @@
 // alone, which is Sean's pack, so every existing link still lands where it did.
 (function () {
   var PACKS = {
+    akiyama: {
+      mins: 11,
+      week: '1284', crew: ['packs-avatar3.png', 'packsx-avatar-b.png', 'joined-avatar-jiwoo.png'],
+      clip: 'akiyama-smile.mp4',
+      type: 'Pro', sub: 'Movement Coach · 512K subscribers',
+      sport: 'Agility', joined: '3,190', rec: ['Rhythm', 'Balance'],
+      total: 19, bars: [['5min', 'LOOSEN'], ['9min', 'SHADOW'], ['You Can Choose', 'GHOST!']],
+      info: ['Some Experience', 'Rhythm · Deception', 'Indoor Court', 'Pro'],
+      also: ['curry', 'ladder'], more: ['basketball', 'ladder', 'strength'],
+      photo: 'akiyama-smile-poster.jpg', author: 'Akiyama', avatar: 'packs-avatar3.png',
+      title: "Akiyama's Ghost Step",
+      desc: 'The step that leaves a defender reading the wrong hip. Weight shift first, then the tempo change that sells it, drilled slowly before it is run at speed.'
+    },
     sprint: {
       mins: 7,
+      week: '214', crew: ['packs-profile-kanni.png', 'packsx-avatar-a.png', 'packs-avatar4.png'],
       clip: 'clip-sprint.mp4',
       type: 'Creator', sub: 'Sprint Coach · 96K subscribers',
       sport: 'Sprint', joined: '412', rec: ['Boost'],
@@ -22,6 +36,7 @@
     },
     bolt: {
       mins: 7,
+      week: '2077', crew: ['packs-avatar-usainbolt.png', 'packsx-avatar-c.png', 'packs-avatar1.png'],
       clip: 'clip-bolt.mp4',
       type: 'Pro', sub: 'Olympic Sprinter · 2.1M subscribers',
       sport: 'Sprint', joined: '5,204', rec: ['Boost', 'Pace On'],
@@ -34,6 +49,7 @@
     },
     curry: {
       mins: 11,
+      week: '496', crew: ['packs-avatar1.png', 'joined-avatar-swim.png', 'packsx-avatar-d.png'],
       clip: 'clip-curry.mp4',
       type: 'Creator', sub: 'Skills Creator · 318K subscribers',
       sport: 'Basketball', joined: '1,146', rec: ['Balance'],
@@ -46,6 +62,7 @@
     },
     strength: {
       mins: 14,
+      week: '331', crew: ['packs-avatar2.png', 'packsx-avatar-a.png', 'packs-avatar3.png'],
       clip: 'clip-strength.mp4',
       type: 'Skilled User', sub: 'S&C Coach · 74K subscribers',
       sport: 'Strength', joined: '638', rec: ['Safe', 'Balance'],
@@ -58,6 +75,7 @@
     },
     ladder: {
       mins: 8,
+      week: '405', crew: ['packs-avatar4.png', 'packsx-avatar-b.png', 'joined-avatar-jiwoo.png'],
       clip: 'clip-ladder.mp4',
       type: 'Creator', sub: 'Footwork Creator · 129K subscribers',
       sport: 'Agility', joined: '902', rec: ['Rhythm'],
@@ -70,6 +88,7 @@
     },
     sprinter: {
       mins: 6,
+      week: '168', crew: ['packs-profile-kanni.png', 'packsx-avatar-d.png', 'packs-avatar2.png'],
       clip: 'clip-sprinter.mp4',
       type: 'Creator', sub: 'Sprint Coach · 96K subscribers',
       sport: 'Sprint', joined: '355', rec: ['Boost'],
@@ -82,6 +101,7 @@
     },
     interval: {
       mins: 22,
+      week: '742', crew: ['packs-avatar2.png', 'joined-avatar-swim.png', 'packsx-avatar-c.png'],
       clip: 'clip-interval.mp4',
       type: 'Skilled User', sub: 'S&C Coach · 74K subscribers',
       sport: 'Running', joined: '1,507', rec: ['Pace On', 'Safe'],
@@ -94,6 +114,7 @@
     },
     legburn: {
       mins: 9,
+      week: '963', crew: ['joined-avatar-jiwoo.png', 'packsx-avatar-a.png', 'packs-avatar1.png'],
       clip: 'clip-legburn.mp4',
       type: 'Creator', sub: 'Home Training Creator · 205K subscribers',
       sport: 'Legs', joined: '2,388', rec: ['Safe'],
@@ -106,6 +127,7 @@
     },
     boxing: {
       mins: 16,
+      week: '359', crew: ['packs-avatar1.png', 'packsx-avatar-c.png', 'packs-avatar4.png'],
       clip: 'clip-boxing.mp4',
       type: 'Pro', sub: 'Skills Creator · 318K subscribers',
       sport: 'Boxing', joined: '774', rec: ['Boost', 'Balance'],
@@ -118,6 +140,7 @@
     },
     tennis: {
       mins: 18,
+      week: '228', crew: ['packs-avatar4.png', 'packsx-avatar-b.png', 'joined-avatar-swim.png'],
       clip: 'clip-tennis.mp4',
       type: 'Creator', sub: 'Footwork Creator · 129K subscribers',
       sport: 'Tennis', joined: '486', rec: ['Pace On'],
@@ -130,6 +153,7 @@
     },
     basketball: {
       mins: 12,
+      week: '517', crew: ['joined-avatar-jiwoo.png', 'packs-avatar3.png', 'packsx-avatar-d.png'],
       clip: 'clip-basketball.mp4',
       type: 'Skilled User', sub: 'Home Training Creator · 205K subscribers',
       sport: 'Basketball', joined: '1,033', rec: ['Balance', 'Rhythm'],
@@ -160,6 +184,31 @@
       var el = document.querySelector('.swipe-detail, .dj-screen') || document.body;
       el.style.setProperty('--pack-main', 'rgb(' + r + ',' + gr + ',' + b + ')');
       el.style.setProperty('--pack-main-80', 'rgba(' + r + ',' + gr + ',' + b + ',0.8)');
+
+      // The blurred band across the foot of the hero is the clip's colour, not a fixed
+      // tan. Sampled from the BOTTOM THIRD of the frame, because that is the part of the
+      // picture the band actually sits over — the whole-frame mean is nearly neutral on a
+      // photograph, which is how every pack ended up wearing the same warm wash. The
+      // chroma is pushed back out from that patch's own luminance, the same way the kebab
+      // does it, so the band reads as the colour the eye sees down there rather than the
+      // grey an average makes of it.
+      var wr = 0, wg = 0, wb = 0, wk = 0;
+      for (var wy = Math.floor(n * 0.62); wy < n; wy++) {
+        for (var wx = 0; wx < n; wx++) {
+          var w = (wy * n + wx) * 4;
+          wr += d[w]; wg += d[w + 1]; wb += d[w + 2]; wk++;
+        }
+      }
+      wr /= wk; wg /= wk; wb /= wk;
+      var wl = 0.2126 * wr + 0.7152 * wg + 0.0722 * wb;
+      var pull = function (v, k) { return Math.max(0, Math.min(255, Math.round(wl + (v - wl) * k))); };
+      var lift = function (v, k) { return Math.max(0, Math.min(255, Math.round(v * k))); };
+      // Top of the band is the deep end, the foot is the light one — the same two-stop
+      // climb the hand-picked pair had, now taken from the picture.
+      el.style.setProperty('--pack-wash-a',
+        'rgba(' + lift(pull(wr, 1.5), 0.62) + ',' + lift(pull(wg, 1.5), 0.62) + ',' + lift(pull(wb, 1.5), 0.62) + ',0.42)');
+      el.style.setProperty('--pack-wash-b',
+        'rgba(' + lift(pull(wr, 1.5), 1.18) + ',' + lift(pull(wg, 1.5), 1.18) + ',' + lift(pull(wb, 1.5), 1.18) + ',0.78)');
 
       // The kebab gets its own reading. Two reasons the frame average will not do for it:
       // it sits in the TOP RIGHT, which can be a different part of the picture entirely,
@@ -249,6 +298,18 @@
 
   if (p.sub) txt('.dj-meta .sub', p.sub);
   if (p.type) txt('.creator-content .top-row .tag-pill', p.type);
+  // The bar at the foot is this pack's crowd, not a fixed three: a different count and
+  // three different faces per pack, so two cards opened one after the other do not look
+  // like the same screen with the title swapped.
+  if (p.week) txt('.joined-people p', p.week + ' joined this week');
+  if (p.crew) {
+    [].forEach.call(document.querySelectorAll('.joined-avatars'), function (row) {
+      [].forEach.call(row.querySelectorAll('img'), function (img, i) {
+        if (p.crew[i]) img.src = 'assets/photos/' + p.crew[i];
+      });
+    });
+  }
+
   txt('.stats-row .stat:nth-child(1) .value', p.sport);
   txt('.stats-row .stat:nth-child(3) .value', p.joined);
 
@@ -267,6 +328,15 @@
 
   // The total is read by process.js on its way past, so this has to land first — it
   // does: packs.js is the earlier <script defer>.
+  // Every link that lands back on this screen keeps the pack. Without it the fold's own
+  // pages and the back button dropped the key and the screen reverted to the markup —
+  // which is Sean's pack, whichever card you had opened.
+  [].forEach.call(document.querySelectorAll('a[href]'), function (a) {
+    var h = a.getAttribute('href');
+    if (!/^(pyeongso|ollilttae)\.html$/.test(h)) return;
+    a.setAttribute('href', h + '?pack=' + key);
+  });
+
   if (p.total) txt('.process-graph .big-number .num', p.total);
   if (p.bars) {
     [].forEach.call(document.querySelectorAll('.process-graph .bar'), function (bar, i) {
@@ -306,4 +376,22 @@
       fill(a, p.more[i], 'img', '.t-body-bold');
     });
   }
+})();
+
+// Back goes back, when back is a screen you came from on purpose.
+//
+// The pack's back button is a fixed link to Packs, because history.back() used to land on
+// the setup flow — you reach this screen from there too, and returning INTO a flow you had
+// just left is worse than always landing somewhere sane. But it costs you the other case:
+// open a card on Home, scroll, come back, and you are on Packs at the top rather than on
+// Home looking at the card you tapped. So the fixed link stays as the default and steps
+// aside only for the two screens a card is actually tapped from, where going back is the
+// browser restoring the page AND the scroll position — which is the card's own view.
+(function () {
+  var ref = (document.referrer || '').split('/').pop().split('?')[0];
+  if (ref !== 'home.html' && ref !== 'packs.html') return;
+  if (history.length < 2) return;
+  var back = document.querySelector('.dj-hero .app-bar-transparent a.icon-btn, .creator-nav a.icon-btn');
+  if (!back) return;
+  back.addEventListener('click', function (e) { e.preventDefault(); history.back(); });
 })();

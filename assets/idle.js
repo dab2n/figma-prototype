@@ -1,10 +1,10 @@
-// Attract loop: ten seconds with nobody touching the phone puts a notice on screen, and
+// Attract loop: fifteen seconds with nobody touching the phone puts a notice on screen, and
 // three seconds after that the prototype goes back to flows.html — so the next person
 // meets the four flows rather than wherever the last person stopped. The hub is the start
 // now; the splash is the first screen OF a flow, not the way in, so it goes back too.
 //
 // The notice is a warning, not a countdown you have to sit through: touching anything
-// cancels it and starts the ten seconds over. Somebody who is still reading taps once and
+// cancels it and starts the fifteen over. Somebody who is still reading taps once and
 // stays where they are.
 //
 // The timer is armed on load and re-armed by anything a person can actually do. Capture
@@ -13,13 +13,13 @@
 // listener on window sees those.
 (function () {
   var HOME = 'flows.html';
-  var WAIT = 10000;      // stillness before the notice
+  var WAIT = 15000;      // stillness before the notice
   var GRACE = 3;         // seconds the notice counts down before it goes
 
   var here = location.pathname.split('/').pop() || 'index.html';
   if (here === HOME) return;
   try {
-    // An escape hatch for reviewing on a desktop, where being bounced back every ten
+    // An escape hatch for reviewing on a desktop, where being bounced back every fifteen
     // seconds while reading a screen is not help. ?idle=off for one visit, the localStorage
     // key for the machine.
     if (localStorage.getItem('idleOff') || /(?:\?|&)idle=off/.test(location.search)) return;
