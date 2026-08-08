@@ -19,7 +19,13 @@
 .ob-turn { position: absolute; left: 0; right: 0; top: 277px; text-align: center;
   font-family: var(--font-supreme-bold); font-size: 22px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black);
   animation: ob-fade .6s ease 2.1s both; }
-.ob-cta { position: absolute; left: 16px; right: 16px; top: 604px; animation: ob-fade .6s ease 2.35s both; }
+/* Anchored to the FOOT, not 604 from the top. The splash is the one screen with no
+   scroller (.ob-splash is overflow:hidden), so a viewport shorter than the design's 780
+   simply cut the button off with no way to reach it — measured on a 360x640 phone, Get
+   Started ran from 606 to 702 with 640 of screen. 81px is the gap the 780 frame already
+   had below it (780 − 604 − 95), so nothing moves at the design size and it follows the bottom everywhere
+   else. */
+.ob-cta { position: absolute; left: 16px; right: 16px; bottom: 81px; animation: ob-fade .6s ease 2.35s both; }
 .ob-get { display: flex; align-items: center; justify-content: center; gap: 4px; background: var(--color-black); border-radius: 999px; padding: 16px 20px; text-decoration: none;
   font-family: var(--font-supreme-bold); font-size: 18px; letter-spacing: -0.54px; color: #fff; }
 .ob-get img { width: 20px; height: 20px; display: block; filter: brightness(0) invert(1); }

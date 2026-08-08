@@ -243,6 +243,9 @@
 
   var step = sessionStorage.getItem(KEY);
   sessionStorage.removeItem(KEY);                   // a reload is a normal page again
+  // A take drives the page for twenty seconds with no user input at all, which is exactly
+  // what idle.js reads as "nobody is here". The flag tells it to stand down.
+  if (step) document.documentElement.setAttribute('data-tour', '1');
   if (step === '1') home();
   else if (step === '2') packs();
   else if (step === '3') detail();
