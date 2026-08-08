@@ -151,10 +151,27 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
   position: relative;
   width: 360px;
   height: 780px;
-  background: var(--color-black);
   border-radius: 40px;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+}
+/* NO background here. Black under the whole frame drew a dark hairline along the rounded
+   top edge on every screen: the frame's corner is antialiased and the screen clipped
+   inside it is antialiased on the SAME curve, and two partial coverages never sum back to
+   one — the gap that leaves is the black underneath showing through. Measured on the
+   export, a 1px stroke following the top-left and top-right arcs.
+   The black is only ever structural at the foot, where the content frame's rounded bottom
+   meets the flat-topped navbar and the concave junction reveals it. So it lives there and
+   nowhere else. No radius on the band: .phone's own overflow clips it to the frame's
+   corners, which keeps it right on a phone too, where that radius is 0. The height only
+   has to clear the junction — everything above it is behind an opaque screen. */
+.phone:has(> .tabbar)::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 160px;
+  background: var(--color-black);
+  pointer-events: none;
 }
 
 /* Content scrolls inside the fixed viewport; taller (expanded) screens scroll */
