@@ -520,3 +520,38 @@ button { font-family: inherit; }
   .status-bar .statusbar-svg { visibility: visible; }
   .app-bar-transparent { top: 44px; }
 }
+
+/* ── The way back, on every other screen ───────────────────────────────────────
+   A dot where a phone puts its camera. Top centre is the one strip free across the
+   whole prototype — every app bar puts its controls in the corners — with a single
+   exception: the report's centred pack pill starts at y16, so the dot sits at y8..16
+   and the target is 26 tall rather than 44 to stay off it.
+   Red on the grey screens, but half the prototype opens on a red wash or a photograph
+   where a red dot would vanish, so it carries a soft white ring: whichever of the two
+   the background swallows, the other one still reads. Measured — see below.
+   Inside .phone, not fixed to the window: on desktop the frame is a 360x780 box
+   sitting in the middle of the page, and `fixed` would pin this to the browser. */
+.flow-exit {
+  position: absolute;
+  z-index: 900;
+  top: env(safe-area-inset-top, 0px);
+  left: 50%;
+  width: 44px; height: 26px;
+  margin-left: -22px;
+  display: flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.flow-exit i {
+  display: block;
+  width: 8px; height: 8px;
+  border-radius: 999px;
+  background: rgba(250, 48, 48, 0.62);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+  transition: background .18s ease, transform .18s ease;
+}
+.flow-exit:active i { background: var(--color-red); transform: scale(1.4); }
+/* On the desktop mockup our own 44px status bar is drawn, so the dot lives inside it —
+   the same place a phone's camera sits, and clear of the clock and the battery. */
+@media (min-width: 401px) {
+  .flow-exit { top: 0; height: 30px; }
+}

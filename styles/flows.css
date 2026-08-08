@@ -1,0 +1,65 @@
+/* ── Entry hub ─────────────────────────────────────────────────────────────────
+   The four flows, as a way in. Nothing new is designed here: the frame is the
+   onboarding one (.ob-screen grey, same status bar), the heading is the .ob-title
+   scale, and the cards are .ob-card — 20px radius, 16px padding, 20px/-1px bold
+   title, silhouette bottom-anchored and multiplied. It should read as a screen of
+   the app, not as a menu bolted onto it. */
+.fl-screen { display: flex; flex-direction: column; }
+
+.fl-head { padding: 56px 16px 28px; }
+.fl-head h1 { margin: 0; font-family: var(--font-supreme-bold); font-size: 32px; line-height: 1.2; letter-spacing: -1.5px; color: var(--color-black); }
+.fl-head p { margin: 12px 0 0; font-family: var(--font-supreme); font-size: 15px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-500); }
+
+.fl-body { flex: 1; overflow-y: auto; scrollbar-width: none; padding: 0 12px 24px; }
+.fl-body::-webkit-scrollbar { display: none; }
+
+.fl-list { display: flex; flex-direction: column; gap: 4px; }
+
+/* .ob-row's card, one per flow: 20px radius, white, and the silhouette bottom-right under
+   a multiply blend, exactly as the sport rows in onboarding carry theirs. A row rather
+   than a 2x2 of squares because a caption is the useful part here — it is what tells you
+   which screens a flow actually walks through, and a square card has no line for it. */
+.fl-row {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  height: 128px;
+  padding: 16px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+.fl-step {
+  position: relative; z-index: 2;
+  display: block;
+  font-family: var(--font-supreme-bold); font-size: 12px; line-height: 1.2; letter-spacing: -0.5px;
+  color: var(--color-red);
+}
+.fl-t {
+  position: relative; z-index: 2;
+  margin: 8px 0 0;
+  font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px;
+  color: var(--color-black);
+}
+.fl-sub {
+  position: relative; z-index: 2;
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-supreme); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px;
+  color: var(--color-neutral-500);
+}
+/* Right-anchored and contained, the way .ob-row places its own artwork. Held to the right
+   third so it never runs under the caption — these strings are longer than a sport name. */
+.fl-img {
+  position: absolute;
+  top: 0; bottom: 0; right: 8px;
+  width: 116px;
+  background-position: right center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.fl-row:active { background: var(--color-neutral-50); }

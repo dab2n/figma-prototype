@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<script>if(innerWidth>400){document.documentElement.style.setProperty("--fit",Math.min(1,innerHeight/812).toFixed(4));try{if(localStorage.getItem("clay"))document.documentElement.className+=" clay";}catch(e){}}</script>
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F2F2F2">
+<script defer src="assets/openext.js?v=1030"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="NEWTON">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<title>Newton — Try the flows</title>
+<link rel="stylesheet" href="styles/main.css?v=1030">
+<link rel="stylesheet" href="styles/onboarding.css?v=1030">
+<link rel="stylesheet" href="styles/flows.css?v=1030">
+</head>
+<body>
+<div class="phone">
+  <div class="screen ob-screen fl-screen">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <div class="fl-head">
+      <h1>Try NEWTON</h1>
+      <p>Four flows. Pick one and walk it end to end.</p>
+    </div>
+
+    <div class="fl-body">
+      <!-- The step tag is the flow's place in the product, not a menu index: setup happens
+           once, the other three are the loop you come back to. -->
+      <div class="fl-list">
+        <a class="fl-row" href="index.html">
+          <span class="fl-step">01</span>
+          <p class="fl-t">First Setup</p>
+          <span class="fl-sub">Onboarding · Body scan · Home</span>
+          <span class="fl-img" style="background-image:url('assets/photos/sport-running.png?v=1030')"></span>
+        </a>
+        <a class="fl-row" href="home.html">
+          <span class="fl-step">02</span>
+          <p class="fl-t">Explore Home</p>
+          <span class="fl-sub">Home · Packs · Pack detail</span>
+          <span class="fl-img" style="background-image:url('assets/photos/sport-basketball.png?v=1030')"></span>
+        </a>
+        <a class="fl-row" href="setup-location.html">
+          <span class="fl-step">03</span>
+          <p class="fl-t">Start a Workout</p>
+          <span class="fl-sub">Setup · Devices · Ready</span>
+          <span class="fl-img" style="background-image:url('assets/photos/sport-marathon.png?v=1030')"></span>
+        </a>
+        <!-- Home is where this flow starts, but only with the strip: home.html's own inline
+             script reveals it 1.8s after landing when notifNow is set, which is the same
+             door 프로토타입 2 walks through. Set on the click rather than carried in the URL
+             so a reload of Home is an ordinary Home again. -->
+        <a class="fl-row" href="home.html" data-notif>
+          <span class="fl-step">04</span>
+          <p class="fl-t">Session Report</p>
+          <span class="fl-sub">New on Home · Recap · Report</span>
+          <span class="fl-img" style="background-image:url('assets/photos/sport-hometraining.png?v=1030')"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.querySelector('[data-notif]').addEventListener('click', function () {
+    try { sessionStorage.setItem('notifNow', '1'); } catch (e) {}
+  });
+</script>
+</body>
+</html>
