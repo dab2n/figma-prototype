@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.webkit.JavascriptInterface
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 
 /**
@@ -76,18 +77,41 @@ class MainActivity : AppCompatActivity() {
                 // otherwise, and unlike a query parameter it survives every navigation.
                 userAgentString = userAgentString + " NewtonShell"
             }
-            // Keep every link inside the app; the prototype is one origin.
-            webViewClient = WebViewClient()
+            // Keep every link inside the app; the prototype is one origin. Every load wipes
+            // the inset properties with the document, so they are re-sent when one lands.
+            webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView, url: String) {
+                    ViewCompat.requestApplyInsets(view)
+                }
+            }
         }
         setContentView(web)
 
-        // Nothing may CONSUME the bar insets on the way down. A view that eats them is a
+        // Two jobs, one listener.
+        //
+        // Nothing may CONSUME the bar insets on the way down: a view that eats them is a
         // window that has quietly stopped drawing behind the bars — the same failure this
-        // wrapper exists to avoid, by another route — and the page's env(safe-area-inset-*)
-        // would fall to 0 with no other sign. Passed through untouched, so the WebView is
-        // the full height of the window and the page clears the strips with the CSS it
-        // already has.
-        ViewCompat.setOnApplyWindowInsetsListener(web) { _, insets -> insets }
+        // wrapper exists to avoid, by another route. They are returned untouched, so the
+        // WebView stays the full height of the window.
+        //
+        // And a WebView's env(safe-area-inset-*) reports the display CUTOUT only; the system
+        // bars are not in it. That is why the app bar came to rest under the clock with none
+        // of the room the design leaves for it — the padding resolved to 0. The shell
+        // measures the bars itself and hands them to the page as --sat/--sab, which the CSS
+        // prefers over env(). In a browser they are unset and env() answers as it always did.
+        ViewCompat.setOnApplyWindowInsetsListener(web) { v, insets ->
+            val sys = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val cut = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
+            val d = resources.displayMetrics.density
+            val top = (maxOf(sys.top, cut.top) / d).toInt()
+            val bottom = (maxOf(sys.bottom, cut.bottom) / d).toInt()
+            (v as WebView).evaluateJavascript(
+                "document.documentElement.style.setProperty('--sat','${top}px');" +
+                "document.documentElement.style.setProperty('--sab','${bottom}px');",
+                null,
+            )
+            insets
+        }
 
         // The bars are transparent, so what is behind them is the page — and the system's
         // own glyphs have to stay readable against it. The navbar is black on every screen,

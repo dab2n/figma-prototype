@@ -534,10 +534,10 @@ html.installed .creator-screen,
 html.installed body .creator-screen,
 html.installed body .recap-screen { height: 100%; min-height: 0; border-radius: 0; }
 html.installed body .phone:has(> .tabbar) > .screen {
-  height: calc(100% - 56px - max(24px, env(safe-area-inset-bottom, 0px)));
+  height: calc(100% - 56px - max(24px, var(--sab, env(safe-area-inset-bottom, 0px))));
 }
 html.installed body .phone.notif-on:has(> .tabbar) > .screen {
-  height: calc(100% - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px)));
+  height: calc(100% - 56px - 66px - max(24px, var(--sab, env(safe-area-inset-bottom, 0px))));
 }
 /* The navbar sits at the foot of the FRAME, not of the window — the frame is the window
    here, and absolute keeps it in the same coordinate space as everything it meets. */
@@ -548,12 +548,12 @@ html.installed .tabbar { position: absolute; left: 0; right: 0; bottom: 0; width
    it rather than under it. */
 html.installed body .tabbar {
   box-sizing: border-box;
-  height: calc(56px + max(24px, env(safe-area-inset-bottom, 0px)));
+  height: calc(56px + max(24px, var(--sab, env(safe-area-inset-bottom, 0px))));
   padding-bottom: 0;
 }
 /* The junction rides on the navbar's height, which grows into the bottom inset here. */
-html.installed .phone { --foot: calc(56px + max(24px, env(safe-area-inset-bottom, 0px))); }
-html.installed .phone.notif-on { --foot: calc(56px + 66px + max(24px, env(safe-area-inset-bottom, 0px))); }
+html.installed .phone { --foot: calc(56px + max(24px, var(--sab, env(safe-area-inset-bottom, 0px)))); }
+html.installed .phone.notif-on { --foot: calc(56px + 66px + max(24px, var(--sab, env(safe-area-inset-bottom, 0px)))); }
 /* Installed, the phone draws its own gesture handle — so ours is a second one drawn under
    it, and it goes. The 24pt it sat in stays: that is the space the real handle needs, and
    with the pill gone the navbar's own black simply fills it down to the foot of the app.
@@ -581,4 +581,7 @@ html.installed .flow-exit { top: 0; height: 44px; }
    does draw under the clock. */
 html.installed .status-bar { display: none; }
 html.installed .app-bar-transparent { top: 0; }
-html.installed .phone { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); }
+/* --sat/--sab are the shell's own measurement of the system bars. A WebView's env() only
+   reports the display cutout, so inside the app that padding came out 0 and the app bar sat
+   under the clock. Everywhere else --sat is unset and env() answers as it always did. */
+html.installed .phone { box-sizing: border-box; padding-top: var(--sat, env(safe-area-inset-top, 0px)); }

@@ -4,6 +4,9 @@
 // so nothing jumps unexpectedly.
 (function () {
   var ua = navigator.userAgent.toLowerCase();
+  // Our own Android shell IS a webview, and it matches the `; wv)` test below — but it is
+  // the app, not something to escape from. It says so on its user agent.
+  if (ua.indexOf('newtonshell') > -1) return;
 
   function target() {
     if (ua.indexOf('kakaotalk') > -1)
