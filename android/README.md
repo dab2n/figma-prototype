@@ -45,6 +45,21 @@ Read off `probe.html`, installed as a PWA, Chrome 140, DPR 3:
 0 — so `viewport-fit=cover` is being honoured as a tag and ignored as a request.
 There is nothing left to try from inside the page: the strips are not part of it.
 
+## How to tell it worked
+
+Open `probe.html` inside the shell. Its verdict answers the only question that matters —
+whether the app's WINDOW reaches behind the navigationBars inset, which is not the same as
+whether a handle is drawn:
+
+    before (PWA, S23)   inset bottom 0, window 58pt short of the screen
+                        -> the strip is reserved OUTSIDE the app
+
+    after (shell)       inset bottom > 0, window + insets == screen
+                        -> the page is drawing behind it
+
+A bottom inset of 0 inside the shell would mean the hint is genuinely off AND the window
+already covers the screen — line B says which: window + insets against screen.height.
+
 ## Build
 
 Android Studio (Koala or newer), or:

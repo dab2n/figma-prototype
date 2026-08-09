@@ -30,7 +30,7 @@
 </head>
 <body>
 <h1>Viewport probe</h1>
-<p class="sub">Read this on the phone, screenshot it. Every number is what the phone reports, not what the app assumes.</p>
+<p class="sub">Read this on the phone, screenshot it. The question is whether the app's WINDOW reaches behind the system bars — not whether a handle is drawn.</p>
 
 <div id="verdicts"></div>
 <table id="t"></table>
@@ -85,26 +85,34 @@
   var out = [];
   function say(cls, text) { out.push('<div class="v ' + cls + '">' + text + '</div>'); }
 
-  say(cover ? 'ok' : 'no', '<b>1. viewport-fit=cover</b> — ' +
-    (cover ? 'applied on this page.' : 'NOT in the viewport tag.'));
+  // The question is not whether a handle is DRAWN. It is whether the app's window reaches
+  // behind the navigationBars inset. Two numbers settle it together and neither does alone:
+  // how much of the screen the window covers, and what the bottom inset reports.
+  var covered = innerHeight + top + bot;      // everything the page can address
+  var missing = screenH - covered;            // screen the window never sees
+  var drawsBehind = bot > 0;
+  var reserved = !drawsBehind && missing > 4;
 
-  say(chrome >= 108 ? 'ok' : (chrome ? 'no' : 'huh'),
-    '<b>2. edge-to-edge capable</b> — Chrome ' + (chrome || '?') +
-    (chrome >= 108 ? '. dvh/svh/lvh and env() are all supported here.'
-                   : '. Below 108, so the dynamic viewport units are missing.'));
+  say(drawsBehind ? 'ok' : 'no', '<b>A. is the window drawing behind the navigation inset?</b><br>' +
+    (drawsBehind
+      ? 'YES — the bottom inset reports ' + bot + 'pt, which is strip the page is addressing.'
+      : reserved
+        ? 'NO — the bottom inset is 0 AND the window is ' + missing + 'pt short of the screen. ' +
+          'That strip is reserved OUTSIDE the app: not part of the page, so nothing in CSS reaches it.'
+        : 'the inset is 0 and the window already covers the screen — there is no strip to draw behind.'));
 
-  var reaches = bot > 0;
-  say(reaches ? 'ok' : 'no', '<b>3. does the viewport reach the gesture strip?</b> — ' +
-    (reaches
-      ? 'yes. The bottom inset is ' + bot + 'pt, which is the strip the page is drawing under.'
-      : 'no. The bottom inset is 0, so either the system is keeping that strip to itself ' +
-        'or there is nothing there to keep.') +
-    '<br>dvh ' + dvh + ' + inset ' + bot + ' = ' + (dvh + bot) + ' against a ' + screenH + 'pt screen.');
+  say(missing > 4 ? 'no' : 'ok', '<b>B. window against screen</b><br>' +
+    'window ' + innerHeight + ' + insets ' + (top + bot) + ' = ' + covered +
+    ' against a ' + screenH + 'pt screen' +
+    (missing > 4 ? ' — <b>' + missing + 'pt outside the app.</b>' : ' — the whole screen.'));
 
-  var nav = bot === 0 ? 'no strip at all — gesture hints hidden, or the page is not drawing under it'
-          : bot <= 30 ? 'swipe gestures (a thin handle)'
-          : '3-button navigation (a tall bar)';
-  say('huh', '<b>4. navigation mode</b> — bottom inset ' + bot + 'pt reads as: ' + nav + '.');
+  say('huh', '<b>C. what the strips measure</b><br>' +
+    'top inset ' + top + 'pt, bottom inset ' + bot + 'pt. ' +
+    (bot === 0 ? 'A 0 here does not mean the handle is off — it means the page is not addressing that strip.'
+     : bot <= 30 ? 'That reads as a gesture handle.' : 'That reads as a three-button bar.'));
+
+  say('huh', '<b>D. capability</b><br>viewport-fit=cover ' + (cover ? 'applied' : 'MISSING') +
+    ', Chrome ' + (chrome || '?') + (chrome >= 108 ? ' (dvh/svh/lvh and env() all supported).' : '.'));
 
   document.getElementById('verdicts').innerHTML = out.join('');
   document.getElementById('ua').textContent = navigator.userAgent;

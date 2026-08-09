@@ -11,6 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 
 /**
@@ -77,6 +78,14 @@ class MainActivity : AppCompatActivity() {
             webViewClient = WebViewClient()
         }
         setContentView(web)
+
+        // Nothing may CONSUME the bar insets on the way down. A view that eats them is a
+        // window that has quietly stopped drawing behind the bars — the same failure this
+        // wrapper exists to avoid, by another route — and the page's env(safe-area-inset-*)
+        // would fall to 0 with no other sign. Passed through untouched, so the WebView is
+        // the full height of the window and the page clears the strips with the CSS it
+        // already has.
+        ViewCompat.setOnApplyWindowInsetsListener(web) { _, insets -> insets }
 
         if (savedInstanceState == null) web.loadUrl(START_URL)
 
