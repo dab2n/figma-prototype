@@ -6,6 +6,12 @@
    whose bottom edge is pale. */
 :root { color-scheme: dark; }
 :root:has(.ob-bottom), :root:has(.rts-screen), :root:has(.recap-screen) { color-scheme: light; }
+/* In a browser the page is a white sheet with a frame on it, and the CANVAS — everything
+   outside the body's box — has to be that white too. Two things were wrong: nothing set a
+   background on html, and color-scheme: dark makes the browser paint its canvas dark until
+   a background is known. That is the black the gap flashes on reload, and the cut-off
+   colour underneath it afterwards. Stated outright, both stop. */
+html:not(.installed) { color-scheme: light; background: #fff; }
 
 /* Smooth cross-document crossfade between screens (Chrome; ignored elsewhere) */
 @view-transition { navigation: auto; }
@@ -132,7 +138,12 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
   height: 780px;
   border-radius: 40px;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  /* Small enough to fade out inside the air the frame is given. 20/60 was drawn for a
+     desktop page with room all round it; on a phone the frame nearly fills the screen, so
+     that shadow ran off the bottom edge and stopped dead — a grey band under the frame
+     that reads as the background being cut. 32px of air each side now (the boot script's
+     424/844) and a shadow spent within about 28. */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
 }
 /* NO background here. Black under the whole frame drew a dark hairline along the rounded
    top edge on every screen: the frame's corner is antialiased and the screen clipped
@@ -542,16 +553,20 @@ html.installed .phone.notif-on { --foot: calc(56px + 66px + max(24px, env(safe-a
 html.installed .side-trigger { display: none; }
 html.installed .flow-exit { top: 0; height: 44px; }
 
-/* Installed, the phone draws its own clock and its own gesture bar and BOTH are wanted.
-   Ours is a drawing of a status bar — the mockup's — and next to a real one it is simply a
-   second status bar, which is what a Galaxy and an iPhone were each showing. So it is not
-   drawn here at all; it belongs to the browser, where there is no real one inside the
-   frame. The gesture bar is the other way round: the drawn pill in the navbar STAYS,
-   because the Galaxy's own hint gets switched off by hand and the app still has to have
-   one.
-   The top inset as padding, on every installed device rather than only iOS: it is 0
-   wherever the system keeps that strip to itself, so it costs nothing there and it is
-   exactly right where the page does draw under the clock. */
+/* Whose status bar, decided by measurement rather than by guessing at the device.
+   The manifest asks for fullscreen, so on a phone that grants it there is no system clock
+   and the frame draws the design's own — the 44px these screens were always laid out with,
+   telling the real time. On a phone that keeps its clock anyway (Android 15 draws the
+   app edge to edge and leaves the bar on top) drawing ours as well is two status bars,
+   which is what a Galaxy showed. The tell is the top safe-area inset: 0 means the strip is
+   ours, anything else means the system is still up there. assets/flows.js reads it and
+   sets .own-bar.
+   The bottom is not in question either way: the drawn pill in the navbar stays, because
+   the phone's own gesture hint is switched off by hand and the app still has to have one. */
 html.installed .status-bar { display: none; }
 html.installed .app-bar-transparent { top: 0; }
 html.installed .phone { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); }
+html.installed.own-bar .status-bar { display: block; }
+html.installed.own-bar .status-bar .statusbar-svg { visibility: visible; }
+html.installed.own-bar .app-bar-transparent { top: 44px; }
+html.installed.own-bar .phone { padding-top: 0; }

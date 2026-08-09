@@ -10,7 +10,7 @@
      392/812 are the frame plus 16px of air; --fit scales it to whatever is actually there.
      Inline and parser-blocking ON PURPOSE: --fit falls back to 1, so any frame painted
      before it is set shows the phone at FULL size and then snaps down. -->
-<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true;if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/392,h/812).toFixed(4));};window.__box();try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
+<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true;if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/424,h/844).toFixed(4));};window.__box();try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
 <!-- The four faces every screen actually renders in. Preloaded because font-display:swap
      draws the fallback first and re-lays the text out when the real one lands — on the
      phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
@@ -20,7 +20,7 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#AC896D">
-<script defer src="assets/openext.js?v=1049"></script>
+<script defer src="assets/openext.js?v=1051"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -28,11 +28,11 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Front Scan</title>
-<link rel="stylesheet" href="styles/main.css?v=1049">
-<link rel="stylesheet" href="styles/onboarding.css?v=1049">
-<link rel="stylesheet" href="styles/scan.css?v=1049">
-<script defer src="assets/idle.js?v=1049"></script>
-<script defer src="assets/flows.js?v=1049"></script>
+<link rel="stylesheet" href="styles/main.css?v=1051">
+<link rel="stylesheet" href="styles/onboarding.css?v=1051">
+<link rel="stylesheet" href="styles/scan.css?v=1051">
+<script defer src="assets/idle.js?v=1051"></script>
+<script defer src="assets/flows.js?v=1051"></script>
 </head>
 <body>
 <div class="phone">
@@ -42,11 +42,11 @@
     <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
 
     <div class="scan-cam">
-      <span class="scan-shot" style="background-image:url('assets/photos/scan-front.jpg?v=1049')"></span>
+      <span class="scan-shot" style="background-image:url('assets/photos/scan-front.jpg?v=1051')"></span>
       <span class="scan-dim"></span>
     </div>
     <div class="scan-wash"></div>
-    <img class="scan-sil" src="assets/icons/scan-front-sil.svg?v=1049" alt="">
+    <img class="scan-sil" src="assets/icons/scan-front-sil.svg?v=1051" alt="">
 
     <div class="ob-appbar">
       <a class="back" href="scan-intro.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
@@ -75,6 +75,6 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/scan.js?v=1049"></script>
+<script src="assets/scan.js?v=1051"></script>
 </body>
 </html>
