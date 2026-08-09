@@ -56,6 +56,29 @@
   else paint();
 })();
 
+// The strip under the phone's own status bar, painted to match the screen.
+//
+// On a phone that draws the app edge to edge (Android 15) the page runs UNDER the system
+// clock, and the frame takes that height back as padding — so what shows up there is the
+// frame's own ground. Left unpainted that is the black behind the frame, and Chrome has
+// meanwhile told the OS the bar is #ffffff (this page's theme-color), so the OS drew DARK
+// icons on it: a black strip with an invisible clock in it, which is what an S25 showed.
+//
+// theme-color is the one value both ends already agree on — it is what the page says its
+// top is, and what the OS picked its icon colour against. So the strip is painted with it.
+// Where the system keeps that strip to itself the inset is 0 and this paints nothing.
+(function () {
+  var r = document.documentElement;
+  if (!r.classList.contains('installed')) return;
+  function paint() {
+    var meta = document.querySelector('meta[name="theme-color"]');
+    var phone = document.querySelector('.phone');
+    if (meta && phone) phone.style.background = meta.getAttribute('content');
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paint);
+  else paint();
+})();
+
 // The clock in our status bar, wherever ours is the one on screen.
 //
 // The 9:41 is outlined paths inside one SVG and cannot be edited, so the sheet is clipped
