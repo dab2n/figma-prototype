@@ -55,39 +55,3 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paint);
   else paint();
 })();
-
-// Fullscreen means the phone hands over the whole screen and stops drawing its own clock,
-// so the app draws the design's status bar instead — and it may as well tell the time. The
-// 9:41 is outlined paths inside one SVG and cannot be edited, so the SVG is clipped past
-// the clock and the time is written over it in Pretendard SemiBold, the face those glyphs
-// were outlined from. Only in fullscreen: on the desktop mockup 9:41 is the frame's
-// signature, and every export is measured against it.
-(function () {
-  var fs = false;
-  try { fs = matchMedia('(display-mode: fullscreen)').matches; } catch (e) {}
-  if (!fs) return;
-  function clock() {
-    var bar = document.querySelector('.status-bar');
-    if (!bar || bar.querySelector('.sb-now')) return;
-    var svg = bar.querySelector('.statusbar-svg');
-    if (!svg) return;
-    svg.style.clipPath = 'inset(0 0 0 70px)';
-    var d = document.createElement('div');
-    d.className = 'sb-now';
-    // Same box the outlined glyphs sat in: ink from x 20.67 to 49, centred in the first
-    // 70px of the bar, 15px SemiBold.
-    d.style.cssText = 'position:absolute;left:0;top:0;width:70px;height:44px;' +
-      'display:flex;align-items:center;justify-content:center;' +
-      'font-family:Pretendard,-apple-system,sans-serif;font-weight:600;font-size:15px;' +
-      'line-height:1;pointer-events:none;color:' + (bar.classList.contains('on-dark') ? '#fff' : '#333') + ';';
-    bar.appendChild(d);
-    var tick = function () {
-      var n = new Date(), h = n.getHours() % 12;
-      d.textContent = (h === 0 ? 12 : h) + ':' + String(n.getMinutes()).padStart(2, '0');
-    };
-    tick();
-    setInterval(tick, 20000);
-  }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', clock);
-  else clock();
-})();

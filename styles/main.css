@@ -97,6 +97,13 @@ body {
   padding: 0;
   overflow: hidden;
   background: #fff;
+  /* dvh, so the frame is centred in what is actually on screen. With the address bar out
+     the layout box is the taller one and a frame centred in THAT sits low, which is the
+     white that opens up under it on a phone. dvh is the unit for exactly this; it only
+     misbehaved when it was asked to size an installed app, where there is no browser UI
+     for it to track. */
+  height: 100vh;
+  height: 100dvh;
 }
 .phone { zoom: var(--fit, 1); }
 
@@ -543,14 +550,16 @@ html.installed body .tabbar {
 html.installed .side-trigger { display: none; }
 html.installed .flow-exit { top: 0; height: 44px; }
 
-/* iOS never gives the status bar back — a web app there is always standalone and the
-   system clock stays on top of it. Drawing ours as well is two status bars, which is what
-   an iPhone was showing. So on iOS ours stays hidden and the frame takes the inset as
-   padding instead; on Android, where fullscreen really does hand the strip over, ours is
-   the only one on screen and it tells the real time (assets/flows.js). */
-html.installed .status-bar { display: block; }
-html.installed .status-bar .statusbar-svg { visibility: visible; }
-html.installed .app-bar-transparent { top: 44px; }
-html.installed.ios .status-bar { display: none; }
-html.installed.ios .app-bar-transparent { top: 0; }
-html.installed.ios .phone { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); }
+/* Installed, the phone draws its own clock and its own gesture bar and BOTH are wanted.
+   Ours is a drawing of a status bar — the mockup's — and next to a real one it is simply a
+   second status bar, which is what a Galaxy and an iPhone were each showing. So it is not
+   drawn here at all; it belongs to the browser, where there is no real one inside the
+   frame. The gesture bar is the other way round: the drawn pill in the navbar STAYS,
+   because the Galaxy's own hint gets switched off by hand and the app still has to have
+   one.
+   The top inset as padding, on every installed device rather than only iOS: it is 0
+   wherever the system keeps that strip to itself, so it costs nothing there and it is
+   exactly right where the page does draw under the clock. */
+html.installed .status-bar { display: none; }
+html.installed .app-bar-transparent { top: 0; }
+html.installed .phone { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); }
