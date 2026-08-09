@@ -56,46 +56,40 @@
   else paint();
 })();
 
-// Whose status bar is at the top, measured.
+// The clock in our status bar, when ours is the one on screen.
 //
-// The manifest asks for fullscreen. A phone that grants it hands over the whole screen and
-// stops drawing its clock, so the frame draws the design's own — and it may as well tell
-// the time. A phone that keeps its clock anyway leaves a top safe-area inset behind, and
-// there ours would be the second one on screen. So the inset IS the question: 0 and the
-// strip is ours, anything else and it is not.
+// Installed, the manifest asks for fullscreen: Android takes its own clock away and the
+// frame draws the design's, so it may as well tell the time. iOS keeps its clock whatever
+// the manifest says, and there ours is hidden (main.css) — so this stands down.
 //
 // The 9:41 is outlined paths inside one SVG and cannot be edited, so the SVG is clipped
 // past the clock and the time written over it in Pretendard SemiBold, the face those
 // glyphs were outlined from — the same way the exports do it.
 (function () {
   var r = document.documentElement;
-  if (!r.classList.contains('installed')) return;
-  var pad = document.createElement('div');
-  pad.style.cssText = 'position:absolute;top:-9999px;height:env(safe-area-inset-top, 0px);';
-  document.body.appendChild(pad);
-  var inset = pad.offsetHeight;
-  pad.parentNode.removeChild(pad);
-  if (inset > 0) return;                     // the system is still drawing one
-  r.classList.add('own-bar');
-
-  var bar = document.querySelector('.status-bar');
-  if (!bar || bar.querySelector('.sb-now')) return;
-  var svg = bar.querySelector('.statusbar-svg');
-  if (!svg) return;
-  svg.style.clipPath = 'inset(0 0 0 70px)';
-  var d = document.createElement('div');
-  d.className = 'sb-now';
-  // The box the outlined glyphs sat in: ink from x 20.67 to 49, centred in the bar's
-  // first 70px, 15px SemiBold.
-  d.style.cssText = 'position:absolute;left:0;top:0;width:70px;height:44px;' +
-    'display:flex;align-items:center;justify-content:center;' +
-    'font-family:Pretendard,-apple-system,sans-serif;font-weight:600;font-size:15px;' +
-    'line-height:1;pointer-events:none;color:' + (bar.classList.contains('on-dark') ? '#fff' : '#333') + ';';
-  bar.appendChild(d);
-  var tick = function () {
-    var n = new Date(), h = n.getHours() % 12;
-    d.textContent = (h === 0 ? 12 : h) + ':' + String(n.getMinutes()).padStart(2, '0');
-  };
-  tick();
-  setInterval(tick, 20000);
+  if (!r.classList.contains('installed') || r.classList.contains('ios')) return;
+  function draw() {
+    var bar = document.querySelector('.status-bar');
+    if (!bar || bar.querySelector('.sb-now')) return;
+    var svg = bar.querySelector('.statusbar-svg');
+    if (!svg) return;
+    svg.style.clipPath = 'inset(0 0 0 70px)';
+    var d = document.createElement('div');
+    d.className = 'sb-now';
+    // The box the outlined glyphs sat in: ink from x 20.67 to 49, centred in the bar's
+    // first 70px, 15px SemiBold.
+    d.style.cssText = 'position:absolute;left:0;top:0;width:70px;height:44px;' +
+      'display:flex;align-items:center;justify-content:center;' +
+      'font-family:Pretendard,-apple-system,sans-serif;font-weight:600;font-size:15px;' +
+      'line-height:1;pointer-events:none;color:' + (bar.classList.contains('on-dark') ? '#fff' : '#333') + ';';
+    bar.appendChild(d);
+    var tick = function () {
+      var n = new Date(), h = n.getHours() % 12;
+      d.textContent = (h === 0 ? 12 : h) + ':' + String(n.getMinutes()).padStart(2, '0');
+    };
+    tick();
+    setInterval(tick, 15000);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', draw);
+  else draw();
 })();

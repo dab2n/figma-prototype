@@ -542,6 +542,10 @@ html.installed body .phone.notif-on:has(> .tabbar) > .screen {
 /* The navbar sits at the foot of the FRAME, not of the window — the frame is the window
    here, and absolute keeps it in the same coordinate space as everything it meets. */
 html.installed .tabbar { position: absolute; left: 0; right: 0; bottom: 0; width: auto; }
+/* 56 of icons and 24 of gesture strip — the design's own, and the only one on screen now
+   that Android has taken its hint away. env() is 0 in fullscreen, so max() simply keeps
+   the 24; where a system inset does survive (iOS) it takes over and the pill sits above
+   it rather than under it. */
 html.installed body .tabbar {
   box-sizing: border-box;
   height: calc(56px + max(24px, env(safe-area-inset-bottom, 0px)));
@@ -553,20 +557,18 @@ html.installed .phone.notif-on { --foot: calc(56px + 66px + max(24px, env(safe-a
 html.installed .side-trigger { display: none; }
 html.installed .flow-exit { top: 0; height: 44px; }
 
-/* Whose status bar, decided by measurement rather than by guessing at the device.
-   The manifest asks for fullscreen, so on a phone that grants it there is no system clock
-   and the frame draws the design's own — the 44px these screens were always laid out with,
-   telling the real time. On a phone that keeps its clock anyway (Android 15 draws the
-   app edge to edge and leaves the bar on top) drawing ours as well is two status bars,
-   which is what a Galaxy showed. The tell is the top safe-area inset: 0 means the strip is
-   ours, anything else means the system is still up there. assets/flows.js reads it and
-   sets .own-bar.
-   The bottom is not in question either way: the drawn pill in the navbar stays, because
-   the phone's own gesture hint is switched off by hand and the app still has to have one. */
-html.installed .status-bar { display: none; }
-html.installed .app-bar-transparent { top: 0; }
-html.installed .phone { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); }
-html.installed.own-bar .status-bar { display: block; }
-html.installed.own-bar .status-bar .statusbar-svg { visibility: visible; }
-html.installed.own-bar .app-bar-transparent { top: 44px; }
-html.installed.own-bar .phone { padding-top: 0; }
+/* One status bar and one bottom bar, both ours.
+   The manifest asks for fullscreen, so Android takes its clock and its gesture hint away
+   and hands over the whole screen — and the frame draws the pair the design has always
+   had: the 44px status bar at the top, telling the real time, and the navbar with its own
+   gesture pill at the foot. Nothing of the system's is left to line up with, so there is
+   nothing to leave a gap or to appear twice.
+   iOS is the exception it has to be: a web app there is always standalone and the system
+   clock cannot be taken away, so ours stays hidden and the frame takes the top inset as
+   padding instead. Drawing both would be the two status bars an iPhone was showing. */
+html.installed .status-bar { display: block; }
+html.installed .status-bar .statusbar-svg { visibility: visible; }
+html.installed .app-bar-transparent { top: 44px; }
+html.installed.ios .status-bar { display: none; }
+html.installed.ios .app-bar-transparent { top: 0; }
+html.installed.ios .phone { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); }
