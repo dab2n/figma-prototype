@@ -575,7 +575,8 @@ button { font-family: inherit; }
    so a tab is untouched.
    NOT VERIFIED on a device from here — display-mode cannot be emulated in a desktop
    Chrome window, and env() reports 0. The arithmetic is the same as the block below. */
-@media (max-width: 400px) and (display-mode: standalone) {
+@media (max-width: 400px) and (display-mode: standalone),
+       (hover: none) and (pointer: coarse) and (max-width: 900px) and (display-mode: standalone) {
   .phone { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); }
   body .phone:has(> .tabbar) > .screen {
     height: calc(100dvh - 56px - max(24px, env(safe-area-inset-bottom, 0px)) - env(safe-area-inset-top, 0px));

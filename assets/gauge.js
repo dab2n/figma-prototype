@@ -11,14 +11,27 @@
 window.rpGauge = (function () {
   var ARC_CX = 180, ARC_RX = 261, ARC_RY = 188.5, ARC_TOP = 24;   // the ellipse the arc is drawn from
   var ANCHOR_X = 228, ANCHOR_SCORE = 78.8, PX_PER_POINT = 2.58;   // 78.8 lands exactly where Figma puts it
-  var TRAVEL = 780, LEAD = 150;                                   // marker leads, number joins at LEAD
+  // 1100, not 780. The marker has 144px of arc to cover and a cubic ease-OUT spent 87% of
+  // it in the first half — measured on Records, left went 44.5 -> 191 of a 208.5 finish
+  // inside 400ms and then crawled, while the number kept counting for the full run. That
+  // is the "it barely moves and only the number animates" of it. Ease in AND out over a
+  // longer run, so the marker sets off, travels, and settles — one continuous sweep along
+  // the curve rather than a jump followed by a crawl.
+  var TRAVEL = 1100, LEAD = 260;                                  // marker leads, number joins at LEAD
 
   var cur = { gain: 0, score: 0 }, raf = 0;
   var reduce = false;
   try { reduce = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
 
   function $(id) { return document.getElementById(id); }
+  // The number still eases out — a count-up wants to slow into its last digits. The
+  // marker gets an ease-in-out, which is what makes a travel read as travel.
   function ease(p) { return 1 - Math.pow(1 - p, 3); }
+  // Smoothstep, not a cubic in-out: the cubic's ramp is so slow that the marker sat still
+  // for four tenths of a second before anything moved — a dead start reads as broken just
+  // as much as a jump does. This one is off the mark from the first frame and still
+  // decelerates into its landing.
+  function glide(p) { return p * p * (3 - 2 * p); }
 
   // Marker sits ON the curve: solve the ellipse for y at the marker's x. The progress
   // line is dashed to end exactly under the marker, so it reads as a tail being dragged
@@ -81,7 +94,7 @@ window.rpGauge = (function () {
     raf = requestAnimationFrame(function frame(t) {
       if (!t0) t0 = t;
       var el = t - t0;
-      place(s0 + (score - s0) * ease(Math.min(1, el / TRAVEL)));
+      place(s0 + (score - s0) * glide(Math.min(1, el / TRAVEL)));
 
       if (el >= LEAD) {
         if (!joined) {                       // paint the start value before unhiding

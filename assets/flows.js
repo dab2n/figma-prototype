@@ -23,3 +23,33 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', add);
   else add();
 })();
+
+// Installed to the home screen, Chrome tints the system bars from <meta name="theme-color">
+// — and it is one value for both ends of a screen that is white at the top and black at
+// the foot. Home declares white, which is right for the status bar it sits under and wrong
+// for the gesture bar below the navbar: that is the white strip under the tab bar.
+//
+// Only in standalone, and only the meta: in a browser tab the tag still says what the top
+// of the page is, which is what that case needs. viewport-fit=cover means the page draws
+// its own top in standalone, so the status bar takes its colour from the page either way.
+(function () {
+  var standalone = false;
+  try {
+    standalone = matchMedia('(display-mode: standalone)').matches ||
+                 matchMedia('(display-mode: fullscreen)').matches ||
+                 navigator.standalone === true;
+  } catch (e) {}
+  if (!standalone) return;
+  function paint() {
+    var bar = document.querySelector('.phone > .tabbar, .phone > .dj-bar, .phone > .detail-sheet');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) return;
+    // Whatever the bottom-most bar is painted, or the frame's own ground when a screen has
+    // no bar at all — the report and the recap run their colour to the bottom edge.
+    var el = bar || document.querySelector('.phone > .screen') || document.body;
+    var c = getComputedStyle(el).backgroundColor;
+    if (c && c !== 'rgba(0, 0, 0, 0)' && c !== 'transparent') meta.setAttribute('content', c);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paint);
+  else paint();
+})();
