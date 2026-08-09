@@ -49,8 +49,10 @@
   var v = window.visualViewport;
   var m = (navigator.userAgent.match(/Chrome\/(\d+)/) || [])[1];
   var chrome = m ? parseInt(m, 10) : 0;
+  var shell = / NewtonShell/.test(navigator.userAgent);
   var mode = ['fullscreen', 'standalone', 'minimal-ui', 'browser']
     .filter(function (x) { try { return matchMedia('(display-mode: ' + x + ')').matches; } catch (e) { return false; } })[0] || '?';
+  if (shell) mode += ' (in the Android shell)';
 
   var vp = document.querySelector('meta[name=viewport]');
   var cover = /viewport-fit\s*=\s*cover/.test(vp ? vp.content : '');

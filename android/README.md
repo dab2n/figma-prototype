@@ -29,6 +29,22 @@ The bars themselves are untouched: one real clock, one real gesture handle, both
 own, with the page drawing behind them. The page already carries `viewport-fit=cover`, so
 `env(safe-area-inset-*)` reports the strips and the frame's own CSS clears them.
 
+## What the S23 said
+
+Read off `probe.html`, installed as a PWA, Chrome 140, DPR 3:
+
+    display-mode        standalone
+    viewport-fit=cover  yes
+    screen.height       780
+    innerHeight         722       <- the app gets the middle band only
+    100vh/dvh/lvh       722
+    100svh              666
+    inset top/bottom    0 / 0     <- and it is drawing under neither bar
+
+780 minus 722 is 58pt of screen the app never sees, and every safe-area inset is
+0 — so `viewport-fit=cover` is being honoured as a tag and ignored as a request.
+There is nothing left to try from inside the page: the strips are not part of it.
+
 ## Build
 
 Android Studio (Koala or newer), or:

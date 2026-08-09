@@ -67,6 +67,11 @@ class MainActivity : AppCompatActivity() {
                 loadWithOverviewMode = false
                 useWideViewPort = true
                 cacheMode = android.webkit.WebSettings.LOAD_DEFAULT
+                // The page decides between two layouts from display-mode, and inside a
+                // WebView that reads `browser` — which would put the framed mockup on a
+                // white page inside the app. A marker on the user agent is what tells it
+                // otherwise, and unlike a query parameter it survives every navigation.
+                userAgentString = userAgentString + " NewtonShell"
             }
             // Keep every link inside the app; the prototype is one origin.
             webViewClient = WebViewClient()
