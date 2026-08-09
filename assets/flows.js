@@ -177,9 +177,12 @@ window.__tick = (function () {
     var g = document.createElementNS(ns, 'g');
     g.setAttribute('clip-path', 'url(#' + id + ')');
     var run = document.createElementNS(ns, 'path');
-    // The check's centreline. The stroke is far wider than the brush on purpose — it is
-    // clipped to it, so only its LEADING EDGE matters, and that edge is the pen.
-    run.setAttribute('d', 'M119 155 L144.5 180 L197 126');
+    // The check's centreline, run PAST the brush at both ends. The stroke is far wider
+    // than the brush on purpose — it is clipped to it, so only its leading edge matters,
+    // and that edge is the pen. Stopping the line on the brush's own tips left both of
+    // them squared off by the cap; overshooting puts the cut outside the shape, where the
+    // clip throws it away, and the tapered ends survive.
+    run.setAttribute('d', 'M110.4 146.6 L144.5 180 L206.8 116');
     run.setAttribute('class', 'ob-check-tick');
     g.appendChild(run);
 

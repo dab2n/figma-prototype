@@ -598,9 +598,9 @@ html.installed .phone { box-sizing: border-box; padding-top: var(--sat, env(safe
 .ob-check-disc { fill: #fff; transform-origin: 159.69px 159.69px; animation: ob-disc .22s cubic-bezier(.2,.8,.3,1) both; }
 .ob-check-tick {
   fill: none; stroke: #FA3030; stroke-width: 64; stroke-linecap: butt; stroke-linejoin: round;
-  /* The centreline runs 111 units; 118 clears it, so the brush is fully hidden at 0%.
+  /* The centreline runs 137 units; 140 clears it, so the brush is fully hidden at 0%.
      A butt cap keeps the growing edge square — a round one would reveal ahead of the pen. */
-  stroke-dasharray: 118; stroke-dashoffset: 118;
+  stroke-dasharray: 140; stroke-dashoffset: 140;
   animation: ob-tick .34s cubic-bezier(.6,0,.35,1) .12s forwards;
 }
 @keyframes ob-disc { from { transform: scale(.4); opacity: 0; } }

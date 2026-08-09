@@ -18,3 +18,24 @@ document.querySelectorAll('[data-toggle]').forEach(function (el) {
     obMark(el, !on);
   });
 });
+
+// Next is a promise, so it only looks like one once the page can keep it. The screens
+// that ask a question say so with [data-single]/[data-group]; those with nothing to answer
+// (the scan steps) never gain the gate and stay live, which is why this is opt-in rather
+// than a default-off.
+(function () {
+  var next = document.querySelector('.ob-next');
+  var groups = document.querySelectorAll('.ob-screen [data-single], .ob-screen [data-group]');
+  if (!next || !groups.length) return;
+  var href = next.getAttribute('href');
+  next.classList.add('gated');
+  function refresh() {
+    var ok = [].every.call(groups, function (g) { return g.querySelector('.sel'); });
+    next.classList.toggle('ready', ok);
+    if (ok) next.setAttribute('href', href); else next.removeAttribute('href');
+  }
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-toggle]')) setTimeout(refresh, 0);
+  });
+  refresh();
+})();

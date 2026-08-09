@@ -19,8 +19,19 @@
   }
 
   if (scr.getAttribute('data-stage') === 'intro') {
-    // A beat to read the title, then the preview opens out.
+    // A beat to read the title, then the preview opens out — and then it goes on by
+    // itself. This screen asks nothing; making somebody press Next to leave a sentence
+    // they have already read is a stop that does not need to be there.
     setTimeout(wide, 1800);
+    var next = document.querySelector('.ob-next');
+    var go = next && next.getAttribute('href');
+    if (go) {
+      var t = setTimeout(function () { location.href = go; }, 3000);
+      // Touch anything and it is theirs: a tap on Next, or a change of mind on Back.
+      ['pointerdown', 'touchstart', 'keydown'].forEach(function (e) {
+        document.addEventListener(e, function () { clearTimeout(t); }, { passive: true, once: true });
+      });
+    }
     return;
   }
 
