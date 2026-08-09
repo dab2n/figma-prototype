@@ -606,14 +606,6 @@ button { font-family: inherit; }
   body .creator-screen, body .recap-screen { height: calc(100dvh - env(safe-area-inset-top, 0px)); }
 }
 
-/* Fullscreen (installed on Android): the phone draws no status bar at all, so ours comes
-   back to fill that space — exactly the 44px the Figma frames budget for it. Scoped to
-   the fullscreen display mode so it can never sit under a real one. */
-@media (max-width: 400px) and (display-mode: fullscreen) {
-  .status-bar { display: block; }
-  .status-bar .statusbar-svg { visibility: visible; }
-  .app-bar-transparent { top: 44px; }
-}
 
 /* ── The way back, on every other screen ───────────────────────────────────────
    A dot where a phone puts its camera. Top centre is the one strip free across the
@@ -715,4 +707,42 @@ button { font-family: inherit; }
   body .tabbar { box-sizing: border-box; height: calc(56px + max(24px, env(safe-area-inset-bottom, 0px))); padding-bottom: 0; }
   .side-trigger { display: none; }
   .flow-exit { top: env(safe-area-inset-top, 0px); height: 26px; }
+}
+
+/* Installed and asked for the whole screen. Measured on a Galaxy: in standalone the app
+   is handed the band BETWEEN the system bars — 32.8pt of status bar above it and 25.4pt of
+   gesture bar below, of a 780pt screen — and Android paints both of those itself. That is
+   the hairline under the clock and the white strip under the navbar, and no CSS reaches
+   either of them: viewport-fit=cover only tells the page where the insets are, it does not
+   make Chrome hand them over.
+   So the manifest asks for fullscreen and the app draws its own status bar — the 9:41 the
+   design has always had, which is what these frames were drawn with. Nothing is left for
+   the system to paint. iOS ignores the display mode and stays standalone; there the block
+   below does the same job with the safe-area insets, which iOS does hand over. */
+@media (display-mode: fullscreen) {
+  html, body { height: 100%; }
+  body { padding: 0; align-items: stretch; }
+  .phone { width: 100%; height: 100%; border-radius: 0; box-shadow: none; padding-top: 0; }
+  .status-bar { display: block; }
+  .status-bar .statusbar-svg { visibility: visible; }
+  .app-bar-transparent { top: 44px; }
+}
+/* Belt and braces on the sizing, for both installed modes: a percentage of a window that
+   has no browser UI in it is exact, where 100dvh on this Galaxy came out 58pt short of the
+   screen. Last in the file so it settles the tie with the viewport-unit rules above. */
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  html, body { height: 100%; min-height: 100%; }
+  .phone { height: 100%; }
+  /* No safe-area term in these: a percentage resolves against the frame's CONTENT box,
+     and in standalone the frame already takes the top inset as padding, so it is out of
+     the number before the arithmetic starts. Subtracting it again is how a screen ends up
+     an inset short of the navbar. */
+  body .phone:has(> .tabbar) > .screen {
+    height: calc(100% - 56px - max(24px, env(safe-area-inset-bottom, 0px)));
+  }
+  body .phone.notif-on:has(> .tabbar) > .screen {
+    height: calc(100% - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px)));
+  }
+  .recap-screen, .records-screen, .swipe-detail, .creator-screen,
+  body .creator-screen, body .recap-screen { height: 100%; min-height: 0; }
 }
