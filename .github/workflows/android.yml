@@ -1,0 +1,55 @@
+name: Android app
+
+# Builds the WebView shell and publishes the APK, so installing it needs nothing on the
+# phone but a browser: the run attaches the file to a release with a stable address.
+on:
+  push:
+    branches: [main]
+    paths: ['android/**', '.github/workflows/android.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      # `gradle`, not `./gradlew` — the wrapper's jar is a binary this repo does not carry,
+      # and the action provides the same version the wrapper properties ask for.
+      - name: Build debug APK
+        working-directory: android
+        run: gradle --no-daemon assembleDebug
+
+      - name: Name it after the run
+        id: name
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk newton-${{ github.run_number }}.apk
+          echo "apk=newton-${{ github.run_number }}.apk" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: newton-apk
+          path: ${{ steps.name.outputs.apk }}
+
+      # A release, because a phone can download from one without signing in to anything.
+      - name: Publish
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: app-${{ github.run_number }}
+          name: NEWTON app ${{ github.run_number }}
+          body: |
+            Install on the phone: open this page in Chrome, tap the .apk, allow the install.
+            The app is the prototype in a WebView that draws behind both system bars.
+          files: ${{ steps.name.outputs.apk }}

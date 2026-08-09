@@ -11,8 +11,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import android.webkit.JavascriptInterface
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 
 /**
  * The prototype, edge to edge, with the phone's own bars left alone.
@@ -86,6 +88,19 @@ class MainActivity : AppCompatActivity() {
         // the full height of the window and the page clears the strips with the CSS it
         // already has.
         ViewCompat.setOnApplyWindowInsetsListener(web) { _, insets -> insets }
+
+        // The bars are transparent, so what is behind them is the page — and the system's
+        // own glyphs have to stay readable against it. The navbar is black on every screen,
+        // so its handle is light and stays light. The top changes per screen, and the page
+        // is the only thing that knows: it calls back with its own theme-color's lightness.
+        val bars = WindowInsetsControllerCompat(window, web)
+        bars.isAppearanceLightNavigationBars = false
+        web.addJavascriptInterface(object {
+            @JavascriptInterface
+            fun topIsLight(light: Boolean) {
+                runOnUiThread { bars.isAppearanceLightStatusBars = light }
+            }
+        }, "NewtonShell")
 
         if (savedInstanceState == null) web.loadUrl(START_URL)
 

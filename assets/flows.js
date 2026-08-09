@@ -56,6 +56,30 @@
   else paint();
 })();
 
+// Inside the Android shell the real status bar is transparent and the page is what shows
+// through it — so the system's own glyphs have to stay readable against whatever this
+// screen puts up there. The page is the only side that knows: theme-color IS its top, so
+// its lightness decides whether the OS draws dark glyphs or light ones. Home is white and
+// gets dark; the report is red and gets light.
+(function () {
+  var shell = window.NewtonShell;
+  if (!shell || !shell.topIsLight) return;
+  function tell() {
+    var meta = document.querySelector('meta[name="theme-color"]');
+    var c = (meta && meta.getAttribute('content') || '#ffffff').trim();
+    var m = c.match(/^#?([0-9a-f]{6})$/i);
+    var lum = 1;
+    if (m) {
+      var n = parseInt(m[1], 16);
+      // Rec. 709, the same weighting the rest of this project measures luminance with.
+      lum = (0.2126 * (n >> 16 & 255) + 0.7152 * (n >> 8 & 255) + 0.0722 * (n & 255)) / 255;
+    }
+    try { shell.topIsLight(lum > 0.6); } catch (e) {}
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tell);
+  else tell();
+})();
+
 // The strip under the phone's own status bar, painted to match the screen.
 //
 // On a phone that draws the app edge to edge (Android 15) the page runs UNDER the system
