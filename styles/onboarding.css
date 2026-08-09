@@ -56,18 +56,27 @@
 .ob-card.tall { height: 166px; }
 .ob-card.short { height: 108px; }
 .ob-card .t { position: relative; z-index: 2; margin: 0; padding: 16px; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
-/* The artwork is exported from Figma AT CARD SIZE, with its placement inside the card
-   already in the picture — the design puts each figure somewhere different and no single
-   background-position was ever going to hold all of them. So it simply fills the card, and
-   multiply drops its white ground into whatever the card is painted, which is what lets
-   the selected gradient come through underneath exactly as before. */
-.ob-card .img { position: absolute; inset: 0; background-position: center; background-repeat: no-repeat; background-size: 100% 100%; mix-blend-mode: multiply; }
-/* Selected: Newton gradient fill + white title + light-blend image + check + inner glow. */
+
+/* How a sport card is actually built in Figma, and now here.
+   The artwork is a GREYSCALE CUTOUT on transparency, and the red is a gradient laid over
+   it in plus-lighter — one asset serving both states, because the two states differ only
+   in which layer does the lightening:
+       unselected   white card  ->  cutout, then the gradient over it (the red silhouette)
+       selected     gradient card -> the cutout itself lightens what is already red
+   Each figure has its own box inside the card, given here as --ix/--iy/--iw/--ih straight
+   from the design; several of them are bigger than the card and the card's overflow clips
+   them, which is the cropping the design intends. Exported at that box's size, so the
+   picture is never resized into a shape it was not drawn for. */
+.ob-card .img { position: absolute; left: var(--ix, 0); top: var(--iy, 0); width: var(--iw, 100%); height: var(--ih, 100%);
+  background-position: center; background-repeat: no-repeat; background-size: 100% 100%; }
+.ob-card .img::after { content: ""; position: absolute; inset: 0; mix-blend-mode: plus-lighter;
+  background: var(--grad, linear-gradient(180deg, #FA3030, #FEB179)); }
+/* Selected: Newton gradient fill + white title + the cutout lightening it + check + glow. */
 .ob-card.sel { background: linear-gradient(180deg, #FA3030 48%, #FE6E3C 77.6%, #FEC389 100.5%, #D1FEFF 107.5%);
   box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6); }
+.ob-card.sel .img { mix-blend-mode: plus-lighter; }
+.ob-card.sel .img::after { content: none; }
 .ob-card.sel .t { color: #fff; }
-.ob-card.sel::after { content: ""; position: absolute; top: 4px; right: 4px; z-index: 3; width: 52px; height: 52px;
-  background: url('../assets/icons/check-circle.webp') center / contain no-repeat; pointer-events: none; }
 
 /* ── "What do you want to do most?" list ─────────────────────────────────────── */
 .ob-list { display: flex; flex-direction: column; gap: 4px; }
@@ -79,8 +88,6 @@
 .ob-row.sel { background: linear-gradient(90deg, #FA3030 55%, #FE6E3C 85%, #FEC389 100%, #D1FEFF 108%);
   box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6); }
 .ob-row.sel .t { color: #fff; }
-.ob-row.sel::after { content: ""; position: absolute; top: 50%; right: 4px; margin-top: -26px; z-index: 3; width: 52px; height: 52px;
-  background: url('../assets/icons/check-circle.webp') center / contain no-repeat; pointer-events: none; }
 
 /* ── "Where do you work out?" (Indoors / Outdoors / Both) ─────────────────────── */
 .ob-where { display: flex; gap: 4px; }
@@ -97,11 +104,14 @@
   box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6); }
 .ob-wcard.sel .t { color: #fff; }
 .ob-wcard.sel .s { color: var(--color-neutral-100); }
-.ob-wcard.sel::after { content: ""; position: absolute; top: 8px; right: 8px; z-index: 3; width: 52px; height: 52px;
-  background: url('../assets/icons/check-circle.webp') center / contain no-repeat; pointer-events: none; }
 
 /* ── Bottom bar (Next) ───────────────────────────────────────────────────────── */
-.ob-bottom { justify-content: flex-end; padding: 12px 16px 0; box-sizing: border-box; background: var(--color-neutral-100); }
+.ob-bottom { justify-content: space-between; padding: 12px 16px 0; box-sizing: border-box; background: var(--color-neutral-100); }
 .ob-bottom .sb-row { display: flex; align-items: center; justify-content: flex-end; height: 32px; }
 .ob-next { display: flex; align-items: center; gap: 2px; font-family: var(--font-supreme-bold); font-size: 22px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); text-decoration: none; }
 .ob-next img { width: 13px; height: 12px; display: block; margin: 0 5px; filter: brightness(0) invert(0.03); }
+
+/* Where each family hangs the shared tick (see main.css for the mark itself). */
+.ob-card .ob-check  { top: 4px;  right: 4px; }
+.ob-wcard .ob-check { top: 8px;  right: 8px; }
+.ob-row .ob-check   { top: 50%; right: 4px; margin-top: -26px; }

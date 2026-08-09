@@ -585,3 +585,22 @@ html.installed .app-bar-transparent { top: 0; }
    reports the display cutout, so inside the app that padding came out 0 and the app bar sat
    under the clock. Everywhere else --sat is unset and env() answers as it always did. */
 html.installed .phone { box-sizing: border-box; padding-top: var(--sat, env(safe-area-inset-top, 0px)); }
+
+/* ── The tick ─────────────────────────────────────────────────────────────────
+   White disc, then the check drawn along its own stroke. The element is inserted by
+   onboarding.js at the moment of selection, so the keyframes simply run on arrival and
+   there is no from-state to hold between taps. Sits where each family's design puts it. */
+.ob-check { position: absolute; z-index: 3; width: 52px; height: 52px; pointer-events: none; overflow: visible; }
+.ob-check { filter: drop-shadow(0 2px 6px rgba(0,0,0,0.16)); }
+.ob-check-disc { fill: #fff; transform-origin: 26px 26px; animation: ob-disc .22s cubic-bezier(.2,.8,.3,1) both; }
+.ob-check-tick {
+  fill: none; stroke: #FA3030; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round;
+  /* 20 is a hair past the path's own length, so the dash clears it completely at 0%. */
+  stroke-dasharray: 20; stroke-dashoffset: 20;
+  animation: ob-tick .3s cubic-bezier(.65,0,.35,1) .14s forwards;
+}
+@keyframes ob-disc { from { transform: scale(.4); opacity: 0; } }
+@keyframes ob-tick { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .ob-check-disc, .ob-check-tick { animation-duration: 1ms; animation-delay: 0s; }
+}

@@ -20,7 +20,7 @@
   }
   function restore() {
     var on; try { on = JSON.parse(sessionStorage.getItem(KEY)); } catch (e) {}
-    (on || []).forEach(function (i) { if (toggles[i]) toggles[i].classList.add('sel'); });
+    (on || []).forEach(function (i) { if (toggles[i]) { toggles[i].classList.add('sel'); mark(toggles[i], true); } });
   }
 
   // Required input groups: single-select cards/toggles, and the multi-select injury/mode groups.
@@ -53,12 +53,25 @@
   // Toggle any [data-toggle] button: tap to select (.sel), tap again to clear.
   // A [data-single] group behaves like radio (selecting clears siblings) but the active
   // one can still be tapped off; [data-group] (injury / mode) allows multiple.
+  // The tick is the same mark the onboarding cards use, built by window.__tick and drawn
+  // along its stroke. It goes where the card's own rule puts it; cards that carry a
+  // placeholder box (.mc-check) hand it that box instead of their own corner.
+  function mark(el, on) {
+    var slot = el.querySelector('.mc-check') || el;
+    var old = slot.querySelector('.ob-check');
+    if (old) old.remove();
+    if (on && window.__tick) slot.appendChild(window.__tick());
+  }
+
   toggles.forEach(function (btn) {
     btn.addEventListener('click', function () {
       var on = btn.classList.contains('sel');
       var group = btn.closest('[data-single]');
-      if (group && !on) group.querySelectorAll('[data-toggle].sel').forEach(function (b) { b.classList.remove('sel'); });
+      if (group && !on) group.querySelectorAll('[data-toggle].sel').forEach(function (b) {
+        b.classList.remove('sel'); mark(b, false);
+      });
       btn.classList.toggle('sel', !on);
+      mark(btn, !on);
       save();
       syncHots();
       refresh();

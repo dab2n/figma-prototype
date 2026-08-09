@@ -142,3 +142,31 @@ window.__liveClock = function () {
   tick();
   setInterval(tick, 15000);
 };
+
+// The tick, drawn rather than faded in.
+//
+// Every selectable thing in onboarding and setup answers a tap with the same mark: a white
+// disc that pops, then a check that RUNS ALONG ITS OWN STROKE. It lives here because three
+// different families of card use it and the geometry has to stay one thing; each of them
+// only says where it sits. A flattened image cannot do this — dash-offset needs a path to
+// walk. Inserting the element is what starts the draw, so there is no resting state to
+// clear between taps: the caller removes it on deselect.
+window.__tick = function () {
+  var ns = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(ns, 'svg');
+  svg.setAttribute('class', 'ob-check');
+  svg.setAttribute('viewBox', '0 0 52 52');
+  svg.setAttribute('aria-hidden', 'true');
+  // The badge is 28pt across (node 9:9851). The box around it is 52 because that is the
+  // room the old asset reserved for its shadow, and every rule that places this mark is
+  // written against those 52 — so the disc is drawn at 28 inside them, not filling them.
+  var c = document.createElementNS(ns, 'circle');
+  c.setAttribute('cx', '26'); c.setAttribute('cy', '26'); c.setAttribute('r', '14');
+  c.setAttribute('class', 'ob-check-disc');
+  var p = document.createElementNS(ns, 'path');
+  // The check is 22x17 of that 28, at the design's own inset.
+  p.setAttribute('d', 'M18.2 25.6 L22.3 30.7 L33.1 19.2');
+  p.setAttribute('class', 'ob-check-tick');
+  svg.appendChild(c); svg.appendChild(p);
+  return svg;
+};

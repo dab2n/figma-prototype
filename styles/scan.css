@@ -27,11 +27,13 @@
 }
 .scan-screen.wide .scan-cam { left: 0; right: 0; height: 100%; border-radius: 0; }
 
-/* 464x700 at x=-52 in Figma is exactly what `center / cover` gives a 360-wide
-   frame, so the framing needs no numbers of its own. The scale is there to push
-   the blur's transparent bleed off the edges. */
+/* The preview is live footage now, not a photograph — the same shot the scan asks for,
+   ten seconds of it, looping and silent. It is encoded already cropped to the frame's
+   own 360:780, so `cover` has nothing left to cut. The scale is there to push the
+   blur's transparent bleed off the edges. */
 .scan-shot {
-  position: absolute; inset: 0;
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: center;
   background-position: center; background-size: cover; background-repeat: no-repeat;
   filter: blur(26px); transform: scale(1.14);
   transition: filter 1.1s ease, transform 1.1s ease;
