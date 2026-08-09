@@ -102,8 +102,12 @@ body {
      white that opens up under it on a phone. dvh is the unit for exactly this; it only
      misbehaved when it was asked to size an installed app, where there is no browser UI
      for it to track. */
-  height: 100vh;
+  /* --vph is the visual viewport, measured (assets/openext.js). dvh is only the fallback
+     for the frames before the script runs: on at least one phone it reports ~35pt less
+     than is really there, and that shortfall is what opened as a white band under the
+     frame. */
   height: 100dvh;
+  height: var(--vph, 100dvh);
 }
 .phone { zoom: var(--fit, 1); }
 
@@ -489,10 +493,12 @@ html:not(.installed) .flow-exit { top: 0; height: 30px; }
    width it was never asked for is exactly how this went wrong before.
    Percentages, not viewport units: a percentage of a window with no browser UI in
    it is exact, where 100dvh measured 58pt short of a Galaxy's screen. */
-html.installed, html.installed body { height: 100%; background: var(--color-black); overscroll-behavior: none; }
+html.installed, html.installed body { height: 100%; height: var(--vph, 100%); background: var(--color-black); overscroll-behavior: none; }
 html.installed body { padding: 0; align-items: stretch; justify-content: flex-start; }
 html.installed .phone {
-  width: 100%; height: 100%;
+  width: 100%;
+  height: 100%;
+  height: var(--vph, 100%);
   border-radius: 0;
   box-shadow: none;
   zoom: 1;

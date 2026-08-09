@@ -80,17 +80,21 @@
   if (document.body) build();
   else document.addEventListener('DOMContentLoaded', build);
 
-  // --fit again whenever the window changes — a rotation, the address bar sliding away,
-  // a keyboard. It is one custom property and two divisions.
+  // The viewport, measured — not asked for in a unit.
+  //
+  // On the Galaxy S23, 100dvh and innerHeight both come back about 35pt SHORT of what is
+  // actually on screen: measured off a Chrome screenshot, the page had 804pt of room and
+  // the frame was laid out against ~770. Half of that shortfall sat under the frame as a
+  // white band, and installed it was the strip under the navbar. visualViewport reports
+  // what is really visible, so that is what --vph and --fit are taken from; height*scale
+  // normalises a pinch back to layout pixels so a zoom does not resize the frame.
   (function () {
-    var r = document.documentElement;
-    if (r.classList.contains('installed')) return;
-    var fit = function () {
-      r.style.setProperty('--fit', Math.min(1, innerWidth / 392, innerHeight / 812).toFixed(4));
-    };
-    addEventListener('resize', fit);
-    addEventListener('orientationchange', fit);
-    addEventListener('pageshow', fit);
-    fit();
+    var box = window.__box;
+    if (!box) return;
+    var v = window.visualViewport;
+    ['resize', 'orientationchange', 'pageshow'].forEach(function (e) { addEventListener(e, box); });
+    if (v) { v.addEventListener('resize', box); v.addEventListener('scroll', box); }
+    box();
   })();
+
 })();
