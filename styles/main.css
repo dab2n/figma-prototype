@@ -81,7 +81,7 @@ html:active-view-transition-type(report-in)::view-transition-new(root) {
    across a page change instead of blinking out. Never on a phone — that is the point of
    them: on a phone the report still arrives on its own after 5s. */
 .side-trigger { display: none; }
-@media (min-width: 401px) {
+@media (min-width: 401px) and (hover: hover) {
   .side-trigger {
     display: block;
     position: fixed;
@@ -433,14 +433,14 @@ button { font-family: inherit; }
    bezel, shadow) and let the phone go edge-to-edge. */
 @media (max-width: 400px) {
   html, body { background: var(--color-black); }
-  body { padding: 0; align-items: stretch; min-height: 100dvh; }
+  body { padding: 0; align-items: stretch; min-height: 100vh; min-height: 100dvh; }
   /* Full-bleed on a phone: no OUTER frame corner radius, fill the whole viewport. */
-  .phone { width: 100vw; height: 100dvh; border-radius: 0; box-shadow: none; }
-  .recap-screen, .records-screen, .swipe-detail, .creator-screen { height: 100dvh; border-radius: 0; }
+  .phone { width: 100vw; height: 100vh; height: 100dvh; border-radius: 0; box-shadow: none; }
+  .recap-screen, .records-screen, .swipe-detail, .creator-screen { height: 100vh; height: 100dvh; border-radius: 0; }
   /* creator.css / recap.css load after this file, so their concrete 780px would win at
      equal specificity and overflow a ~752px phone viewport — same clip the detail pages
      had. `body` outranks them. */
-  body .creator-screen, body .recap-screen { min-height: 0; height: 100dvh; }
+  body .creator-screen, body .recap-screen { min-height: 0; height: 100vh; height: 100dvh; }
   /* Content frame FILLS the viewport above the 80px navbar (no fixed 780 → kills the
      white gap on tall phones) and keeps its rounded BOTTOM (inverted/concave radius
      over the flat black navbar). Square top so it's flush to the screen edge. */
@@ -450,8 +450,10 @@ button { font-family: inherit; }
      pinned navbar. */
   /* Same expression as .tabbar's height — the content fills whatever is left, so the
      page is exactly one viewport tall on any phone. */
-  body .phone:has(> .tabbar) > .screen { height: calc(100dvh - 56px - max(24px, env(safe-area-inset-bottom, 0px))); }
-  body .phone.notif-on:has(> .tabbar) > .screen { height: calc(100dvh - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px))); }
+  body .phone:has(> .tabbar) > .screen { height: calc(100vh - 56px - max(24px, env(safe-area-inset-bottom, 0px)));
+    height: calc(100dvh - 56px - max(24px, env(safe-area-inset-bottom, 0px))); }
+  body .phone.notif-on:has(> .tabbar) > .screen { height: calc(100vh - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px)));
+    height: calc(100dvh - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px))); }
   /* No title bar on these screens, so the back/kebab row sits directly under the
      phone's own status bar instead of below the 44px ours used to occupy. */
   .app-bar-transparent { top: 0; }
@@ -559,7 +561,7 @@ button { font-family: inherit; }
    at all — an 860px-tall layout in a shorter window used to slide up and down and cut the
    bottom off whatever screen was being looked at (or recorded) — and the phone shrinks to
    fit instead of being clipped. --fit is measured in assets/openext.js; 1 until then. */
-@media (min-width: 401px) {
+@media (min-width: 401px) and (hover: hover) {
   html, body { height: 100%; overflow: hidden; }
   body { padding: 0; align-items: center; }
   .phone { zoom: var(--fit, 1); }
@@ -625,7 +627,7 @@ button { font-family: inherit; }
 .flow-exit:active i { background: var(--color-red); transform: scale(1.4); }
 /* On the desktop mockup our own 44px status bar is drawn, so the dot lives inside it —
    the same place a phone's camera sits, and clear of the clock and the battery. */
-@media (min-width: 401px) {
+@media (min-width: 401px) and (hover: hover) {
   .flow-exit { top: 0; height: 30px; }
 }
 
@@ -662,3 +664,36 @@ button { font-family: inherit; }
 .idle-s { margin: 4px 0 0; font-family: var(--font-supreme); font-size: 13px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-500); }
 .idle-s b { font-family: var(--font-supreme-bold); color: var(--color-red); }
 .idle-h { margin: 12px 0 0; font-family: var(--font-supreme); font-size: 12px; line-height: 1.2; letter-spacing: -0.5px; color: var(--color-neutral-400); }
+
+/* The same full-bleed layout, asked for a second time and keyed on what you are holding
+   rather than on a number. A phone whose browser reports a layout wider than 400 — a
+   larger display size, a browser that does not honour width=360 — was falling through to
+   the desktop mockup: 40px of page above and below a rounded card. That is the line
+   between the status bar and the app, and the pale strip under the navbar. Anything you
+   touch, and that is small enough to be a phone, gets the frame edge to edge.
+   Repeated rather than folded into one query because the two conditions have to be OR'd
+   and CSS has no way to name a media condition; last in the file, so it settles any tie. */
+@media (hover: none) and (pointer: coarse) and (max-width: 900px) {
+  html, body { background: var(--color-black); }
+  /* No rubber-band at the ends either: the bounce pulls the frame off the edge and shows
+     the ground behind it, which on a screen meant to be filled reads as a gap. */
+  html, body { overscroll-behavior: none; }
+  body { padding: 0; align-items: stretch; min-height: 100vh; min-height: 100dvh; }
+  .phone { width: 100vw; height: 100vh; height: 100dvh; border-radius: 0; box-shadow: none; zoom: 1; }
+  .recap-screen, .records-screen, .swipe-detail, .creator-screen { height: 100vh; height: 100dvh; border-radius: 0; }
+  body .creator-screen, body .recap-screen { min-height: 0; height: 100vh; height: 100dvh; }
+  body .phone:has(> .tabbar) > .screen {
+    height: calc(100vh - 56px - max(24px, env(safe-area-inset-bottom, 0px)));
+    height: calc(100dvh - 56px - max(24px, env(safe-area-inset-bottom, 0px)));
+  }
+  body .phone.notif-on:has(> .tabbar) > .screen {
+    height: calc(100vh - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px)));
+    height: calc(100dvh - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px)));
+  }
+  .app-bar-transparent { top: 0; }
+  .status-bar { display: none; }
+  .tabbar { position: fixed; left: 0; bottom: 0; width: 100vw; }
+  body .tabbar { box-sizing: border-box; height: calc(56px + max(24px, env(safe-area-inset-bottom, 0px))); padding-bottom: 0; }
+  .side-trigger { display: none; }
+  .flow-exit { top: env(safe-area-inset-top, 0px); height: 26px; }
+}
