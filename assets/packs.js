@@ -28,7 +28,7 @@
       type: 'Creator', sub: 'Sprint Coach · 96K subscribers',
       sport: 'Sprint', joined: '412', rec: ['Boost'],
       total: 16, bars: [['5min', 'PRIME'], ['8min', 'DRIVE'], ['You Can Choose', 'SPRINT!']],
-      info: ['Some Experience', 'Power · Turnover', 'Track', 'Creator'],
+      info: ['Some Experience', 'Power · Turnover', 'Indoor', 'Creator'],
       also: ['interval', 'legburn'], more: ['sprinter', 'bolt', 'strength'],
       photo: 'recent-running.webp', author: 'Kanni', avatar: 'packs-profile-kanni.png',
       title: 'Sprint Without Limits',
@@ -67,7 +67,7 @@
       type: 'Skilled User', sub: 'S&C Coach · 74K subscribers',
       sport: 'Strength', joined: '638', rec: ['Safe', 'Balance'],
       total: 24, bars: [['7min', 'MOBILISE'], ['13min', 'LOAD'], ['You Can Choose', 'HOLD!']],
-      info: ['Some Experience', 'Stability · Strength', 'Gym', 'Skilled User'],
+      info: ['Some Experience', 'Stability · Strength', 'Outdoor', 'Skilled User'],
       also: ['ladder', 'legburn'], more: ['interval', 'legburn', 'sprint'],
       photo: 'rec-strength.jpg', author: 'Daniel', avatar: 'packs-avatar2.png',
       title: 'Agility Strength',
@@ -80,7 +80,7 @@
       type: 'Creator', sub: 'Footwork Creator · 129K subscribers',
       sport: 'Agility', joined: '902', rec: ['Rhythm'],
       total: 15, bars: [['4min', 'LOOSEN'], ['9min', 'PATTERN'], ['You Can Choose', 'PLAY!']],
-      info: ['Anyone', 'Rhythm · Coordination', 'Indoor', 'Creator'],
+      info: ['Anyone', 'Rhythm · Coordination', 'Outdoor', 'Creator'],
       also: ['basketball', 'tennis'], more: ['tennis', 'basketball', 'curry'],
       photo: 'rec-ladder.webp', author: 'Sojin', avatar: 'packs-avatar3.png',
       title: 'Ladder Footwork',
@@ -119,7 +119,7 @@
       type: 'Creator', sub: 'Home Training Creator · 205K subscribers',
       sport: 'Legs', joined: '2,388', rec: ['Safe'],
       total: 14, bars: [['3min', 'PREP'], ['9min', 'BURN'], ['You Can Choose', 'FINISH!']],
-      info: ['Anyone', 'Endurance · Control', 'Anywhere', 'Creator'],
+      info: ['Anyone', 'Endurance · Control', 'Outdoor', 'Creator'],
       also: ['strength', 'interval'], more: ['basketball', 'strength', 'ladder'],
       photo: 'pack-legburn.jpg', author: 'Jiwoo', avatar: 'packs-avatar4.png',
       title: 'Leg Burn Set',
@@ -145,7 +145,7 @@
       type: 'Creator', sub: 'Footwork Creator · 129K subscribers',
       sport: 'Tennis', joined: '486', rec: ['Pace On'],
       total: 27, bars: [['7min', 'RALLY IN'], ['16min', 'DEPTH'], ['You Can Choose', 'POINT!']],
-      info: ['Some Experience', 'Depth · Recovery', 'Outdoor Court', 'Creator'],
+      info: ['Some Experience', 'Depth · Recovery', 'Indoor Court', 'Creator'],
       also: ['ladder', 'basketball'], more: ['ladder', 'curry', 'basketball'],
       photo: 'recent-tennis.webp', author: 'Sojin', avatar: 'packsx-avatar-b.png',
       title: 'Baseline Rally',
@@ -158,13 +158,54 @@
       type: 'Skilled User', sub: 'Home Training Creator · 205K subscribers',
       sport: 'Basketball', joined: '1,033', rec: ['Balance', 'Rhythm'],
       total: 19, bars: [['5min', 'SLIDE'], ['12min', 'CLOSEOUT'], ['You Can Choose', 'RUN IT!']],
-      info: ['Basics Recommended', 'Footwork · Balance', 'Indoor Court', 'Skilled User'],
+      info: ['Basics Recommended', 'Footwork · Balance', 'Outdoor Court', 'Skilled User'],
       also: ['curry', 'ladder'], more: ['legburn', 'curry', 'boxing'],
       photo: 'recent-basketball.webp', author: 'Jiwoo', avatar: 'packsx-avatar-c.png',
       title: 'Court Footwork',
       desc: 'The steps between the highlights. Closeouts, drop steps and the slide that keeps your hips in front, drilled at the speed the game is actually played at.'
     }
   };
+
+  // One table, one truth. A card in a feed and the screen it opens are the same pack, so
+  // the card takes its title, its type, its length, its creator and that creator's face
+  // from here rather than from whatever was typed into the markup — which is how Home
+  // ended up promising "Running Intervals" and opening "Interval Push".
+  //
+  // The link is stamped at the same time. Two things ride on it: the pack key, and WHERE
+  // THE TAP CAME FROM, so the pack's back button can return to the feed the card was in.
+  // The referrer cannot be used for that — inside the Android shell every navigation is
+  // re-issued by the shell itself and arrives with no referrer at all.
+  window.PACKS = PACKS;
+  (function () {
+    var here = (location.pathname.split('/').pop() || 'index.html').replace('.html', '');
+    if (here !== 'home' && here !== 'packs' && here !== 'packs-expanded') return;
+    var from = here === 'packs-expanded' ? 'packs' : here;
+    [].forEach.call(document.querySelectorAll('a[href*="pyeongso.html?pack="]'), function (a) {
+      var key = (a.getAttribute('href').match(/[?&]pack=(\w+)/) || [])[1];
+      var t = PACKS[key];
+      if (!t) return;
+      a.setAttribute('href', 'pyeongso.html?pack=' + key + '&from=' + from);
+      set(a, '.hero-title, .pack-name, .t-body-bold', t.title);
+      set(a, '.t-caption-bold', t.author);
+      var av = a.querySelector('.pack-avatar-sm');
+      if (av) av.src = 'assets/photos/' + t.avatar;
+      // The caption is the pack's own: who made it, and how long it runs. Cards that
+      // carry only the first half (Today's Movement) get only the first half.
+      var meta = a.querySelectorAll('.hero-meta span, .recent-meta span, .pack-meta span');
+      if (meta.length) meta[0].textContent = t.type;
+      if (meta.length > 1) {
+        var last = meta[meta.length - 1];
+        // "11 min" on the hero, "12m" in the rows — each card keeps its own shorthand.
+        last.textContent = t.mins + (/\smin\b/.test(last.textContent) ? ' min' : 'm');
+      }
+      var lone = a.querySelector('.t-caption-regular.dim');
+      if (lone && !meta.length) lone.textContent = t.type;
+    });
+    function set(root, sel, v) {
+      var el = root.querySelector(sel);
+      if (el && v) el.textContent = v;
+    }
+  })();
 
   // The bottom sheet and the kebab are tinted from the hero photo itself, so the screen
   // has to know its colour. Average a small downsample, keep a darker mate for the ramp,
@@ -246,8 +287,11 @@
     img.src = url;
   }
 
-  var key;
-  try { key = new URLSearchParams(location.search).get('pack'); } catch (e) { key = null; }
+  var key, from;
+  try {
+    var q = new URLSearchParams(location.search);
+    key = q.get('pack'); from = q.get('from');
+  } catch (e) { key = null; from = null; }
   var p = key && PACKS[key];
 
   var hero = document.querySelector('.dj-photo, .hero-photo');
@@ -334,7 +378,8 @@
   [].forEach.call(document.querySelectorAll('a[href]'), function (a) {
     var h = a.getAttribute('href');
     if (!/^(pyeongso|ollilttae)\.html$/.test(h)) return;
-    a.setAttribute('href', h + '?pack=' + key);
+    // The feed rides along too, so a hop into 올릴때 and back still knows where Back goes.
+    a.setAttribute('href', h + '?pack=' + key + (from ? '&from=' + from : ''));
   });
 
   if (p.total) txt('.process-graph .big-number .num', p.total);
@@ -378,20 +423,26 @@
   }
 })();
 
-// Back goes back, when back is a screen you came from on purpose.
+// Back goes back to the feed the card was tapped in.
 //
-// The pack's back button is a fixed link to Packs, because history.back() used to land on
-// the setup flow — you reach this screen from there too, and returning INTO a flow you had
-// just left is worse than always landing somewhere sane. But it costs you the other case:
-// open a card on Home, scroll, come back, and you are on Packs at the top rather than on
-// Home looking at the card you tapped. So the fixed link stays as the default and steps
-// aside only for the two screens a card is actually tapped from, where going back is the
-// browser restoring the page AND the scroll position — which is the card's own view.
+// It used to read document.referrer, which works in a browser and not in the app: the
+// shell re-issues every navigation itself, so the page arrives with an empty referrer and
+// every pack fell back to Packs — including the ones opened from Home. The feed now rides
+// on the URL (&from=home|packs), stamped by the card that was tapped, and survives every
+// hop the pack screen makes into its own sub-pages.
+//
+// history.back() where it can be: that restores the feed's SCROLL as well, so you come
+// back to the card you tapped rather than to the top of the list.
 (function () {
-  var ref = (document.referrer || '').split('/').pop().split('?')[0];
-  if (ref !== 'home.html' && ref !== 'packs.html') return;
-  if (history.length < 2) return;
+  var from;
+  try { from = new URLSearchParams(location.search).get('from'); } catch (e) { from = null; }
+  if (from !== 'home' && from !== 'packs') return;
   var back = document.querySelector('.dj-hero .app-bar-transparent a.icon-btn, .creator-nav a.icon-btn');
   if (!back) return;
-  back.addEventListener('click', function (e) { e.preventDefault(); history.back(); });
+  back.setAttribute('href', from + '.html');
+  back.addEventListener('click', function (e) {
+    if (history.length < 2) return;                 // no history to walk: follow the href
+    e.preventDefault();
+    history.back();
+  });
 })();

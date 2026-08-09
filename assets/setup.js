@@ -56,7 +56,13 @@
   // The tick is the same mark the onboarding cards use, built by window.__tick and drawn
   // along its stroke. It goes where the card's own rule puts it; cards that carry a
   // placeholder box (.mc-check) hand it that box instead of their own corner.
+  // Only where the design puts one. Every selectable thing on these screens is a
+  // [data-toggle], but a chip and a toggle button say they are chosen by turning red —
+  // a tick on top of that is a second answer to a question already answered.
+  var TICKED = '.card-sel, .mode-card, .np-cover';
+
   function mark(el, on) {
+    if (!el.matches(TICKED)) return;
     var slot = el.querySelector('.mc-check') || el;
     var old = slot.querySelector('.ob-check');
     if (old) old.remove();

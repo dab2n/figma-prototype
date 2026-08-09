@@ -71,17 +71,33 @@
     return out;
   }
 
-  var state = { env: 'all', sport: '', type: '' };
+  var state = { env: 'all', sport: '', type: '', q: '' };
   var open = '';                      // which drawer is showing: '', 'sport' or 'type'
 
   function label(chip) { return (chip.childNodes[0].textContent || '').trim(); }
+
+  // What a search matches: the pack's name, whose it is, and its sport and type — the
+  // same four things the card already shows, so nothing matches on data nobody can see.
+  function haystack(c) {
+    if (!c.__hay) {
+      c.__hay = [
+        (c.querySelector('.pack-name') || {}).textContent || '',
+        (c.querySelector('.t-caption-bold') || {}).textContent || '',
+        c.getAttribute('data-sport') || '',
+        c.getAttribute('data-type') || '',
+        c.getAttribute('data-env') || ''
+      ].join(' ').toLowerCase();
+    }
+    return c.__hay;
+  }
 
   function apply() {
     var shown = [];
     cards.forEach(function (c) {
       var ok = (state.env === 'all' || c.getAttribute('data-env') === state.env) &&
                (!state.sport || c.getAttribute('data-sport') === state.sport) &&
-               (!state.type  || c.getAttribute('data-type')  === state.type);
+               (!state.type  || c.getAttribute('data-type')  === state.type) &&
+               (!state.q || haystack(c).indexOf(state.q) > -1);
       c.hidden = !ok;
       if (ok) shown.push(c);
       else {
@@ -149,4 +165,36 @@
   });
 
   paintChips();
+
+  // ── Search ────────────────────────────────────────────────────────────────
+  // The magnifier opens a field under the chip row rather than replacing the title: the
+  // filters stay visible and stay in force, so a search is one more narrowing on top of
+  // them rather than a mode that throws them away. Closing it clears the query.
+  var search = document.getElementById('packSearch');
+  var field = search && search.querySelector('input');
+  var openBtn = document.querySelector('.app-bar .actions [data-search]');
+  if (search && field && openBtn) {
+    function setOpen(on) {
+      search.classList.toggle('open', on);
+      openBtn.classList.toggle('on', on);
+      if (on) field.focus();
+      else if (state.q) { state.q = ''; field.value = ''; apply(); }
+    }
+    openBtn.addEventListener('click', function () { setOpen(!search.classList.contains('open')); });
+    search.querySelector('.ps-clear').addEventListener('click', function () {
+      if (field.value) { field.value = ''; state.q = ''; apply(); field.focus(); }
+      else setOpen(false);
+    });
+    var t;
+    field.addEventListener('input', function () {
+      clearTimeout(t);
+      t = setTimeout(function () {
+        var v = field.value.trim().toLowerCase();
+        if (v === state.q) return;
+        state.q = v;
+        apply();
+      }, 140);
+    });
+    field.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+  }
 })();

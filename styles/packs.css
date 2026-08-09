@@ -226,3 +226,82 @@
    pack), so the list says so rather than going blank. */
 .pack-empty { margin: 40px 12px; text-align: center; font-family: var(--font-supreme); font-size: 14px; letter-spacing: -0.42px; color: var(--color-neutral-400); }
 .pack-empty[hidden] { display: none; }
+
+/* ── The app bar's two actions ────────────────────────────────────────────────
+   They were bare images; the magnifier now toggles something, so it is a button and the
+   plus is a link. Both keep the 24px glyph and gain a thumb-sized hit box around it. */
+.app-bar .actions .act {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; margin: -4px;
+  padding: 0; border: 0; background: none; cursor: pointer;
+  border-radius: 999px;
+  -webkit-tap-highlight-color: transparent;
+}
+.app-bar .actions .act.on { background: rgba(0,0,0,0.06); }
+.app-bar .actions .act:active { background: rgba(0,0,0,0.10); }
+
+/* ── Search ───────────────────────────────────────────────────────────────────
+   Height, not opacity — the row has to give its space back to the flow so the list sits
+   where it did when the field is shut, the same way the chip drawer works. */
+.pack-search {
+  height: 0;
+  overflow: hidden;
+  transition: height .24s cubic-bezier(.2,.8,.25,1);
+}
+.pack-search.open { height: 56px; }
+.ps-field {
+  display: flex; align-items: center; gap: 8px;
+  margin: 8px 16px 0;
+  padding: 10px 12px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 14px 54px 10px rgba(0,0,0,0.03);
+}
+.ps-field img { width: 18px; height: 18px; display: block; opacity: .45; flex: none; }
+.ps-field input {
+  flex: 1; min-width: 0;
+  border: 0; outline: 0; background: none; padding: 0;
+  font-family: var(--font-supreme); font-size: 15px; letter-spacing: -0.5px;
+  color: var(--color-black);
+}
+.ps-field input::placeholder { color: var(--color-neutral-500); }
+/* The browser's own clear affordance is a second, differently-shaped X next to ours. */
+.ps-field input::-webkit-search-cancel-button { -webkit-appearance: none; display: none; }
+.ps-clear {
+  flex: none; width: 22px; height: 22px; border: 0; border-radius: 999px;
+  background: var(--color-neutral-100); color: var(--color-neutral-600);
+  font: 16px/1 -apple-system, sans-serif; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.ps-clear:active { background: var(--color-neutral-200, #e5e5e5); }
+
+/* ── Create a pack ────────────────────────────────────────────────────────────
+   The one thing the setup flow has no component for is a place to type. It borrows the
+   card's own shell — white, 16 radius, the same soft shadow — so it sits in the column
+   as one more answer rather than as a form control. */
+.np-field {
+  background: #fff; border-radius: 16px; padding: 16px 20px;
+  box-shadow: 0 14px 54px 10px rgba(0,0,0,0.03);
+}
+.np-field input {
+  width: 100%; border: 0; outline: 0; background: none; padding: 0;
+  font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2;
+  letter-spacing: -1px; color: var(--color-black);
+}
+.np-field input::placeholder { font-family: var(--font-supreme); color: var(--color-neutral-500); letter-spacing: -0.5px; }
+
+.np-covers { display: flex; gap: 4px; }
+.np-cover {
+  flex: 1; height: 88px; min-width: 0; padding: 0; border: 0; cursor: pointer;
+  border-radius: 16px; background: #fff center / cover no-repeat;
+  box-shadow: 0 14px 54px 10px rgba(0,0,0,0.03);
+  position: relative; overflow: hidden;
+}
+/* The tick this app already draws, at the size a thumbnail can carry. */
+.np-cover .ob-check { top: -12px; right: -12px; transform: scale(.72); }
+.np-cover.sel { box-shadow: 0 0 0 2px var(--color-red), 0 14px 54px 10px rgba(0,0,0,0.06); }
+
+/* The preview is a real pack card, so it is styled by the list's own rules; it only has
+   to stop behaving like a link and say when no cover has been picked yet. */
+.np-preview { pointer-events: none; }
+.np-preview .pack-thumb.np-empty { background: var(--color-neutral-200, #E5E5E5); }

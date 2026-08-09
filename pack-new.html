@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<!-- Which of the two the page is: INSTALLED, where the app owns the screen and fills it,
+     or a BROWSER, where it is the 360x780 frame on a white page. Decided here rather than
+     in a media query so nothing depends on a browser reporting a width it was asked for.
+     392/812 are the frame plus 16px of air; --fit scales it to whatever is actually there.
+     Inline and parser-blocking ON PURPOSE: --fit falls back to 1, so any frame painted
+     before it is set shows the phone at FULL size and then snaps down. -->
+<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true||/ NewtonShell/.test(navigator.userAgent);if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/424,h/844).toFixed(4));};window.__box();try{var S=window.NewtonShell;if(S&&S.insetTop){var st=S.insetTop(),sb=S.insetBottom();if(st)r.style.setProperty("--sat",st+"px");if(sb)r.style.setProperty("--sab",sb+"px");}}catch(e){}try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
+<!-- The four faces every screen actually renders in. Preloaded because font-display:swap
+     draws the fallback first and re-lays the text out when the real one lands — on the
+     phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Regular.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Bold.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Medium.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#F2F2F2">
+<script defer src="assets/openext.js?v=1065"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="NEWTON">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<title>Newton — Create a Pack</title>
+<link rel="stylesheet" href="styles/main.css?v=1065">
+<link rel="stylesheet" href="styles/setup.css?v=1065">
+<link rel="stylesheet" href="styles/packs.css?v=1065">
+<script defer src="assets/idle.js?v=1065"></script>
+<script defer src="assets/flows.js?v=1065"></script>
+<script defer src="assets/setup.js?v=1065"></script>
+</head>
+<body>
+<div class="phone">
+  <!-- Making a pack, in the app's own furniture. Nothing new is drawn here: the frame is
+       the setup one, the answers are .toggle-btn and .card-sel, the sports are the chips
+       the setup flow already uses, and the foot is the Next bar. A placeholder path — it
+       collects the four things a pack card shows and stops there. -->
+  <div class="screen setup-screen">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <div class="setup-appbar">
+      <a class="back" href="packs.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
+      <a class="skip" href="packs.html">Cancel</a>
+    </div>
+
+    <div class="setup-title">
+      <h1>Make a pack<br>of your own</h1>
+      <p>Four things, and it is ready to share.</p>
+    </div>
+
+    <div class="setup-body">
+      <div class="setup-sec">
+        <p class="setup-sec-label">Name</p>
+        <div class="np-field">
+          <input id="npName" type="text" maxlength="34" autocomplete="off" placeholder="e.g. Morning Court Footwork">
+        </div>
+      </div>
+
+      <div class="setup-sec">
+        <p class="setup-sec-label">Sport</p>
+        <div class="chip-rows">
+          <div class="chip-row" data-single>
+            <button class="chip-sel" data-toggle>Running</button>
+            <button class="chip-sel" data-toggle>Sprint</button>
+            <button class="chip-sel" data-toggle>Basketball</button>
+            <button class="chip-sel" data-toggle>Tennis</button>
+            <button class="chip-sel" data-toggle>Boxing</button>
+            <button class="chip-sel" data-toggle>Agility</button>
+            <button class="chip-sel" data-toggle>Strength</button>
+            <button class="chip-sel" data-toggle>Legs</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="setup-sec">
+        <p class="setup-sec-label">Where</p>
+        <div class="toggle-row" data-single>
+          <button class="toggle-btn" data-toggle><img src="assets/icons/setup-indoor.png" alt=""><span>Indoor</span></button>
+          <button class="toggle-btn" data-toggle><img src="assets/icons/setup-outdoor.png" alt=""><span>Outdoor</span></button>
+        </div>
+      </div>
+
+      <div class="setup-sec">
+        <p class="setup-sec-label">Cover</p>
+        <div class="np-covers" data-single>
+          <button class="np-cover" data-toggle style="background-image:url('assets/photos/rec-curry.webp?v=1065')"></button>
+          <button class="np-cover" data-toggle style="background-image:url('assets/photos/rec-strength.jpg?v=1065')"></button>
+          <button class="np-cover" data-toggle style="background-image:url('assets/photos/rec-ladder.webp?v=1065')"></button>
+          <button class="np-cover" data-toggle style="background-image:url('assets/photos/pack-interval.jpg?v=1065')"></button>
+        </div>
+      </div>
+
+      <div class="setup-sec">
+        <p class="setup-sec-label">Preview</p>
+        <a class="pack-card np-preview" id="npPreview">
+          <div class="pack-thumb" style="height:189px;">
+            <div class="pack-thumb-top">
+              <div class="pack-person">
+                <img class="pack-avatar-sm" src="assets/photos/my-profile-hd.webp?v=1065" alt="">
+                <span class="t-caption-bold" style="color:#fff;">Juwon Park</span>
+              </div>
+              <span class="badge">NEW</span>
+            </div>
+          </div>
+          <div class="pack-info">
+            <p class="pack-name t-subtitle-b">Untitled Pack</p>
+            <div class="pack-meta t-caption-regular"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>—</span></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- The setup flow's own foot. Create lights up the way Next does — once every group
+       has an answer — so the bar is the same promise it is everywhere else. -->
+  <nav class="tabbar setup-stepbar">
+    <div class="sb-row">
+      <div class="steps-wrap"><div class="steps">
+        <span class="step active">New Pack</span>
+      </div></div>
+      <a class="sb-next" data-next="packs.html">Create <img src="assets/icons/arrow-right-lg.svg" alt=""></a>
+    </div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
+</div>
+
+<script>
+// The preview is the point of the screen: whatever is typed or tapped shows up in a real
+// pack card, the same component the list is built from, so it is obvious what is being
+// made. Nothing is saved — this is the path, not the feature.
+(function () {
+  var name = document.getElementById('npName');
+  var card = document.getElementById('npPreview');
+  var title = card.querySelector('.pack-name');
+  var meta = card.querySelectorAll('.pack-meta span');
+  var thumb = card.querySelector('.pack-thumb');
+
+  function paint() {
+    title.textContent = name.value.trim() || 'Untitled Pack';
+    var sport = document.querySelector('.chip-row .chip-sel.sel');
+    var where = document.querySelector('.toggle-row .toggle-btn.sel span');
+    meta[meta.length - 1].textContent =
+      [sport && sport.textContent.trim(), where && where.textContent.trim()].filter(Boolean).join(' · ') || '—';
+    var cover = document.querySelector('.np-cover.sel');
+    thumb.style.backgroundImage = cover ? cover.style.backgroundImage : '';
+    thumb.classList.toggle('np-empty', !cover);
+  }
+  name.addEventListener('input', paint);
+  document.addEventListener('click', function (e) { if (e.target.closest('[data-toggle]')) setTimeout(paint, 0); });
+  paint();
+})();
+</script>
+</body>
+</html>

@@ -419,8 +419,11 @@ button { font-family: inherit; }
 .flow-exit {
   position: absolute;
   z-index: 900;
-  top: env(safe-area-inset-top, 0px);
-  left: 50%;
+  top: var(--sat, env(safe-area-inset-top, 0px));
+  /* Not centred. Dead centre is where a Galaxy puts its camera, and the dot sat under
+     the punch-hole where nothing could be seen or aimed at. 30% is the gap between the
+     clock and that hole on a 360 frame — 108px in, 72px clear of it. */
+  left: 30%;
   width: 44px; height: 26px;
   margin-left: -22px;
   display: flex; align-items: center; justify-content: center;

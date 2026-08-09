@@ -60,9 +60,16 @@
   // heading — a short pull up still reaches 1회 진입, and a short pull DOWN still falls
   // out of it. Biasing only one way is what made the fold feel one-directional: from
   // 올릴때 you had to drag 140px before it would let go.
+  // Just past the open stop the folded header is whole — avatar, creator line, name — and
+  // a flick that carries a little past it leaves that block half gone with the sheet
+  // riding over the rest. Under BREAK the page falls back to the clean state; past it the
+  // header is genuinely leaving and is left alone.
+  var BREAK = 48;
+
   function settle() {
     if (holding || snapping) return;
     var y = screen.scrollTop;
+    if (y > OPEN && y < OPEN + BREAK) { snapping = 1; glide(OPEN, 260); return; }
     if (y >= OPEN) return;
     var back = dir < 0;
     var target;

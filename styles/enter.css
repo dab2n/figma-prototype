@@ -168,11 +168,12 @@
   position: absolute;
   left: 20px;
   --dj-rest: calc(136px + var(--copyh, 131px) + var(--s, 0) * 37px);
-  /* 100% - 144px, not a flat 636: 636 IS 780 - 144, so it only lands 144 into the header
-     on a frame that happens to be 780 tall. A phone's is 100dvh — on an iPhone that is
-     nearer 745 with the browser bar, which put the avatar ~35px high while .dj-meta below
-     it stayed pinned at top 154, and the two collided. */
-  bottom: calc(var(--dj-rest) + (100% - 144px - var(--dj-rest)) * var(--q, 0));
+  /* 636 FROM THE BOTTOM, which is the only end that means anything here: the fold's edge
+     is measured up from the bottom too (549 at q=1), so 636 is a fixed 87 above it on a
+     frame of any height. Written as 100% - 144px it was 87 above the edge at exactly one
+     height, 780 — installed, where the status inset takes 32 off the frame, the avatar and
+     the creator line under it slid down past the edge and the sheet covered them. */
+  bottom: calc(var(--dj-rest) + (636px - var(--dj-rest)) * var(--q, 0));
   z-index: 5;
   display: flex;
   align-items: center;
@@ -197,10 +198,11 @@
 .dj-meta {
   position: absolute;
   left: 0; right: 0;
-  /* Figma: 10 from the avatar down to the creator line, and 20 from the Sean pill down to
-     the sheet. The avatar's folded bottom is a fixed 144 into the hero and the header ends
-     at 231 (the clip-path edge at s=q=1), so those two gaps pin this block exactly. */
-  top: 154px;
+  /* Same reason as the avatar above: anchored to the BOTTOM, because that is where the
+     fold's edge is. 575 leaves the pill 26 clear of the edge at q=1 and keeps doing so
+     on a frame that is not 780 tall. Anchored to the top it was clear on the design frame
+     and 11px under the sheet in the installed app — the creator's name, cut in half. */
+  bottom: 575px;
   z-index: 5;
   text-align: center;
   color: #fff;
