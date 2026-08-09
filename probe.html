@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<title>Newton — viewport probe</title>
+<style>
+  /* Deliberately NOT the app's stylesheet: this page has to report what the phone says,
+     not what the app's layout makes of it. Full bleed, so the four insets are the phone's
+     own numbers. */
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #fff; color: #141A1A; }
+  body { font: 400 13px/1.45 -apple-system, "Segoe UI", Roboto, sans-serif; padding: 16px; }
+  h1 { margin: 0 0 4px; font-size: 18px; letter-spacing: -0.4px; }
+  p.sub { margin: 0 0 16px; color: #757575; font-size: 12px; }
+  table { border-collapse: collapse; width: 100%; margin-bottom: 16px; }
+  td { padding: 5px 0; border-bottom: 1px solid #EFEFEF; vertical-align: top; }
+  td:first-child { color: #757575; width: 46%; }
+  td:last-child { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .v { padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; font-size: 13px; }
+  .ok   { background: #E8F6EC; color: #14532D; }
+  .no   { background: #FDECEC; color: #7F1D1D; }
+  .huh  { background: #F4F4F5; color: #3F3F46; }
+  b { font-weight: 700; }
+  #ua { word-break: break-all; font-size: 11px; color: #525252; }
+</style>
+</head>
+<body>
+<h1>Viewport probe</h1>
+<p class="sub">Read this on the phone, screenshot it. Every number is what the phone reports, not what the app assumes.</p>
+
+<div id="verdicts"></div>
+<table id="t"></table>
+<p id="ua"></p>
+
+<script>
+(function () {
+  // A probe element, so every CSS unit and every env() is measured the way the layout
+  // engine actually resolves it rather than guessed at.
+  var pad = document.createElement('div');
+  pad.style.cssText = 'position:absolute;top:-9999px;left:0;width:1px;';
+  document.body.appendChild(pad);
+  function css(expr) { pad.style.height = expr; return Math.round(pad.offsetHeight); }
+  function inset(side) { return css('env(safe-area-inset-' + side + ', 0px)'); }
+
+  var v = window.visualViewport;
+  var m = (navigator.userAgent.match(/Chrome\/(\d+)/) || [])[1];
+  var chrome = m ? parseInt(m, 10) : 0;
+  var mode = ['fullscreen', 'standalone', 'minimal-ui', 'browser']
+    .filter(function (x) { try { return matchMedia('(display-mode: ' + x + ')').matches; } catch (e) { return false; } })[0] || '?';
+
+  var vp = document.querySelector('meta[name=viewport]');
+  var cover = /viewport-fit\s*=\s*cover/.test(vp ? vp.content : '');
+
+  var dvh = css('100dvh'), lvh = css('100lvh'), svh = css('100svh'), vh = css('100vh');
+  var top = inset('top'), bot = inset('bottom'), left = inset('left'), right = inset('right');
+  var screenH = Math.round(screen.height);
+  var clientH = document.documentElement.clientHeight;
+
+  var rows = [
+    ['display-mode', mode],
+    ['viewport-fit=cover', cover ? 'yes' : 'NO'],
+    ['Chrome / WebView', chrome || '?'],
+    ['innerHeight', innerHeight],
+    ['visualViewport.height', v ? Math.round(v.height) : '—'],
+    ['100vh / 100dvh', vh + ' / ' + dvh],
+    ['100lvh / 100svh', lvh + ' / ' + svh],
+    ['html clientHeight', clientH],
+    ['screen.height (css)', screenH],
+    ['devicePixelRatio', devicePixelRatio],
+    ['inset top / bottom', top + ' / ' + bot],
+    ['inset left / right', left + ' / ' + right],
+    ['dvh + bottom inset', dvh + bot],
+  ];
+  document.getElementById('t').innerHTML = rows.map(function (r) {
+    return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>';
+  }).join('');
+
+  // ── the four questions, answered ──────────────────────────────────────────
+  var out = [];
+  function say(cls, text) { out.push('<div class="v ' + cls + '">' + text + '</div>'); }
+
+  say(cover ? 'ok' : 'no', '<b>1. viewport-fit=cover</b> — ' +
+    (cover ? 'applied on this page.' : 'NOT in the viewport tag.'));
+
+  say(chrome >= 108 ? 'ok' : (chrome ? 'no' : 'huh'),
+    '<b>2. edge-to-edge capable</b> — Chrome ' + (chrome || '?') +
+    (chrome >= 108 ? '. dvh/svh/lvh and env() are all supported here.'
+                   : '. Below 108, so the dynamic viewport units are missing.'));
+
+  var reaches = bot > 0;
+  say(reaches ? 'ok' : 'no', '<b>3. does the viewport reach the gesture strip?</b> — ' +
+    (reaches
+      ? 'yes. The bottom inset is ' + bot + 'pt, which is the strip the page is drawing under.'
+      : 'no. The bottom inset is 0, so either the system is keeping that strip to itself ' +
+        'or there is nothing there to keep.') +
+    '<br>dvh ' + dvh + ' + inset ' + bot + ' = ' + (dvh + bot) + ' against a ' + screenH + 'pt screen.');
+
+  var nav = bot === 0 ? 'no strip at all — gesture hints hidden, or the page is not drawing under it'
+          : bot <= 30 ? 'swipe gestures (a thin handle)'
+          : '3-button navigation (a tall bar)';
+  say('huh', '<b>4. navigation mode</b> — bottom inset ' + bot + 'pt reads as: ' + nav + '.');
+
+  document.getElementById('verdicts').innerHTML = out.join('');
+  document.getElementById('ua').textContent = navigator.userAgent;
+
+  // keep it live — the numbers move when the address bar slides
+  var redraw = function () { location.reload(); };
+  addEventListener('orientationchange', redraw);
+})();
+</script>
+</body>
+</html>
