@@ -56,8 +56,12 @@
 .ob-card.tall { height: 166px; }
 .ob-card.short { height: 108px; }
 .ob-card .t { position: relative; z-index: 2; margin: 0; padding: 16px; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
-/* Sport silhouette, bottom-anchored. Already red-tinted; on a selected card it lightens. */
-.ob-card .img { position: absolute; inset: 0; background-position: center bottom; background-repeat: no-repeat; background-size: contain; mix-blend-mode: multiply; }
+/* The artwork is exported from Figma AT CARD SIZE, with its placement inside the card
+   already in the picture — the design puts each figure somewhere different and no single
+   background-position was ever going to hold all of them. So it simply fills the card, and
+   multiply drops its white ground into whatever the card is painted, which is what lets
+   the selected gradient come through underneath exactly as before. */
+.ob-card .img { position: absolute; inset: 0; background-position: center; background-repeat: no-repeat; background-size: 100% 100%; mix-blend-mode: multiply; }
 /* Selected: Newton gradient fill + white title + light-blend image + check + inner glow. */
 .ob-card.sel { background: linear-gradient(180deg, #FA3030 48%, #FE6E3C 77.6%, #FEC389 100.5%, #D1FEFF 107.5%);
   box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6); }
@@ -69,7 +73,9 @@
 .ob-list { display: flex; flex-direction: column; gap: 4px; }
 .ob-row { position: relative; display: flex; align-items: center; height: 85px; box-sizing: border-box; border-radius: 20px; overflow: hidden; cursor: pointer; background: #fff; }
 .ob-row .t { position: relative; z-index: 2; margin: 0; padding: 0 20px; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
-.ob-row .img { position: absolute; right: 12px; top: 0; bottom: 0; width: 150px; background-position: right center; background-repeat: no-repeat; background-size: contain; mix-blend-mode: multiply; }
+/* Same as the cards above: the row's artwork is exported at row size with the figure
+   already where the design has it. */
+.ob-row .img { position: absolute; inset: 0; background-position: center; background-repeat: no-repeat; background-size: 100% 100%; mix-blend-mode: multiply; }
 .ob-row.sel { background: linear-gradient(90deg, #FA3030 55%, #FE6E3C 85%, #FEC389 100%, #D1FEFF 108%);
   box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6); }
 .ob-row.sel .t { color: #fff; }
@@ -86,7 +92,7 @@
 .ob-wcard.full { height: 442px; }
 .ob-wcard .t { margin: 0; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); position: relative; z-index: 2; }
 .ob-wcard .s { margin: 2px 0 0; font-family: var(--font-supreme); font-size: 13px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-500); position: relative; z-index: 2; }
-.ob-wcard .img { position: absolute; inset: 0; background-position: center bottom; background-repeat: no-repeat; background-size: contain; mix-blend-mode: multiply; }
+.ob-wcard .img { position: absolute; inset: 0; background-position: center; background-repeat: no-repeat; background-size: 100% 100%; mix-blend-mode: multiply; }
 .ob-wcard.sel { background: linear-gradient(180deg, #FA3030 48%, #FE6E3C 77.6%, #FEC389 100.5%, #D1FEFF 107.5%);
   box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6); }
 .ob-wcard.sel .t { color: #fff; }
