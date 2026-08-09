@@ -79,4 +79,18 @@
   }
   if (document.body) build();
   else document.addEventListener('DOMContentLoaded', build);
+
+  // --fit again whenever the window changes — a rotation, the address bar sliding away,
+  // a keyboard. It is one custom property and two divisions.
+  (function () {
+    var r = document.documentElement;
+    if (r.classList.contains('installed')) return;
+    var fit = function () {
+      r.style.setProperty('--fit', Math.min(1, innerWidth / 392, innerHeight / 812).toFixed(4));
+    };
+    addEventListener('resize', fit);
+    addEventListener('orientationchange', fit);
+    addEventListener('pageshow', fit);
+    fit();
+  })();
 })();

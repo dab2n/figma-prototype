@@ -2,14 +2,15 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<!-- The frame is a fixed 360x780; 812 is that plus 16px of air top and bottom.
-     Inline and parser-blocking ON PURPOSE: --fit falls back to 1, so any frame painted
-     before it is set shows the phone at FULL size and then snaps down. openext.js is
-     deferred, which is after parsing but not reliably before the first paint — with three
-     navigations in a row that flash was the viewport zooming in and out. -->
-<script>if(innerWidth>400){document.documentElement.style.setProperty("--fit",Math.min(1,innerHeight/812).toFixed(4));try{if(localStorage.getItem("clay"))document.documentElement.className+=" clay";}catch(e){}}</script>
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
+<!-- Which of the two the page is: INSTALLED, where the app owns the screen and fills it,
+     or a BROWSER, where it is the 360x780 frame on a white page. Decided here rather than
+     in a media query so nothing depends on a browser reporting a width it was asked for.
+     392/812 are the frame plus 16px of air; --fit scales it to whatever is actually there.
+     Inline and parser-blocking ON PURPOSE: --fit falls back to 1, so any frame painted
+     before it is set shows the phone at FULL size and then snaps down. -->
+<script>(function(d){var r=d.documentElement,m=window.matchMedia,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true;if(i){r.className+=" installed"+(navigator.standalone===true?" ios":"");}else{r.style.setProperty("--fit",Math.min(1,innerWidth/392,innerHeight/812).toFixed(4));}try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
 <!-- The four faces every screen actually renders in. Preloaded because font-display:swap
      draws the fallback first and re-lays the text out when the real one lands — on the
      phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
@@ -22,7 +23,7 @@
 <link rel="preload" as="image" href="assets/icons/check-circle.png">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1040"></script>
+<script defer src="assets/openext.js?v=1042"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -30,10 +31,10 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Sports</title>
-<link rel="stylesheet" href="styles/main.css?v=1040">
-<link rel="stylesheet" href="styles/onboarding.css?v=1040">
-<script defer src="assets/idle.js?v=1040"></script>
-<script defer src="assets/flows.js?v=1040"></script>
+<link rel="stylesheet" href="styles/main.css?v=1042">
+<link rel="stylesheet" href="styles/onboarding.css?v=1042">
+<script defer src="assets/idle.js?v=1042"></script>
+<script defer src="assets/flows.js?v=1042"></script>
 </head>
 <body>
 <div class="phone">
@@ -53,19 +54,19 @@
     <div class="ob-body" data-group>
       <div class="ob-grid">
         <div class="ob-col">
-          <div class="ob-card tall"  data-toggle><p class="t">Running</p><div class="img" style="background-image:url('assets/photos/sport-running.png?v=1040')"></div></div>
-          <div class="ob-card short" data-toggle><p class="t">Marathon</p><div class="img" style="background-image:url('assets/photos/sport-marathon.png?v=1040'); background-position:right bottom;"></div></div>
-          <div class="ob-card tall"  data-toggle><p class="t">Basketball</p><div class="img" style="background-image:url('assets/photos/sport-basketball.png?v=1040')"></div></div>
-          <div class="ob-card short" data-toggle><p class="t">Dance</p><div class="img" style="background-image:url('assets/photos/sport-dance.png?v=1040'); background-position:right bottom;"></div></div>
-          <div class="ob-card tall"  data-toggle><p class="t">Golf</p><div class="img" style="background-image:url('assets/photos/sport-golf.png?v=1040')"></div></div>
+          <div class="ob-card tall"  data-toggle><p class="t">Running</p><div class="img" style="background-image:url('assets/photos/sport-running.png?v=1042')"></div></div>
+          <div class="ob-card short" data-toggle><p class="t">Marathon</p><div class="img" style="background-image:url('assets/photos/sport-marathon.png?v=1042'); background-position:right bottom;"></div></div>
+          <div class="ob-card tall"  data-toggle><p class="t">Basketball</p><div class="img" style="background-image:url('assets/photos/sport-basketball.png?v=1042')"></div></div>
+          <div class="ob-card short" data-toggle><p class="t">Dance</p><div class="img" style="background-image:url('assets/photos/sport-dance.png?v=1042'); background-position:right bottom;"></div></div>
+          <div class="ob-card tall"  data-toggle><p class="t">Golf</p><div class="img" style="background-image:url('assets/photos/sport-golf.png?v=1042')"></div></div>
         </div>
         <div class="ob-col">
-          <div class="ob-card short" data-toggle><p class="t">Tennis</p><div class="img" style="background-image:url('assets/photos/sport-tennis.png?v=1040'); background-position:right bottom;"></div></div>
-          <div class="ob-card tall"  data-toggle><p class="t">Boxing</p><div class="img" style="background-image:url('assets/photos/sport-boxing.png?v=1040')"></div></div>
-          <div class="ob-card short" data-toggle><p class="t">Soccer</p><div class="img" style="background-image:url('assets/photos/sport-soccer.png?v=1040'); background-position:right bottom;"></div></div>
-          <div class="ob-card tall"  data-toggle><p class="t">Hiking</p><div class="img" style="background-image:url('assets/photos/sport-hiking.png?v=1040')"></div></div>
-          <div class="ob-card short" data-toggle><p class="t">Home<br>Workout</p><div class="img" style="background-image:url('assets/photos/sport-hometraining.png?v=1040'); background-position:right bottom;"></div></div>
-          <div class="ob-card tall"  data-toggle><p class="t">Badminton</p><div class="img" style="background-image:url('assets/photos/sport-badminton.png?v=1040')"></div></div>
+          <div class="ob-card short" data-toggle><p class="t">Tennis</p><div class="img" style="background-image:url('assets/photos/sport-tennis.png?v=1042'); background-position:right bottom;"></div></div>
+          <div class="ob-card tall"  data-toggle><p class="t">Boxing</p><div class="img" style="background-image:url('assets/photos/sport-boxing.png?v=1042')"></div></div>
+          <div class="ob-card short" data-toggle><p class="t">Soccer</p><div class="img" style="background-image:url('assets/photos/sport-soccer.png?v=1042'); background-position:right bottom;"></div></div>
+          <div class="ob-card tall"  data-toggle><p class="t">Hiking</p><div class="img" style="background-image:url('assets/photos/sport-hiking.png?v=1042')"></div></div>
+          <div class="ob-card short" data-toggle><p class="t">Home<br>Workout</p><div class="img" style="background-image:url('assets/photos/sport-hometraining.png?v=1042'); background-position:right bottom;"></div></div>
+          <div class="ob-card tall"  data-toggle><p class="t">Badminton</p><div class="img" style="background-image:url('assets/photos/sport-badminton.png?v=1042')"></div></div>
         </div>
       </div>
     </div>
@@ -78,6 +79,6 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/onboarding.js?v=1040"></script>
+<script src="assets/onboarding.js?v=1042"></script>
 </body>
 </html>

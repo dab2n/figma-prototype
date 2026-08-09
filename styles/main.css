@@ -75,63 +75,30 @@ html:active-view-transition-type(report-in)::view-transition-new(root) {
   z-index: 2;
 }
 
-/* Web-only side controls, parked outside the frame so they can never sit over the screen
-   and never move: 196px is half the frame plus 16, and the frame only ever gets narrower
-   (it scales down to fit). Injected on every page by assets/tour.js, so they stay put
-   across a page change instead of blinking out. Never on a phone — that is the point of
-   them: on a phone the report still arrives on its own after 5s. */
-.side-trigger { display: none; }
-@media (min-width: 401px) and (hover: hover) {
-  .side-trigger {
-    display: block;
-    position: fixed;
-    top: 50%;
-    left: calc(50% + 196px);
-    transform: translateY(-50%);
-    padding: 12px 18px;
-    border: none;
-    border-radius: 999px;
-    cursor: pointer;
-    background: var(--color-neutral-200);
-    color: var(--color-neutral-700);
-    font-family: var(--font-supreme-bold);
-    font-size: 14px;
-    letter-spacing: -0.3px;
-  }
-  .phone.notif-on ~ #reportTrigger { background: var(--color-red); color: #fff; }
-  .tour-trigger { top: calc(50% + 52px); }
-  .clay-trigger { top: calc(50% + 104px); }
-  html.clay .clay-trigger { background: var(--color-black); color: #fff; }
-
-  /* ── Screen-recording mode (web only) ──────────────────────────────────
-     A capture should be the UI and nothing around it: the page goes pure white,
-     the frame drops its drop shadow, and a hairline takes its place so the
-     viewport still has an edge. Flat, like a clay mockup. The UI's own shadows —
-     the cards, the carousel glow — are left alone; they are part of what is being
-     recorded. Toggled by the UI 녹화 button (assets/tour.js) and re-applied
-     before the first paint by the inline script in every page's <head>. */
-  html.clay, html.clay body { background: #fff; }
-  html.clay .phone {
-    box-shadow: none;
-    /* outline, not a ring-shaped box-shadow: Chrome follows border-radius for
-       outline, so it traces the 40px corners exactly and nothing bleeds. */
-    /* #3B3B3B, and measured off the reference: its bezel is 14px on a 495px-wide phone,
-       so 10px in the FRAME's own coordinates. Left to scale with `zoom` rather than
-       pinned to real pixels — a bezel is part of the mockup, so it has to shrink with it
-       or a scaled-down frame ends up wearing one twice as heavy as the reference. 8, a
-       shade under the measured 10. */
-    outline: 8px solid #3B3B3B;
-    outline-offset: 0;
-  }
+/* Screen-recording mode: a capture should be the UI and nothing around it. The page
+   goes pure white — it already is — the frame drops its shadow, and a hairline takes its
+   place so the viewport still has an edge. Toggled from settings; re-applied before the
+   first paint by the inline script in every page head. */
+html.clay .phone {
+  box-shadow: none;
+  outline: 8px solid #3B3B3B;
+  outline-offset: 0;
 }
 
+
+/* A browser — any browser, a laptop or a phone — shows the frame as a frame: 360x780 on
+   a white page, centred, scaled by --fit to whatever room there is. Installed, the app
+   owns the screen and the rules under html.installed take over. */
+html, body { height: 100%; }
 body {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 40px 0;
-  min-height: 100vh;
+  align-items: center;
+  padding: 0;
+  overflow: hidden;
+  background: #fff;
 }
+.phone { zoom: var(--fit, 1); }
 
 /* Kill the mobile tap flash / focus box so tapping a card or button never draws a
    blue rectangle (breaks immersion on Galaxy/Android). Text stays unselectable on
@@ -190,14 +157,10 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
   /* A screen that reaches its end must not hand the scroll on to the page behind it —
      that chaining is what let the desktop document slide up and clip the frame. */
   overscroll-behavior: contain;
-  /* `overflow: hidden` plus `border-radius` is a clip Chrome does not always honour —
-     the same failure that put the phone's own bottom corners back as squares. On the
-     Galaxy it let the recent list paint straight through the frame's rounded foot and
-     over the navbar: the concave junction disappeared, and what leaked past it is the
-     glitching. `contain: paint` is a promise, not a hint — descendants are clipped to
-     this box, radius and all — and it lets the compositor skip everything scrolled out
-     of view, which is the cheaper way to draw this page anyway. */
-  contain: paint;
+  /* No paint containment. It was put here to force the rounded clip to hold, and it did
+     that by clipping EVERYTHING to this box — including the hero carousel's own glow,
+     which spills past the scroller by design and came back cut off. The junction is drawn
+     over the frame now (see .tabbar's fillets), so nothing needs the clip to hold. */
 }
 .screen::-webkit-scrollbar { display: none; }
 .screen { scrollbar-width: none; }
@@ -431,141 +394,13 @@ button { font-family: inherit; }
 /* Mobile: the viewport meta (width=360) makes phones scale the 360-wide canvas
    to fill the screen, so here we just drop the desktop framing (padding, rounded
    bezel, shadow) and let the phone go edge-to-edge. */
-@media (max-width: 400px) {
-  html, body { background: var(--color-black); }
-  body { padding: 0; align-items: stretch; min-height: 100vh; min-height: 100dvh; }
-  /* Full-bleed on a phone: no OUTER frame corner radius, fill the whole viewport. */
-  .phone { width: 100vw; height: 100vh; height: 100dvh; border-radius: 0; box-shadow: none; }
-  .recap-screen, .records-screen, .swipe-detail, .creator-screen { height: 100vh; height: 100dvh; border-radius: 0; }
-  /* creator.css / recap.css load after this file, so their concrete 780px would win at
-     equal specificity and overflow a ~752px phone viewport — same clip the detail pages
-     had. `body` outranks them. */
-  body .creator-screen, body .recap-screen { min-height: 0; height: 100vh; height: 100dvh; }
-  /* Content frame FILLS the viewport above the 80px navbar (no fixed 780 → kills the
-     white gap on tall phones) and keeps its rounded BOTTOM (inverted/concave radius
-     over the flat black navbar). Square top so it's flush to the screen edge. */
-  /* `body` prefix bumps specificity so this BEATS per-page concrete heights
-     (home.css sets 700px/634px at equal specificity but loads later). Without it
-     the home screen stays 700px on tall phones, leaving a dead band above the
-     pinned navbar. */
-  /* Same expression as .tabbar's height — the content fills whatever is left, so the
-     page is exactly one viewport tall on any phone. */
-  body .phone:has(> .tabbar) > .screen { height: calc(100vh - 56px - max(24px, env(safe-area-inset-bottom, 0px)));
-    height: calc(100dvh - 56px - max(24px, env(safe-area-inset-bottom, 0px))); }
-  body .phone.notif-on:has(> .tabbar) > .screen { height: calc(100vh - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px)));
-    height: calc(100dvh - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px))); }
-  /* No title bar on these screens, so the back/kebab row sits directly under the
-     phone's own status bar instead of below the 44px ours used to occupy. */
-  .app-bar-transparent { top: 0; }
 
-  /* Status bar: DROP ours entirely on a phone — graphic and its 44px of space. The
-     device always draws the real one (browser chrome in a tab, the PWA shell when
-     installed to the home screen), so ours was pure duplication sitting under a blank
-     band. The real bar is tinted to each page's top colour via that page's
-     <meta name="theme-color">, so it reads as part of the app instead of a grey strip.
-     Desktop keeps the 9:41 graphic — there it's the mockup's phone frame. */
-  .status-bar { display: none; }
-
-  /* Navbar pinned to the very bottom of the viewport on every tabbar page. Its
-     background grows into the iPhone home-indicator strip so no black band shows
-     under it. BOTTOM ONLY — the top status bar is deliberately left untouched
-     (an env(safe-area-inset-top) padding there pushed the bar down and let content
-     scroll over the OS status bar). `body` prefix beats .ob-bottom's padding
-     shorthand in onboarding.css, which loads later. */
-  .tabbar { position: fixed; left: 0; bottom: 0; width: 100vw; }
-  /* 56px of icons plus ONE gesture strip — not the design's 24px strip stacked on top
-     of the phone's own inset, which is what left a dead black band under the drawn
-     pill on iPhone (inset 34) while looking right on Galaxy (inset 0). max() takes
-     whichever strip the platform actually has, and the pill below is dropped wherever
-     the OS draws its own. */
-  body .tabbar {
-    box-sizing: border-box;
-    height: calc(56px + max(24px, env(safe-area-inset-bottom, 0px)));
-    padding-bottom: 0;
-  }
-  /* The drawn pill stays on every platform — it is part of the design, and with the
-     strip no longer doubled it lands within a couple of pixels of where iOS draws its
-     own, so the two read as one bar rather than two. */
-  /* ponytail: on Android this padding is a no-op today and the black tab bar stops
-     above a light gesture bar we cannot colour. Not a bug here — the opt-in for
-     drawing under it is viewport-fit=cover (Chrome 135+), which the viewport meta
-     already sets, but INSTALLED PWAs still refuse to go edge-to-edge: crbug is
-     In Progress as of 2026-07, no ship date. theme-color only tints the status bar,
-     so there is no web-side lever for the gesture bar. When Chrome ships the fix,
-     env() starts returning the inset and this rule fills it with no code change.
-     Only alternative if it can't wait: relight the tab bar to match the white bar. */
-  /* The bars keep the design's colour. The gesture bar is handled the other way round:
-     viewport-fit=cover plus the env() padding above lets each bar's own colour run under
-     it wherever the platform allows the page down there, and the canvas below is set to
-     the nearest colour to whatever sits above it — black here, the pack's own tone on a
-     pack (packs.js) — so the strip never reads as a different surface.
-     An earlier attempt lit every bar instead, which turned Home white. */
-
-  /* Fallback for when env() reads 0: with a fixed-width (width=360) viewport iOS
-     can't always extend the page under the safe-area strips, and they then show the
-     <html> CANVAS colour. Black blends under the black tab bar but not under the grey
-     onboarding bar / red splash / white ready screen — match the canvas to each.
-     These three are single-colour full-bleed pages, so it's correct at both edges. */
-  html:has(.ob-bottom)  { background: var(--color-neutral-100); }
-  /* Setup was left off this list and so kept the default black canvas under a grey
-     page — on a phone that is a dark strip between the device's status bar and the
-     app bar. Its bottom strip stays black because the step bar is fixed there and
-     paints its own, inset included. */
-  html:has(.setup-screen) { background: var(--color-neutral-100); }
-  html:has(.ob-splash)  { background: var(--color-red); }
-  html:has(.rts-screen) { background: #fff; }
-  /* Pages with no bottom bar end in white, so the canvas behind the system gesture
-     bar has to be white too or a black strip shows through it. */
-  html:has(.records-screen), html:has(.recap-screen) { background: #fff; }
-
-  /* The phone draws its own home indicator / gesture bar, so every mocked-up one is
-     duplication — drop them all (.tabbar's pill, the detail pages' row). !important
-     because each page reintroduces it through a more specific selector of its own
-     (.tabbar .home-indicator, .swipe-detail .home-indicator-row, …) from a stylesheet
-     that loads after this one; a kill switch shouldn't need specificity arithmetic. */
-  /* The 24px below the tab icons is the design's own gesture strip — with the phone's
-     own turned off it is the only one there, so it stays. 144x4, as drawn.
-     The detail screens are a different case: their sheet already sits on the bottom
-     edge, so a second strip inside it is just padding. Those stay hidden. */
-  .home-indicator-row, .creator-nav-indicator { display: none !important; }
-
-  /* Detail pages were laid out at a fixed 780/790px — taller than a real phone
-     viewport (a Galaxy in standalone leaves ~750), so their bottom bar (Start /
-     Explore Packs) fell off the bottom edge. Fill the viewport instead and give the
-     hero the slack, so nothing is cut at either end. */
-  body .detail-screen {
-    min-height: 0;
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-  }
-  body .detail-screen > .hero-photo { flex: 1 1 auto; height: auto; min-height: 0; }
-  /* The swipe variant positions everything absolutely inside the screen instead, so
-     it must NOT become a flex column — restore block flow and let the hero fill. */
-  body .swipe-detail { display: block; }
-  body .swipe-detail > .hero-photo { position: absolute; inset: 0; height: auto; }
-  /* Bottom bars sit under the system gesture bar with viewport-fit=cover, which clipped
-     the Start row. content-box + padding keeps the bar's own content at its designed
-     height and just extends the black underneath, so the gesture bar blends into it. */
-  body .detail-bottombar, body .detail-sheet {
-    box-sizing: content-box;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-  /* Same for the two pages whose last element sits near the bottom edge with no bar
-     under it — otherwise the gesture bar covers them. */
-  body .rts-start { bottom: calc(30px + env(safe-area-inset-bottom, 0px)); }
-  body .records-content { padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px)); }
-}
 
 /* Desktop: the frame is a device sitting still, not a page. The document does not scroll
    at all — an 860px-tall layout in a shorter window used to slide up and down and cut the
    bottom off whatever screen was being looked at (or recorded) — and the phone shrinks to
    fit instead of being clipped. --fit is measured in assets/openext.js; 1 until then. */
-@media (min-width: 401px) and (hover: hover) {
-  html, body { height: 100%; overflow: hidden; }
-  body { padding: 0; align-items: center; }
-  .phone { zoom: var(--fit, 1); }
-}
+
 
 /* Installed (standalone): the OS DOES draw its own status bar, and viewport-fit=cover puts
    the page under it — so the back/kebab row and the top of every scrolling screen were
@@ -575,36 +410,7 @@ button { font-family: inherit; }
    so a tab is untouched.
    NOT VERIFIED on a device from here — display-mode cannot be emulated in a desktop
    Chrome window, and env() reports 0. The arithmetic is the same as the block below. */
-@media (max-width: 400px) and (display-mode: standalone),
-       (hover: none) and (pointer: coarse) and (max-width: 900px) and (display-mode: standalone) {
-  .phone { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); }
-  /* A backstop across the bottom inset. When the app IS drawing edge to edge the gesture
-     bar sits over this strip and it is the navbar's own black under the pill; when the
-     system keeps that area to itself the inset is 0 and this is nothing at all. Either way
-     nothing pale can open up between the navbar and the foot of the screen.
-     Painted from the same variable the navbar uses, so it can never disagree with it. */
-  body::after {
-    content: "";
-    position: fixed;
-    left: 0; right: 0; bottom: 0;
-    height: env(safe-area-inset-bottom, 0px);
-    background: var(--color-black);
-    z-index: 40;
-    pointer-events: none;
-  }
-  /* …except where the foot of the screen is not black. Those screens run their own colour
-     to the edge and the strip has to follow, not stamp black over it. */
-  body:has(.recap-screen)::after, body:has(.rts-screen)::after { background: var(--color-red); }
-  body:has(.ob-bottom)::after { background: var(--color-neutral-100); }
-  body .phone:has(> .tabbar) > .screen {
-    height: calc(100dvh - 56px - max(24px, env(safe-area-inset-bottom, 0px)) - env(safe-area-inset-top, 0px));
-  }
-  body .phone.notif-on:has(> .tabbar) > .screen {
-    height: calc(100dvh - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px)) - env(safe-area-inset-top, 0px));
-  }
-  .recap-screen, .records-screen, .swipe-detail, .creator-screen,
-  body .creator-screen, body .recap-screen { height: calc(100dvh - env(safe-area-inset-top, 0px)); }
-}
+
 
 
 /* ── The way back, on every other screen ───────────────────────────────────────
@@ -636,11 +442,9 @@ button { font-family: inherit; }
   transition: background .18s ease, transform .18s ease;
 }
 .flow-exit:active i { background: var(--color-red); transform: scale(1.4); }
-/* On the desktop mockup our own 44px status bar is drawn, so the dot lives inside it —
-   the same place a phone's camera sits, and clear of the clock and the battery. */
-@media (min-width: 401px) and (hover: hover) {
-  .flow-exit { top: 0; height: 30px; }
-}
+/* In a browser the 44px status bar is drawn, so the dot lives inside it — the same place
+   a phone's camera sits, and clear of the clock and the battery. */
+html:not(.installed) .flow-exit { top: 0; height: 30px; }
 
 /* ── "Back to the start" notice ────────────────────────────────────────────────
    Shown by assets/idle.js after ten still seconds, three seconds before it goes.
@@ -684,30 +488,7 @@ button { font-family: inherit; }
    touch, and that is small enough to be a phone, gets the frame edge to edge.
    Repeated rather than folded into one query because the two conditions have to be OR'd
    and CSS has no way to name a media condition; last in the file, so it settles any tie. */
-@media (hover: none) and (pointer: coarse) and (max-width: 900px) {
-  html, body { background: var(--color-black); }
-  /* No rubber-band at the ends either: the bounce pulls the frame off the edge and shows
-     the ground behind it, which on a screen meant to be filled reads as a gap. */
-  html, body { overscroll-behavior: none; }
-  body { padding: 0; align-items: stretch; min-height: 100vh; min-height: 100dvh; }
-  .phone { width: 100vw; height: 100vh; height: 100dvh; border-radius: 0; box-shadow: none; zoom: 1; }
-  .recap-screen, .records-screen, .swipe-detail, .creator-screen { height: 100vh; height: 100dvh; border-radius: 0; }
-  body .creator-screen, body .recap-screen { min-height: 0; height: 100vh; height: 100dvh; }
-  body .phone:has(> .tabbar) > .screen {
-    height: calc(100vh - 56px - max(24px, env(safe-area-inset-bottom, 0px)));
-    height: calc(100dvh - 56px - max(24px, env(safe-area-inset-bottom, 0px)));
-  }
-  body .phone.notif-on:has(> .tabbar) > .screen {
-    height: calc(100vh - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px)));
-    height: calc(100dvh - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px)));
-  }
-  .app-bar-transparent { top: 0; }
-  .status-bar { display: none; }
-  .tabbar { position: fixed; left: 0; bottom: 0; width: 100vw; }
-  body .tabbar { box-sizing: border-box; height: calc(56px + max(24px, env(safe-area-inset-bottom, 0px))); padding-bottom: 0; }
-  .side-trigger { display: none; }
-  .flow-exit { top: env(safe-area-inset-top, 0px); height: 26px; }
-}
+
 
 /* Installed and asked for the whole screen. Measured on a Galaxy: in standalone the app
    is handed the band BETWEEN the system bars — 32.8pt of status bar above it and 25.4pt of
@@ -719,30 +500,57 @@ button { font-family: inherit; }
    design has always had, which is what these frames were drawn with. Nothing is left for
    the system to paint. iOS ignores the display mode and stays standalone; there the block
    below does the same job with the safe-area insets, which iOS does hand over. */
-@media (display-mode: fullscreen) {
-  html, body { height: 100%; }
-  body { padding: 0; align-items: stretch; }
-  .phone { width: 100%; height: 100%; border-radius: 0; box-shadow: none; padding-top: 0; }
-  .status-bar { display: block; }
-  .status-bar .statusbar-svg { visibility: visible; }
-  .app-bar-transparent { top: 44px; }
-}
+
 /* Belt and braces on the sizing, for both installed modes: a percentage of a window that
    has no browser UI in it is exact, where 100dvh on this Galaxy came out 58pt short of the
    screen. Last in the file so it settles the tie with the viewport-unit rules above. */
-@media (display-mode: standalone), (display-mode: fullscreen) {
-  html, body { height: 100%; min-height: 100%; }
-  .phone { height: 100%; }
-  /* No safe-area term in these: a percentage resolves against the frame's CONTENT box,
-     and in standalone the frame already takes the top inset as padding, so it is out of
-     the number before the arithmetic starts. Subtracting it again is how a screen ends up
-     an inset short of the navbar. */
-  body .phone:has(> .tabbar) > .screen {
-    height: calc(100% - 56px - max(24px, env(safe-area-inset-bottom, 0px)));
-  }
-  body .phone.notif-on:has(> .tabbar) > .screen {
-    height: calc(100% - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px)));
-  }
-  .recap-screen, .records-screen, .swipe-detail, .creator-screen,
-  body .creator-screen, body .recap-screen { height: 100%; min-height: 0; }
+
+/* ── Installed ─────────────────────────────────────────────────────────────────
+   The app owns the screen: the frame fills it, corner to corner, and draws the
+   design's own status bar in the space the system gives back. Keyed on a class the
+   page sets before its first paint, not on a media query — a phone reporting a
+   width it was never asked for is exactly how this went wrong before.
+   Percentages, not viewport units: a percentage of a window with no browser UI in
+   it is exact, where 100dvh measured 58pt short of a Galaxy's screen. */
+html.installed, html.installed body { height: 100%; background: var(--color-black); overscroll-behavior: none; }
+html.installed body { padding: 0; align-items: stretch; justify-content: flex-start; }
+html.installed .phone {
+  width: 100%; height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+  zoom: 1;
 }
+html.installed .recap-screen,
+html.installed .records-screen,
+html.installed .swipe-detail,
+html.installed .creator-screen,
+html.installed body .creator-screen,
+html.installed body .recap-screen { height: 100%; min-height: 0; border-radius: 0; }
+html.installed body .phone:has(> .tabbar) > .screen {
+  height: calc(100% - 56px - max(24px, env(safe-area-inset-bottom, 0px)));
+}
+html.installed body .phone.notif-on:has(> .tabbar) > .screen {
+  height: calc(100% - 56px - 66px - max(24px, env(safe-area-inset-bottom, 0px)));
+}
+/* The navbar sits at the foot of the FRAME, not of the window — the frame is the window
+   here, and absolute keeps it in the same coordinate space as everything it meets. */
+html.installed .tabbar { position: absolute; left: 0; right: 0; bottom: 0; width: auto; }
+html.installed body .tabbar {
+  box-sizing: border-box;
+  height: calc(56px + max(24px, env(safe-area-inset-bottom, 0px)));
+  padding-bottom: 0;
+}
+html.installed .side-trigger { display: none; }
+html.installed .flow-exit { top: 0; height: 44px; }
+
+/* iOS never gives the status bar back — a web app there is always standalone and the
+   system clock stays on top of it. Drawing ours as well is two status bars, which is what
+   an iPhone was showing. So on iOS ours stays hidden and the frame takes the inset as
+   padding instead; on Android, where fullscreen really does hand the strip over, ours is
+   the only one on screen and it tells the real time (assets/flows.js). */
+html.installed .status-bar { display: block; }
+html.installed .status-bar .statusbar-svg { visibility: visible; }
+html.installed .app-bar-transparent { top: 44px; }
+html.installed.ios .status-bar { display: none; }
+html.installed.ios .app-bar-transparent { top: 0; }
+html.installed.ios .phone { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); }

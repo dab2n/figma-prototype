@@ -12,10 +12,8 @@
    frame to 700/634 on a phone whose viewport is 800+ — the frame's rounded foot ended up
    below the pinned navbar, so the concave junction was off-screen and the edge read flat.
    On a phone the height comes from the viewport (main.css), as it should. */
-@media (min-width: 401px) and (hover: hover) {
-  .phone:has(> .tabbar) > .screen { height: 700px; }
-  .phone.notif-on:has(> .tabbar) > .screen { height: 634px; }
-}
+html:not(.installed) .phone:has(> .tabbar) > .screen { height: 700px; }
+html:not(.installed) .phone.notif-on:has(> .tabbar) > .screen { height: 634px; }
 .notif-bar {
   position: absolute;
   left: 0; right: 0;

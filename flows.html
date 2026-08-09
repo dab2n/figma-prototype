@@ -2,9 +2,13 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<script>if(innerWidth>400){document.documentElement.style.setProperty("--fit",Math.min(1,innerHeight/812).toFixed(4));try{if(localStorage.getItem("clay"))document.documentElement.className+=" clay";}catch(e){}}</script>
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=360, viewport-fit=cover">
+<!-- Which of the two the page is: INSTALLED, where the app owns the screen and fills it,
+     or a BROWSER, where it is the 360x780 frame on a white page. Measured AFTER the
+     viewport tag, because innerWidth is only the width the page asked for once that
+     tag has been read. -->
+<script>(function(d){var r=d.documentElement,m=window.matchMedia,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true;if(i){r.className+=" installed"+(navigator.standalone===true?" ios":"");}else{r.style.setProperty("--fit",Math.min(1,innerWidth/392,innerHeight/812).toFixed(4));}try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
 <!-- The four faces every screen actually renders in. Preloaded because font-display:swap
      draws the fallback first and re-lays the text out when the real one lands — on the
      phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
@@ -14,7 +18,7 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1040"></script>
+<script defer src="assets/openext.js?v=1042"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -22,9 +26,9 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Try the flows</title>
-<link rel="stylesheet" href="styles/main.css?v=1040">
-<link rel="stylesheet" href="styles/onboarding.css?v=1040">
-<link rel="stylesheet" href="styles/flows.css?v=1040">
+<link rel="stylesheet" href="styles/main.css?v=1042">
+<link rel="stylesheet" href="styles/onboarding.css?v=1042">
+<link rel="stylesheet" href="styles/flows.css?v=1042">
 </head>
 <body>
 <div class="phone">

@@ -253,35 +253,8 @@
   else if (step === '12') recap();
   else if (step === '13') report();
 
-  // The two web-only controls, on every page and never anywhere else on the page: a
-  // recording must not have them blink out at a page change. Home already carries its own
-  // trigger in markup because its inline script binds to it before this file runs — which
-  // is also why that one keeps the id reportTrigger.
-  if (matchMedia('(min-width: 401px)').matches) {
-    [['reportTrigger', '프로토타입 2', '', function () {
-        sessionStorage.setItem('notifNow', '1');   // Home reveals the strip on landing
-        sessionStorage.setItem(P2, '1');
-        go('home.html', 11);
-      }],
-     // Reloading Home rather than replaying in place: the arrival animation is the page's,
-     // and a fresh load is the only thing that plays it honestly.
-     ['tour1', '프로토타입 1', ' tour-trigger', function () { go('home.html', 1); }],
-     // Screen-recording mode: white page, no drop shadow, a hairline round the frame —
-     // a flat clay mockup, so a capture is the UI and nothing else. Kept in localStorage
-     // rather than sessionStorage so it survives a page change AND a restart, and the
-     // inline <head> script on every page re-applies it before the first paint.
-     ['clayToggle', 'UI 녹화', ' clay-trigger', function () {
-        var on = !document.documentElement.classList.contains('clay');
-        document.documentElement.classList.toggle('clay', on);
-        try { localStorage.setItem('clay', on ? '1' : ''); } catch (e) {}
-      }]
-    ].forEach(function (b) {
-      if (document.getElementById(b[0])) return;
-      var el = document.createElement('button');
-      el.id = b[0]; el.type = 'button'; el.className = 'side-trigger' + b[2];
-      el.textContent = b[1];
-      el.addEventListener('click', b[3]);
-      document.body.appendChild(el);
-    });
-  }
+  // The side buttons are gone. They were the only way to start a take by hand, and they
+  // were also three chips floating beside a frame that is now the whole of what the page
+  // shows. A take is started the same way it always continued — by setting the step in
+  // sessionStorage and loading Home — which is what the export scripts do.
 })();

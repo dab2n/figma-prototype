@@ -84,7 +84,7 @@
 /* On a phone our status bar is gone (main.css), so the hero starts 44px higher — but the
    wash is placed against .rp-screen, not the hero, so it stayed put and sat 44px low
    against the gauge and the number. Shifted up to match. */
-@media (max-width: 400px) { .rp-hero-bg { top: -177px; } }
+html.installed .rp-hero-bg { top: -177px; }
 
 /* Arriving from the recap, the wash RIDES UP into place: on the recap it fills the screen,
    and here it has travelled up to sit as the band at the top. Held off
