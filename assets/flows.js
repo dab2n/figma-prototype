@@ -24,14 +24,16 @@
   else add();
 })();
 
-// Installed to the home screen, Chrome tints the system bars from <meta name="theme-color">
-// — and it is one value for both ends of a screen that is white at the top and black at
-// the foot. Home declares white, which is right for the status bar it sits under and wrong
-// for the gesture bar below the navbar: that is the white strip under the tab bar.
+// Installed to the home screen, the strip the system draws its gesture bar in takes its
+// colour from the document CANVAS — the html background — not from anything the page lays
+// out. Every screen here paints its own ground inside .phone and leaves html to whatever
+// the media query set, so on a phone that is not drawing edge-to-edge that strip came out
+// the system's own light grey: the white band under the navbar.
 //
-// Only in standalone, and only the meta: in a browser tab the tag still says what the top
-// of the page is, which is what that case needs. viewport-fit=cover means the page draws
-// its own top in standalone, so the status bar takes its colour from the page either way.
+// theme-color is NOT the lever. Chrome uses it for the STATUS bar, so setting it to the
+// foot's colour turned the top of Home black — one tag cannot describe both ends of a
+// screen that is white at the top and black at the bottom. The tag is left alone, saying
+// what the top of the page is, and the canvas is painted to match the foot instead.
 (function () {
   var standalone = false;
   try {
@@ -41,14 +43,14 @@
   } catch (e) {}
   if (!standalone) return;
   function paint() {
-    var bar = document.querySelector('.phone > .tabbar, .phone > .dj-bar, .phone > .detail-sheet');
-    var meta = document.querySelector('meta[name="theme-color"]');
-    if (!meta) return;
-    // Whatever the bottom-most bar is painted, or the frame's own ground when a screen has
-    // no bar at all — the report and the recap run their colour to the bottom edge.
-    var el = bar || document.querySelector('.phone > .screen') || document.body;
-    var c = getComputedStyle(el).backgroundColor;
-    if (c && c !== 'rgba(0, 0, 0, 0)' && c !== 'transparent') meta.setAttribute('content', c);
+    // Only where there IS a bar at the foot. A full-bleed screen ends in whatever its own
+    // artwork ends in — a gradient, a photograph — and there is no single colour to copy;
+    // those keep the canvas the stylesheet already gave them.
+    var bar = document.querySelector('.phone > .tabbar, .phone > .dj-bar');
+    if (!bar) return;
+    var c = getComputedStyle(bar).backgroundColor;
+    if (!c || c === 'rgba(0, 0, 0, 0)' || c === 'transparent') return;
+    document.documentElement.style.backgroundColor = c;
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paint);
   else paint();

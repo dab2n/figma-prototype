@@ -578,6 +578,24 @@ button { font-family: inherit; }
 @media (max-width: 400px) and (display-mode: standalone),
        (hover: none) and (pointer: coarse) and (max-width: 900px) and (display-mode: standalone) {
   .phone { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); }
+  /* A backstop across the bottom inset. When the app IS drawing edge to edge the gesture
+     bar sits over this strip and it is the navbar's own black under the pill; when the
+     system keeps that area to itself the inset is 0 and this is nothing at all. Either way
+     nothing pale can open up between the navbar and the foot of the screen.
+     Painted from the same variable the navbar uses, so it can never disagree with it. */
+  body::after {
+    content: "";
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: env(safe-area-inset-bottom, 0px);
+    background: var(--color-black);
+    z-index: 40;
+    pointer-events: none;
+  }
+  /* …except where the foot of the screen is not black. Those screens run their own colour
+     to the edge and the strip has to follow, not stamp black over it. */
+  body:has(.recap-screen)::after, body:has(.rts-screen)::after { background: var(--color-red); }
+  body:has(.ob-bottom)::after { background: var(--color-neutral-100); }
   body .phone:has(> .tabbar) > .screen {
     height: calc(100dvh - 56px - max(24px, env(safe-area-inset-bottom, 0px)) - env(safe-area-inset-top, 0px));
   }
