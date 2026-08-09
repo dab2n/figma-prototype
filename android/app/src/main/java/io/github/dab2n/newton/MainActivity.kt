@@ -105,6 +105,8 @@ class MainActivity : AppCompatActivity() {
             val d = resources.displayMetrics.density
             val top = (maxOf(sys.top, cut.top) / d).toInt()
             val bottom = (maxOf(sys.bottom, cut.bottom) / d).toInt()
+            barTop = top
+            barBottom = bottom
             (v as WebView).evaluateJavascript(
                 "document.documentElement.style.setProperty('--sat','${top}px');" +
                 "document.documentElement.style.setProperty('--sab','${bottom}px');",
@@ -119,11 +121,21 @@ class MainActivity : AppCompatActivity() {
         // is the only thing that knows: it calls back with its own theme-color's lightness.
         val bars = WindowInsetsControllerCompat(window, web)
         bars.isAppearanceLightNavigationBars = false
+        // A bridge object is in place before any of a document's own scripts run, which is
+        // the whole point of insetTop/insetBottom: the page reads the bars synchronously in
+        // its <head> and lays out right the first time. Pushing them after the load instead
+        // is what made the app bar sit on the clock for a moment on every tab change.
         web.addJavascriptInterface(object {
             @JavascriptInterface
             fun topIsLight(light: Boolean) {
                 runOnUiThread { bars.isAppearanceLightStatusBars = light }
             }
+
+            @JavascriptInterface
+            fun insetTop(): Int = barTop
+
+            @JavascriptInterface
+            fun insetBottom(): Int = barBottom
         }, "NewtonShell")
 
         if (savedInstanceState == null) web.loadUrl(START_URL)
@@ -139,6 +151,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var web: WebView? = null
+
+    /** Last measured system bars, in CSS px. The page reads these before it paints, off
+     *  the bridge thread — hence volatile. */
+    @Volatile private var barTop = 0
+    @Volatile private var barBottom = 0
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

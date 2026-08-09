@@ -28,7 +28,7 @@
 /* Supplied red-blur gradient — full width (no scaling, so no visible box edge); it just
    eases DOWN a touch as the tap page appears. Sits below the text/foot. */
 .rts-blur { position: absolute; top: 0; left: 0; width: 360px; height: 100%; z-index: 1; pointer-events: none;
-  background: url('../assets/icons/start-blur.png') center top / 100% 100% no-repeat;
+  background: url('../assets/icons/start-blur.webp') center top / 100% 100% no-repeat;
   animation: rts-blur 3.6s cubic-bezier(.3,0,.2,1) both; }
 @keyframes rts-blur {
   0%   { opacity: 0; transform: translateY(-72px); }

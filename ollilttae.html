@@ -10,7 +10,7 @@
      392/812 are the frame plus 16px of air; --fit scales it to whatever is actually there.
      Inline and parser-blocking ON PURPOSE: --fit falls back to 1, so any frame painted
      before it is set shows the phone at FULL size and then snaps down. -->
-<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true||/ NewtonShell/.test(navigator.userAgent);if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/424,h/844).toFixed(4));};window.__box();try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
+<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true||/ NewtonShell/.test(navigator.userAgent);if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/424,h/844).toFixed(4));};window.__box();try{var S=window.NewtonShell;if(S&&S.insetTop){var st=S.insetTop(),sb=S.insetBottom();if(st)r.style.setProperty("--sat",st+"px");if(sb)r.style.setProperty("--sab",sb+"px");}}catch(e){}try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
 <!-- The four faces every screen actually renders in. Preloaded because font-display:swap
      draws the fallback first and re-lays the text out when the real one lands — on the
      phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
@@ -20,8 +20,8 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#8E7E65">
-<script defer src="assets/openext.js?v=1061"></script>
-<script defer src="assets/process.js?v=1061"></script>
+<script defer src="assets/openext.js?v=1062"></script>
+<script defer src="assets/process.js?v=1062"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,23 +29,23 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Creator (올릴때)</title>
-<link rel="stylesheet" href="styles/main.css?v=1061">
-<link rel="stylesheet" href="styles/creator.css?v=1061">
-<script defer src="assets/idle.js?v=1061"></script>
-<script defer src="assets/flows.js?v=1061"></script>
+<link rel="stylesheet" href="styles/main.css?v=1062">
+<link rel="stylesheet" href="styles/creator.css?v=1062">
+<script defer src="assets/idle.js?v=1062"></script>
+<script defer src="assets/flows.js?v=1062"></script>
 </head>
 <body>
 <div class="phone">
   <div class="screen creator-screen" id="creatorScreen">
     <div class="creator-hero">
-      <div class="creator-hero-bg" style="background-image:url('assets/photos/creator-hero-bg.jpg?v=1061');"></div>
+      <div class="creator-hero-bg" style="background-image:url('assets/photos/creator-hero-bg.jpg?v=1062');"></div>
       <div class="status-bar on-dark" style="position:absolute; top:0; left:0; z-index:6;"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
       <div class="app-bar-transparent" style="position:absolute; z-index:6;">
         <button class="icon-btn" onclick="location.href='pyeongso.html'"><img src="assets/icons/appbar-back.svg" alt="뒤로"></button>
         <button class="kebab-btn"><img src="assets/icons/kebab-dots.svg" alt="더보기"></button>
       </div>
       <div class="creator-profile">
-        <img class="avatar" src="assets/photos/creator-profile-sean.png?v=1061" alt="Sean">
+        <img class="avatar" src="assets/photos/creator-profile-sean.webp?v=1062" alt="Sean">
         <p class="sub">Running Creator · 240K subscribers</p>
         <span class="tag-pill">Sean</span>
       </div>
@@ -98,14 +98,14 @@
         <p class="t-subtitle-b" style="color:var(--color-neutral-50); margin:0 0 8px;">You might also like</p>
         <div class="also-like-list">
           <a class="also-like-item" href="pyeongso.html">
-            <img src="assets/photos/related-running-intervals.png?v=1061" alt="">
+            <img src="assets/photos/related-running-intervals.webp?v=1062" alt="">
             <div class="txt">
               <p class="t-body-bold">Running Intervals</p>
               <div class="meta"><span>Skilled User</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>12m</span></div>
             </div>
           </a>
           <a class="also-like-item" href="pyeongso.html">
-            <img src="assets/photos/related-boxing-beginner.png?v=1061" alt="">
+            <img src="assets/photos/related-boxing-beginner.png?v=1062" alt="">
             <div class="txt">
               <p class="t-body-bold">Boxing Beginner Challenge</p>
               <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>12m</span></div>
@@ -121,17 +121,17 @@
         </div>
         <div class="more-scroll">
           <a class="more-card" href="pyeongso.html">
-            <img src="assets/photos/more-running-form.jpg?v=1061" alt="">
+            <img src="assets/photos/more-running-form.jpg?v=1062" alt="">
             <p class="t-body-bold">Running Form Correction Routine</p>
             <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>25m</span></div>
           </a>
           <a class="more-card" href="pyeongso.html">
-            <img src="assets/photos/more-everyday-crew.jpg?v=1061" alt="">
+            <img src="assets/photos/more-everyday-crew.jpg?v=1062" alt="">
             <p class="t-body-bold">Everyday Running Crew</p>
             <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>23m</span></div>
           </a>
           <a class="more-card" href="pyeongso.html">
-            <img src="assets/photos/more-5km-finish.png?v=1061" alt="">
+            <img src="assets/photos/more-5km-finish.webp?v=1062" alt="">
             <p class="t-body-bold">Sean's 5km Finish Strategy</p>
             <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>15m</span></div>
           </a>

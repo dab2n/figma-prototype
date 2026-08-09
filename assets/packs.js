@@ -30,7 +30,7 @@
       total: 16, bars: [['5min', 'PRIME'], ['8min', 'DRIVE'], ['You Can Choose', 'SPRINT!']],
       info: ['Some Experience', 'Power · Turnover', 'Track', 'Creator'],
       also: ['interval', 'legburn'], more: ['sprinter', 'bolt', 'strength'],
-      photo: 'recent-running.jpg', author: 'Kanni', avatar: 'packs-profile-kanni.png',
+      photo: 'recent-running.webp', author: 'Kanni', avatar: 'packs-profile-kanni.png',
       title: 'Sprint Without Limits',
       desc: 'Break the ceiling you keep hitting at top speed. Kanni rebuilds your drive phase and arm carriage first, then holds that form under fatigue so the last 20m stops falling apart.'
     },
@@ -43,7 +43,7 @@
       total: 21, bars: [['6min', 'SET-UP'], ['9min', 'BLOCKS'], ['You Can Choose', 'RACE!']],
       info: ['Advanced', 'Power · Reaction', 'Track', 'Pro'],
       also: ['sprint', 'sprinter'], more: ['sprint', 'interval', 'legburn'],
-      photo: 'packs-card3-thumb.png', author: 'Usain Bolt', avatar: 'packs-avatar-usainbolt.png',
+      photo: 'packs-card3-thumb.webp', author: 'Usain Bolt', avatar: 'packs-avatar-usainbolt.png',
       title: "Usain Bolt's Sprint Masterclass",
       desc: 'The block start, the transition and the top-end mechanics, taken one at a time. Short reps with long rests, so every rep is run at the speed you are actually training for.'
     },
@@ -56,7 +56,7 @@
       total: 20, bars: [['6min', 'WARM'], ['11min', 'DRILL'], ['You Can Choose', 'SHOOT!']],
       info: ['Basics Recommended', 'Balance · Footwork', 'Indoor Court', 'Creator'],
       also: ['basketball', 'ladder'], more: ['boxing', 'basketball', 'ladder'],
-      photo: 'rec-curry.jpg', author: 'Janghoon', avatar: 'packs-avatar1.png',
+      photo: 'rec-curry.webp', author: 'Janghoon', avatar: 'packs-avatar1.png',
       title: "Curry's Step Back",
       desc: 'Create the half metre you need to get the shot off. Footwork into the step back, then the balance to land square and rise without drifting sideways.'
     },
@@ -82,7 +82,7 @@
       total: 15, bars: [['4min', 'LOOSEN'], ['9min', 'PATTERN'], ['You Can Choose', 'PLAY!']],
       info: ['Anyone', 'Rhythm · Coordination', 'Indoor', 'Creator'],
       also: ['basketball', 'tennis'], more: ['tennis', 'basketball', 'curry'],
-      photo: 'rec-ladder.jpg', author: 'Sojin', avatar: 'packs-avatar3.png',
+      photo: 'rec-ladder.webp', author: 'Sojin', avatar: 'packs-avatar3.png',
       title: 'Ladder Footwork',
       desc: 'Quick feet that survive contact with a real game. Ladder patterns first, then the same patterns with a ball and a defender in front of you.'
     },
@@ -134,7 +134,7 @@
       total: 26, bars: [['6min', 'SHADOW'], ['14min', 'COMBOS'], ['You Can Choose', 'SPAR!']],
       info: ['Basics Recommended', 'Timing · Angles', 'Indoor', 'Pro'],
       also: ['ladder', 'strength'], more: ['curry', 'basketball', 'ladder'],
-      photo: 'movement-boxing.jpg', author: 'Janghoon', avatar: 'packsx-avatar-a.png',
+      photo: 'movement-boxing.webp', author: 'Janghoon', avatar: 'packsx-avatar-a.png',
       title: 'Southpaw Drill',
       desc: 'Working against the other stance without reaching. Angle out of the lead hand, keep the rear foot loaded, and land the counter on the way past.'
     },
@@ -147,7 +147,7 @@
       total: 27, bars: [['7min', 'RALLY IN'], ['16min', 'DEPTH'], ['You Can Choose', 'POINT!']],
       info: ['Some Experience', 'Depth · Recovery', 'Outdoor Court', 'Creator'],
       also: ['ladder', 'basketball'], more: ['ladder', 'curry', 'basketball'],
-      photo: 'recent-tennis.jpg', author: 'Sojin', avatar: 'packsx-avatar-b.png',
+      photo: 'recent-tennis.webp', author: 'Sojin', avatar: 'packsx-avatar-b.png',
       title: 'Baseline Rally',
       desc: 'Depth before power. Recover to the middle every ball, take the high one early, and hold the rally until the short one you can actually attack shows up.'
     },
@@ -160,7 +160,7 @@
       total: 19, bars: [['5min', 'SLIDE'], ['12min', 'CLOSEOUT'], ['You Can Choose', 'RUN IT!']],
       info: ['Basics Recommended', 'Footwork · Balance', 'Indoor Court', 'Skilled User'],
       also: ['curry', 'ladder'], more: ['legburn', 'curry', 'boxing'],
-      photo: 'recent-basketball.jpg', author: 'Jiwoo', avatar: 'packsx-avatar-c.png',
+      photo: 'recent-basketball.webp', author: 'Jiwoo', avatar: 'packsx-avatar-c.png',
       title: 'Court Footwork',
       desc: 'The steps between the highlights. Closeouts, drop steps and the slide that keeps your hips in front, drilled at the speed the game is actually played at.'
     }

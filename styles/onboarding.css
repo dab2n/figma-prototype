@@ -67,7 +67,7 @@
   box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6); }
 .ob-card.sel .t { color: #fff; }
 .ob-card.sel::after { content: ""; position: absolute; top: 4px; right: 4px; z-index: 3; width: 52px; height: 52px;
-  background: url('../assets/icons/check-circle.png') center / contain no-repeat; pointer-events: none; }
+  background: url('../assets/icons/check-circle.webp') center / contain no-repeat; pointer-events: none; }
 
 /* ── "What do you want to do most?" list ─────────────────────────────────────── */
 .ob-list { display: flex; flex-direction: column; gap: 4px; }
@@ -80,7 +80,7 @@
   box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6); }
 .ob-row.sel .t { color: #fff; }
 .ob-row.sel::after { content: ""; position: absolute; top: 50%; right: 4px; margin-top: -26px; z-index: 3; width: 52px; height: 52px;
-  background: url('../assets/icons/check-circle.png') center / contain no-repeat; pointer-events: none; }
+  background: url('../assets/icons/check-circle.webp') center / contain no-repeat; pointer-events: none; }
 
 /* ── "Where do you work out?" (Indoors / Outdoors / Both) ─────────────────────── */
 .ob-where { display: flex; gap: 4px; }
@@ -98,7 +98,7 @@
 .ob-wcard.sel .t { color: #fff; }
 .ob-wcard.sel .s { color: var(--color-neutral-100); }
 .ob-wcard.sel::after { content: ""; position: absolute; top: 8px; right: 8px; z-index: 3; width: 52px; height: 52px;
-  background: url('../assets/icons/check-circle.png') center / contain no-repeat; pointer-events: none; }
+  background: url('../assets/icons/check-circle.webp') center / contain no-repeat; pointer-events: none; }
 
 /* ── Bottom bar (Next) ───────────────────────────────────────────────────────── */
 .ob-bottom { justify-content: flex-end; padding: 12px 16px 0; box-sizing: border-box; background: var(--color-neutral-100); }

@@ -10,7 +10,7 @@
      392/812 are the frame plus 16px of air; --fit scales it to whatever is actually there.
      Inline and parser-blocking ON PURPOSE: --fit falls back to 1, so any frame painted
      before it is set shows the phone at FULL size and then snaps down. -->
-<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true||/ NewtonShell/.test(navigator.userAgent);if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/424,h/844).toFixed(4));};window.__box();try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
+<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true||/ NewtonShell/.test(navigator.userAgent);if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/424,h/844).toFixed(4));};window.__box();try{var S=window.NewtonShell;if(S&&S.insetTop){var st=S.insetTop(),sb=S.insetBottom();if(st)r.style.setProperty("--sat",st+"px");if(sb)r.style.setProperty("--sab",sb+"px");}}catch(e){}try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
 <!-- The four faces every screen actually renders in. Preloaded because font-display:swap
      draws the fallback first and re-lays the text out when the real one lands — on the
      phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
@@ -20,10 +20,10 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <!-- The selected tick is a ::after, which is not fetched until something is selected.
      112KB arriving on the first tap is the blink; preloading it makes the tap instant. -->
-<link rel="preload" as="image" href="assets/icons/check-circle.png">
+<link rel="preload" as="image" href="assets/icons/check-circle.webp">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1061"></script>
+<script defer src="assets/openext.js?v=1062"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,11 +31,11 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Setup · Main Workout</title>
-<link rel="stylesheet" href="styles/main.css?v=1061">
-<link rel="stylesheet" href="styles/setup.css?v=1061">
-<link rel="stylesheet" href="styles/mainworkout.css?v=1061">
-<script defer src="assets/idle.js?v=1061"></script>
-<script defer src="assets/flows.js?v=1061"></script>
+<link rel="stylesheet" href="styles/main.css?v=1062">
+<link rel="stylesheet" href="styles/setup.css?v=1062">
+<link rel="stylesheet" href="styles/mainworkout.css?v=1062">
+<script defer src="assets/idle.js?v=1062"></script>
+<script defer src="assets/flows.js?v=1062"></script>
 </head>
 <body>
 <div class="phone">
@@ -109,7 +109,7 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/setup.js?v=1061"></script>
+<script src="assets/setup.js?v=1062"></script>
 <script>
 (function () {
   var STRETCH = 8, LEARN = 10;   // fixed pack minutes (node 338:19949/19953)

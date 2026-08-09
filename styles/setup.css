@@ -67,7 +67,7 @@
 .card-sel.sel::after {
   content: ""; position: absolute; right: 8px; top: 50%; margin-top: -26px;
   width: 52px; height: 52px; pointer-events: none;
-  background: url('../assets/icons/check-circle.png') center / contain no-repeat;
+  background: url('../assets/icons/check-circle.webp') center / contain no-repeat;
 }
 
 /* Indoor/Outdoor toggle + Difficulty 3-segment */
@@ -166,7 +166,7 @@
 /* Check badge, same asset as the cards: 28px circle inset 16px from the top right. */
 /* Same reason as the art above: display:none means the tick is not fetched until the
    first tap, and it is 112KB. Faded instead, so it is on the page from the start. */
-.mode-card .mc-check { position: absolute; top: 4px; right: 4px; z-index: 3; width: 52px; height: 52px; opacity: 0; transition: opacity .18s ease; background: url('../assets/icons/check-circle.png') center / contain no-repeat; }
+.mode-card .mc-check { position: absolute; top: 4px; right: 4px; z-index: 3; width: 52px; height: 52px; opacity: 0; transition: opacity .18s ease; background: url('../assets/icons/check-circle.webp') center / contain no-repeat; }
 .mode-card.sel .mc-check { opacity: 1; }
 
 /* Bottom step bar (node 385:3263). The active step sits at the LEFT edge with the rest
