@@ -16,6 +16,12 @@
   var WAIT = 15000;      // stillness before the notice
   var GRACE = 3;         // seconds the notice counts down before it goes
 
+  // PAUSED. Being sent back to the hub every fifteen seconds while a layout is being
+  // chased on a real phone is not help. Flip this to false to have it back — nothing else
+  // about it changed.
+  var PAUSED = true;
+  if (PAUSED) return;
+
   var here = location.pathname.split('/').pop() || 'index.html';
   if (here === HOME) return;
   try {

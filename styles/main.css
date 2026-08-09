@@ -554,6 +554,15 @@ html.installed body .tabbar {
 /* The junction rides on the navbar's height, which grows into the bottom inset here. */
 html.installed .phone { --foot: calc(56px + max(24px, env(safe-area-inset-bottom, 0px))); }
 html.installed .phone.notif-on { --foot: calc(56px + 66px + max(24px, env(safe-area-inset-bottom, 0px))); }
+/* Installed, the phone draws its own gesture handle — so ours is a second one drawn under
+   it, and it goes. The 24pt it sat in stays: that is the space the real handle needs, and
+   with the pill gone the navbar's own black simply fills it down to the foot of the app.
+   Where the system reports that strip (the wrapper, or an Android that hands it over) the
+   inset takes over from the 24 and the icons clear the real handle by exactly its height.
+   In a browser the drawn pill stays — there is no real one there and it is part of the
+   frame the mockup is drawing. */
+html.installed .tabbar .home-indicator { display: none; }
+
 html.installed .side-trigger { display: none; }
 html.installed .flow-exit { top: 0; height: 44px; }
 
