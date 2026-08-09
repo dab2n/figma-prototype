@@ -13,8 +13,8 @@ android {
         // paints its own scrim behind the bars and no app can stop it.
         minSdk = 29
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = (System.getenv("BUILD_NUMBER") ?: "1").toInt()
+        versionName = "1." + (System.getenv("BUILD_NUMBER") ?: "0")
     }
 
     buildTypes {

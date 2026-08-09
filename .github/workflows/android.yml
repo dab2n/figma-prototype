@@ -30,6 +30,8 @@ jobs:
       # and the action provides the same version the wrapper properties ask for.
       - name: Build debug APK
         working-directory: android
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
         run: gradle --no-daemon assembleDebug
 
       - name: Name it after the run
@@ -50,6 +52,6 @@ jobs:
           tag_name: app-${{ github.run_number }}
           name: NEWTON app ${{ github.run_number }}
           body: |
-            Install on the phone: open this page in Chrome, tap the .apk, allow the install.
-            The app is the prototype in a WebView that draws behind both system bars.
+            Install over the one already there — same signature, so it updates in place.
+            Only needed when the shell itself changes; page edits arrive on the next launch.
           files: ${{ steps.name.outputs.apk }}

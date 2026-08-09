@@ -77,9 +77,36 @@ class MainActivity : AppCompatActivity() {
                 // otherwise, and unlike a query parameter it survives every navigation.
                 userAgentString = userAgentString + " NewtonShell"
             }
-            // Keep every link inside the app; the prototype is one origin. Every load wipes
-            // the inset properties with the document, so they are re-sent when one lands.
+            // Keep every link inside the app; the prototype is one origin.
             webViewClient = object : WebViewClient() {
+                /** The URL we just re-issued ourselves, so we don't re-issue it again. */
+                private var reissued: String? = null
+
+                // Every asset carries ?v=<build>, so those can cache forever — but the HTML
+                // documents have no such marker and the host hands them a ten minute
+                // max-age. That is ten minutes in which a page that has already been
+                // replaced keeps being shown. Asking for a revalidation costs one 304 and
+                // nothing else: the assets behind it still come from cache.
+                override fun shouldOverrideUrlLoading(
+                    view: WebView,
+                    request: android.webkit.WebResourceRequest,
+                ): Boolean {
+                    val url = request.url.toString()
+                    if (!request.isForMainFrame || url == reissued || !url.startsWith(SITE)) {
+                        reissued = null
+                        return false
+                    }
+                    reissued = url
+                    view.loadUrl(url, mapOf("Cache-Control" to "no-cache"))
+                    return true
+                }
+
+                override fun onPageStarted(view: WebView, url: String, favicon: android.graphics.Bitmap?) {
+                    reissued = null
+                }
+
+                // Every load wipes the inset properties with the document, so they are
+                // re-sent when one lands.
                 override fun onPageFinished(view: WebView, url: String) {
                     ViewCompat.requestApplyInsets(view)
                 }
@@ -138,7 +165,9 @@ class MainActivity : AppCompatActivity() {
             fun insetBottom(): Int = barBottom
         }, "NewtonShell")
 
-        if (savedInstanceState == null) web.loadUrl(START_URL)
+        // Same revalidation as every navigation below — a cold start is exactly when the
+        // page is most likely to have been replaced since it was last looked at.
+        if (savedInstanceState == null) web.loadUrl(START_URL, mapOf("Cache-Control" to "no-cache"))
 
         // Back walks the prototype's own history before it leaves.
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
@@ -169,6 +198,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         /** Point this at a build to try; the prototype is a static site, so any host does. */
-        const val START_URL = "https://dab2n.github.io/figma-prototype/flows.html"
+        const val SITE = "https://dab2n.github.io/figma-prototype/"
+        const val START_URL = SITE + "flows.html"
     }
 }
