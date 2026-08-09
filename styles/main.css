@@ -424,23 +424,28 @@ button { font-family: inherit; }
      the punch-hole where nothing could be seen or aimed at. 30% is the gap between the
      clock and that hole on a 360 frame — 108px in, 72px clear of it. */
   left: 30%;
-  width: 44px; height: 26px;
-  margin-left: -22px;
+  /* A pill, not a dot. 8px of target is a miss on a phone even when it is in the clear —
+     this is 56x22 of it, in the shape the status bar already uses for a live activity, and
+     the whole pill is the hit area. Centred on the same 30% the dot was moved to. */
+  width: 56px; height: 22px;
+  margin-left: -28px;
   display: flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  background: var(--color-red);
+  transition: transform .18s ease, filter .18s ease;
   -webkit-tap-highlight-color: transparent;
 }
 .flow-exit i {
   display: block;
-  width: 8px; height: 8px;
-  border-radius: 999px;
-  background: rgba(250, 48, 48, 0.62);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
-  transition: background .18s ease, transform .18s ease;
+  width: 9px; height: 9px;
+  border-radius: 2px;
+  background: rgba(5, 10, 10, 0.86);
 }
-.flow-exit:active i { background: var(--color-red); transform: scale(1.4); }
+.flow-exit:active { transform: scale(0.94); filter: brightness(0.88); }
 /* In a browser the 44px status bar is drawn, so the dot lives inside it — the same place
    a phone's camera sits, and clear of the clock and the battery. */
-html:not(.installed) .flow-exit { top: 0; height: 30px; }
+/* In a browser the 44px status bar is drawn, so the pill is centred in it. */
+html:not(.installed) .flow-exit { top: 11px; }
 
 /* ── "Back to the start" notice ────────────────────────────────────────────────
    Shown by assets/idle.js after ten still seconds, three seconds before it goes.
@@ -567,7 +572,10 @@ html.installed .phone.notif-on { --foot: calc(56px + 66px + max(24px, var(--sab,
 html.installed .tabbar .home-indicator { display: none; }
 
 html.installed .side-trigger { display: none; }
-html.installed .flow-exit { top: 0; height: 44px; }
+/* Installed, the strip belongs to the phone and its height is whatever the shell measured.
+   The pill is centred in it — the height overrides that used to be here were sizing the
+   dot's centring box and would now stretch the pill itself. */
+html.installed .flow-exit { top: calc((var(--sat, env(safe-area-inset-top, 44px)) - 22px) / 2); }
 
 /* Standalone, and the phone's own status bar is the one at the top.
    Fullscreen was tried and measured: on a Galaxy with a camera cutout Android LETTERBOXES

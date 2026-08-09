@@ -31,6 +31,13 @@
   filter: saturate(0.28) brightness(0.86);
   pointer-events: none;
   z-index: 0;
+  /* Hidden until it is actually running. A video element that has not started yet draws
+     the platform's own start-playback button over the frame, and no CSS on that shadow
+     control removes it reliably — so the element is simply not there until the script
+     sees it playing. What shows meanwhile is the gradient, which is the frame anyway.
+     Stated here rather than only in the rAF loop: the loop's first callback lands after
+     the first paint, and that one painted frame is where the button was being seen. */
+  visibility: hidden;
   /* Leaving for the report: the runner goes TRANSPARENT where he is and still running,
      rather than being frozen by the outgoing snapshot and cut. What shows through him is
      the fill and the blob, which is the red the report opens on — so the two screens meet

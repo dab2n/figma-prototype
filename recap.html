@@ -20,8 +20,8 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=1066"></script>
-<script defer src="assets/tour.js?v=1066"></script>
+<script defer src="assets/openext.js?v=1067"></script>
+<script defer src="assets/tour.js?v=1067"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,15 +29,15 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Session Recap</title>
-<link rel="stylesheet" href="styles/main.css?v=1066">
-<link rel="stylesheet" href="styles/recap.css?v=1066">
-<script defer src="assets/idle.js?v=1066"></script>
-<script defer src="assets/flows.js?v=1066"></script>
+<link rel="stylesheet" href="styles/main.css?v=1067">
+<link rel="stylesheet" href="styles/recap.css?v=1067">
+<script defer src="assets/idle.js?v=1067"></script>
+<script defer src="assets/flows.js?v=1067"></script>
 </head>
 <body>
 <div class="phone">
   <div class="screen recap-screen" id="recapScreen">
-    <video class="recap-clip" id="clip" src="assets/video/recap-overlay.mp4?v=1066"
+    <video class="recap-clip" id="clip" src="assets/video/recap-overlay.mp4?v=1067"
            muted playsinline webkit-playsinline autoplay loop preload="auto" disablepictureinpicture></video>
     <!-- Three layers, exactly as drawn: the black clip, its own fill whitening the foot,
          and the blur blob over both on lighten. Nothing else — the earlier full-frame
@@ -106,8 +106,30 @@
       var p = Math.min((t - s) / dur, 1);
       num.textContent = ((1 - Math.pow(1 - p, 2)) * target).toFixed(1);   // ease-out
       if (p < 1) requestAnimationFrame(step);
-      else document.querySelector('.recap-match').classList.add('done');  // "Outstanding Match"
+      else {
+        document.querySelector('.recap-match').classList.add('done');       // "Outstanding Match"
+        armLoop();
+      }
     });
+  }
+
+  // The score is in; now the clip finishes its lap and the report opens by itself. The
+  // recap is a title card, not a screen with anything to do on it, so waiting for a tap is
+  // a stop with nothing behind it. `loop` means 'ended' never fires, so the wrap is caught
+  // by watching the time fall back to the start.
+  function armLoop() {
+    var full = document.querySelector('.recap-full');
+    if (!full) return;
+    var last = clip.currentTime, armed = true;
+    (function watch() {
+      if (!armed) return;
+      var t = clip.currentTime;
+      if (t + 0.25 < last) { armed = false; full.click(); return; }   // it came round
+      last = t;
+      requestAnimationFrame(watch);
+    })();
+    // A thumb that gets there first wins; nothing should fire twice.
+    full.addEventListener('click', function () { armed = false; }, { once: true });
   }
 
   // Nothing counts until there is a picture to count over: the score waits for the clip's
