@@ -587,17 +587,18 @@ html.installed .app-bar-transparent { top: 0; }
 html.installed .phone { box-sizing: border-box; padding-top: var(--sat, env(safe-area-inset-top, 0px)); }
 
 /* ── The tick ─────────────────────────────────────────────────────────────────
-   White disc, then the check drawn along its own stroke. The element is inserted by
-   onboarding.js at the moment of selection, so the keyframes simply run on arrival and
-   there is no from-state to hold between taps. Sits where each family's design puts it. */
-.ob-check { position: absolute; z-index: 3; width: 52px; height: 52px; pointer-events: none; overflow: visible; }
-.ob-check { filter: drop-shadow(0 2px 6px rgba(0,0,0,0.16)); }
-.ob-check-disc { fill: #fff; transform-origin: 26px 26px; animation: ob-disc .22s cubic-bezier(.2,.8,.3,1) both; }
+   The designer's own mark (체크박스.svg), inserted by the page's own script at the moment
+   of selection so the keyframes simply run on arrival and there is no resting state to
+   clear between taps. Each family says only where it sits. */
+.ob-check { position: absolute; z-index: 3; width: 52px; height: 52px; pointer-events: none;
+  overflow: visible; filter: drop-shadow(0 0 12px rgba(0,0,0,0.2)); }
+.ob-check-disc { fill: #fff; transform-origin: 159.69px 159.69px; animation: ob-disc .22s cubic-bezier(.2,.8,.3,1) both; }
 .ob-check-tick {
-  fill: none; stroke: #FA3030; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round;
-  /* 20 is a hair past the path's own length, so the dash clears it completely at 0%. */
-  stroke-dasharray: 20; stroke-dashoffset: 20;
-  animation: ob-tick .3s cubic-bezier(.65,0,.35,1) .14s forwards;
+  fill: none; stroke: #FA3030; stroke-width: 64; stroke-linecap: butt; stroke-linejoin: round;
+  /* The centreline runs 111 units; 118 clears it, so the brush is fully hidden at 0%.
+     A butt cap keeps the growing edge square — a round one would reveal ahead of the pen. */
+  stroke-dasharray: 118; stroke-dashoffset: 118;
+  animation: ob-tick .34s cubic-bezier(.6,0,.35,1) .12s forwards;
 }
 @keyframes ob-disc { from { transform: scale(.4); opacity: 0; } }
 @keyframes ob-tick { to { stroke-dashoffset: 0; } }

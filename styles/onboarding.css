@@ -115,3 +115,39 @@
 .ob-card .ob-check  { top: 4px;  right: 4px; }
 .ob-wcard .ob-check { top: 8px;  right: 8px; }
 .ob-row .ob-check   { top: 50%; right: 4px; margin-top: -26px; }
+
+/* ── Arrival ──────────────────────────────────────────────────────────────────
+   The cards come up from below when the step opens, a beat apart down each column and
+   the right column half a beat behind the left, so the two read as one wave rather than
+   two lists starting at once. Runs once, on load; nothing re-triggers it. */
+@keyframes ob-rise { from { opacity: 0; transform: translateY(22px); } }
+.ob-grid .ob-card, .ob-list .ob-row, .ob-where .ob-wcard {
+  animation: ob-rise .52s cubic-bezier(.2,.85,.25,1) both;
+  animation-delay: var(--rise, 0ms);
+}
+.ob-col > :nth-child(1), .ob-list > :nth-child(1), .ob-where .col > :nth-child(1) { --rise: 40ms; }
+.ob-col > :nth-child(2), .ob-list > :nth-child(2), .ob-where .col > :nth-child(2) { --rise: 100ms; }
+.ob-col > :nth-child(3), .ob-list > :nth-child(3) { --rise: 160ms; }
+.ob-col > :nth-child(4), .ob-list > :nth-child(4) { --rise: 220ms; }
+.ob-col > :nth-child(5), .ob-list > :nth-child(5) { --rise: 280ms; }
+.ob-col > :nth-child(6) { --rise: 340ms; }
+.ob-grid .ob-col:last-child > * { animation-delay: calc(var(--rise, 0ms) + 30ms); }
+.ob-where .col:last-child > * { animation-delay: calc(var(--rise, 0ms) + 30ms); }
+@media (prefers-reduced-motion: reduce) {
+  .ob-grid .ob-card, .ob-list .ob-row, .ob-where .ob-wcard { animation: none; }
+}
+
+/* ── The top of the scroller ──────────────────────────────────────────────────
+   Cards used to pass under the heading and stop dead on a hard line. They now fade out
+   into it instead: the strip sits on the title (which is the element directly above the
+   scroller, whatever each page's heading height turns out to be) and carries both a wash
+   of the page's own grey and a little blur, so what is leaving is soft rather than cut. */
+.ob-title { position: relative; z-index: 2; }
+.ob-title::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 26px;
+  pointer-events: none;
+  background: linear-gradient(180deg, var(--color-neutral-100) 12%, rgba(242,242,242,0) 100%);
+  -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+  -webkit-mask-image: linear-gradient(180deg, #000 20%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 20%, transparent 100%);
+}

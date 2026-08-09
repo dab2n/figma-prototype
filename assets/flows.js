@@ -145,28 +145,47 @@ window.__liveClock = function () {
 
 // The tick, drawn rather than faded in.
 //
-// Every selectable thing in onboarding and setup answers a tap with the same mark: a white
-// disc that pops, then a check that RUNS ALONG ITS OWN STROKE. It lives here because three
-// different families of card use it and the geometry has to stay one thing; each of them
-// only says where it sits. A flattened image cannot do this — dash-offset needs a path to
-// walk. Inserting the element is what starts the draw, so there is no resting state to
-// clear between taps: the caller removes it on deselect.
-window.__tick = function () {
-  var ns = 'http://www.w3.org/2000/svg';
-  var svg = document.createElementNS(ns, 'svg');
-  svg.setAttribute('class', 'ob-check');
-  svg.setAttribute('viewBox', '0 0 52 52');
-  svg.setAttribute('aria-hidden', 'true');
-  // The badge is 28pt across (node 9:9851). The box around it is 52 because that is the
-  // room the old asset reserved for its shadow, and every rule that places this mark is
-  // written against those 52 — so the disc is drawn at 28 inside them, not filling them.
-  var c = document.createElementNS(ns, 'circle');
-  c.setAttribute('cx', '26'); c.setAttribute('cy', '26'); c.setAttribute('r', '14');
-  c.setAttribute('class', 'ob-check-disc');
-  var p = document.createElementNS(ns, 'path');
-  // The check is 22x17 of that 28, at the design's own inset.
-  p.setAttribute('d', 'M18.2 25.6 L22.3 30.7 L33.1 19.2');
-  p.setAttribute('class', 'ob-check-tick');
-  svg.appendChild(c); svg.appendChild(p);
-  return svg;
-};
+// The mark is the designer's own vector (체크박스.svg): a white disc and a BRUSH-SHAPED
+// check — a filled outline, not a stroke, so dash-offset has nothing to walk along. It is
+// revealed instead: a fat stroke follows the check's centreline and is clipped to the
+// brush, so what grows is the artwork itself, along its own path, never a redrawn
+// approximation of it.
+//
+// The 320 viewBox is kept exactly as exported, which is what puts the disc at 28pt inside
+// the 52pt box every rule here places it in (r 85.95 of 320 -> 27.9 of 52, centred).
+window.__tick = (function () {
+  var seq = 0;
+  var BRUSH = 'M193.882 118.025C194.108 118.007 194.736 118.025 194.958 118.056C197.689 118.442 200.224 118.947 202.048 121.194C203.228 122.655 203.792 124.523 203.62 126.397C203.452 128.057 202.702 129.654 201.555 130.853C199.833 132.651 197.371 133.315 195.349 134.689C193.91 135.635 192.451 137.266 191.663 138.801C189.275 143.455 186.191 146.568 181.895 149.47C180.017 150.739 177.561 152.897 176.016 154.674C175.197 155.623 174.461 156.641 173.814 157.716C172.436 160.025 171.523 162.339 169.516 164.25C166.731 166.899 163.538 168.033 160.953 171.042C159.428 172.819 158.753 174.101 157.506 176.021C156.445 177.666 155.269 179.278 154.269 180.961C152.144 184.538 149.83 189.448 144.83 188.828C143.895 188.709 143 188.376 142.213 187.854C138.786 185.588 139.824 182.27 136.851 179.294C134.301 176.741 132.197 176.39 129.528 174.365C127.528 172.848 125.786 169.684 124.168 167.572C121.882 164.922 120.148 164.326 117.004 163.168C115.853 162.744 114.704 162.25 113.78 161.418C112.701 160.448 112.009 159.087 111.948 157.626C111.877 155.899 112.644 154.456 113.777 153.216C114.526 152.397 115.398 151.677 116.207 150.92C118.296 148.964 120.254 147.015 123.276 146.899C124.762 146.841 126.427 147.321 127.689 148.107C129.414 149.181 130.61 150.842 132.021 152.27C133.688 153.957 135.568 155.471 136.892 157.47C138.306 159.603 139.238 162.52 141.114 164.243C142.134 165.18 143.516 165.906 144.932 165.817C149.071 165.557 157.129 153.515 159.581 150.136C160.664 148.666 161.759 147.205 162.865 145.753C164.003 144.242 165.234 142.544 166.571 141.219C167.726 140.073 169.043 139.105 170.48 138.348C173.004 136.995 174.652 136.646 176.733 134.324C179.917 130.77 182.03 126.489 184.967 122.813C186.927 120.358 190.696 118.234 193.882 118.025Z';
+  return function () {
+    var ns = 'http://www.w3.org/2000/svg';
+    var id = 'tickclip' + (++seq);
+    var svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('class', 'ob-check');
+    svg.setAttribute('viewBox', '0 0 320 320');
+    svg.setAttribute('aria-hidden', 'true');
+
+    var disc = document.createElementNS(ns, 'circle');
+    disc.setAttribute('cx', '159.69'); disc.setAttribute('cy', '159.69'); disc.setAttribute('r', '85.9482');
+    disc.setAttribute('class', 'ob-check-disc');
+
+    var clip = document.createElementNS(ns, 'clipPath');
+    clip.setAttribute('id', id);
+    var shape = document.createElementNS(ns, 'path');
+    shape.setAttribute('d', BRUSH);
+    clip.appendChild(shape);
+
+    var g = document.createElementNS(ns, 'g');
+    g.setAttribute('clip-path', 'url(#' + id + ')');
+    var run = document.createElementNS(ns, 'path');
+    // The check's centreline. The stroke is far wider than the brush on purpose — it is
+    // clipped to it, so only its LEADING EDGE matters, and that edge is the pen.
+    run.setAttribute('d', 'M119 155 L144.5 180 L197 126');
+    run.setAttribute('class', 'ob-check-tick');
+    g.appendChild(run);
+
+    svg.appendChild(disc);
+    svg.appendChild(clip);
+    svg.appendChild(g);
+    return svg;
+  };
+})();
