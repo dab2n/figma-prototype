@@ -82,12 +82,12 @@
 
   // The viewport, measured — not asked for in a unit.
   //
-  // On the Galaxy S23, 100dvh and innerHeight both come back about 35pt SHORT of what is
-  // actually on screen: measured off a Chrome screenshot, the page had 804pt of room and
-  // the frame was laid out against ~770. Half of that shortfall sat under the frame as a
-  // white band, and installed it was the strip under the navbar. visualViewport reports
-  // what is really visible, so that is what --vph and --fit are taken from; height*scale
-  // normalises a pinch back to layout pixels so a zoom does not resize the frame.
+  // The LARGER of innerHeight and visualViewport.height, never a multiplied one. Both
+  // describe the same thing and either can come back short depending on the phone and
+  // where its address bar is; taking the larger means the frame is never laid out against
+  // less room than the page actually has, which is what left a band under it. A scale
+  // factor was tried here and is gone: it made the number smaller on the phones where
+  // scale is not 1, which is a frame shrunk to a fraction of the screen.
   (function () {
     var box = window.__box;
     if (!box) return;
