@@ -10,7 +10,7 @@
      392/812 are the frame plus 16px of air; --fit scales it to whatever is actually there.
      Inline and parser-blocking ON PURPOSE: --fit falls back to 1, so any frame painted
      before it is set shows the phone at FULL size and then snaps down. -->
-<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true;if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=Math.max(innerWidth,v?v.width:0),h=Math.max(innerHeight,v?v.height:0);r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/392,h/812).toFixed(4));};window.__box();try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
+<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true;if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/392,h/812).toFixed(4));};window.__box();try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
 <!-- The four faces every screen actually renders in. Preloaded because font-display:swap
      draws the fallback first and re-lays the text out when the real one lands — on the
      phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
@@ -20,12 +20,12 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#8E7E65">
-<script defer src="assets/openext.js?v=1047"></script>
-<script defer src="assets/clips.js?v=1047"></script>
-<script defer src="assets/packs.js?v=1047"></script>
-<script defer src="assets/enter.js?v=1047"></script>
-<script defer src="assets/process.js?v=1047"></script>
-<script defer src="assets/tour.js?v=1047"></script>
+<script defer src="assets/openext.js?v=1049"></script>
+<script defer src="assets/clips.js?v=1049"></script>
+<script defer src="assets/packs.js?v=1049"></script>
+<script defer src="assets/enter.js?v=1049"></script>
+<script defer src="assets/process.js?v=1049"></script>
+<script defer src="assets/tour.js?v=1049"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,12 +33,12 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Sean's Pace Strategy</title>
-<link rel="stylesheet" href="styles/main.css?v=1047">
-<link rel="stylesheet" href="styles/detail.css?v=1047">
-<link rel="stylesheet" href="styles/creator.css?v=1047">
-<link rel="stylesheet" href="styles/enter.css?v=1047">
-<script defer src="assets/idle.js?v=1047"></script>
-<script defer src="assets/flows.js?v=1047"></script>
+<link rel="stylesheet" href="styles/main.css?v=1049">
+<link rel="stylesheet" href="styles/detail.css?v=1049">
+<link rel="stylesheet" href="styles/creator.css?v=1049">
+<link rel="stylesheet" href="styles/enter.css?v=1049">
+<script defer src="assets/idle.js?v=1049"></script>
+<script defer src="assets/flows.js?v=1049"></script>
 </head>
 <body>
 <div class="phone">
@@ -52,8 +52,8 @@
       <!-- The still stays: it is the poster, and packs.js samples it for the screen's
            tone. The video sits inside .dj-photo rather than beside it so the fold's
            scale and blur, which live on .dj-photo, apply to it unchanged. -->
-      <div class="dj-photo" style="background-image:url('assets/photos/hero-sean-running.jpg?v=1047');">
-        <video src="assets/photos/sean-running.mp4?v=1047" poster="assets/photos/hero-sean-running.jpg?v=1047" muted loop playsinline preload="none" disablepictureinpicture></video>
+      <div class="dj-photo" style="background-image:url('assets/photos/hero-sean-running.jpg?v=1049');">
+        <video src="assets/photos/sean-running.mp4?v=1049" poster="assets/photos/hero-sean-running.jpg?v=1049" muted loop playsinline preload="none" disablepictureinpicture></video>
       </div>
       <div class="dj-wash"></div>
 
@@ -73,7 +73,7 @@
       <!-- The one element that survives the fold, so it is the one that travels:
            it slides to the centre and grows into the 올릴때 header avatar. -->
       <div class="dj-profile">
-        <img src="assets/photos/creator-profile-sean.png?v=1047" alt="">
+        <img src="assets/photos/creator-profile-sean.png?v=1049" alt="">
         <span class="who"><span class="name">Sean</span></span>
       </div>
       <div class="dj-meta">
@@ -147,14 +147,14 @@
         <p class="t-subtitle-b" style="color:var(--color-neutral-50); margin:0 0 8px;">You might also like</p>
         <div class="also-like-list">
           <a class="also-like-item" href="pyeongso.html?pack=interval">
-            <img src="assets/photos/related-running-intervals.png?v=1047" alt="">
+            <img src="assets/photos/related-running-intervals.png?v=1049" alt="">
             <div class="txt">
               <p class="t-body-bold">Running Intervals</p>
               <div class="meta"><span>Skilled User</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>12m</span></div>
             </div>
           </a>
           <a class="also-like-item" href="pyeongso.html?pack=boxing">
-            <img src="assets/photos/related-boxing-beginner.png?v=1047" alt="">
+            <img src="assets/photos/related-boxing-beginner.png?v=1049" alt="">
             <div class="txt">
               <p class="t-body-bold">Boxing Beginner Challenge</p>
               <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>12m</span></div>
@@ -170,17 +170,17 @@
         </div>
         <div class="more-scroll">
           <a class="more-card" href="pyeongso.html?pack=sprinter">
-            <img src="assets/photos/more-running-form.jpg?v=1047" alt="">
+            <img src="assets/photos/more-running-form.jpg?v=1049" alt="">
             <p class="t-body-bold">Running Form Correction Routine</p>
             <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>25m</span></div>
           </a>
           <a class="more-card" href="pyeongso.html?pack=legburn">
-            <img src="assets/photos/more-everyday-crew.jpg?v=1047" alt="">
+            <img src="assets/photos/more-everyday-crew.jpg?v=1049" alt="">
             <p class="t-body-bold">Everyday Running Crew</p>
             <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>23m</span></div>
           </a>
           <a class="more-card" href="pyeongso.html?pack=sprint">
-            <img src="assets/photos/more-5km-finish.png?v=1047" alt="">
+            <img src="assets/photos/more-5km-finish.png?v=1049" alt="">
             <p class="t-body-bold">Sean's 5km Finish Strategy</p>
             <div class="meta"><span>Creator</span><img class="sep" src="assets/icons/dot-tiny1.svg" alt=""><span>15m</span></div>
           </a>
@@ -202,9 +202,9 @@
         <div class="joined-row">
           <div class="joined-people">
             <div class="joined-avatars">
-              <img src="assets/photos/packs-avatar1.png?v=1047" alt="">
-              <img src="assets/photos/packs-avatar2.png?v=1047" alt="">
-              <img src="assets/photos/joined-avatar-swim.png?v=1047" alt="">
+              <img src="assets/photos/packs-avatar1.png?v=1049" alt="">
+              <img src="assets/photos/packs-avatar2.png?v=1049" alt="">
+              <img src="assets/photos/joined-avatar-swim.png?v=1049" alt="">
             </div>
             <p>877 joined this week</p>
           </div>

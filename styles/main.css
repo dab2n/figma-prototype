@@ -89,25 +89,26 @@ html.clay .phone {
 /* A browser — any browser, a laptop or a phone — shows the frame as a frame: 360x780 on
    a white page, centred, scaled by --fit to whatever room there is. Installed, the app
    owns the screen and the rules under html.installed take over. */
-html, body { height: 100%; }
+/* html only. A definite height on the body would pin it to the layout box, and the frame
+   has to be centred in what can be SEEN — the two differ by the address bar. min-height
+   below does that, and leaves the body free to grow if anything ever overflows, which is
+   what makes the page scrollable instead of cutting the rest off. */
+html { height: 100%; }
 body {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0;
-  overflow: hidden;
   background: #fff;
-  /* dvh, so the frame is centred in what is actually on screen. With the address bar out
-     the layout box is the taller one and a frame centred in THAT sits low, which is the
-     white that opens up under it on a phone. dvh is the unit for exactly this; it only
-     misbehaved when it was asked to size an installed app, where there is no browser UI
-     for it to track. */
-  /* --vph is the visual viewport, measured (assets/openext.js). dvh is only the fallback
-     for the frames before the script runs: on at least one phone it reports ~35pt less
-     than is really there, and that shortfall is what opened as a white band under the
-     frame. */
-  height: 100dvh;
-  height: var(--vph, 100dvh);
+  /* The SMALLER of innerHeight and visualViewport.height, measured in JS (openext.js) and
+     handed over as --vph. Whichever is smaller is the box the frame has to fit inside —
+     taking the larger sized it against room that was not there, and the frame overflowed a
+     screen that cannot scroll, which is a navbar nobody can reach.
+     And the page CAN scroll now. overflow: hidden was belt for a frame that always fits;
+     if one ever does not — a short window, a text size we did not test — the rest has to
+     be reachable rather than simply gone. */
+  min-height: 100dvh;
+  min-height: var(--vph, 100dvh);
 }
 .phone { zoom: var(--fit, 1); }
 
@@ -500,11 +501,17 @@ html:not(.installed) .flow-exit { top: 0; height: 30px; }
    given, and when the app owns the screen that box is the answer. --vph stays for the
    browser, where the frame is centred in what can be seen and the two differ by the
    address bar. */
-html.installed, html.installed body { height: 100%; background: var(--color-black); overscroll-behavior: none; }
+/* lvh — the viewport with every retractable bar retracted — with 100% as the fallback.
+   On a phone whose gesture hint is switched off, the strip Android would otherwise keep is
+   simply screen, and lvh is the unit that says so; 100% only ever resolves against the box
+   the page was handed, which on that phone is short by exactly that strip. That shortfall
+   is the white under the navbar. */
+html.installed, html.installed body { height: 100%; height: 100lvh; background: var(--color-black); overscroll-behavior: none; }
 html.installed body { padding: 0; align-items: stretch; justify-content: flex-start; }
 html.installed .phone {
   width: 100%;
   height: 100%;
+  height: 100lvh;
   border-radius: 0;
   box-shadow: none;
   zoom: 1;
