@@ -16,11 +16,26 @@
   var clips = [].slice.call(document.querySelectorAll('video[loop]'));
   if (!clips.length) return;
 
+  // A refused play is not always permanent. iOS turns off inline autoplay entirely in Low
+  // Power Mode, and a phone at 17% is usually in it — which is a card sitting on its poster
+  // with no explanation. The first touch anywhere is a user gesture, and after one of those
+  // WebKit lets muted inline video run, so every clip that was refused is asked once more.
+  var refused = [];
+  function retry() {
+    var q = refused; refused = [];
+    q.forEach(function (v) { if (v.dataset.held !== '1' && v.paused) play(v); });
+  }
+  ['touchend', 'pointerup', 'click'].forEach(function (e) {
+    addEventListener(e, retry, { capture: true, passive: true });
+  });
+
   function play(v) {
     if (v.dataset.held === '1') return;          // paused by hand — leave it alone
     v.muted = true;
     var p = v.play();
-    if (p && p.catch) p.catch(function () {});   // refused: the poster stays, no button
+    if (p && p.catch) p.catch(function () {       // refused: the poster stays, no button
+      if (refused.indexOf(v) < 0) refused.push(v);
+    });
   }
   function stop(v) { if (!v.paused) v.pause(); }
 

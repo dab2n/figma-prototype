@@ -140,6 +140,12 @@ html:not(.installed) .phone.notif-on:has(> .tabbar) > .screen { height: 634px; }
      scopes plus-lighter to the card rather than to whatever is behind it; card 1 had it
      for that reason and 2 and 3 did not. */
   isolation: isolate;
+  /* WebKit needs the promise kept, not just declared: on an iPhone the plus-lighter shot
+     inside was still reaching the page, which paints the card's own rectangle a shade
+     lighter than everything around it and leaves the glow looking cut off at that edge.
+     A composited layer cannot blend outside itself, so the isolation actually holds.
+     iOS only — on Chrome the declaration is enough and a promoted layer per card is a
+     raster it does not need. */
   /* Two shadows, not one: the Figma rect (17/54/-24) IS the glow, but on its own it stops
      dead about 20px under the card — a compact smudge with an edge. The second is the
      same colour spread twice as far and half as strong, purely to give the first one a
@@ -419,3 +425,5 @@ html:not(.installed) .phone.notif-on:has(> .tabbar) > .screen { height: 634px; }
 .movement-card:nth-child(2) { animation-delay: .30s; }
 .movement-card:nth-child(3) { animation-delay: .34s; }
 @keyframes home-slide { from { opacity: 0; transform: translateY(18px); } }
+
+html.ios .hero-card { transform: translateZ(0); }

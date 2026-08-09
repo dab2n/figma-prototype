@@ -269,64 +269,34 @@ video::-webkit-media-controls-start-playback-button {
   border-radius: 0;              /* flat top; the phone frame rounds the bottom to 40 */
 }
 /* ── The concave junction ──────────────────────────────────────────────────────
-   Drawn ON TOP of the frame, not cut out of it. The frame used to round its own
-   foot and let the black behind show through the corners, and that is a rounded
-   clip on a scrolling, video-bearing layer — the one thing Chrome keeps dropping
-   here. On the Galaxy it dropped intermittently: sometimes the junction, sometimes
-   the whole corner, and what leaked through it was the glitching.
-   Two masked fillets instead, the same pair detail.css uses for the pack sheet:
-   a 40px black square at each of the bar's top corners with a quarter circle taken
-   out of it. They sit above the frame, so nothing has to be clipped at all, and
-   they are anchored to the BAR — so they land on the junction whatever height the
-   frame works out to.
-   The fill follows the bar it belongs to: the onboarding and setup bars are the
-   same grey as their screens, so theirs simply do not read. */
-.tabbar { --bar-fill: var(--color-black); }
-.tabbar.ob-bottom { --bar-fill: var(--color-neutral-100); }
-.tabbar::before,
-.tabbar::after {
-  content: "";
-  position: absolute;          /* absolute, so it is not a flex item of the bar */
-  bottom: 100%;
-  width: 40px; height: 40px;
-  background: var(--bar-fill);
-  pointer-events: none;
-}
-.tabbar::before {
-  left: 0;
-  -webkit-mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%);
-          mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%);
-}
-.tabbar::after {
-  right: 0;
-  -webkit-mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);
-          mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);
-}
-
-/* When the report strip is up it sits BETWEEN the frame and the navbar, so the junction
-   moves up 66px with the frame's foot and the bar's own pair is left drawing a curve
-   against nothing. The strip carries the pair instead, and the bar's stands down. */
-.notif-bar::before,
-.notif-bar::after {
+   Drawn ON TOP of the frame, not cut out of it — a rounded clip on a scrolling,
+   video-bearing layer is the one thing Chrome keeps dropping here, and what leaked
+   through when it did was the glitching. Two masked fillets instead, the pair
+   detail.css already uses for the pack sheet: a 40px square at each corner of the
+   frame's foot with a quarter circle taken out of it.
+   ONE element carrying both corners, positioned by --foot, so the junction is
+   wherever the frame's foot currently is. That matters while the report strip opens:
+   the foot travels 66px over a second, and a pair pinned to the navbar (or to the
+   strip) is drawing a curve against nothing for the whole of that — which is the
+   junction breaking as the strip arrives. home.html's tween writes --foot on the
+   same frames it writes the height, so the curve travels with the edge.
+   The fill follows the bar it belongs to: the onboarding bar is the same grey as its
+   screen, so its pair simply does not read. */
+.phone { --bar-fill: var(--color-black); --foot: 80px; }
+.phone:has(> .tabbar.ob-bottom) { --bar-fill: var(--color-neutral-100); }
+.phone.notif-on { --foot: 146px; }
+.phone:has(> .tabbar)::after {
   content: "";
   position: absolute;
-  bottom: 100%;
-  width: 40px; height: 40px;
-  background: var(--color-black);
+  left: 0; right: 0;
+  bottom: var(--foot);
+  height: 40px;
+  z-index: 20;                 /* over the frame, under the navbar's own 30 */
   pointer-events: none;
+  background:
+    radial-gradient(40px at 40px 0, #0000 99%, var(--bar-fill) 100%) top left / 40px 40px no-repeat,
+    radial-gradient(40px at 0 0,  #0000 99%, var(--bar-fill) 100%) top right / 40px 40px no-repeat;
 }
-.notif-bar::before {
-  left: 0;
-  -webkit-mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%);
-          mask: radial-gradient(40px at 100% 0, #0000 99%, #000 100%);
-}
-.notif-bar::after {
-  right: 0;
-  -webkit-mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);
-          mask: radial-gradient(40px at 0 0, #0000 99%, #000 100%);
-}
-.phone.notif-on .tabbar::before,
-.phone.notif-on .tabbar::after { display: none; }
 
 .tabbar .tabs {
   display: flex;
@@ -547,6 +517,9 @@ html.installed body .tabbar {
   height: calc(56px + max(24px, env(safe-area-inset-bottom, 0px)));
   padding-bottom: 0;
 }
+/* The junction rides on the navbar's height, which grows into the bottom inset here. */
+html.installed .phone { --foot: calc(56px + max(24px, env(safe-area-inset-bottom, 0px))); }
+html.installed .phone.notif-on { --foot: calc(56px + 66px + max(24px, env(safe-area-inset-bottom, 0px))); }
 html.installed .side-trigger { display: none; }
 html.installed .flow-exit { top: 0; height: 44px; }
 

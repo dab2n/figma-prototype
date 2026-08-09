@@ -10,7 +10,7 @@
      392/812 are the frame plus 16px of air; --fit scales it to whatever is actually there.
      Inline and parser-blocking ON PURPOSE: --fit falls back to 1, so any frame painted
      before it is set shows the phone at FULL size and then snaps down. -->
-<script>(function(d){var r=d.documentElement,m=window.matchMedia,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true;if(i){r.className+=" installed"+(navigator.standalone===true?" ios":"");}else{r.style.setProperty("--fit",Math.min(1,innerWidth/392,innerHeight/812).toFixed(4));}try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
+<script>(function(d){var r=d.documentElement,m=window.matchMedia,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true;var ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true;if(ios)r.className+=" ios";if(i){r.className+=" installed";}else{r.style.setProperty("--fit",Math.min(1,innerWidth/392,innerHeight/812).toFixed(4));}try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
 <!-- The four faces every screen actually renders in. Preloaded because font-display:swap
      draws the fallback first and re-lays the text out when the real one lands — on the
      phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
@@ -23,7 +23,7 @@
 <link rel="preload" as="image" href="assets/icons/check-circle.png">
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1043"></script>
+<script defer src="assets/openext.js?v=1044"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,10 +31,10 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Where</title>
-<link rel="stylesheet" href="styles/main.css?v=1043">
-<link rel="stylesheet" href="styles/onboarding.css?v=1043">
-<script defer src="assets/idle.js?v=1043"></script>
-<script defer src="assets/flows.js?v=1043"></script>
+<link rel="stylesheet" href="styles/main.css?v=1044">
+<link rel="stylesheet" href="styles/onboarding.css?v=1044">
+<script defer src="assets/idle.js?v=1044"></script>
+<script defer src="assets/flows.js?v=1044"></script>
 </head>
 <body>
 <div class="phone">
@@ -56,17 +56,17 @@
         <div class="col">
           <div class="ob-wcard h" data-toggle>
             <p class="t">Indoors</p><p class="s">Mostly indoors</p>
-            <div class="img" style="background-image:url('assets/photos/sport-hometraining.png?v=1043')"></div>
+            <div class="img" style="background-image:url('assets/photos/sport-hometraining.png?v=1044')"></div>
           </div>
           <div class="ob-wcard h" data-toggle>
             <p class="t">Outdoors</p><p class="s">Parks, tracks, and<br>another spots</p>
-            <div class="img" style="background-image:url('assets/photos/sport-running.png?v=1043')"></div>
+            <div class="img" style="background-image:url('assets/photos/sport-running.png?v=1044')"></div>
           </div>
         </div>
         <div class="col">
           <div class="ob-wcard full" data-toggle>
             <p class="t">Both</p><p class="s">Depends on the day</p>
-            <div class="img" style="background-image:url('assets/photos/sport-marathon.png?v=1043'); background-position:center 80%;"></div>
+            <div class="img" style="background-image:url('assets/photos/sport-marathon.png?v=1044'); background-position:center 80%;"></div>
           </div>
         </div>
       </div>
@@ -80,6 +80,6 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/onboarding.js?v=1043"></script>
+<script src="assets/onboarding.js?v=1044"></script>
 </body>
 </html>
