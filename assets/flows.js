@@ -22,6 +22,63 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', add);
   else add();
+
+  // Out of the way until it is asked for. The pill sat on every screen at all times, which
+  // is a prototype control living in the middle of a design; now it is pulled down from the
+  // top of the frame the way a phone's own shade is, and it goes back up on its own.
+  //
+  // The gesture is deliberately narrow — it starts in the top 96px, within the middle third,
+  // and has to travel 28px DOWN — so it cannot be tripped by an ordinary tap on the app bar
+  // or by a sideways swipe through a carousel.
+  var HOLD = 4000;
+  var hideAt = 0, timer = 0;
+
+  function show(phone) {
+    var pill = phone.querySelector('.flow-exit');
+    if (!pill) return;
+    phone.classList.add('exit-on');
+    clearTimeout(timer);
+    timer = setTimeout(function () { phone.classList.remove('exit-on'); }, HOLD);
+  }
+
+  function arm() {
+    var phone = document.querySelector('.phone');
+    if (!phone) return;
+    var x0 = 0, y0 = 0, live = false;
+    function down(x, y) {
+      var r = phone.getBoundingClientRect();
+      live = (y - r.top) < 96 && (x - r.left) > r.width * 0.33 && (x - r.left) < r.width * 0.67;
+      x0 = x; y0 = y;
+    }
+    function move(x, y) {
+      if (!live) return;
+      if (y - y0 > 28 && Math.abs(x - x0) < 40) { live = false; show(phone); }
+    }
+    // Both families. A WebView that coalesces pointer events still sends touches, and one
+    // that has no touch at all still sends pointers — either alone leaves a device out.
+    phone.addEventListener('pointerdown', function (e) { down(e.clientX, e.clientY); }, { passive: true });
+    phone.addEventListener('pointermove', function (e) { move(e.clientX, e.clientY); }, { passive: true });
+    phone.addEventListener('touchstart', function (e) {
+      var t = e.touches[0]; if (t) down(t.clientX, t.clientY);
+    }, { passive: true });
+    phone.addEventListener('touchmove', function (e) {
+      var t = e.touches[0]; if (t) move(t.clientX, t.clientY);
+    }, { passive: true });
+    // Ended, not CANCELLED. Chrome fires pointercancel the moment the compositor takes the
+    // gesture over as a scroll — which is precisely what a pull down at the top of a page
+    // is — so clearing on cancel threw the gesture away a few pixels into it. Measured: the
+    // drag reached 26px of its 28 and then went dead. touchmove keeps arriving through the
+    // scroll, so the travel is still counted; only a finger LIFTING ends it.
+    ['pointerup', 'touchend'].forEach(function (t) {
+      phone.addEventListener(t, function () { live = false; }, { passive: true });
+    });
+    // Touching the pill keeps it up long enough to press it.
+    phone.addEventListener('pointerdown', function (e) {
+      if (e.target.closest('.flow-exit')) show(phone);
+    }, { passive: true });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm);
+  else arm();
 })();
 
 // Installed to the home screen, the strip the system draws its gesture bar in takes its

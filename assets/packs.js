@@ -10,14 +10,14 @@
   var PACKS = {
     akiyama: {
       mins: 11,
-      week: '1284', crew: ['packs-avatar3.png', 'packsx-avatar-b.png', 'joined-avatar-jiwoo.png'],
+      week: '1284', crew: ['akiyama-avatar.png', 'packsx-avatar-b.png', 'joined-avatar-jiwoo.png'],
       clip: 'akiyama-step.mp4',
       type: 'Pro', sub: 'Movement Coach · 512K subscribers',
       sport: 'Agility', joined: '3,190', rec: ['Rhythm', 'Balance'],
       total: 19, bars: [['5min', 'LOOSEN'], ['9min', 'SHADOW'], ['You Can Choose', 'GHOST!']],
       info: ['Some Experience', 'Rhythm · Deception', 'Indoor Court', 'Pro'],
       also: ['curry', 'ladder'], more: ['basketball', 'ladder', 'strength'],
-      photo: 'akiyama-smile-poster.jpg', author: 'Akiyama', avatar: 'packs-avatar3.png',
+      photo: 'akiyama-step-poster.jpg', author: 'Akiyama', avatar: 'akiyama-avatar.png',
       title: "Akiyama's Ghost Step",
       desc: 'The step that leaves a defender reading the wrong hip. Weight shift first, then the tempo change that sells it, drilled slowly before it is run at speed.'
     },

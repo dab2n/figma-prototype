@@ -445,16 +445,23 @@ button { font-family: inherit; }
      and the recap; on the pale screens it disappears into them and the fill does the work.
      The soft shadow is for the ones that are a photograph. */
   box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.55), 0 2px 8px rgba(0, 0, 0, 0.18);
-  transition: transform .18s ease, filter .18s ease;
+  /* Hidden until pulled down from the top of the frame (assets/flows.js). It comes down
+     out of the strip rather than fading in place, so the gesture and the thing it reveals
+     are one movement. */
+  opacity: 0;
+  transform: translateY(-14px);
+  pointer-events: none;
+  transition: opacity .22s ease, transform .28s cubic-bezier(.2,.8,.25,1), filter .18s ease;
   -webkit-tap-highlight-color: transparent;
 }
+.phone.exit-on .flow-exit { opacity: 1; transform: none; pointer-events: auto; }
 .flow-exit i {
   display: block;
   width: 9px; height: 9px;
   border-radius: 2px;
   background: rgba(5, 10, 10, 0.86);
 }
-.flow-exit:active { transform: scale(0.94); filter: brightness(0.88); }
+.phone.exit-on .flow-exit:active { transform: scale(0.94); filter: brightness(0.88); }
 /* In a browser the 44px status bar is drawn, so the dot lives inside it — the same place
    a phone's camera sits, and clear of the clock and the battery. */
 /* In a browser the 44px status bar is drawn by the mockup and nothing else wants those
