@@ -420,18 +420,24 @@ button { font-family: inherit; }
   position: absolute;
   z-index: 900;
   top: var(--sat, env(safe-area-inset-top, 0px));
-  /* Not centred. Dead centre is where a Galaxy puts its camera, and the dot sat under
-     the punch-hole where nothing could be seen or aimed at. 30% is the gap between the
-     clock and that hole on a 360 frame — 108px in, 72px clear of it. */
-  left: 30%;
+  /* Centred, and BELOW the system bar — see the installed rule further down. Sitting in
+     the strip itself was the reason it stopped responding: the app draws behind Android's
+     status bar, but that bar's own window still takes the touches in its height, so a tap
+     up there reaches SystemUI and never the page. Below it the app bar's middle is empty
+     on every screen (back and title left, actions right), which is where this goes. */
+  left: 50%;
   /* A pill, not a dot. 8px of target is a miss on a phone even when it is in the clear —
-     this is 56x22 of it, in the shape the status bar already uses for a live activity, and
-     the whole pill is the hit area. Centred on the same 30% the dot was moved to. */
+     this is 56x22 of it, in the shape the status bar uses for a live activity, and the
+     whole pill is the hit area. */
   width: 56px; height: 22px;
   margin-left: -28px;
   display: flex; align-items: center; justify-content: center;
   border-radius: 999px;
   background: var(--color-red);
+  /* A red pill on a red screen is not a pill. The hairline separates it from the report
+     and the recap; on the pale screens it disappears into them and the fill does the work.
+     The soft shadow is for the ones that are a photograph. */
+  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.55), 0 2px 8px rgba(0, 0, 0, 0.18);
   transition: transform .18s ease, filter .18s ease;
   -webkit-tap-highlight-color: transparent;
 }
@@ -444,7 +450,8 @@ button { font-family: inherit; }
 .flow-exit:active { transform: scale(0.94); filter: brightness(0.88); }
 /* In a browser the 44px status bar is drawn, so the dot lives inside it — the same place
    a phone's camera sits, and clear of the clock and the battery. */
-/* In a browser the 44px status bar is drawn, so the pill is centred in it. */
+/* In a browser the 44px status bar is drawn by the mockup and nothing else wants those
+   touches, so the pill sits inside it, centred. */
 html:not(.installed) .flow-exit { top: 11px; }
 
 /* ── "Back to the start" notice ────────────────────────────────────────────────
@@ -572,10 +579,10 @@ html.installed .phone.notif-on { --foot: calc(56px + 66px + max(24px, var(--sab,
 html.installed .tabbar .home-indicator { display: none; }
 
 html.installed .side-trigger { display: none; }
-/* Installed, the strip belongs to the phone and its height is whatever the shell measured.
-   The pill is centred in it — the height overrides that used to be here were sizing the
-   dot's centring box and would now stretch the pill itself. */
-html.installed .flow-exit { top: calc((var(--sat, env(safe-area-inset-top, 44px)) - 22px) / 2); }
+/* Installed, the strip belongs to the phone — and to SystemUI's touch region with it. The
+   pill clears it by 5px, so it is the first thing in the page that a thumb can actually
+   reach, and it lands in the app bar's empty middle. */
+html.installed .flow-exit { top: calc(var(--sat, env(safe-area-inset-top, 0px)) + 5px); }
 
 /* Standalone, and the phone's own status bar is the one at the top.
    Fullscreen was tried and measured: on a Galaxy with a camera cutout Android LETTERBOXES
