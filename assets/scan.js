@@ -14,10 +14,14 @@
   var meta = document.querySelector('meta[name="theme-color"]');
 
   // What the system clock actually sits on, rather than a colour picked once by hand:
-  // the top of the footage with the page's own warm wash over it. A fixed tan was 35-43
+  // the top of the footage with whatever this stage lays over it. A fixed tan was 35-43
   // out on these two clips, which on the phone is a status bar in a different colour
   // from the screen it is sitting on. Read off the clip, so it follows the footage.
-  var WASH = [100, 47, 0], WASH_A = 0.32;   // .scan-wash, at the strip's own height
+  //
+  // The stack at the very top of the screen, from the design:
+  //   aiming    picture at 50% black (.scan-dim), then the veil's 7% warm wash
+  //   sharp     picture under the band's own 70% warm gradient (.scan-band)
+  var WARM = [155, 109, 69];
   function camTone() {
     var v = scr.querySelector('.scan-shot');
     if (!v || !v.videoWidth) return null;
@@ -25,7 +29,7 @@
     c.width = n; c.height = n;
     var rows = Math.max(1, Math.round(n * 0.06)), d;   // the strip is 44 of 780
     try {
-    // object-fit: cover throws part of the frame away, and the thrown-away part is
+      // object-fit: cover throws part of the frame away, and the thrown-away part is
       // usually the edges — sampling the whole decoded frame averages in columns nobody
       // is looking at, which read ~10% darker on this footage. Draw only what is visible.
       var sw = v.videoWidth, sh = v.videoHeight;
@@ -38,8 +42,10 @@
     } catch (e) { return null; }          // a cross-origin clip taints the canvas
     var s = [0, 0, 0], k = 0;
     for (var i = 0; i < d.length; i += 4) { s[0] += d[i]; s[1] += d[i + 1]; s[2] += d[i + 2]; k++; }
+    var sharp = scr.classList.contains('sharp');
+    var dim = sharp ? 1 : 0.5, a = sharp ? 0.7 : 0.07;
     return 'rgb(' + s.map(function (v2, j) {
-      return Math.round(v2 / k * (1 - WASH_A) + WASH[j] * WASH_A);
+      return Math.round(v2 / k * dim * (1 - a) + WARM[j] * a);
     }).join(',') + ')';
   }
 
@@ -49,14 +55,19 @@
     return !!c;
   }
 
-  function wide() {
+  // `after` is how long the card takes to reach the top of the screen. Until it does,
+  // what is up there is still the page's own grey, and a tag that changed the moment
+  // the animation STARTED put a brown system bar over a grey screen for most of a
+  // second. The pages that arrive already open pass 0.
+  function wide(after) {
     scr.classList.add('wide');
-    // The clip may not have decoded a frame yet; try again while it is arriving.
-    if (!paintTop()) {
+    setTimeout(function () {
+      // The clip may not have decoded a frame yet; try again while it is arriving.
+      if (paintTop()) return;
       var tries = 0, id = setInterval(function () {
         if (paintTop() || ++tries > 20) clearInterval(id);
       }, 150);
-    }
+    }, after || 0);
   }
 
   // Anything the user does takes the screen back off the clock: a tap on Next, a
@@ -75,17 +86,19 @@
     // A beat to read the title, then the preview opens out — and then it goes on by
     // itself. This screen asks nothing; making somebody press Next to leave a sentence
     // they have already read is a stop that does not need to be there.
-    setTimeout(wide, 1500);
+    setTimeout(function () { wide(800); }, 1500);   // 800 = the card's own opening
     if (href) untilTouched(3200, function () { location.href = href; });
     return;
   }
 
   wide();
   var pct = scr.querySelector('.scan-pct');
-  var bar = scr.querySelector('.scan-bar i');
   setTimeout(function () { scr.classList.add('aim'); }, 600);
   setTimeout(function () {
     scr.classList.add('sharp');
+    // Focusing swaps a 50%-black-plus-soft-wash top for the band's 70% warm one, so
+    // what the clock sits on is a different colour from this point on.
+    paintTop();
     // Counted on the clock rather than in steps: the number is the only thing
     // moving on this screen, so it has to be smooth.
     var t0 = 0, DUR = 3400;
@@ -93,7 +106,6 @@
       if (!t0) t0 = t;
       var k = Math.min(1, (t - t0) / DUR);
       if (pct) pct.textContent = Math.round(k * 100) + '%';
-      if (bar) bar.style.width = (k * 100) + '%';
       if (k < 1) return requestAnimationFrame(f);
       done();
     });

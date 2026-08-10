@@ -1,219 +1,156 @@
-/* ── Body scan (Figma section 2567:1535) ──────────────────────────────────────
+/* ── Body scan (Figma 971:12850 → frames 246:15627…246:15737) ─────────────────
    Three camera screens plus a summary, bolted onto the end of the onboarding
    flow: intro → front scan → side scan → ready. Everything here rides on the
    .ob-* chrome from onboarding.css (grey frame, app bar, title block, Next bar);
    this file only adds the camera layer, the silhouette and the step pips.
 
    Each screen is ONE page with stages, driven by classes from assets/scan.js:
-     (none)  camera is a card at the bottom, page is grey, title is black
-     .wide   camera fills the screen, title turns white, the top wash appears
-     .aim    the capture frame and the body silhouette rise in
-     .sharp  the preview comes into focus, the beam sweeps, the title counts
-     .done   the beam stops, the tick is drawn, Next opens */
+     (none)  the camera is a 344x240 card at the foot, dimmed 70%
+     .wide   the card OPENS to the whole 360x700 screen; dim drops to 50%
+     .aim    the body guide rises in
+     .sharp  the veil lifts, the picture comes into focus, the top band arrives
+     .done   the tick is drawn and Next opens
 
-/* ── Full bleed ───────────────────────────────────────────────────────────────
-   Once the camera is the screen it has to reach the FOOT of the frame, not stop
-   at the 80px bar — a white band under a full-screen viewfinder is the single
-   thing that made this read as a mock-up. The bar stays where it is and turns
-   into chrome over the picture: no fill of its own, a scrim so white type holds
-   over a bright room, and the concave fillets (which draw the grey bar's shape
-   into the frame) switched off, since there is no bar edge left to describe. */
-/* The screen grows with the camera rather than snapping 80px taller the instant the
-   stage changes — the card is animating its own bottom edge against this one. */
-.phone:has(> .tabbar) > .screen.scan-screen { transition: height .8s cubic-bezier(.3,.75,.25,1); }
-.phone:has(.scan-screen.wide) > .screen { height: 100%; }
-.phone:has(.scan-screen.wide)::after { display: none; }
-.tabbar.scan-bottom { transition: background .6s ease; }
-.phone:has(.scan-screen.wide) > .tabbar.scan-bottom {
-  background: linear-gradient(180deg, rgba(23,18,15,0) 0%, rgba(23,18,15,.42) 46%, rgba(23,18,15,.62) 100%);
-}
-.phone:has(.scan-screen.wide) > .tabbar .home-indicator span {
-  background: rgba(255,255,255,0.75); mix-blend-mode: plus-lighter;
-}
+   The two things the design does that are worth naming, because they are what
+   the first version got wrong:
 
-/* ── Camera layer ─────────────────────────────────────────────────────────────
-   The card and the full screen are the same element, so the expansion is one
-   box morph. The photo inside is NOT held still while it grows — it is blurred
-   to nothing at that point, so its reframing cannot be seen, and holding it
-   would mean counter-animating an inner layer against an animating box (the
-   one thing WebKit reliably gets wrong). */
+   1. The card is a WINDOW, not a picture that grows. In every frame the photo
+      sits at the same place — full screen size, bottom aligned — and the card
+      is a hole cut over it. So the opening reveals more of a still composition
+      instead of reframing a moving one, and nothing inside it has to move.
+   2. Focus is a BACKDROP filter on a veil over the picture, not a filter on the
+      picture. The <video> is never re-rasterised, which is what a blur on a
+      playing clip costs on a phone. */
+
+/* ── Camera layer ─────────────────────────────────────────────────────────── */
 .scan-cam {
-  position: absolute; left: 8px; right: 8px; bottom: 0; height: 320px;
-  border-radius: 32px; overflow: hidden; z-index: 0;
+  position: absolute; left: 8px; right: 8px; bottom: 0; height: 240px;
+  border-radius: 40px; overflow: hidden; z-index: 0;
   background: #2A2422;
   /* iOS will not clip a rasterised child to a parent's radius without one. */
   isolation: isolate;
   transition: left .8s cubic-bezier(.3,.75,.25,1), right .8s cubic-bezier(.3,.75,.25,1),
-              height .8s cubic-bezier(.3,.75,.25,1), border-radius .8s cubic-bezier(.3,.75,.25,1),
-              transform .8s cubic-bezier(.2,.8,.25,1), opacity .6s ease;
+              height .8s cubic-bezier(.3,.75,.25,1);
   animation: scan-card-in .7s cubic-bezier(.2,.85,.25,1) both;
 }
-@keyframes scan-card-in { from { transform: translateY(38px); opacity: 0; } }
-.scan-screen.wide .scan-cam { left: 0; right: 0; height: 100%; border-radius: 0; }
+@keyframes scan-card-in { from { opacity: 0; transform: translateY(38px); } }
+.scan-screen.wide .scan-cam { left: 0; right: 0; height: 100%; }
 
-/* The preview is live footage now, not a photograph — the same shot the scan asks for,
-   ten seconds of it, looping and silent. It is encoded already cropped to the frame's
-   own 360:780, so `cover` has nothing left to cut. The scale is there to push the
-   blur's transparent bleed off the edges. */
+/* The composition the window looks at: the full screen, pinned to the foot, so
+   it is in the same place whatever size the window is. Only its left edge moves
+   — by the 8px the card is inset — and that is the whole of the reframing. */
+.scan-inner {
+  position: absolute; left: -8px; bottom: 0; width: 360px; height: 700px;
+  transition: left .8s cubic-bezier(.3,.75,.25,1);
+}
+.scan-screen.wide .scan-inner { left: 0; }
 .scan-shot {
   position: absolute; inset: 0; width: 100%; height: 100%;
   object-fit: cover; object-position: center;
-  background-position: center; background-size: cover; background-repeat: no-repeat;
-  filter: blur(14px); transform: scale(1.14);
-  transition: filter 1.1s ease, transform 1.1s ease;
 }
-.scan-screen.sharp .scan-shot { filter: blur(0); transform: none; }
 
-/* The lens has not opened yet: the card reads as a dark pane and lifts as it grows.
-   .42, not .62 — at .62 with a 26px blur the card was a flat brown rectangle with nothing
-   in it, and what it is meant to say is "the camera is warming up", not "this is off". */
-.scan-dim { position: absolute; inset: 0; background: #17120F; opacity: .42; transition: opacity .8s ease; }
-.scan-screen.wide .scan-dim { opacity: 0; }
+/* Node 246:15629/15638/15691 — a flat black over the picture: 70% while the
+   card is closed, 50% while it is aiming, gone once it is sharp. */
+.scan-dim { position: absolute; inset: 0; background: #000; opacity: .7; transition: opacity .8s ease; }
+.scan-screen.wide .scan-dim { opacity: .5; }
+.scan-screen.sharp .scan-dim { opacity: 0; }
 
-/* Top wash — measured off the Figma render: a warm scrim at 37% fading out by
-   150px, which is what lets white type sit on the beige ceiling. */
-.scan-wash {
-  position: absolute; left: 0; right: 0; top: 0; height: 160px; z-index: 1; pointer-events: none;
-  background: linear-gradient(180deg, rgba(100,47,0,.37), rgba(100,47,0,0));
+/* Node 246:15630/15640 — the out-of-focus state. A 7% warm wash carrying a
+   backdrop blur, which is what makes the room soft; both go to nothing when the
+   camera focuses. Kept at blur(0) rather than removed so the lift can tween. */
+.scan-veil {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(155,109,69,0.07) 9.27%, rgba(212,184,162,0.07) 88.02%);
+  -webkit-backdrop-filter: blur(5.95px); backdrop-filter: blur(5.95px);
+  transition: opacity .9s ease, -webkit-backdrop-filter .9s ease, backdrop-filter .9s ease;
+}
+.scan-screen.sharp .scan-veil {
+  opacity: 0; -webkit-backdrop-filter: blur(0); backdrop-filter: blur(0);
+}
+
+/* Node 246:15692 — the band the clock and Skip sit on once the room is sharp
+   and bright. 515 wide and 273 tall starting 117 above the frame, so what shows
+   is its lower half: a 70% warm gradient over a 16px backdrop blur, which is
+   both of the things asked for at once — the bar is transparent, and what is
+   behind it is blurred AND carries the picture's own colour.
+   Figma softens the band's bottom edge with a 22px layer blur; a mask does the
+   same to both the fill and the backdrop blur, for none of the repaint cost of
+   blurring a live layer every frame. */
+.scan-band {
+  position: absolute; left: 50%; margin-left: -257px; top: -117px;
+  width: 515px; height: 273px; z-index: 2; pointer-events: none;
+  background: linear-gradient(180deg, rgba(155,109,69,0.7) 43.13%, rgba(212,184,162,0.7) 88%);
+  -webkit-backdrop-filter: blur(16.45px); backdrop-filter: blur(16.45px);
+  -webkit-mask-image: linear-gradient(180deg, #000 86%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 86%, transparent 100%);
   opacity: 0; transition: opacity .7s ease;
 }
-.scan-screen.wide .scan-wash { opacity: 1; }
+.scan-screen.sharp .scan-band { opacity: 1; }
 
 /* ── Chrome over the camera ───────────────────────────────────────────────────
    The status bar is left alone: main.css already has it sticky at z-index 30, and
    giving it position:relative here would drop it behind the camera. */
 .scan-screen > .ob-appbar,
-.scan-screen > .ob-title { position: relative; z-index: 2; }
-/* Grey until the camera is behind it, then the photo has to show through.
+.scan-screen > .ob-title { position: relative; z-index: 3; }
+/* Grey until the camera is behind it, then the picture has to show through.
    statusbar-full.svg carries an opaque white plate, which .ob-screen knocks out by
    multiplying it against the status bar's own grey. With no grey left there is
    nothing to multiply against — the bar has z-index 30, so it is its own stacking
-   context and the child's blend cannot reach the photo. Blending the BAR instead
-   puts the camera in its backdrop: white drops to the photo, the glyphs stay dark,
-   which is what the Figma frame shows over this beige room. */
+   context and the child's blend cannot reach the picture. Blending the BAR instead
+   puts the camera in its backdrop: white drops away, the glyphs stay dark, which is
+   the #3B3B3B clock the design puts on this band. */
 .scan-screen.wide > .status-bar { background: transparent; mix-blend-mode: multiply; }
 .scan-screen.wide .ob-appbar .back img { filter: brightness(0) invert(1); }
 .scan-screen.wide .ob-appbar .skip { color: #fff; }
 
-.scan-title { text-align: center; position: relative; }
+.scan-title { text-align: center; position: relative; z-index: 3; }
 .scan-title h1 { transition: color .6s ease; }
 .scan-screen.wide .scan-title h1 { color: #fff; }
 .scan-screen.wide .scan-title p { color: rgba(255,255,255,.82); }
-/* The two titles occupy the same slot: the guide copy leaves as the count arrives. */
-.scan-title .t-scan { position: absolute; left: 0; right: 0; top: 0; opacity: 0; transition: opacity .45s ease; }
+/* Three titles in one slot: the guide copy leaves as the count arrives, and the
+   count leaves when there is something better to say than a finished number. */
+.scan-title .t-scan,
+.scan-title .t-done { position: absolute; left: 0; right: 0; top: 0; opacity: 0; transition: opacity .45s ease; }
 .scan-title .t-guide { transition: opacity .45s ease; }
 .scan-screen.sharp .scan-title .t-guide { opacity: 0; }
 .scan-screen.sharp .scan-title .t-scan { opacity: 1; }
-/* Three titles in the one slot, not two: the count is not a resting state, and a
-   screen that leaves "Scanning 100%" up while it moves on never said it finished. */
-.scan-title .t-done { position: absolute; left: 0; right: 0; top: 0; opacity: 0; transition: opacity .45s ease; }
 .scan-screen.done .scan-title .t-scan { opacity: 0; }
 .scan-screen.done .scan-title .t-done { opacity: 1; }
+/* The numeral is OffBit, like every other number in the app. */
+.scan-pct { font-family: var(--font-offbit); letter-spacing: 1px; }
 
-/* ── Body silhouette ──────────────────────────────────────────────────────────
-   Both silhouettes are centred on the frame in Figma (front 113+133/2, side
-   145+71/2 — both 180), so left:50% places them without per-page numbers. Sized
-   as a share of the screen rather than a fixed 415px: a phone screen is 100dvh,
-   not the 700 the artboard is, and a fixed height would hang off the bottom. */
+/* ── Body guide ───────────────────────────────────────────────────────────────
+   Node 246:15641 / 246:15653: 129 wide (front) and 67 (side), from 36.5% of the
+   700 box down to 4.85% off its foot, centred. Given as shares rather than the
+   design's flat pixels because a phone screen is 100dvh, not the 700 the artboard
+   is, and a fixed height would hang off the bottom. */
 .scan-sil {
-  position: absolute; left: 50%; top: 34.2%; height: 59.2%; width: auto; z-index: 1;
+  position: absolute; left: 50%; top: 36.5%; height: 58.65%; width: auto; z-index: 2;
   pointer-events: none;
   opacity: 0; transform: translate(-50%, 14px);
   transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.25,1);
-  filter: drop-shadow(0 0 18px rgba(0,0,0,.22));
 }
- /* .58, not 1: at full strength the guide is a white cut-out pasted over the room and
-    you cannot see what the camera can see. It is a guide, so the room shows through. */
-.scan-screen.aim .scan-sil { opacity: .58; transform: translate(-50%, 0); }
+.scan-screen.aim .scan-sil { opacity: 1; transform: translate(-50%, 0); }
 .scan-screen.sharp .scan-sil { opacity: 0; transition-duration: .45s; }
 
-/* ── Capture frame ────────────────────────────────────────────────────────────
-   Four corner marks around the area the body has to land in. Drawn as eight
-   background slices on one box rather than four children: the whole thing is a
-   single element to move, and the beam below can be its only child.
-   It stays for the whole capture — the silhouette leaves once the picture is
-   sharp, but the frame is what says the camera is still holding on to you. */
-.scan-frame {
-  position: absolute; left: 28px; right: 28px; top: 30%; bottom: 12%; z-index: 1;
-  pointer-events: none; overflow: hidden;
-  --c: rgba(255,255,255,.92);
-  background:
-    linear-gradient(var(--c),var(--c)) left    top    / 28px 2px no-repeat,
-    linear-gradient(var(--c),var(--c)) left    top    / 2px 28px no-repeat,
-    linear-gradient(var(--c),var(--c)) right   top    / 28px 2px no-repeat,
-    linear-gradient(var(--c),var(--c)) right   top    / 2px 28px no-repeat,
-    linear-gradient(var(--c),var(--c)) left    bottom / 28px 2px no-repeat,
-    linear-gradient(var(--c),var(--c)) left    bottom / 2px 28px no-repeat,
-    linear-gradient(var(--c),var(--c)) right   bottom / 28px 2px no-repeat,
-    linear-gradient(var(--c),var(--c)) right   bottom / 2px 28px no-repeat;
-  opacity: 0; transform: scale(1.06);
-  transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.25,1);
-  filter: drop-shadow(0 0 10px rgba(0,0,0,.28));
-}
-.scan-screen.aim .scan-frame { opacity: 1; transform: none; }
-/* Captured: the marks go to Newton red and pull in a hair, the way a shutter confirms. */
-.scan-screen.done .scan-frame { --c: #FA3030; transform: scale(.985); }
-
-/* The sweep. One band travelling the frame while the count runs — it is the only
-   thing on the screen that says work is happening, and it stops the moment it is
-   done rather than looping under a finished number. */
-.scan-beam {
-  /* Sized to the frame and moved by BACKGROUND-POSITION, not transform: the travel is
-     then "one band from above the box to its bottom edge" in the box's own units, and
-     nothing has to know how tall the frame turned out on this phone. */
-  position: absolute; inset: 0; mix-blend-mode: plus-lighter; opacity: 0;
-  background-image: linear-gradient(180deg,
-    rgba(250,48,48,0) 0%, rgba(250,48,48,.30) 52%,
-    rgba(255,255,255,.85) 76%, rgba(255,220,200,.28) 84%, rgba(250,48,48,0) 100%);
-  background-repeat: no-repeat; background-size: 100% 112px; background-position: 0 -112px;
-}
-.scan-screen.sharp .scan-beam { opacity: 1; animation: scan-sweep 2.1s cubic-bezier(.42,0,.58,1) infinite; }
-.scan-screen.done .scan-beam { opacity: 0; animation: none; transition: opacity .4s ease; }
-@keyframes scan-sweep { from { background-position: 0 -112px; } to { background-position: 0 100%; } }
-
-/* The count's own track, under the title. 96px because it sits inside a centred
-   heading and a full-width rule would read as a divider rather than progress. */
-.scan-bar { width: 96px; height: 3px; margin: 14px auto 0; border-radius: 2px;
-  background: rgba(255,255,255,.3); overflow: hidden; }
-.scan-bar i { display: block; height: 100%; width: 0%; border-radius: 2px;
-  background: linear-gradient(90deg, #FA3030, #FE6E3C); }
-.scan-screen.done .scan-bar i { background: #fff; }
-
-/* The mark itself, dead centre of the capture frame. It is the shared .ob-check —
-   the designer's brush, drawn along its own stroke — so it is the same tick the
-   sport cards and the setup steps use. */
+/* The mark, dead centre of the picture — the shared .ob-check, the designer's
+   brush drawn along its own stroke, so it is the same tick the sport cards and
+   the setup steps use. */
 .scan-done-mark { position: absolute; left: 50%; top: 50%; width: 0; height: 0; z-index: 3; }
 .scan-done-mark .ob-check { width: 64px; height: 64px; left: -32px; top: -32px; }
-
-/* The numeral is OffBit, like every other number in the app. */
-.scan-pct { font-family: var(--font-offbit); letter-spacing: 1px; }
-/* Nothing scrolls on these screens, so the heading's fade-and-blur strip is a
-   gradient over nothing — the same rule the other short pages get. */
-.scan-screen .ob-title::after { content: none; }
 
 /* ── Bottom bar: step pips on the left, Next on the right ─────────────────── */
 .scan-bottom .sb-row { justify-content: space-between; }
 .scan-steps { display: flex; align-items: center; gap: 10px; }
 .scan-steps .st { display: flex; align-items: center; gap: 6px;
-  font-family: var(--font-supreme-medium); font-size: 14px; letter-spacing: -0.5px;
+  font-family: var(--font-supreme); font-size: 14px; line-height: 1.4; letter-spacing: -0.42px;
   color: var(--color-neutral-300); }
 .scan-steps .st i { flex: none; width: 20px; height: 20px; border-radius: 999px;
-  background: var(--color-neutral-300); color: #fff; font-style: normal;
-  font-family: var(--font-supreme-bold); font-size: 12px; letter-spacing: -0.3px;
+  background: var(--color-neutral-300); color: var(--color-neutral-50); font-style: normal;
+  font-family: var(--font-supreme); font-size: 14px; letter-spacing: -0.42px;
   display: flex; align-items: center; justify-content: center; }
 .scan-steps .st.on { color: var(--color-red); }
 .scan-steps .st.on i { background: var(--color-red); }
-/* Over the picture the bar is chrome, so everything in it goes to white — including
-   Next, which otherwise opens to black on a dark room and disappears. Closed, it is
-   the same faded state the rest of the flow uses, just keyed to white. */
-.phone:has(.scan-screen.wide) .scan-steps .st { color: rgba(255,255,255,.62); }
-.phone:has(.scan-screen.wide) .scan-steps .st i { background: rgba(255,255,255,.28); }
-.phone:has(.scan-screen.wide) .scan-steps .st.on { color: #fff; }
-.phone:has(.scan-screen.wide) .scan-steps .st.on i { background: var(--color-red); }
-.phone:has(.scan-screen.wide) .ob-next.gated { color: rgba(255,255,255,.42); }
-.phone:has(.scan-screen.wide) .ob-next.gated img { filter: brightness(0) invert(1); opacity: .42; }
-.phone:has(.scan-screen.wide) .ob-next.gated.ready { color: #fff; }
-.phone:has(.scan-screen.wide) .ob-next.gated.ready img { opacity: 1; }
 
 /* ── Ready screen ─────────────────────────────────────────────────────────────
    The list is setup.css's .sc-list/.sc-row, unchanged — same white tray, 4px
@@ -221,8 +158,12 @@
    here beyond the left-aligned title the rest of the .ob-* pages share. */
 .scan-ready .ob-title { padding-bottom: 32px; }
 
+/* Nothing scrolls on these screens, so the heading's fade-and-blur strip is a
+   gradient over nothing — the same rule the other short pages get. */
+.scan-screen .ob-title::after { content: none; }
+
 @media (prefers-reduced-motion: reduce) {
-  .scan-cam, .scan-shot, .scan-dim, .scan-wash, .scan-sil, .scan-title .t-scan, .scan-title .t-guide {
-    transition: none;
-  }
+  .scan-cam, .scan-inner, .scan-dim, .scan-veil, .scan-band, .scan-sil,
+  .scan-title .t-scan, .scan-title .t-done, .scan-title .t-guide { transition: none; }
+  .scan-cam { animation: none; }
 }

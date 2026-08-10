@@ -178,13 +178,13 @@ var HERO = [
   // These two are arena and gym footage rather than black-backdrop shots, so they composite
   // plainly and their masks hand the bottom third back to the gradient for the type.
   { x:-560, y: 240, z: -70, ry: 13, rx:-4,   rz: 3,  s:1.26, cls:'hero-card-live hero-card-3', plain:true,
-    clip:'hero3d-curry-step.mp4', vs:'top:-40px;width:360px;height:640px',
+    clip:'hero3d-ronaldo.png', vs:'top:-40px;width:360px;height:640px',
     mask:'--mask-in:28%;--mask-out:86%',
-    title:"Curry's Pull-Up Three", tier:'Creator Pack', dur:'15 min', btn:'#C4210A' },
+    title:"Ronaldo's Long Run", tier:'Pro Pack', dur:'34 min', btn:'#C4210A' },
   { x: 610, y: 240, z:-160, ry:-14, rx:-4,   rz:-3,  s:1.20, t:0.08, cls:'hero-card-live hero-card-2', plain:true,
-    clip:'hero3d-akiyama-step.mp4', vs:'top:-40px;width:360px;height:640px',
+    clip:'hero3d-euddeum.mp4', vs:'top:-30px;width:360px;height:480px',
     mask:'--mask-in:28%;--mask-out:86%',
-    title:"Akiyama's Heavy Bag", tier:'Pro Pack', dur:'16 min', btn:'#E0431C' }
+    title:"Euddeum's Home Core", tier:'Creator Pack', dur:'21 min', btn:'#E0431C' }
 ];
 
 // Filler: the repo's own stock sports clips, standing in until the real packs exist.
@@ -282,8 +282,12 @@ cards.forEach(function (c, idx) {
   // decoder. The rest carry the same still as their poster and only swap to moving footage
   // once the file has arrived: with a dozen clips fetched at once nothing had a frame to
   // paint and the whole field came up as bare gradients.
-  var poster = 'assets/photos/poster/' + c.clip.replace('.mp4', '.jpg');
-  var still = t > 0.45;
+  // A card's artwork can be a still to begin with (no clip shot for it yet), in which case
+  // there is nothing to preload and nothing to play — it is simply the image.
+  var isClip = /\.mp4$/.test(c.clip);
+  var poster = isClip ? 'assets/photos/poster/' + c.clip.replace('.mp4', '.jpg')
+                      : 'assets/photos/' + c.clip;
+  var still = !isClip || t > 0.45;
   var art = still
     ? '<img class="hero-clip" alt="" src="' + poster + '"'
     : '<video class="hero-clip" muted loop playsinline preload="none" disablepictureinpicture' +
