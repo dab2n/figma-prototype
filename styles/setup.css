@@ -219,3 +219,43 @@
 .sc-list .sc-row:nth-child(3) { animation-delay: .38s; }
 .sc-list .sc-row:nth-child(4) { animation-delay: .46s; }
 @media (prefers-reduced-motion: reduce) { .sc-pack, .sc-list .sc-row { animation: none; } }
+
+/* The write-your-own chip. Same shell as the seven printed ones — it only has to look
+   like one more answer, not like a form. */
+.chip-sel.chip-own { color: var(--color-neutral-500); }
+.chip-sel.chip-own.sel { color: #fff; }
+.chip-sel.chip-own.editing { padding: 6px 12px; }
+.chip-sel.chip-own input {
+  border: 0; outline: 0; background: none; padding: 0; min-width: 84px;
+  font-family: var(--font-supreme); font-size: 14px; line-height: 1.4; letter-spacing: -0.42px;
+  color: var(--color-black);
+}
+.chip-sel.chip-own input::placeholder { color: var(--color-neutral-400); }
+
+/* Later's question. Two plain answers under the card's copy — the same 16px Supreme the
+   rest of the flow answers in, one quiet and one the app's red. */
+.sc-ask-row { display: flex; gap: 8px; margin-top: 20px; }
+.sc-ask-btn {
+  flex: 1; min-width: 0; border: 0; cursor: pointer;
+  padding: 14px 12px; border-radius: 16px;
+  background: var(--color-neutral-100); color: var(--color-neutral-700);
+  font-family: var(--font-supreme-bold); font-size: 16px; line-height: 1.2; letter-spacing: -0.5px;
+}
+.sc-ask-btn.sc-ask-yes { background: var(--color-red); color: #fff; }
+.sc-ask-btn:active { filter: brightness(0.94); }
+
+/* The booking's summary line — the same white card the rest of the flow answers in. */
+.sch-card { background: #fff; border-radius: 16px; padding: 16px 20px; box-shadow: 0 14px 54px 10px rgba(0,0,0,0.03); }
+.sch-when { margin: 0; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
+.sch-pack { margin: 4px 0 0; font-family: var(--font-supreme); font-size: 14px; line-height: 1.4; letter-spacing: -0.42px; color: var(--color-neutral-600); }
+/* The clock sits in a card here, where Main Workout has one already. */
+.sch-screen .mw-panel { background: #fff; border-radius: 16px; padding: 4px 0; box-shadow: 0 14px 54px 10px rgba(0,0,0,0.03); }
+/* The column centres its rows, which on an overflowing one means clipping it equally at
+   both ends — the first chip lost its left half. Full width, and the row scrolls. */
+.sch-screen .chip-rows { align-items: stretch; }
+/* Seven days run wider than the frame, so the row scrolls instead of wrapping. No padding
+   of its own — .setup-body already gives the column its gutter, and a second one inside a
+   scroller reads as the first chip being cut. */
+.sch-screen .chip-row { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; flex-wrap: nowrap; }
+.sch-screen .chip-row::-webkit-scrollbar { display: none; }
+.sch-screen .chip-sel { flex: none; }

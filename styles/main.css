@@ -474,6 +474,10 @@ html:not(.installed) .flow-exit { top: 11px; }
    360x780 box in the middle of the page and `fixed` would pin this to the browser.
    Nothing new in it — the card is the app's: white, 20px radius, 16/13px Supreme,
    over the scrim the pack sheet already uses. */
+/* display:flex beats the UA's [hidden] { display: none }, so a card that is meant to be
+   waiting was simply on screen. Said outright, where every user of this shell can rely on
+   it. */
+.idle-note[hidden] { display: none; }
 .idle-note {
   position: absolute;
   inset: 0;

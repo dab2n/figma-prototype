@@ -22,8 +22,8 @@
      112KB arriving on the first tap is the blink; preloading it makes the tap instant. -->
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1075"></script>
-<script defer src="assets/i18n.js?v=1075"></script>
+<script defer src="assets/openext.js?v=1076"></script>
+<script defer src="assets/i18n.js?v=1076"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,11 +31,11 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Setup · Injury check</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1075">
-<link rel="stylesheet" href="styles/main.css?v=1075">
-<link rel="stylesheet" href="styles/setup.css?v=1075">
-<script defer src="assets/idle.js?v=1075"></script>
-<script defer src="assets/flows.js?v=1075"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1076">
+<link rel="stylesheet" href="styles/main.css?v=1076">
+<link rel="stylesheet" href="styles/setup.css?v=1076">
+<script defer src="assets/idle.js?v=1076"></script>
+<script defer src="assets/flows.js?v=1076"></script>
 </head>
 <body>
 <div class="phone">
@@ -53,7 +53,7 @@
     </div>
 
     <div class="injury-stage">
-      <video src="assets/photos/injury-check.mp4?v=1075" autoplay loop muted playsinline preload="auto"></video>
+      <video src="assets/photos/injury-check.mp4?v=1076" autoplay loop muted playsinline preload="auto"></video>
       <!-- Tap a region on the body instead of the chip below — same selection either way. -->
       <div class="injury-map">
         <button class="body-hot" type="button" data-region="Left Arm"    style="left:85px;  top:170px;"><img src="assets/icons/body-ring.png" alt=""></button>
@@ -86,6 +86,12 @@
           <button class="chip-sel" data-toggle>Right Arm</button>
           <button class="chip-sel" data-toggle>Calf</button>
         </div>
+        <!-- The body has more parts than a list can hold. The same chip, but tapping it
+             opens it up to be typed in — so an area nobody thought of is still an answer
+             the page can take, and it counts towards the group like any other. -->
+        <div class="chip-row">
+          <button class="chip-sel chip-own" id="ownChip" type="button">+ Somewhere else</button>
+        </div>
       </div>
     </div>
   </div>
@@ -104,6 +110,70 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/setup.js?v=1075"></script>
+<script src="assets/setup.js?v=1076"></script>
+<script>
+// Tap the chip and it becomes a field; type an area and it becomes that chip, selected.
+// It is a [data-toggle] from that moment on, so setup.js counts it, un-picks it and
+// restores it exactly like the seven printed ones.
+(function () {
+  var chip = document.getElementById('ownChip');
+  if (!chip) return;
+  var LABEL = chip.textContent;
+
+  function ask() {
+    if (chip.querySelector('input')) return;
+    var v = chip.getAttribute('data-own') || '';
+    chip.textContent = '';
+    chip.classList.add('editing');
+    var f = document.createElement('input');
+    f.type = 'text'; f.value = v; f.maxLength = 18;
+    f.placeholder = 'Type an area';
+    f.setAttribute('aria-label', 'Type an area');
+    chip.appendChild(f);
+    // The width follows what is typed, so the chip grows with the word rather than
+    // sitting at some guessed size.
+    function size() { f.style.width = Math.max(84, (f.value || f.placeholder).length * 8.6) + 'px'; }
+    f.addEventListener('input', size); size();
+    f.focus(); f.select();
+    // Enter commits outright rather than going through blur — a soft keyboard's Done does
+    // not always move focus, and on a page with nothing else focusable the blur may never
+    // come. Tapping away still commits, through the blur below.
+    f.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); done(); }
+      if (e.key === 'Escape') { f.value = v; done(); }
+    });
+    f.addEventListener('change', done);
+    f.addEventListener('blur', done);
+  }
+
+  function done() {
+    var f = chip.querySelector('input');
+    if (!f) return;
+    var v = f.value.trim();
+    chip.classList.remove('editing');
+    chip.textContent = v || LABEL;
+    if (v) {
+      chip.setAttribute('data-own', v);
+      chip.setAttribute('data-toggle', '');       // now it answers the question
+      chip.classList.add('sel');
+    } else {
+      chip.removeAttribute('data-own');
+      chip.removeAttribute('data-toggle');
+      chip.classList.remove('sel');
+    }
+    // setup.js gates Next on every group having a .sel; ask it to look again.
+    if (window.__setupRefresh) window.__setupRefresh();
+  }
+
+  chip.addEventListener('click', function (e) {
+    // Once it holds an area it behaves like a chip — tap to un-pick, tap the pencil to
+    // change it. A second tap on a SELECTED one re-opens the field.
+    if (chip.classList.contains('editing')) return;
+    if (chip.hasAttribute('data-own') && !chip.classList.contains('sel')) { chip.removeAttribute('data-own'); chip.textContent = LABEL; return; }
+    if (chip.hasAttribute('data-own')) { e.stopPropagation(); ask(); return; }
+    ask();
+  });
+})();
+</script>
 </body>
 </html>

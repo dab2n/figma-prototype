@@ -69,6 +69,15 @@
     if (on && window.__tick) slot.appendChild(window.__tick());
   }
 
+  // Leaving by Next: say which step this was, so the next page can slide the row in from
+  // here instead of landing on it.
+  var hereHref = (location.pathname.split('/').pop() || '');
+  document.addEventListener('click', function (e) {
+    var n = e.target.closest('.sb-next');
+    if (!n || !n.getAttribute('href')) return;
+    try { sessionStorage.setItem('setupFrom', hereHref); } catch (err) {}
+  });
+
   toggles.forEach(function (btn) {
     btn.addEventListener('click', function () {
       var on = btn.classList.contains('sel');
@@ -105,6 +114,10 @@
   restore();
   syncHots();
   refresh();
+  // A page can add an answer of its own after this ran — the injury screen's write-your-own
+  // chip becomes a [data-toggle] the moment something is typed into it. It cannot reach
+  // into the closure, so the gate is offered as a hook.
+  window.__setupRefresh = refresh;
 
   // Step → step is a hard cut: no cross-document fade, so the bar isn't snapshotted or
   // faded on arrival — the only motion is the slide below.
@@ -128,7 +141,14 @@
     var here = -active.offsetLeft;
     // Arrived from the step before this one → start the row where that page had it and
     // shift everything one slot left, the previous title dimming as this one lights up.
-    var cameFromPrev = prev && document.referrer && document.referrer.indexOf(prev.getAttribute('href')) !== -1;
+    // Where we came from, stamped on the way out rather than read off the referrer: inside
+    // the Android shell every navigation is re-issued by the shell and arrives with an
+    // empty referrer, so the slide never ran there — the row just appeared in its new
+    // place. sessionStorage survives the hop and nothing else.
+    var came = '';
+    try { came = sessionStorage.getItem('setupFrom') || ''; sessionStorage.removeItem('setupFrom'); } catch (e) {}
+    if (!came) came = document.referrer || '';
+    var cameFromPrev = prev && came && came.indexOf(prev.getAttribute('href')) !== -1;
     if (cameFromPrev) {
       place(offsetFor(prev));
       active.classList.remove('active');

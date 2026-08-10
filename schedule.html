@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<!-- Which of the two the page is: INSTALLED, where the app owns the screen and fills it,
+     or a BROWSER, where it is the 360x780 frame on a white page. Decided here rather than
+     in a media query so nothing depends on a browser reporting a width it was asked for.
+     392/812 are the frame plus 16px of air; --fit scales it to whatever is actually there.
+     Inline and parser-blocking ON PURPOSE: --fit falls back to 1, so any frame painted
+     before it is set shows the phone at FULL size and then snaps down. -->
+<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true||/ NewtonShell/.test(navigator.userAgent);if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/424,h/844).toFixed(4));};window.__box();try{var S=window.NewtonShell;if(S&&S.insetTop){var st=S.insetTop(),sb=S.insetBottom();if(st)r.style.setProperty("--sat",st+"px");if(sb)r.style.setProperty("--sab",sb+"px");}}catch(e){}try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
+<!-- The four faces every screen actually renders in. Preloaded because font-display:swap
+     draws the fallback first and re-lays the text out when the real one lands — on the
+     phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Regular.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Bold.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Medium.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#F2F2F2">
+<script defer src="assets/openext.js?v=1076"></script>
+<script defer src="assets/i18n.js?v=1076"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="NEWTON">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<title>Newton — Schedule</title>
+<link rel="stylesheet" href="styles/freesentation.css?v=1076">
+<link rel="stylesheet" href="styles/main.css?v=1076">
+<link rel="stylesheet" href="styles/setup.css?v=1076">
+<link rel="stylesheet" href="styles/mainworkout.css?v=1076">
+<script defer src="assets/idle.js?v=1076"></script>
+<script defer src="assets/flows.js?v=1076"></script>
+</head>
+<body>
+<div class="phone">
+  <!-- Booking the pack for later. Nothing new is drawn: the frame and the heading are the
+       setup flow's, the day chips are .chip-sel, the clock is the Main Workout wheels, and
+       the foot is the same bar with the same Next. -->
+  <div class="screen setup-screen sch-screen">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <div class="setup-appbar">
+      <a class="back" href="setup-complete.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
+      <a class="skip" href="home.html">Skip</a>
+    </div>
+
+    <div class="setup-title">
+      <h1>When do you<br>want to move?</h1>
+      <p>We'll send a reminder when it comes round.</p>
+    </div>
+
+    <div class="setup-body">
+      <div class="setup-sec">
+        <p class="setup-sec-label">Day</p>
+        <div class="chip-rows">
+          <div class="chip-row" id="schDays" data-single></div>
+        </div>
+      </div>
+
+      <div class="setup-sec">
+        <p class="setup-sec-label">Time</p>
+        <div class="mw-panel">
+          <div class="mw-time">
+            <div class="mw-wheel" id="schH" data-max="23"></div>
+            <span class="mw-unit">h</span>
+            <div class="mw-wheel" id="schM" data-max="55" data-step="5"></div>
+            <span class="mw-unit">m</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="setup-sec">
+        <p class="setup-sec-label">Reminder</p>
+        <div class="card-list" data-single id="schWhen">
+          <button class="card-sel" data-toggle><span class="cs-title">10 minutes before</span><span class="cs-desc">Just enough time to change</span></button>
+          <button class="card-sel" data-toggle><span class="cs-title">1 hour before</span><span class="cs-desc">Time to plan the rest of the day around it</span></button>
+          <button class="card-sel" data-toggle><span class="cs-title">At the time</span><span class="cs-desc">Only when it starts</span></button>
+        </div>
+      </div>
+
+      <div class="setup-sec">
+        <p class="setup-sec-label">Summary</p>
+        <div class="sch-card">
+          <p class="sch-when" id="schWhenText">Today · 6:00 pm</p>
+          <p class="sch-pack">Sean's Pace Strategy · 5km · 48m</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="tabbar setup-stepbar">
+    <div class="sb-row">
+      <div class="steps-wrap"><div class="steps">
+        <span class="step active">Schedule</span>
+      </div></div>
+      <a class="sb-next" id="schDone" data-next="home.html">Set <img src="assets/icons/arrow-right-lg.svg" alt=""></a>
+    </div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
+
+  <!-- The confirmation, in the same card the rest of the app talks in. -->
+  <div class="idle-note sch-done" id="schNote" hidden>
+    <div class="idle-card">
+      <p class="idle-t">Booked</p>
+      <p class="idle-s" id="schNoteWhen">Today · 6:00 pm</p>
+      <p class="idle-h">We'll message you 10 minutes before.</p>
+    </div>
+  </div>
+</div>
+<script src="assets/setup.js?v=1076"></script>
+<script>
+// The day chips are built rather than typed: seven days from today, so the page is never
+// offering a date that has gone. Everything else is the setup flow's own machinery —
+// setup.js gates Set on the two groups having an answer.
+(function () {
+  var days = document.getElementById('schDays');
+  var DAY = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var now = new Date();
+  for (var i = 0; i < 7; i++) {
+    var d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i);
+    var b = document.createElement('button');
+    b.className = 'chip-sel';
+    b.setAttribute('data-toggle', '');
+    b.setAttribute('data-date', (d.getMonth() + 1) + '/' + d.getDate());
+    b.textContent = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : DAY[d.getDay()] + ' ' + (d.getMonth() + 1) + '/' + d.getDate();
+    days.appendChild(b);
+  }
+  days.firstChild.classList.add('sel');
+
+  // The clock, built the way Main Workout builds its own.
+  var ROW = 36;
+  var wheels = { h: document.getElementById('schH'), m: document.getElementById('schM') };
+  Object.keys(wheels).forEach(function (k) {
+    var w = wheels[k], max = +w.getAttribute('data-max'), step = +(w.getAttribute('data-step') || 1);
+    var html = '<div class="pad"></div>';
+    for (var i = 0; i <= max; i += step) html += '<div class="op">' + (i < 10 ? '0' + i : i) + '</div>';
+    w.innerHTML = html + '<div class="pad"></div>';
+    var raf = 0;
+    w.addEventListener('scroll', function () {
+      mark(w);
+      if (raf) return;
+      raf = requestAnimationFrame(function () { raf = 0; paint(); });
+    }, { passive: true });
+  });
+  function mark(w) {
+    var idx = Math.round(w.scrollTop / ROW);
+    [].forEach.call(w.querySelectorAll('.op'), function (o, i) { o.classList.toggle('on', i === idx); });
+  }
+  function val(w) {
+    var step = +(w.getAttribute('data-step') || 1);
+    return Math.round(w.scrollTop / ROW) * step;
+  }
+
+  var out = document.getElementById('schWhenText');
+  function label() {
+    var day = days.querySelector('.sel');
+    var h = val(wheels.h), m = val(wheels.m);
+    var ap = h < 12 ? 'am' : 'pm', hh = h % 12 === 0 ? 12 : h % 12;
+    return (day ? day.textContent : 'Today') + ' · ' + hh + ':' + (m < 10 ? '0' + m : m) + ' ' + ap;
+  }
+  function paint() { out.textContent = label(); }
+  document.addEventListener('click', function (e) { if (e.target.closest('[data-toggle]')) setTimeout(paint, 0); });
+
+  // 6pm, which is when most of these packs get run.
+  wheels.h.scrollTop = 18 * ROW; wheels.m.scrollTop = 0;
+  mark(wheels.h); mark(wheels.m); paint();
+
+  // Set: confirm in place, then home. The reminder itself is a real notification in the
+  // product; here the screen says what it would have promised.
+  var note = document.getElementById('schNote'), noteWhen = document.getElementById('schNoteWhen');
+  document.getElementById('schDone').addEventListener('click', function (e) {
+    if (!this.classList.contains('ready')) return;
+    e.preventDefault();
+    noteWhen.textContent = label();
+    var pick = document.querySelector('#schWhen .sel .cs-title');
+    document.querySelector('#schNote .idle-h').textContent =
+      pick ? "We'll message you " + pick.textContent.toLowerCase() + '.' : "We'll message you.";
+    note.hidden = false;
+    setTimeout(function () { location.href = 'home.html'; }, 1800);
+  });
+})();
+</script>
+</body>
+</html>

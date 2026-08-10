@@ -58,7 +58,11 @@
 .mw-ticks .sp { flex: none; }                         /* half-width spacers so ends can centre */
 /* Each notch is a fixed cell holding its line and (for integers) a label below, so the
    number always stays directly under its line as the ruler scrolls. */
-.mw-cell { flex: none; display: flex; flex-direction: column; align-items: center; scroll-snap-align: center; }
+/* min-width: 0 is the whole point. A flex item's automatic minimum is its CONTENT, and an
+   integer cell holds a label ("10.0") far wider than the 18px notch spacing — so those ten
+   cells were quietly wider than the rest and the strip drifted, 36px of it by 4km. The
+   label still overflows its cell, centred under its own line, which is what it is for. */
+.mw-cell { flex: none; min-width: 0; display: flex; flex-direction: column; align-items: center; scroll-snap-align: center; }
 /* 0.2km minor lines: short, Neutral/200. Integer lines: taller, Neutral/300.
    4.0 is the recommended distance, so its line + label are darker (Neutral/500). */
 .mw-tick { width: 2px; height: 14px; border-radius: 99px; background: #E5E5E5; }

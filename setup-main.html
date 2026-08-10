@@ -22,8 +22,8 @@
      112KB arriving on the first tap is the blink; preloading it makes the tap instant. -->
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1075"></script>
-<script defer src="assets/i18n.js?v=1075"></script>
+<script defer src="assets/openext.js?v=1076"></script>
+<script defer src="assets/i18n.js?v=1076"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,12 +31,12 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Setup · Main Workout</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1075">
-<link rel="stylesheet" href="styles/main.css?v=1075">
-<link rel="stylesheet" href="styles/setup.css?v=1075">
-<link rel="stylesheet" href="styles/mainworkout.css?v=1075">
-<script defer src="assets/idle.js?v=1075"></script>
-<script defer src="assets/flows.js?v=1075"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1076">
+<link rel="stylesheet" href="styles/main.css?v=1076">
+<link rel="stylesheet" href="styles/setup.css?v=1076">
+<link rel="stylesheet" href="styles/mainworkout.css?v=1076">
+<script defer src="assets/idle.js?v=1076"></script>
+<script defer src="assets/flows.js?v=1076"></script>
 </head>
 <body>
 <div class="phone">
@@ -110,7 +110,7 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/setup.js?v=1075"></script>
+<script src="assets/setup.js?v=1076"></script>
 <script>
 (function () {
   var STRETCH = 8, LEARN = 10;   // fixed pack minutes (node 338:19949/19953)
@@ -187,9 +187,21 @@
     ticks.appendChild(trail);
   })();
 
+  // Where the pointer actually is — MEASURED off the ticks, not derived from scrollLeft.
+  // The strip is a lead spacer plus the cells, and the arithmetic version had to assume
+  // exactly where that spacer ended; it was out by two notches, so the readout and the
+  // line under the pointer disagreed by 0.4km. Asking the cells where they are cannot be
+  // out by anything.
+  var cells = ticks.querySelectorAll('.mw-cell');
+  function firstCentre() { return cells[0].offsetLeft + cells[0].offsetWidth / 2; }
+  function indexAt(x) {
+    var at = x + track.clientWidth / 2;                 // the pointer, in content coords
+    return Math.max(0, Math.min(steps, Math.round((at - firstCentre()) / GAP)));
+  }
+  function scrollFor(i) { return firstCentre() + i * GAP - track.clientWidth / 2; }
+
   function setDistFromScroll() {
-    var i = Math.max(0, Math.min(steps, Math.round(track.scrollLeft / GAP)));
-    var km = DMIN + i * DSTEP;
+    var km = DMIN + indexAt(track.scrollLeft) * DSTEP;
     document.getElementById('mwDist').textContent = km.toFixed(1);
     if (!interacted) return;    // only a real swipe (not the centring/snap-settle) counts
     chooseRun();
@@ -197,10 +209,14 @@
     setWheel(runMin);           // keep the Time wheel in sync
     layout();
   }
-  var dScroll;
+  // Live, on the frame — not on a timer. The number over the pointer and the Total above
+  // it are the two things the swipe is FOR, and a 60ms debounce made both of them lag the
+  // finger. rAF keeps it to one update a frame.
+  var dRaf = 0;
   track.addEventListener('scroll', function () {
-    clearTimeout(dScroll); dScroll = setTimeout(setDistFromScroll, 60);
-  });
+    if (dRaf) return;
+    dRaf = requestAnimationFrame(function () { dRaf = 0; setDistFromScroll(); });
+  }, { passive: true });
 
   // ── Time wheels (h / m) — seconds dropped, max 2h ─────────────────────────
   var wheels = { h: document.getElementById('wheelH'), m: document.getElementById('wheelM') };
@@ -209,9 +225,12 @@
     var w = wheels[k], max = +w.getAttribute('data-max'), html = '<div class="pad"></div>';
     for (var i = 0; i <= max; i++) html += '<div class="op">' + (i < 10 ? '0' + i : i) + '</div>';
     w.innerHTML = html + '<div class="pad"></div>';
-    var t; w.addEventListener('scroll', function () {
-      mark(w); clearTimeout(t); t = setTimeout(readWheels, 80);
-    });
+    var raf = 0;
+    w.addEventListener('scroll', function () {
+      mark(w);
+      if (raf) return;
+      raf = requestAnimationFrame(function () { raf = 0; readWheels(); });
+    }, { passive: true });
   });
   function mark(w) {
     var idx = Math.round(w.scrollTop / ROW);
@@ -255,7 +274,7 @@
   });
 
   // ── Init ───────────────────────────────────────────────────────────────────
-  track.scrollLeft = Math.round((5.0 - DMIN) / DSTEP) * GAP;   // centre on 5.0
+  track.scrollLeft = scrollFor(Math.round((5.0 - DMIN) / DSTEP));   // centre on 5.0
   setWheel(runMin);
   intro();
 })();

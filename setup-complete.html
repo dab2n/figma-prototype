@@ -20,8 +20,8 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1075"></script>
-<script defer src="assets/i18n.js?v=1075"></script>
+<script defer src="assets/openext.js?v=1076"></script>
+<script defer src="assets/i18n.js?v=1076"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,11 +29,11 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Setup Complete</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1075">
-<link rel="stylesheet" href="styles/main.css?v=1075">
-<link rel="stylesheet" href="styles/setup.css?v=1075">
-<script defer src="assets/idle.js?v=1075"></script>
-<script defer src="assets/flows.js?v=1075"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1076">
+<link rel="stylesheet" href="styles/main.css?v=1076">
+<link rel="stylesheet" href="styles/setup.css?v=1076">
+<script defer src="assets/idle.js?v=1076"></script>
+<script defer src="assets/flows.js?v=1076"></script>
 </head>
 <body>
 <div class="phone">
@@ -53,7 +53,7 @@
       <section class="sc-sec">
         <p class="sc-label">Pack</p>
         <div class="sc-pack">
-          <div class="sc-thumb" style="background-image:url('assets/photos/packs-card2-thumb.jpg?v=1075'); background-position: center 30%;"></div>
+          <div class="sc-thumb" style="background-image:url('assets/photos/packs-card2-thumb.jpg?v=1076'); background-position: center 30%;"></div>
           <div>
             <p class="sc-pack-title">Sean’s Pace Strategy</p>
             <p class="sc-pack-sub">Creator · 18m</p>
@@ -75,11 +75,36 @@
 
   <nav class="tabbar setup-stepbar sc-bottom">
     <div class="sb-row">
-      <a class="sc-later" href="home.html"><img src="assets/icons/clock-schedule.svg" alt=""><span>Later</span></a>
+      <a class="sc-later" id="scLater" href="schedule.html"><img src="assets/icons/clock-schedule.svg" alt=""><span>Later</span></a>
       <a class="sb-next ready" href="device-connection.html">Start Now <img src="assets/icons/arrow-right-lg.svg" alt=""></a>
     </div>
     <div class="home-indicator"><span></span></div>
   </nav>
+  <!-- Later asks before it leaves. The card is the app's own — the idle notice's shell,
+       white, r20, 16/13 Supreme, over the same scrim — so this reads as the app speaking
+       rather than as a dialog bolted on. -->
+  <div class="idle-note sc-ask" id="scAsk" hidden>
+    <div class="idle-card">
+      <p class="idle-t">Set a time for this pack?</p>
+      <p class="idle-s">We'll remind you when it comes round.</p>
+      <div class="sc-ask-row">
+        <button type="button" class="sc-ask-btn" data-ask="no">Not now</button>
+        <button type="button" class="sc-ask-btn sc-ask-yes" data-ask="yes">Yes</button>
+      </div>
+    </div>
+  </div>
 </div>
+<script>
+(function () {
+  var later = document.getElementById('scLater'), ask = document.getElementById('scAsk');
+  later.addEventListener('click', function (e) { e.preventDefault(); ask.hidden = false; });
+  ask.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-ask]');
+    if (!b) { if (e.target === ask) ask.hidden = true; return; }
+    if (b.getAttribute('data-ask') === 'yes') location.href = 'schedule.html';
+    else location.href = 'home.html';
+  });
+})();
+</script>
 </body>
 </html>
