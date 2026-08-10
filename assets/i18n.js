@@ -132,6 +132,8 @@
     'full body visible': '전신이 보이게',
     'Your whole body should be visible, head to toe': '머리부터 발끝까지 전신이 보여야 해요',
     'Scanning': '스캔 중', 'Front': '정면', 'Side': '측면',
+    'Front captured': '정면 촬영 완료', 'Side captured': '측면 촬영 완료',
+    'Hold still — moving to the next step': '그대로 계세요 — 다음 단계로 넘어갑니다',
     'Now, you’re': '이제', 'ready to move!': '움직일 준비가 됐어요!',
     'We’ve prepared Packs tailored to your choices': '선택한 정보로 맞춤 Pack을 준비했어요',
     'Preferred Sports': '관심 운동', 'Environment': '운동 환경',
