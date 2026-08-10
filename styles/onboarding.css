@@ -94,19 +94,21 @@
 .ob-list { display: flex; flex-direction: column; gap: 4px; }
 .ob-row { position: relative; display: flex; align-items: center; height: 85px; box-sizing: border-box; border-radius: 20px; overflow: hidden; cursor: pointer; background: #fff; }
 .ob-row .t { position: relative; z-index: 2; margin: 0; padding: 0 20px; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
-/* Same as the cards above: the row's artwork is exported at row size with the figure
-   already where the design has it. Multiply drops its white ground into the white card. */
-.ob-row .img { position: absolute; inset: 0; background-position: center; background-repeat: no-repeat; background-size: 100% 100%; mix-blend-mode: multiply; }
-/* Selected, the row is a gradient and the figure has to LIGHTEN it, the way the sport
-   cards do — multiply on a red ground only makes a darker red shape.
-   These rows are exported red-on-white rather than as a cutout, so the ground is removed
-   by arithmetic instead of by an alpha channel: greyscale, then invert, sends white to
-   black — which adds nothing under plus-lighter — and turns the figure into the light
-   value that lifts the gradient. */
-.ob-row.sel .img {
-  mix-blend-mode: plus-lighter;
-  filter: grayscale(1) invert(1) brightness(var(--row-lift, 0.62));
-}
+/* Built exactly like the sport cards, because the design builds them the same way: a
+   greyscale cutout with the red laid over it in plus-lighter. Each row's artwork is
+   exported already at the row's size, with the figure where the design puts it and NOTHING
+   cropped — the old exports had it scaled up until the head and the trailing foot ran off
+   the edges. The photograph sits on ::before so a filter there cannot isolate the gradient
+   from the card behind it. */
+.ob-row .img { position: absolute; inset: 0; }
+.ob-row .img::before { content: ""; position: absolute; inset: 0;
+  background: var(--art) center / 100% 100% no-repeat;
+  filter: brightness(var(--dim, 1)); }
+.ob-row .img::after { content: ""; position: absolute; inset: 0; mix-blend-mode: plus-lighter;
+  background: var(--grad, linear-gradient(180deg, #FA3030, #FD9562)); }
+/* Selected, the row IS the gradient and the picture is what lightens it. */
+.ob-row.sel .img::before { filter: brightness(calc(var(--dim, 1) * var(--sel-lift, 5.3))); mix-blend-mode: plus-lighter; }
+.ob-row.sel .img::after { content: none; }
 /* 직사각형_Selected, as the style is registered (node 2774:1124): the ramp runs DOWN the
    row, not across it, and the two effects are the drop shadow and the inner white glow. */
 .ob-row.sel {

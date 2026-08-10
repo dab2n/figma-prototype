@@ -11,7 +11,7 @@
     akiyama: {
       mins: 11,
       week: '1284', crew: ['packs-avatar3.png', 'packsx-avatar-b.png', 'joined-avatar-jiwoo.png'],
-      clip: 'akiyama-smile.mp4',
+      clip: 'akiyama-step.mp4',
       type: 'Pro', sub: 'Movement Coach · 512K subscribers',
       sport: 'Agility', joined: '3,190', rec: ['Rhythm', 'Balance'],
       total: 19, bars: [['5min', 'LOOSEN'], ['9min', 'SHADOW'], ['You Can Choose', 'GHOST!']],

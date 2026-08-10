@@ -25,9 +25,12 @@
   --color-neutral-900: #141A1A;
 
   /* Fonts */
-  --font-supreme: 'Supreme-Regular', -apple-system, sans-serif;
-  --font-supreme-bold: 'Supreme-Bold', -apple-system, sans-serif;
-  --font-supreme-medium: 'Supreme-Medium', -apple-system, sans-serif;
+  /* Supreme first, Freesentation behind it. Fallback is per GLYPH, not per element, so a
+     Latin word still comes from Supreme and only Hangul reaches the Korean face — which is
+     why there is one scale here rather than two. */
+  --font-supreme: 'Supreme-Regular', 'Freesentation', -apple-system, sans-serif;
+  --font-supreme-bold: 'Supreme-Bold', 'Freesentation-Bold', -apple-system, sans-serif;
+  --font-supreme-medium: 'Supreme-Medium', 'Freesentation-Medium', -apple-system, sans-serif;
   --font-pretendard: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-offbit: 'OffBit', var(--font-supreme-bold);
   --font-fallback: var(--font-pretendard);

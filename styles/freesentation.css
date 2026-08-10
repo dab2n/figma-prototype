@@ -1,0 +1,40 @@
+/**
+ * Freesentation — the Korean face.
+ *
+ * The type system is Supreme, which has no Hangul. Rather than a second scale, the same
+ * three roles are mapped onto Freesentation's Regular/Medium/Bold and appended to each
+ * token's family list: a Latin glyph still comes from Supreme and only Hangul falls
+ * through, so one rule set serves both languages and nothing has to be sized twice.
+ *
+ * 92%, measured: at 100px Supreme's cap is 70 tall and Freesentation's Hangul inks 84 —
+ * Hangul fills the em box where a Latin cap does not, so set at the same px it reads
+ * noticeably larger. 92% brings it to 77 against that 70 cap, which is the small overhang
+ * Korean normally carries. Line boxes are unaffected: size-adjust scales the glyphs, and
+ * every line-height here is unitless off the element's own size.
+ *
+ * Subset to the syllables the app prints plus a cushion of common ones (623 glyphs,
+ * ~34kB a weight, down from 2.7MB).
+ */
+@font-face {
+  font-family: 'Freesentation';
+  src: url('../fonts/freesentation/Freesentation-Regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+  size-adjust: 92%;
+}
+@font-face {
+  font-family: 'Freesentation-Medium';
+  src: url('../fonts/freesentation/Freesentation-Medium.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+  size-adjust: 92%;
+}
+@font-face {
+  font-family: 'Freesentation-Bold';
+  src: url('../fonts/freesentation/Freesentation-Bold.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+  size-adjust: 92%;
+}
+
+/* Korean breaks between 어절, not inside them. Without this a phone-width column splits a
+   word across two lines, which is the one thing that makes Korean UI copy hard to read.
+   Only under lang=ko, so English keeps its own wrapping. */
+html[lang="ko"] { word-break: keep-all; overflow-wrap: break-word; }
