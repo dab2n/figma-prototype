@@ -32,6 +32,11 @@
 .ob-account { display: block; margin-top: 18px; text-align: center; font-family: var(--font-supreme-bold); font-size: 16px; letter-spacing: -0.5px; color: rgba(0,0,0,0.58); text-decoration: none; }
 @keyframes ob-fade { from { opacity: 0; transform: translateY(6px); } }
 .ob-splash .status-bar { position: absolute; top: 0; left: 0; z-index: 3; background: transparent; }
+/* The dark-glyph plate that covers the white half of the wash. Multiply drops its own
+   white ground, so only the glyphs are laid over the screen, and it leaves on exactly
+   the wash's curve — same name, same duration, so the two can never drift apart. */
+.ob-splash .sb-early { position: absolute; left: 0; top: 0; width: 100%;
+  mix-blend-mode: multiply; animation: ob-wash 1.9s ease forwards; }
 
 /* ── Shared onboarding page chrome (gray frame like setup) ────────────────────── */
 .ob-screen { background: var(--color-neutral-100); }

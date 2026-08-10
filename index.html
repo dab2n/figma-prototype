@@ -20,8 +20,8 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#FA3030">
-<script defer src="assets/openext.js?v=1080"></script>
-<script defer src="assets/i18n.js?v=1080"></script>
+<script defer src="assets/openext.js?v=1081"></script>
+<script defer src="assets/i18n.js?v=1081"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,16 +29,23 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Welcome</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1080">
-<link rel="stylesheet" href="styles/main.css?v=1080">
-<link rel="stylesheet" href="styles/onboarding.css?v=1080">
-<script defer src="assets/flows.js?v=1080"></script>
-<script defer src="assets/idle.js?v=1080"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1081">
+<link rel="stylesheet" href="styles/main.css?v=1081">
+<link rel="stylesheet" href="styles/onboarding.css?v=1081">
+<script defer src="assets/flows.js?v=1081"></script>
+<script defer src="assets/idle.js?v=1081"></script>
 </head>
 <body>
 <div class="phone">
   <div class="screen ob-splash">
-    <div class="status-bar on-dark"><img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41"></div>
+    <!-- The splash opens WHITE and washes to red over 1.9s, so for the first half second
+         the light-glyph bar was white on white — no clock at all. The dark-glyph plate
+         rides the SAME animation as the wash and leaves with it; multiply knocks its own
+         white plate out, so what crosses over is only the glyphs. -->
+    <div class="status-bar on-dark">
+      <img class="statusbar-svg" src="assets/icons/statusbar-full-dark.svg" alt="9:41">
+      <img class="statusbar-svg sb-early" src="assets/icons/statusbar-full.svg" alt="">
+    </div>
 
     <p class="ob-turn">Now, Your Turn!</p>
     <div class="ob-logo"><img src="assets/icons/newton-logo.svg" alt="Newton"></div>
@@ -51,5 +58,25 @@
     <div class="home-indicator"><span></span></div>
   </div>
 </div>
+<script>
+// theme-color is what the OS paints its own status bar with, and this screen is not one
+// colour: it is white for the first beat and Newton red by the end. Read the wash's own
+// animated opacity rather than re-deriving its curve here, and mix the two ends with it.
+(function () {
+  var m = document.querySelector('meta[name="theme-color"]');
+  var sp = document.querySelector('.ob-splash');
+  if (!m || !sp || !window.getComputedStyle) return;
+  var RED = [250, 48, 48], WHITE = [255, 255, 255], last = '';
+  requestAnimationFrame(function f() {
+    var o = parseFloat(getComputedStyle(sp, '::before').opacity);
+    if (isNaN(o)) o = 0;
+    var c = '#' + RED.map(function (v, i) {
+      return ('0' + Math.round(v + (WHITE[i] - v) * o).toString(16)).slice(-2);
+    }).join('').toUpperCase();
+    if (c !== last) { m.setAttribute('content', c); last = c; }
+    if (o > 0.002) requestAnimationFrame(f);
+  });
+})();
+</script>
 </body>
 </html>

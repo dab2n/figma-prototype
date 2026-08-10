@@ -277,14 +277,63 @@
       // it reads as a continuation of the sheet rather than a different surface.
       document.documentElement.style.background = 'rgb(' + deep(r) + ',' + deep(gr) + ',' + deep(b) + ')';
       // Same idea at the top: the OS status bar takes the photo's tone instead of a
-      // fixed colour that was only ever right for one pack.
+      // fixed colour that was only ever right for one pack. The TOP of the picture, not
+      // the frame average — the strip the clock sits in is showing those rows and nothing
+      // else, and on a photograph with a dark sky the two are 25 apart, which on the phone
+      // is a status bar in a visibly different colour from the screen under it.
+      var tr = 0, tg = 0, tb = 0, tk = 0;
+      for (var ty = 0; ty < Math.max(1, Math.round(n * 0.06)); ty++) {
+        for (var tx = 0; tx < n; tx++) {
+          var q = (ty * n + tx) * 4;
+          tr += d[q]; tg += d[q + 1]; tb += d[q + 2]; tk++;
+        }
+      }
       var tc = document.querySelector('meta[name=theme-color]');
-      if (tc) tc.setAttribute('content', 'rgb(' + r + ',' + gr + ',' + b + ')');
+      if (tc) tc.setAttribute('content',
+        'rgb(' + Math.round(tr / tk) + ',' + Math.round(tg / tk) + ',' + Math.round(tb / tk) + ')');
       var lum = (0.2126 * r + 0.7152 * gr + 0.0722 * b) / 255;
       el.classList.toggle('pack-light', lum >= 0.40);
       el.classList.toggle('pack-dark', lum < 0.40);
     };
     img.src = url;
+  }
+
+  // Where the hero MOVES, the poster is only what was up before the first frame — and the
+  // strip the system clock sits in is showing the clip, not the poster. So the tag follows
+  // the clip's own top rows for as long as it plays: a pan from a bright sky into leaves
+  // travels 30-odd levels, and one reading taken at the start is wrong for the rest of it.
+  // A 24x24 draw once a second is nothing; the write is skipped unless the colour actually
+  // moved, so the OS is not handed a new bar tint every frame.
+  function followClip(v) {
+    if (!v) return;
+    var n = 24, c = document.createElement('canvas');
+    c.width = n; c.height = n;
+    // 0.06 of the frame: the status strip is 44px of a 780 screen, and reading deeper
+    // than it averages in picture the clock never sits on.
+    var rows = Math.max(1, Math.round(n * 0.06)), was = null, dead = false;
+    setInterval(function () {
+      if (dead || !v.videoWidth) return;   // paused still SHOWS a frame, so it still counts
+      var d;
+      try {
+    // object-fit: cover throws part of the frame away, and the thrown-away part is
+        // usually the edges — sampling the whole decoded frame averages in columns nobody
+        // is looking at, which read ~10% darker on this footage. Draw only what is visible.
+        var sw = v.videoWidth, sh = v.videoHeight;
+        var box = v.getBoundingClientRect();
+        var kk = Math.max((box.width || sw) / sw, (box.height || sh) / sh);
+        var vw = Math.min(sw, (box.width || sw) / kk), vh = Math.min(sh, (box.height || sh) / kk);
+        var g = c.getContext('2d');
+        g.drawImage(v, (sw - vw) / 2, (sh - vh) / 2, vw, vh, 0, 0, n, n);
+        d = g.getImageData(0, 0, n, rows).data;
+      } catch (e) { dead = true; return; }   // a tainted canvas will never answer
+      var s = [0, 0, 0], k = 0;
+      for (var i = 0; i < d.length; i += 4) { s[0] += d[i]; s[1] += d[i + 1]; s[2] += d[i + 2]; k++; }
+      var now = s.map(function (x) { return Math.round(x / k); });
+      if (was && Math.max(Math.abs(was[0] - now[0]), Math.abs(was[1] - now[1]), Math.abs(was[2] - now[2])) < 6) return;
+      was = now;
+      var tc = document.querySelector('meta[name=theme-color]');
+      if (tc) tc.setAttribute('content', 'rgb(' + now.join(',') + ')');
+    }, 1000);
   }
 
   var key, from;
@@ -299,6 +348,7 @@
     if (hero) {
       var m = (hero.style.backgroundImage || '').match(/url\(["']?([^"')]+)["']?\)/);
       if (m) tone(m[1]);
+      followClip(hero.querySelector('video'));
     }
     return;
   }
@@ -322,6 +372,7 @@
       } else {
         clip.remove();
       }
+      followClip(hero.querySelector('video'));
     }
     // Landscape thumbs crop hard in a portrait hero; a few carry their own framing.
     if (p.pos) hero.style.backgroundPosition = p.pos;

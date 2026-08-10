@@ -12,11 +12,51 @@
   var scr = document.querySelector('.scan-screen');
   if (!scr) return;
   var meta = document.querySelector('meta[name="theme-color"]');
-  var CAM = '#B6957A';                 // the footage's own top row, under the wash
+
+  // What the system clock actually sits on, rather than a colour picked once by hand:
+  // the top of the footage with the page's own warm wash over it. A fixed tan was 35-43
+  // out on these two clips, which on the phone is a status bar in a different colour
+  // from the screen it is sitting on. Read off the clip, so it follows the footage.
+  var WASH = [100, 47, 0], WASH_A = 0.32;   // .scan-wash, at the strip's own height
+  function camTone() {
+    var v = scr.querySelector('.scan-shot');
+    if (!v || !v.videoWidth) return null;
+    var n = 24, c = document.createElement('canvas');
+    c.width = n; c.height = n;
+    var rows = Math.max(1, Math.round(n * 0.06)), d;   // the strip is 44 of 780
+    try {
+    // object-fit: cover throws part of the frame away, and the thrown-away part is
+      // usually the edges — sampling the whole decoded frame averages in columns nobody
+      // is looking at, which read ~10% darker on this footage. Draw only what is visible.
+      var sw = v.videoWidth, sh = v.videoHeight;
+      var box = v.getBoundingClientRect();
+      var kk = Math.max((box.width || sw) / sw, (box.height || sh) / sh);
+      var vw = Math.min(sw, (box.width || sw) / kk), vh = Math.min(sh, (box.height || sh) / kk);
+      var g = c.getContext('2d');
+      g.drawImage(v, (sw - vw) / 2, (sh - vh) / 2, vw, vh, 0, 0, n, n);
+      d = g.getImageData(0, 0, n, rows).data;
+    } catch (e) { return null; }          // a cross-origin clip taints the canvas
+    var s = [0, 0, 0], k = 0;
+    for (var i = 0; i < d.length; i += 4) { s[0] += d[i]; s[1] += d[i + 1]; s[2] += d[i + 2]; k++; }
+    return 'rgb(' + s.map(function (v2, j) {
+      return Math.round(v2 / k * (1 - WASH_A) + WASH[j] * WASH_A);
+    }).join(',') + ')';
+  }
+
+  function paintTop() {
+    var c = camTone();
+    if (c && meta) meta.setAttribute('content', c);
+    return !!c;
+  }
 
   function wide() {
     scr.classList.add('wide');
-    if (meta) meta.setAttribute('content', CAM);
+    // The clip may not have decoded a frame yet; try again while it is arriving.
+    if (!paintTop()) {
+      var tries = 0, id = setInterval(function () {
+        if (paintTop() || ++tries > 20) clearInterval(id);
+      }, 150);
+    }
   }
 
   // Anything the user does takes the screen back off the clock: a tap on Next, a

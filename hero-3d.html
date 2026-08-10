@@ -29,7 +29,7 @@ html, body { height: 100%; background: #000; margin: 0; overflow: hidden; cursor
    angled cards read as one room rather than twenty skewed rectangles. 1400 is a wide-ish
    lens: at z -3000 a card projects to 32% of its size, which is the size difference the
    reference boards get between a foreground tile and a background one. */
-.space { position: absolute; inset: 0; perspective: 1400px; perspective-origin: 50% 48%; }
+.space { position: absolute; inset: 0; perspective: 1150px; perspective-origin: 50% 48%; }
 .field {
   position: absolute; inset: 0;
   transform-style: preserve-3d;
@@ -145,26 +145,46 @@ html, body { height: 100%; background: #000; margin: 0; overflow: hidden; cursor
 // Layout is authored in what you SEE: x/y are stage pixels from centre, z is depth. The
 // world offset a card needs to land there is x/k where k is its own projection factor —
 // done here rather than by hand, so moving a card in z does not move it across the screen.
-var P = 1400;
+var P = 1150;
 
 // The three heroes: near, big, un-hazed, and each one turned a different way. Clip geometry
 // is Figma's, per picture.
 // The three heroes: near, big, un-hazed. Their angles are deliberately NOT a fan — two of
 // them turn the same way and the tilts do not mirror, because a symmetric -21/0/+21 set
 // reads as a carousel no matter how much space is around it.
+// Five foreground cards. The two new ones are the portrait clips shot for this deck — the
+// stock filler is landscape and crops to legs or an empty track in a near-square card, which
+// is fine at 90px in the background and useless at 450. Each pair of same-athlete cards is
+// put in opposite corners so neither reads as a duplicate of the other.
+// Masks are opened up across the board (--mask-in/--mask-out): the artwork now stays solid
+// most of the way down instead of fading out above the title, and every clip is scaled ~12%
+// so the figure fills more of the card.
 var HERO = [
-  { x:-620, y:-175, z: -40, ry:-13, rx: 4,   rz:-5,  s:1.20, cls:'hero-card-live',
-    clip:'hero3d-akiyama.mp4', vs:'top:-13px;width:266px;height:473px;--clip-bright:.82',
+  { x:-370, y:-388, z:  40, ry: -7, rx: 3,   rz:-5,  s:1.52, cls:'hero-card-live',
+    clip:'hero3d-akiyama.mp4', vs:'top:-26px;width:300px;height:533px;--clip-bright:.74',
+    mask:'--mask-in:44%;--mask-out:100%',
     title:"Akiyama's Ghost Step", tier:'Pro Pack', dur:'11 min', btn:'#FA3030' },
-  { x: 150, y: 215, z:-130, ry: 11, rx:-3,   rz: 2,  s:1.06, t:0.09, cls:'hero-card-live hero-card-2',
-    clip:'hero3d-sean.mp4', vs:'top:0;width:248px;height:441px;--clip-bright:.62', mask:'--mask-in:22%;--mask-out:78%',
+  { x:  95, y:  60, z:  20, ry:  9, rx:-3,   rz: 2,  s:1.40, cls:'hero-card-live hero-card-2',
+    clip:'hero3d-sean.mp4', vs:'top:-14px;width:280px;height:498px;--clip-bright:.56',
+    mask:'--mask-in:40%;--mask-out:92%',
     title:"Sean's Final 1km Pace", tier:'Creator Pack', dur:'18 min', btn:'#FB552F' },
   // Curry's maroon ramp sits close enough to Akiyama's red that at this size the two read as
   // the same card. --dim takes it down on top of the colourway rather than editing the Figma
   // gradient, so the card stays the card and only this composition dims it.
-  { x: 700, y:-215, z:-300, ry:-18, rx: 3,   rz: 4,  s:1.16, t:0.16, cls:'hero-card-live hero-card-3',
-    clip:'hero3d-curry.mp4', vs:'top:-4px;width:486px;height:486px;--clip-bright:.58', dim:0.82,
-    title:"Curry's Step Back", tier:'Pro Pack', dur:'23 min', btn:'#8A1A00' }
+  { x: 630, y:-215, z:-300, ry:-11, rx: 3,   rz: 4,  s:1.28, t:0.16, cls:'hero-card-live hero-card-3',
+    clip:'hero3d-curry.mp4', vs:'top:-18px;width:540px;height:540px;--clip-bright:.54', dim:0.82,
+    mask:'--mask-in:44%;--mask-out:100%',
+    title:"Curry's Step Back", tier:'Pro Pack', dur:'23 min', btn:'#8A1A00' },
+  // These two are arena and gym footage rather than black-backdrop shots, so they composite
+  // plainly and their masks hand the bottom third back to the gradient for the type.
+  { x:-560, y: 240, z: -70, ry: 13, rx:-4,   rz: 3,  s:1.26, cls:'hero-card-live hero-card-3', plain:true,
+    clip:'hero3d-curry-step.mp4', vs:'top:-40px;width:360px;height:640px',
+    mask:'--mask-in:28%;--mask-out:86%',
+    title:"Curry's Pull-Up Three", tier:'Creator Pack', dur:'15 min', btn:'#C4210A' },
+  { x: 610, y: 240, z:-160, ry:-14, rx:-4,   rz:-3,  s:1.20, t:0.08, cls:'hero-card-live hero-card-2', plain:true,
+    clip:'hero3d-akiyama-step.mp4', vs:'top:-40px;width:360px;height:640px',
+    mask:'--mask-in:28%;--mask-out:86%',
+    title:"Akiyama's Heavy Bag", tier:'Pro Pack', dur:'16 min', btn:'#E0431C' }
 ];
 
 // Filler: the repo's own stock sports clips, standing in until the real packs exist.
@@ -181,15 +201,13 @@ var FILL = [
   { x: 955, y:-345, z:-1200, ry:-25, rx:-2, rz: 5, clip:F+'sprinter.mp4' },
   { x:-885, y: 405, z:-1300, ry: 12, rx: 4, rz: 4, clip:F+'ladder.mp4' },
   { x: 940, y: 400, z:-1000, ry:-28, rx: 3, rz:-5, clip:F+'tennis.mp4' },
-  { x:-250, y:-490, z:-1350, ry:-13, rx: 7, rz: 2, clip:F+'basketball.mp4' },
+  { x:  60, y:-500, z:-1350, ry:-13, rx: 7, rz: 2, clip:F+'basketball.mp4' },
   { x: 350, y: 500, z:-1150, ry: 22, rx:-7, rz:-3, clip:F+'strength.mp4' },
   // mid band — into the gaps between the three cards
   { x:-815, y: -75, z:-2000, ry: 19, rx: 2, rz: 3, clip:F+'bolt.mp4' },
   { x: 870, y:  95, z:-2300, ry:-17, rx:-2, rz:-2, clip:F+'interval.mp4' },
   { x:-720, y: 260, z:-2550, ry: 23, rx: 3, rz:-4, clip:F+'legburn.mp4' },
   { x: 330, y:-430, z:-2150, ry:-21, rx: 2, rz: 4, clip:F+'sprint.mp4' },
-  { x:-380, y: 330, z:-1900, ry:-11, rx: 5, rz: 2, clip:'hero3d-akiyama-step.mp4', vs:'top:-52px;width:319px;height:567px' },
-  { x: 620, y: 430, z:-2450, ry: 13, rx:-4, rz:-3, clip:'hero3d-curry-step.mp4',   vs:'top:-52px;width:319px;height:567px' },
   // deep specks — picture only, dimmed nearly into the black. Not meant to be read; they are
   // what keeps the space between the big cards from being a hole.
   { x:-300, y: 120, z:-3400, ry: 17, rx: 3, rz: 3, clip:F+'tennis.mp4' },
@@ -223,17 +241,31 @@ var rank = {};
 cards.slice().sort(function (a, b) { return a.x - b.x; })
      .forEach(function (c, n) { rank[cards.indexOf(c)] = n; });
 
+// The room is a bowl, not a wall. Two things do it, and they have to agree or the space
+// reads as a flat plane with tilted cards on it:
+//   1. everything away from centre is pushed BACK, by the square of its distance — the
+//      frame edges recede the way the inside of a sphere does;
+//   2. everything away from centre TURNS toward centre, so an edge card shows you its
+//      inner face. A card at the left edge faces right, one at the bottom faces up.
+// Both are derived from the card's authored position, so a card moved in the layout gets
+// the curvature for its new seat automatically.
+var BOWL = 3200;   // smaller = deeper dish
+var TURN = 60;     // stage px per degree of yaw
+var TIP  = 70;     // stage px per degree of pitch
+
 cards.forEach(function (c, idx) {
   var i = rank[idx];                             // this card's place in the left-to-right wave
-  var k = P / (P - c.z);                         // what perspective will do to this card
+  var z = c.z - (c.x * c.x + c.y * c.y) / BOWL;  // seat on the dish
+  var k = P / (P - z);                           // what perspective will do to this card
   // Non-linear: the haze has to bite early or the mid layer stays as loud as the heroes,
   // and it has to keep going all the way to -9000 for the specks to sit down in the black.
-  var t = c.fill ? Math.pow(Math.min(1, c.z / Z_FAR), 0.55) : (c.t || 0);
+  var t = c.fill ? Math.pow(Math.min(1, z / Z_FAR), 0.55) : (c.t || 0);
   var slot = document.createElement('div');
   slot.className = 'slot';
   slot.style.cssText =
-    '--x:' + (c.x / k).toFixed(1) + 'px;--y:' + (c.y / k).toFixed(1) + 'px;--z:' + c.z + 'px;' +
-    '--ry:' + c.ry + 'deg;--rx:' + c.rx + 'deg;--rz:' + c.rz + 'deg;' +
+    '--x:' + (c.x / k).toFixed(1) + 'px;--y:' + (c.y / k).toFixed(1) + 'px;--z:' + z.toFixed(0) + 'px;' +
+    '--ry:' + (c.ry - c.x / TURN).toFixed(1) + 'deg;--rx:' + (c.rx + c.y / TIP).toFixed(1) + 'deg;' +
+    '--rz:' + c.rz + 'deg;' +
     '--s:' + (c.s || 1) + ';--t:' + t.toFixed(3) + ';' + (c.dim ? '--dim:' + c.dim + ';' : '');
 
   var fly = document.createElement('div');
