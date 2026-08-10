@@ -2,17 +2,18 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>Hero Cards — 3D</title>
+<title>Hero Cards — 3D Space</title>
 <link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Regular.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Bold.woff2" crossorigin>
 <link rel="stylesheet" href="styles/tokens.css">
-<!-- The card itself is home.css untouched: same radial fills, same plus-lighter shot,
-     same blur slab, same button. Only the SPACE around it is new. -->
+<!-- The card itself is home.css untouched: same radial fills, same plus-lighter shot, same
+     blur slab, same button. Everything below is the SPACE the cards hang in. -->
 <link rel="stylesheet" href="styles/home.css">
 <style>
-html, body { height: 100%; background: #000; margin: 0; overflow: hidden; }
+html, body { height: 100%; background: #000; margin: 0; overflow: hidden; cursor: default; }
 
-/* 1920x1080 fixed stage, scaled down to whatever window is actually open. */
+/* Authored at 1920x1080 and only ever scaled, so a window recording is the same
+   composition at any size. */
 .stage {
   position: absolute; top: 50%; left: 50%;
   width: 1920px; height: 1080px;
@@ -20,160 +21,235 @@ html, body { height: 100%; background: #000; margin: 0; overflow: hidden; }
   transform: scale(var(--fit, 1));
   background: #000;
 }
-/* Perspective on the stage, not the cards — one shared vanishing point is what makes the
-   three read as being in the same room rather than three separately skewed rectangles.
-   Origin sits above centre so the cards tip slightly away from the viewer as they rise. */
-.room {
+/* ONE perspective for the whole field — that shared camera is what makes twenty separately
+   angled cards read as one room rather than twenty skewed rectangles. 1400 is a wide-ish
+   lens: at z -3000 a card projects to 32% of its size, which is the size difference the
+   reference boards get between a foreground tile and a background one. */
+.space { position: absolute; inset: 0; perspective: 1400px; perspective-origin: 50% 48%; }
+.field {
   position: absolute; inset: 0;
-  perspective: 1800px;
-  perspective-origin: 50% 44%;
-}
-/* The cylinder the cards hang off: radius --r, pushed back by exactly --r so the middle of
-   the arc lands on the screen plane and only the outer two sit behind it. Without this
-   push-back a card at translateZ(--r) would be sitting a metre in FRONT of the camera and
-   perspective would blow it up to twice its size. */
-.room > .arc {
-  position: absolute; inset: 0;
-  --r: 1300px;
-  transform: translateZ(calc(-1 * var(--r)));
   transform-style: preserve-3d;
+  /* Pointer parallax, written by JS. Lerped there, so this stays a plain transform. */
+  transform: rotateY(var(--camx, 0deg)) rotateX(var(--camy, 0deg));
+  will-change: transform;
 }
-/* One seat per card. rotateY then translateZ out to the radius is what turns the outer two
-   away from the viewer on their own — the angle is the arc's, not hand-picked per card.
-   Everything after it is per-card drift so nothing sits dead on the rail. */
+
+/* One seat per card. --x/--y are STAGE-pixel positions (the layout is authored in what you
+   see, not in world units) — JS divides them by the card's own projection factor before
+   writing them here, so a card at z -3000 needs 3x the world offset to land where it was
+   drawn. --s is the card's own size on top of whatever perspective already did to it. */
 .slot {
   position: absolute; top: 50%; left: 50%;
   width: 319px; height: 326px;
   margin: -163px 0 0 -159.5px;
   transform:
-    rotateY(var(--a)) translateZ(var(--r))
-    translate3d(var(--dx, 0px), var(--dy, 0px), var(--dz, 0px))
+    translate3d(var(--x), var(--y), var(--z))
     rotateY(var(--ry, 0deg)) rotateX(var(--rx, 0deg)) rotateZ(var(--rz, 0deg))
     scale(var(--s, 1));
   transform-style: preserve-3d;
 }
-/* Float lives on its own element so the slot keeps its 3D seat. Three periods that do not
-   divide into each other, so the group never re-syncs. */
-.bob { position: absolute; inset: 0; transform-style: preserve-3d; animation: bob 11s ease-in-out infinite alternate; }
-.slot:nth-of-type(2) .bob { animation-duration: 14s; animation-delay: -3s; }
-.slot:nth-of-type(3) .bob { animation-duration: 17s; animation-delay: -7s; }
-@keyframes bob {
-  0%   { transform: translate3d(0, -14px, 0) rotateY(-2.5deg) rotateX(1.5deg); }
-  50%  { transform: translate3d(6px, 8px, 22px) rotateY(2deg) rotateX(-1deg); }
-  100% { transform: translate3d(-5px, 16px, -18px) rotateY(3deg) rotateX(2deg); }
+/* Distance haze. Perspective already shrinks a far card; this is the rest of what distance
+   does — it dims, it desaturates, and it goes soft. All three come off one --t (0 near,
+   1 far) that JS derives from z, so nothing can drift out of step with the geometry. */
+.slot .hero-card {
+  position: absolute; inset: 0; width: auto; height: auto; flex: none;
+  filter:
+    brightness(calc(1 - 0.76 * var(--t)))
+    saturate(calc(1 - 0.62 * var(--t)))
+    blur(calc(var(--t) * var(--t) * 3.4px));
+  opacity: calc(1 - 0.42 * var(--t));
 }
-@media (prefers-reduced-motion: reduce) { .bob { animation: none; } }
+/* Entrance and idle drift are separate elements on purpose: the entrance runs once and ends
+   on identity, the drift runs forever, and neither has to know the other's numbers. */
+.fly {
+  position: absolute; inset: 0; transform-style: preserve-3d;
+  animation: fly 1.15s cubic-bezier(.16, .84, .3, 1) var(--delay, 0s) both;
+}
+@keyframes fly {
+  from { opacity: 0; transform: translate3d(var(--fx), var(--fy), -900px) rotateY(calc(var(--ry, 0deg) * -1.6)); }
+  to   { opacity: 1; transform: none; }
+}
+.bob {
+  position: absolute; inset: 0; transform-style: preserve-3d;
+  animation: bob var(--bd, 13s) ease-in-out var(--bdelay, 0s) infinite alternate;
+}
+@keyframes bob {
+  0%   { transform: translate3d(0, -13px, 0) rotateY(-2deg) rotateX(1.2deg); }
+  50%  { transform: translate3d(7px, 9px, 26px) rotateY(2deg) rotateX(-1deg); }
+  100% { transform: translate3d(-6px, 15px, -20px) rotateY(3deg) rotateX(1.8deg); }
+}
+/* Reduced motion drops BOTH — the entrance's staggered delay is motion too, so killing only
+   the duration would still hold twenty cards invisible for two seconds. `none` leaves .fly
+   at its own identity transform, which is where the animation ended anyway. */
+@media (prefers-reduced-motion: reduce) {
+  .bob, .fly { animation: none; }
+}
+/* Far cards drop their type. At 30% projection the 28px title is 8px of mush; the reference
+   boards are bare tiles at that distance for the same reason. */
+.bare .hero-text, .bare .hero-btn, .bare .hero-blur { display: none; }
+/* Filler cards are ordinary footage, not the black-backdrop shots the three heroes use, so
+   they composite normally — plus-lighter would just add a whole daylit frame to the card
+   and blow it white. The mask still fades them out at the bottom. */
+.plain { mix-blend-mode: normal; }
 
-/* home.css builds the card as a flex item in the carousel; here it fills its slot. */
-.slot .hero-card { position: absolute; inset: 0; width: auto; height: auto; flex: none; }
-
-/* Floor bounce. Not a real shadow — a soft warm pool under each card so the cards read as
-   hanging over something instead of pasted on flat black. */
+/* Warm floor bounce under the three near cards. */
 .pool {
   position: absolute; left: 50%; top: 50%;
-  width: 520px; height: 200px;
-  margin: -100px 0 0 -260px;
+  width: 520px; height: 200px; margin: -100px 0 0 -260px;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(250,90,50,0.30), rgba(250,48,48,0) 70%);
+  background: radial-gradient(closest-side, rgba(250,90,50,0.28), rgba(250,48,48,0) 70%);
   filter: blur(40px);
-  transform: translateY(240px) rotateX(78deg) scale(var(--ps, 1));
+  transform: translateY(250px) rotateX(78deg);
   pointer-events: none;
 }
-/* Vignette so the black corners fall off instead of ending at the window edge. */
+/* Vignette so the field falls off into black instead of ending at the window edge. */
 .vig {
   position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(120% 100% at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.85) 100%);
+  background: radial-gradient(125% 105% at 50% 46%, rgba(0,0,0,0) 34%, rgba(0,0,0,0.55) 74%, rgba(0,0,0,0.92) 100%);
 }
 </style>
 </head>
 <body>
 <div class="stage">
-  <div class="room">
-  <div class="arc">
-    <!-- Left: furthest back and turned in the most. Akiyama, 9:16 clip, Figma geometry. -->
-    <div class="slot" style="--a:-23deg;--ry:-6deg;--dy:44px;--dz:-30px;--rz:-3deg;--rx:2deg;--s:1.52;">
-      <span class="pool" style="--ps:1.1"></span>
-      <div class="bob">
-        <a class="hero-card hero-card-live" href="pyeongso.html?pack=akiyama">
-          <span class="hero-shot">
-            <video class="hero-clip"
-                   style="top:-13px;width:266px;height:473px;object-fit:cover;--clip-bright:.82"
-                   src="assets/photos/hero3d-akiyama.mp4"
-                   muted loop playsinline autoplay preload="auto" disablepictureinpicture></video>
-          </span>
-          <span class="hero-blur"><i></i><i></i></span>
-          <div class="hero-text">
-            <p class="hero-title">Akiyama's Ghost Step</p>
-            <div class="hero-meta">
-              <span>Pro Pack</span>
-              <img class="sep" src="assets/icons/dot-sep-white.svg" alt="">
-              <span class="dim">11 min</span>
-            </div>
-          </div>
-          <span class="hero-btn" style="--btn:#FA3030;">View Now
-            <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Centre: nearest, biggest, only a few degrees off square so it still doesn't stare. -->
-    <div class="slot" style="--a:0deg;--dy:-50px;--dz:90px;--ry:-7deg;--rz:1.5deg;--rx:-1deg;--s:1.72;">
-      <span class="pool" style="--ps:1.25"></span>
-      <div class="bob">
-        <a class="hero-card hero-card-live hero-card-2" href="pyeongso.html">
-          <span class="hero-shot" style="--mask-in:22%;--mask-out:78%">
-            <video class="hero-clip"
-                   style="top:0;width:248px;height:441px;object-fit:cover;--clip-bright:.62"
-                   src="assets/photos/hero3d-sean.mp4"
-                   muted loop playsinline autoplay preload="auto" disablepictureinpicture></video>
-          </span>
-          <span class="hero-blur"><i></i><i></i></span>
-          <div class="hero-text">
-            <p class="hero-title">Sean's Final 1km Pace</p>
-            <div class="hero-meta">
-              <span>Creator Pack</span>
-              <img class="sep" src="assets/icons/dot-sep-white.svg" alt="">
-              <span class="dim">18 min</span>
-            </div>
-          </div>
-          <span class="hero-btn" style="--btn:#FB552F;">View Now
-            <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Right: back and turned in, tipped the other way from the left one. -->
-    <div class="slot" style="--a:23deg;--ry:7deg;--dy:62px;--dz:-50px;--rz:3deg;--rx:2.5deg;--s:1.46;">
-      <span class="pool" style="--ps:1.05"></span>
-      <div class="bob">
-        <a class="hero-card hero-card-live hero-card-3" href="pyeongso.html?pack=curry">
-          <span class="hero-shot">
-            <video class="hero-clip"
-                   style="top:-4px;width:486px;height:486px;object-fit:cover;--clip-bright:.76"
-                   src="assets/photos/hero3d-curry.mp4"
-                   muted loop playsinline autoplay preload="auto" disablepictureinpicture></video>
-          </span>
-          <span class="hero-blur"><i></i><i></i></span>
-          <div class="hero-text">
-            <p class="hero-title">Curry's Step Back</p>
-            <div class="hero-meta">
-              <span>Pro Pack</span>
-              <img class="sep" src="assets/icons/dot-sep-white.svg" alt="">
-              <span class="dim">23 min</span>
-            </div>
-          </div>
-          <span class="hero-btn" style="--btn:#8A1A00;">View Now
-            <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
-        </a>
-      </div>
-    </div>
-  </div>
-  </div>
+  <div class="space"><div class="field" id="field"></div></div>
   <div class="vig"></div>
 </div>
+
 <script>
-// The stage is authored at 1920x1080 and only ever scaled — so what a screen recording of
-// this window captures is the same composition at any window size.
+// Layout is authored in what you SEE: x/y are stage pixels from centre, z is depth. The
+// world offset a card needs to land there is x/k where k is its own projection factor —
+// done here rather than by hand, so moving a card in z does not move it across the screen.
+var P = 1400;
+
+// The three heroes: near, big, un-hazed, and each one turned a different way. Clip geometry
+// is Figma's, per picture.
+var HERO = [
+  { x:-455, y: 60, z:  60, ry:-21, rx: 2,   rz:-3,  s:1.34, cls:'hero-card-live',
+    clip:'hero3d-akiyama.mp4', vs:'top:-13px;width:266px;height:473px;--clip-bright:.82',
+    title:"Akiyama's Ghost Step", tier:'Pro Pack', dur:'11 min', btn:'#FA3030' },
+  { x:   0, y:-40, z: 180, ry: -7, rx:-1,   rz:1.5, s:1.36, cls:'hero-card-live hero-card-2',
+    clip:'hero3d-sean.mp4', vs:'top:0;width:248px;height:441px;--clip-bright:.62', mask:'--mask-in:22%;--mask-out:78%',
+    title:"Sean's Final 1km Pace", tier:'Creator Pack', dur:'18 min', btn:'#FB552F' },
+  { x: 470, y: 76, z:  20, ry: 22, rx: 2.5, rz:3,   s:1.30, cls:'hero-card-live hero-card-3',
+    clip:'hero3d-curry.mp4', vs:'top:-4px;width:486px;height:486px;--clip-bright:.76',
+    title:"Curry's Step Back", tier:'Pro Pack', dur:'23 min', btn:'#8A1A00' }
+];
+
+// Filler: the repo's own stock sports clips, one per card, standing in until the real packs
+// exist. Three depth bands — a near ring bleeding off the frame edge, a mid layer that
+// starts to crowd the heroes, and a far scatter that reads as specks near the horizon.
+var F = 'clip-';
+var FILL = [
+  // near ring — biggest of the fillers, out at the edges, some cropped by the frame
+  { x:-935, y:-395, z:-1000, ry: 27, rx:-3, rz:-4, clip:F+'boxing.mp4' },
+  { x: 960, y:-350, z:-1150, ry:-25, rx:-2, rz: 5, clip:F+'tennis.mp4' },
+  { x:-895, y: 420, z:-1250, ry: 21, rx: 4, rz: 4, clip:F+'ladder.mp4' },
+  { x: 925, y: 430, z: -950, ry:-28, rx: 3, rz:-5, clip:F+'sprinter.mp4' },
+  { x:-215, y:-505, z:-1300, ry:-13, rx: 7, rz: 2, clip:F+'basketball.mp4' },
+  { x: 315, y: 505, z:-1100, ry: 15, rx:-7, rz:-3, clip:F+'strength.mp4' },
+  // mid layer
+  { x:-800, y:-140, z:-2100, ry: 19, rx: 2, rz: 3, clip:F+'bolt.mp4' },
+  { x: 840, y: -75, z:-2350, ry:-17, rx:-2, rz:-2, clip:F+'interval.mp4' },
+  { x:-735, y: 240, z:-2500, ry: 23, rx: 3, rz:-4, clip:F+'legburn.mp4' },
+  { x: 760, y: 250, z:-1950, ry:-21, rx: 2, rz: 4, clip:F+'sprint.mp4' },
+  { x:-395, y:-430, z:-2400, ry:-11, rx: 5, rz: 2, clip:F+'curry.mp4' },
+  { x: 470, y:-445, z:-2200, ry: 13, rx:-4, rz:-3, clip:'akiyama-step.mp4' },
+  // far scatter — specks
+  { x:-470, y: 390, z:-3300, ry: 15, rx: 3, rz: 3, clip:'curry-stepback.mp4' },
+  { x: 510, y: 380, z:-3600, ry:-15, rx:-3, rz:-2, clip:'sean-running.mp4' },
+  { x:-190, y:-255, z:-4000, ry:  9, rx: 4, rz: 2, clip:F+'tennis.mp4' },
+  { x: 245, y: 210, z:-4300, ry:-19, rx:-4, rz:-3, clip:F+'ladder.mp4' },
+  { x:-615, y: -35, z:-4600, ry: 22, rx: 2, rz: 4, clip:F+'interval.mp4' }
+];
+
+// Filler cards borrow the three colourways in rotation so the field stays one palette.
+var WAYS = ['hero-card-live', 'hero-card-live hero-card-2', 'hero-card-live hero-card-3'];
+var Z_FAR = -4600;
+
+var field = document.getElementById('field');
+var cards = HERO.slice()
+  .concat(FILL.map(function (c, i) { c.cls = WAYS[i % 3]; c.fill = true; return c; }));
+
+// Farthest in first, heroes last: the field builds up behind and the three you are meant to
+// read land on top of it.
+var order = cards.slice().sort(function (a, b) { return a.z - b.z; });
+
+order.forEach(function (c, i) {
+  var k = P / (P - c.z);                         // what perspective will do to this card
+  var t = c.fill ? Math.min(1, c.z / Z_FAR) : 0; // 0 near, 1 at the back of the field
+  var slot = document.createElement('div');
+  slot.className = 'slot';
+  slot.style.cssText =
+    '--x:' + (c.x / k).toFixed(1) + 'px;--y:' + (c.y / k).toFixed(1) + 'px;--z:' + c.z + 'px;' +
+    '--ry:' + c.ry + 'deg;--rx:' + c.rx + 'deg;--rz:' + c.rz + 'deg;' +
+    '--s:' + (c.s || 1) + ';--t:' + t.toFixed(3) + ';';
+
+  var fly = document.createElement('div');
+  fly.className = 'fly';
+  // Each card comes in from its own side — outward from centre, deeper, and counter-turned,
+  // so twenty entrances never look like one group slide.
+  fly.style.cssText =
+    '--fx:' + (c.x * 0.42).toFixed(0) + 'px;--fy:' + (c.y * 0.42 - 60).toFixed(0) + 'px;' +
+    '--ry:' + c.ry + 'deg;--delay:' + (i * 0.062).toFixed(3) + 's;';
+
+  var bob = document.createElement('div');
+  bob.className = 'bob';
+  bob.style.cssText = '--bd:' + (11 + (i % 5) * 1.7) + 's;--bdelay:-' + (i * 1.3) + 's;';
+
+  var bare = t > 0.42;
+  // Twenty videos is twenty parallel downloads and twenty decoders, and it is the one thing
+  // here that will actually cost frames — with all of them live nothing had a frame to paint
+  // at all, the whole field came up as bare gradients. Past 45% into the field a card is
+  // 80-130px wide and nobody can see it move, so it holds a still instead: no bytes beyond
+  // one 30KB jpeg, no decoder. .hero-clip positions an <img> exactly as it does a <video>.
+  var still = t > 0.45;
+  var art = still
+    ? '<img class="hero-clip" alt="" src="assets/photos/poster/' + c.clip.replace('.mp4', '.jpg') + '"'
+    : '<video class="hero-clip" muted loop playsinline autoplay preload="auto" disablepictureinpicture' +
+      ' src="assets/photos/' + c.clip + '"';
+  var a = document.createElement('a');
+  a.className = 'hero-card ' + c.cls + (bare ? ' bare' : '');
+  a.href = c.href || 'pyeongso.html';
+  a.innerHTML =
+    '<span class="hero-shot' + (c.fill ? ' plain' : '') + '"' + (c.mask ? ' style="' + c.mask + '"' : '') + '>' +
+      art + ' style="' + (c.vs || 'top:0;width:100%;height:100%') + ';object-fit:cover">' +
+      (still ? '' : '</video>') +
+    '</span>' +
+    '<span class="hero-blur"><i></i><i></i></span>' +
+    '<div class="hero-text"><p class="hero-title">' + (c.title || '') + '</p>' +
+      '<div class="hero-meta"><span>' + (c.tier || '') + '</span>' +
+      '<img class="sep" src="assets/icons/dot-sep-white.svg" alt="">' +
+      '<span class="dim">' + (c.dur || '') + '</span></div></div>' +
+    '<span class="hero-btn" style="--btn:' + (c.btn || '#FA3030') + '">View Now' +
+      '<img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>';
+
+  bob.appendChild(a);
+  fly.appendChild(bob);
+  if (!c.fill) { var pool = document.createElement('span'); pool.className = 'pool'; slot.appendChild(pool); }
+  slot.appendChild(fly);
+  field.appendChild(slot);
+
+  // autoplay as an attribute is only honoured at parse time for a muted clip; these were
+  // parsed by innerHTML and inserted after, so the play call is the one that actually starts
+  // them. A rejected promise here just means the tab is backgrounded.
+  var v = a.querySelector('video');
+  if (v) { var p = v.play(); if (p) p.catch(function () {}); }
+});
+
+// Pointer parallax on the whole field. Lerped rather than assigned, so the camera keeps
+// gliding after the mouse stops instead of snapping to it.
+var tx = 0, ty = 0, cx = 0, cy = 0;
+addEventListener('pointermove', function (e) {
+  tx = (e.clientX / innerWidth - 0.5) * -9;
+  ty = (e.clientY / innerHeight - 0.5) * 5.5;
+});
+(function tick() {
+  cx += (tx - cx) * 0.045; cy += (ty - cy) * 0.045;
+  field.style.setProperty('--camx', cx.toFixed(3) + 'deg');
+  field.style.setProperty('--camy', cy.toFixed(3) + 'deg');
+  requestAnimationFrame(tick);
+})();
+
 var fit = function () {
   document.documentElement.style.setProperty('--fit',
     Math.min(innerWidth / 1920, innerHeight / 1080).toFixed(4));

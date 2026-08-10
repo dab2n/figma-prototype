@@ -35,8 +35,9 @@
       '최고 속도에서 늘 걸리던 한계를 넘어요. 드라이브 구간과 팔 동작을 먼저 다시 잡고, 지친 상태에서도 그 자세를 유지해 마지막 20m가 무너지지 않게 해요.',
     'The block start, the transition and the top-end mechanics, taken one at a time. Short reps with long rests, so every rep is run at the speed you are actually training for.':
       '블록 스타트, 전환 구간, 최고 속도 메커닉을 하나씩 나눠서 익혀요. 짧게 반복하고 충분히 쉬어서, 매 반복을 실제 목표 속도로 달려요.',
-    'Create the half metre you need to get the shot off. Footwork into the step back, then the balance to land square and rise without drifting sideways.':
-      '슛을 올릴 반 걸음을 만들어요. 스텝백으로 들어가는 풋워크를 익히고, 옆으로 밀리지 않고 정면으로 착지해 올라오는 균형을 잡아요.',
+    'The half metre that decides the shot. Keep the ball low through the setup, push off the front foot to create the gap, then land square and rise — no drift, no fade. Drilled slowly first, then at the speed a defender actually closes.':
+      '슛을 결정하는 반 걸음이에요. 셋업 내내 공을 낮게 두고, 앞발로 밀어 간격을 만든 다음, 정면으로 착지해 올라와요. 밀리지도, 젖혀지지도 않게. 천천히 익힌 뒤 수비가 실제로 붙는 속도로 올려요.',
+    'HANDLE': '핸들링', 'STEP BACK': '스텝백',
     'Agility fails where strength runs out. Single-leg work and controlled decelerations build the base that lets you change direction late without losing the line.':
       '민첩성은 근력이 떨어지는 지점에서 무너져요. 한 다리 운동과 감속 제어로 기초를 쌓아, 늦게 방향을 바꿔도 라인이 흐트러지지 않게 해요.',
     'Quick feet that survive contact with a real game. Ladder patterns first, then the same patterns with a ball and a defender in front of you.':

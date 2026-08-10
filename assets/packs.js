@@ -49,16 +49,16 @@
     },
     curry: {
       mins: 11,
-      week: '496', crew: ['packs-avatar1.png', 'joined-avatar-swim.png', 'packsx-avatar-d.png'],
-      clip: 'curry-step.mp4',
+      week: '496', crew: ['packsx-avatar-a.png', 'joined-avatar-swim.png', 'packsx-avatar-d.png'],
+      clip: 'curry-stepback.mp4',
       type: 'Creator', sub: 'Skills Creator · 318K subscribers',
-      sport: 'Basketball', joined: '1,146', rec: ['Balance'],
-      total: 20, bars: [['6min', 'WARM'], ['11min', 'DRILL'], ['You Can Choose', 'SHOOT!']],
+      sport: 'Basketball', joined: '1,146', rec: ['Balance', 'Rhythm'],
+      total: 20, bars: [['6min', 'HANDLE'], ['11min', 'STEP BACK'], ['You Can Choose', 'SHOOT!']],
       info: ['Basics Recommended', 'Balance · Footwork', 'Indoor Court', 'Creator'],
-      also: ['basketball', 'ladder'], more: ['boxing', 'basketball', 'ladder'],
-      photo: 'curry-step-poster.jpg', author: 'Janghoon', avatar: 'packs-avatar1.png',
+      also: ['basketball', 'ladder'], more: ['basketball', 'ladder', 'sprinter'],
+      photo: 'curry-stepback-poster.jpg', author: 'Janghoon', avatar: 'packsx-avatar-a.png',
       title: "Curry's Step Back",
-      desc: 'Create the half metre you need to get the shot off. Footwork into the step back, then the balance to land square and rise without drifting sideways.'
+      desc: 'The half metre that decides the shot. Keep the ball low through the setup, push off the front foot to create the gap, then land square and rise — no drift, no fade. Drilled slowly first, then at the speed a defender actually closes.'
     },
     strength: {
       mins: 14,
