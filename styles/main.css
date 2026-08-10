@@ -359,6 +359,13 @@ video::-webkit-media-controls-start-playback-button {
   background: rgba(255,255,255,0.6);
   mix-blend-mode: plus-lighter;
 }
+/* On a light bar that handle is white on near-white and simply is not there. The design
+   gives it Neutral/400 on those screens (node 2749:599), and plus-lighter has nothing to
+   add to a pale ground, so it comes off too. */
+.tabbar.ob-bottom .home-indicator span {
+  background: var(--color-neutral-400);
+  mix-blend-mode: normal;
+}
 
 /* Buttons */
 .btn-pill {

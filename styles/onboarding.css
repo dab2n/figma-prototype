@@ -107,8 +107,12 @@
   mix-blend-mode: plus-lighter;
   filter: grayscale(1) invert(1) brightness(var(--row-lift, 0.62));
 }
-.ob-row.sel { background: linear-gradient(90deg, #FA3030 55%, #FE6E3C 85%, #FEC389 100%, #D1FEFF 108%);
-  box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6); }
+/* 직사각형_Selected, as the style is registered (node 2774:1124): the ramp runs DOWN the
+   row, not across it, and the two effects are the drop shadow and the inner white glow. */
+.ob-row.sel {
+  background: linear-gradient(180deg, #FA3030 53.869%, #FE6E3C 85.083%, #FEC389 104.71%, #D1FEFF 104.72%);
+  box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6);
+}
 .ob-row.sel .t { color: #fff; }
 
 /* ── "Where do you work out?" (Indoors / Outdoors / Both) ─────────────────────── */
@@ -142,7 +146,7 @@
 /* Where each family hangs the shared tick (see main.css for the mark itself). */
 .ob-card .ob-check  { top: 4px;  right: 4px; }
 .ob-wcard .ob-check { top: 8px;  right: 8px; }
-.ob-row .ob-check   { top: 50%; right: 4px; margin-top: -26px; }
+.ob-row .ob-check   { top: 50%; right: 8px; margin-top: -26px; }
 
 /* ── Arrival ──────────────────────────────────────────────────────────────────
    The cards come up from below when the step opens, a beat apart down each column and
