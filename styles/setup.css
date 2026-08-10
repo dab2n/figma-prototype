@@ -91,6 +91,10 @@
    no box edge shows. */
 .injury-stage { position: relative; height: 404px; margin-top: -42px; }
 .injury-stage video {
+  /* Hidden until it is genuinely running — see the script on the page. A video that has
+     not started draws the platform's start button over itself, and at this size that is
+     a play triangle across most of the screen. */
+  visibility: hidden;
   position: absolute; top: 0; left: 50%; margin-left: -156px;
   width: 312px; height: 554px; object-fit: cover; display: block;
   mix-blend-mode: multiply;
@@ -244,10 +248,11 @@
 .sc-ask-btn.sc-ask-yes { background: var(--color-red); color: #fff; }
 .sc-ask-btn:active { filter: brightness(0.94); }
 
-/* The booking's summary line — the same white card the rest of the flow answers in. */
-.sch-card { background: #fff; border-radius: 16px; padding: 16px 20px; box-shadow: 0 14px 54px 10px rgba(0,0,0,0.03); }
-.sch-when { margin: 0; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
-.sch-pack { margin: 4px 0 0; font-family: var(--font-supreme); font-size: 14px; line-height: 1.4; letter-spacing: -0.42px; color: var(--color-neutral-600); }
+/* Three wheels, not two: hours on a 12-hour face, minutes, and am/pm — the way a time you
+   are agreeing to meet is read. The colon replaces the h/m labels. */
+.sch-time .sch-colon { font-family: var(--font-supreme-bold); padding: 0 2px; }
+.sch-time .sch-ampm { width: 56px; }
+.sch-time .sch-ampm .op { font-size: 17px; }
 /* The clock sits in a card here, where Main Workout has one already. */
 .sch-screen .mw-panel { background: #fff; border-radius: 16px; padding: 4px 0; box-shadow: 0 14px 54px 10px rgba(0,0,0,0.03); }
 /* The column centres its rows, which on an overflowing one means clipping it equally at

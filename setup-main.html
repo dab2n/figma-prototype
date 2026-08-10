@@ -22,8 +22,8 @@
      112KB arriving on the first tap is the blink; preloading it makes the tap instant. -->
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1076"></script>
-<script defer src="assets/i18n.js?v=1076"></script>
+<script defer src="assets/openext.js?v=1077"></script>
+<script defer src="assets/i18n.js?v=1077"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,12 +31,12 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Setup · Main Workout</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1076">
-<link rel="stylesheet" href="styles/main.css?v=1076">
-<link rel="stylesheet" href="styles/setup.css?v=1076">
-<link rel="stylesheet" href="styles/mainworkout.css?v=1076">
-<script defer src="assets/idle.js?v=1076"></script>
-<script defer src="assets/flows.js?v=1076"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1077">
+<link rel="stylesheet" href="styles/main.css?v=1077">
+<link rel="stylesheet" href="styles/setup.css?v=1077">
+<link rel="stylesheet" href="styles/mainworkout.css?v=1077">
+<script defer src="assets/idle.js?v=1077"></script>
+<script defer src="assets/flows.js?v=1077"></script>
 </head>
 <body>
 <div class="phone">
@@ -110,7 +110,7 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/setup.js?v=1076"></script>
+<script src="assets/setup.js?v=1077"></script>
 <script>
 (function () {
   var STRETCH = 8, LEARN = 10;   // fixed pack minutes (node 338:19949/19953)
@@ -178,9 +178,16 @@
       var km = DMIN + i * DSTEP;
       var isInt = Math.abs(km - Math.round(km)) < 0.01;
       var cell = document.createElement('div');
-      cell.className = 'mw-cell' + (isInt ? ' maj' : '') + (Math.abs(km - 4.0) < 0.01 ? ' rec' : '');
+      var rec = Math.abs(km - 4.0) < 0.01;
+      cell.className = 'mw-cell' + (isInt ? ' maj' : '') + (rec ? ' rec' : '');
       cell.style.width = GAP + 'px';
-      cell.innerHTML = '<div class="mw-tick"></div>' + (isInt ? '<div class="mw-lbl">' + km.toFixed(1) + '</div>' : '');
+      // 4.0 is darker because it is the recommended distance, and until now nothing said
+      // so. The label carries "For you" under it on arrival, centred on the same line, and
+      // slides away after a couple of seconds — by then it has been read, and the number
+      // joins the rest of the ruler.
+      cell.innerHTML = '<div class="mw-tick"></div>'
+        + (isInt ? '<div class="mw-lbl">' + km.toFixed(1) + '</div>' : '')
+        + (rec ? '<div class="mw-rec">For you</div>' : '');
       ticks.appendChild(cell);
     }
     var trail = document.createElement('div'); trail.className = 'sp'; trail.style.width = edge + 'px';
@@ -275,6 +282,8 @@
 
   // ── Init ───────────────────────────────────────────────────────────────────
   track.scrollLeft = scrollFor(Math.round((5.0 - DMIN) / DSTEP));   // centre on 5.0
+  // Two seconds of "For you", then it goes and 4.0 becomes an ordinary notch.
+  setTimeout(function () { ticks.classList.add('rec-done'); }, 2000);
   setWheel(runMin);
   intro();
 })();

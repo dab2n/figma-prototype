@@ -46,7 +46,11 @@
 .mw-dist-val { display: flex; align-items: baseline; font-family: var(--font-supreme-bold); color: var(--color-black); }
 .mw-dist-val .d { font-size: 40px; line-height: 1; letter-spacing: -1.6px; }
 .mw-dist-val .k { font-size: 13px; letter-spacing: -0.5px; margin-left: 8px; }
-.mw-ruler { position: relative; width: 100%; height: 46px; }
+/* 62, not 46: the recommended notch carries a "For you" line under its number, and a
+   scroll container cannot let anything hang outside it — overflow-x: auto forces the other
+   axis to clip too. The extra 16 is the label's room, kept whether or not it is showing so
+   nothing reflows when it goes. */
+.mw-ruler { position: relative; width: 100%; height: 62px; }
 /* Fixed centre pointer the value is read against — swipe the ruler either side of it. */
 .mw-ruler::after { content: ""; position: absolute; left: 50%; top: 0; width: 3px; height: 26px; margin-left: -1.5px; background: var(--color-red); border-radius: 99px; pointer-events: none; z-index: 2; }
 /* Ticks fill the card width and fade toward both edges (node 338:19979). */
@@ -69,7 +73,21 @@
 .mw-cell.maj .mw-tick { height: 24px; background: #C7C7C7; }
 .mw-cell.rec .mw-tick { background: #757575; }
 .mw-lbl { margin-top: 5px; font-family: var(--font-supreme-bold); font-size: 13px; letter-spacing: -0.5px; color: #C7C7C7; white-space: nowrap; }
-.mw-cell.rec .mw-lbl { color: #757575; }
+.mw-cell.rec .mw-lbl { color: #757575; transition: color .5s ease; }
+/* "For you", under 4.0 and centred on the same line as the number. It is a label about
+   the notch, so it hangs off the cell rather than widening it — the cell is one notch
+   wide and stays that way. */
+.mw-rec {
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  margin-top: 2px; white-space: nowrap;
+  font-family: var(--font-supreme-bold); font-size: 11px; line-height: 1.2; letter-spacing: -0.4px;
+  color: #757575;
+  transition: opacity .45s ease, transform .5s cubic-bezier(.4,0,.2,1);
+}
+.mw-cell.rec { position: relative; }
+/* Read, and gone: it slides down out of the ruler and 4.0 joins the other numbers. */
+.mw-ticks.rec-done .mw-rec { opacity: 0; transform: translateX(-50%) translateY(10px); }
+.mw-ticks.rec-done .mw-cell.rec .mw-lbl { color: #C7C7C7; }
 
 /* Time wheels (iPhone-timer style) -------------------------------------------- */
 .mw-time { position: relative; height: 132px; display: flex; align-items: stretch; justify-content: center; }

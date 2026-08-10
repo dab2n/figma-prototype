@@ -22,8 +22,8 @@
      112KB arriving on the first tap is the blink; preloading it makes the tap instant. -->
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1076"></script>
-<script defer src="assets/i18n.js?v=1076"></script>
+<script defer src="assets/openext.js?v=1077"></script>
+<script defer src="assets/i18n.js?v=1077"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,11 +31,11 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Setup · Injury check</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1076">
-<link rel="stylesheet" href="styles/main.css?v=1076">
-<link rel="stylesheet" href="styles/setup.css?v=1076">
-<script defer src="assets/idle.js?v=1076"></script>
-<script defer src="assets/flows.js?v=1076"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1077">
+<link rel="stylesheet" href="styles/main.css?v=1077">
+<link rel="stylesheet" href="styles/setup.css?v=1077">
+<script defer src="assets/idle.js?v=1077"></script>
+<script defer src="assets/flows.js?v=1077"></script>
 </head>
 <body>
 <div class="phone">
@@ -53,7 +53,7 @@
     </div>
 
     <div class="injury-stage">
-      <video src="assets/photos/injury-check.mp4?v=1076" autoplay loop muted playsinline preload="auto"></video>
+      <video src="assets/photos/injury-check.mp4?v=1077" autoplay loop muted playsinline preload="auto"></video>
       <!-- Tap a region on the body instead of the chip below — same selection either way. -->
       <div class="injury-map">
         <button class="body-hot" type="button" data-region="Left Arm"    style="left:85px;  top:170px;"><img src="assets/icons/body-ring.png" alt=""></button>
@@ -61,7 +61,6 @@
         <button class="body-hot" type="button" data-region="Lower Back"  style="left:183px; top:233px;"><img src="assets/icons/body-ring.png" alt=""></button>
         <button class="body-hot" type="button" data-region="Knee"        style="left:155px; top:345px;"><img src="assets/icons/body-ring.png" alt=""></button>
         <button class="body-hot" type="button" data-region="Calf"        style="left:170px; top:415px;"><img src="assets/icons/body-ring.png" alt=""></button>
-        <button class="body-hot" type="button" data-region="Ankle · Sole" style="left:160px; top:465px;"><img src="assets/icons/body-ring.png" alt=""></button>
       </div>
       <!-- Frosted scrim over the lower body: blurs the feet behind the chips so they read
            faintly, per the Figma effect stack. -->
@@ -81,15 +80,12 @@
           <button class="chip-sel" data-toggle>Left Arm</button>
         </div>
         <div class="chip-row">
-          <button class="chip-sel" data-toggle>Ankle · Sole</button>
           <button class="chip-sel" data-toggle>Knee</button>
           <button class="chip-sel" data-toggle>Right Arm</button>
           <button class="chip-sel" data-toggle>Calf</button>
-        </div>
-        <!-- The body has more parts than a list can hold. The same chip, but tapping it
-             opens it up to be typed in — so an area nobody thought of is still an answer
-             the page can take, and it counts towards the group like any other. -->
-        <div class="chip-row">
+          <!-- The body has more parts than a list can hold. The same chip, but tapping it
+               opens it up to be typed in — so an area nobody thought of is still an answer
+               the page can take, and it counts towards the group like any other. -->
           <button class="chip-sel chip-own" id="ownChip" type="button">+ Somewhere else</button>
         </div>
       </div>
@@ -110,7 +106,23 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script src="assets/setup.js?v=1076"></script>
+<script src="assets/setup.js?v=1077"></script>
+<script>
+// The figure is a clip, and a video element that has not started yet draws the platform's
+// own play button over itself — here at 312px wide, which is most of the screen. It is
+// hidden in CSS and revealed the moment it is genuinely running; until then what shows is
+// the page's own grey, which is what the stage is anyway.
+(function () {
+  var v = document.querySelector('.injury-stage video');
+  if (!v) return;
+  v.muted = true;
+  var p = v.play(); if (p && p.catch) p.catch(function () {});
+  (function frame() {
+    v.style.visibility = v.paused ? 'hidden' : 'visible';
+    requestAnimationFrame(frame);
+  })();
+})();
+</script>
 <script>
 // Tap the chip and it becomes a field; type an area and it becomes that chip, selected.
 // It is a [data-toggle] from that moment on, so setup.js counts it, un-picks it and
@@ -135,6 +147,15 @@
     function size() { f.style.width = Math.max(84, (f.value || f.placeholder).length * 8.6) + 'px'; }
     f.addEventListener('input', size); size();
     f.focus(); f.select();
+    // A soft keyboard takes the bottom half of the screen and this row lives near it, so
+    // the chip is brought into the middle of what is left. visualViewport is the only
+    // thing that knows how much of the screen the keyboard actually took.
+    function keepInView() { chip.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+    keepInView();
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', keepInView);
+      f.addEventListener('blur', function () { window.visualViewport.removeEventListener('resize', keepInView); }, { once: true });
+    }
     // Enter commits outright rather than going through blur — a soft keyboard's Done does
     // not always move focus, and on a page with nothing else focusable the blur may never
     // come. Tapping away still commits, through the blur below.

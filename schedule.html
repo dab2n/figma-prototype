@@ -20,8 +20,8 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1076"></script>
-<script defer src="assets/i18n.js?v=1076"></script>
+<script defer src="assets/openext.js?v=1077"></script>
+<script defer src="assets/i18n.js?v=1077"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,12 +29,12 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Schedule</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1076">
-<link rel="stylesheet" href="styles/main.css?v=1076">
-<link rel="stylesheet" href="styles/setup.css?v=1076">
-<link rel="stylesheet" href="styles/mainworkout.css?v=1076">
-<script defer src="assets/idle.js?v=1076"></script>
-<script defer src="assets/flows.js?v=1076"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1077">
+<link rel="stylesheet" href="styles/main.css?v=1077">
+<link rel="stylesheet" href="styles/setup.css?v=1077">
+<link rel="stylesheet" href="styles/mainworkout.css?v=1077">
+<script defer src="assets/idle.js?v=1077"></script>
+<script defer src="assets/flows.js?v=1077"></script>
 </head>
 <body>
 <div class="phone">
@@ -46,7 +46,6 @@
 
     <div class="setup-appbar">
       <a class="back" href="setup-complete.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
-      <a class="skip" href="home.html">Skip</a>
     </div>
 
     <div class="setup-title">
@@ -65,11 +64,11 @@
       <div class="setup-sec">
         <p class="setup-sec-label">Time</p>
         <div class="mw-panel">
-          <div class="mw-time">
-            <div class="mw-wheel" id="schH" data-max="23"></div>
-            <span class="mw-unit">h</span>
+          <div class="mw-time sch-time">
+            <div class="mw-wheel" id="schH" data-min="1" data-max="12"></div>
+            <span class="mw-unit sch-colon">:</span>
             <div class="mw-wheel" id="schM" data-max="55" data-step="5"></div>
-            <span class="mw-unit">m</span>
+            <div class="mw-wheel sch-ampm" id="schA"></div>
           </div>
         </div>
       </div>
@@ -83,13 +82,6 @@
         </div>
       </div>
 
-      <div class="setup-sec">
-        <p class="setup-sec-label">Summary</p>
-        <div class="sch-card">
-          <p class="sch-when" id="schWhenText">Today · 6:00 pm</p>
-          <p class="sch-pack">Sean's Pace Strategy · 5km · 48m</p>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -112,7 +104,7 @@
     </div>
   </div>
 </div>
-<script src="assets/setup.js?v=1076"></script>
+<script src="assets/setup.js?v=1077"></script>
 <script>
 // The day chips are built rather than typed: seven days from today, so the page is never
 // offering a date that has gone. Everything else is the setup flow's own machinery —
@@ -131,14 +123,27 @@
     days.appendChild(b);
   }
   days.firstChild.classList.add('sel');
+  // These chips are built after setup.js has already collected the page's toggles, so the
+  // row picks its own — one day at a time, like any [data-single] group.
+  days.addEventListener('click', function (e) {
+    var c = e.target.closest('.chip-sel');
+    if (!c) return;
+    [].forEach.call(days.children, function (b) { b.classList.toggle('sel', b === c); });
+  });
 
-  // The clock, built the way Main Workout builds its own.
+  // The clock, built the way Main Workout builds its own — but on a 12-hour face with am
+  // and pm as a third wheel, because a time you are agreeing to meet is read that way.
   var ROW = 36;
-  var wheels = { h: document.getElementById('schH'), m: document.getElementById('schM') };
+  var wheels = { h: document.getElementById('schH'), m: document.getElementById('schM'), a: document.getElementById('schA') };
   Object.keys(wheels).forEach(function (k) {
-    var w = wheels[k], max = +w.getAttribute('data-max'), step = +(w.getAttribute('data-step') || 1);
+    var w = wheels[k], min = +(w.getAttribute('data-min') || 0), step = +(w.getAttribute('data-step') || 1);
     var html = '<div class="pad"></div>';
-    for (var i = 0; i <= max; i += step) html += '<div class="op">' + (i < 10 ? '0' + i : i) + '</div>';
+    if (k === 'a') {
+      html += '<div class="op">am</div><div class="op">pm</div>';
+    } else {
+      var max = +w.getAttribute('data-max');
+      for (var i = min; i <= max; i += step) html += '<div class="op">' + (i < 10 ? '0' + i : i) + '</div>';
+    }
     w.innerHTML = html + '<div class="pad"></div>';
     var raf = 0;
     w.addEventListener('scroll', function () {
@@ -152,23 +157,22 @@
     [].forEach.call(w.querySelectorAll('.op'), function (o, i) { o.classList.toggle('on', i === idx); });
   }
   function val(w) {
-    var step = +(w.getAttribute('data-step') || 1);
-    return Math.round(w.scrollTop / ROW) * step;
+    var step = +(w.getAttribute('data-step') || 1), min = +(w.getAttribute('data-min') || 0);
+    return min + Math.round(w.scrollTop / ROW) * step;
   }
 
-  var out = document.getElementById('schWhenText');
   function label() {
     var day = days.querySelector('.sel');
     var h = val(wheels.h), m = val(wheels.m);
-    var ap = h < 12 ? 'am' : 'pm', hh = h % 12 === 0 ? 12 : h % 12;
-    return (day ? day.textContent : 'Today') + ' · ' + hh + ':' + (m < 10 ? '0' + m : m) + ' ' + ap;
+    var ap = Math.round(wheels.a.scrollTop / ROW) === 1 ? 'pm' : 'am';
+    return (day ? day.textContent : 'Today') + ' · ' + h + ':' + (m < 10 ? '0' + m : m) + ' ' + ap;
   }
-  function paint() { out.textContent = label(); }
+  function paint() {}
   document.addEventListener('click', function (e) { if (e.target.closest('[data-toggle]')) setTimeout(paint, 0); });
 
   // 6pm, which is when most of these packs get run.
-  wheels.h.scrollTop = 18 * ROW; wheels.m.scrollTop = 0;
-  mark(wheels.h); mark(wheels.m); paint();
+  wheels.h.scrollTop = (6 - 1) * ROW; wheels.m.scrollTop = 0; wheels.a.scrollTop = 1 * ROW;
+  Object.keys(wheels).forEach(function (k) { mark(wheels[k]); });
 
   // Set: confirm in place, then home. The reminder itself is a real notification in the
   // product; here the screen says what it would have promised.

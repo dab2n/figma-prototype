@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Hero Cards — 3D</title>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Regular.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Bold.woff2" crossorigin>
+<link rel="stylesheet" href="styles/tokens.css">
+<!-- The card itself is home.css untouched: same radial fills, same plus-lighter shot,
+     same blur slab, same button. Only the SPACE around it is new. -->
+<link rel="stylesheet" href="styles/home.css">
+<style>
+html, body { height: 100%; background: #000; margin: 0; overflow: hidden; }
+
+/* 1920x1080 fixed stage, scaled down to whatever window is actually open. */
+.stage {
+  position: absolute; top: 50%; left: 50%;
+  width: 1920px; height: 1080px;
+  margin: -540px 0 0 -960px;
+  transform: scale(var(--fit, 1));
+  background: #000;
+}
+/* Perspective on the stage, not the cards — one shared vanishing point is what makes the
+   three read as being in the same room rather than three separately skewed rectangles.
+   Origin sits above centre so the cards tip slightly away from the viewer as they rise. */
+.room {
+  position: absolute; inset: 0;
+  perspective: 1800px;
+  perspective-origin: 50% 44%;
+}
+/* The cylinder the cards hang off: radius --r, pushed back by exactly --r so the middle of
+   the arc lands on the screen plane and only the outer two sit behind it. Without this
+   push-back a card at translateZ(--r) would be sitting a metre in FRONT of the camera and
+   perspective would blow it up to twice its size. */
+.room > .arc {
+  position: absolute; inset: 0;
+  --r: 1300px;
+  transform: translateZ(calc(-1 * var(--r)));
+  transform-style: preserve-3d;
+}
+/* One seat per card. rotateY then translateZ out to the radius is what turns the outer two
+   away from the viewer on their own — the angle is the arc's, not hand-picked per card.
+   Everything after it is per-card drift so nothing sits dead on the rail. */
+.slot {
+  position: absolute; top: 50%; left: 50%;
+  width: 319px; height: 326px;
+  margin: -163px 0 0 -159.5px;
+  transform:
+    rotateY(var(--a)) translateZ(var(--r))
+    translate3d(var(--dx, 0px), var(--dy, 0px), var(--dz, 0px))
+    rotateY(var(--ry, 0deg)) rotateX(var(--rx, 0deg)) rotateZ(var(--rz, 0deg))
+    scale(var(--s, 1));
+  transform-style: preserve-3d;
+}
+/* Float lives on its own element so the slot keeps its 3D seat. Three periods that do not
+   divide into each other, so the group never re-syncs. */
+.bob { position: absolute; inset: 0; transform-style: preserve-3d; animation: bob 11s ease-in-out infinite alternate; }
+.slot:nth-of-type(2) .bob { animation-duration: 14s; animation-delay: -3s; }
+.slot:nth-of-type(3) .bob { animation-duration: 17s; animation-delay: -7s; }
+@keyframes bob {
+  0%   { transform: translate3d(0, -14px, 0) rotateY(-2.5deg) rotateX(1.5deg); }
+  50%  { transform: translate3d(6px, 8px, 22px) rotateY(2deg) rotateX(-1deg); }
+  100% { transform: translate3d(-5px, 16px, -18px) rotateY(3deg) rotateX(2deg); }
+}
+@media (prefers-reduced-motion: reduce) { .bob { animation: none; } }
+
+/* home.css builds the card as a flex item in the carousel; here it fills its slot. */
+.slot .hero-card { position: absolute; inset: 0; width: auto; height: auto; flex: none; }
+
+/* Floor bounce. Not a real shadow — a soft warm pool under each card so the cards read as
+   hanging over something instead of pasted on flat black. */
+.pool {
+  position: absolute; left: 50%; top: 50%;
+  width: 520px; height: 200px;
+  margin: -100px 0 0 -260px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(250,90,50,0.30), rgba(250,48,48,0) 70%);
+  filter: blur(40px);
+  transform: translateY(240px) rotateX(78deg) scale(var(--ps, 1));
+  pointer-events: none;
+}
+/* Vignette so the black corners fall off instead of ending at the window edge. */
+.vig {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 100% at 50% 45%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.85) 100%);
+}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="room">
+  <div class="arc">
+    <!-- Left: furthest back and turned in the most. Akiyama, 9:16 clip, Figma geometry. -->
+    <div class="slot" style="--a:-23deg;--ry:-6deg;--dy:44px;--dz:-30px;--rz:-3deg;--rx:2deg;--s:1.52;">
+      <span class="pool" style="--ps:1.1"></span>
+      <div class="bob">
+        <a class="hero-card hero-card-live" href="pyeongso.html?pack=akiyama">
+          <span class="hero-shot">
+            <video class="hero-clip"
+                   style="top:-13px;width:266px;height:473px;object-fit:cover;--clip-bright:.82"
+                   src="assets/photos/hero3d-akiyama.mp4"
+                   muted loop playsinline autoplay preload="auto" disablepictureinpicture></video>
+          </span>
+          <span class="hero-blur"><i></i><i></i></span>
+          <div class="hero-text">
+            <p class="hero-title">Akiyama's Ghost Step</p>
+            <div class="hero-meta">
+              <span>Pro Pack</span>
+              <img class="sep" src="assets/icons/dot-sep-white.svg" alt="">
+              <span class="dim">11 min</span>
+            </div>
+          </div>
+          <span class="hero-btn" style="--btn:#FA3030;">View Now
+            <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Centre: nearest, biggest, only a few degrees off square so it still doesn't stare. -->
+    <div class="slot" style="--a:0deg;--dy:-50px;--dz:90px;--ry:-7deg;--rz:1.5deg;--rx:-1deg;--s:1.72;">
+      <span class="pool" style="--ps:1.25"></span>
+      <div class="bob">
+        <a class="hero-card hero-card-live hero-card-2" href="pyeongso.html">
+          <span class="hero-shot" style="--mask-in:22%;--mask-out:78%">
+            <video class="hero-clip"
+                   style="top:0;width:248px;height:441px;object-fit:cover;--clip-bright:.62"
+                   src="assets/photos/hero3d-sean.mp4"
+                   muted loop playsinline autoplay preload="auto" disablepictureinpicture></video>
+          </span>
+          <span class="hero-blur"><i></i><i></i></span>
+          <div class="hero-text">
+            <p class="hero-title">Sean's Final 1km Pace</p>
+            <div class="hero-meta">
+              <span>Creator Pack</span>
+              <img class="sep" src="assets/icons/dot-sep-white.svg" alt="">
+              <span class="dim">18 min</span>
+            </div>
+          </div>
+          <span class="hero-btn" style="--btn:#FB552F;">View Now
+            <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Right: back and turned in, tipped the other way from the left one. -->
+    <div class="slot" style="--a:23deg;--ry:7deg;--dy:62px;--dz:-50px;--rz:3deg;--rx:2.5deg;--s:1.46;">
+      <span class="pool" style="--ps:1.05"></span>
+      <div class="bob">
+        <a class="hero-card hero-card-live hero-card-3" href="pyeongso.html?pack=curry">
+          <span class="hero-shot">
+            <video class="hero-clip"
+                   style="top:-4px;width:486px;height:486px;object-fit:cover;--clip-bright:.76"
+                   src="assets/photos/hero3d-curry.mp4"
+                   muted loop playsinline autoplay preload="auto" disablepictureinpicture></video>
+          </span>
+          <span class="hero-blur"><i></i><i></i></span>
+          <div class="hero-text">
+            <p class="hero-title">Curry's Step Back</p>
+            <div class="hero-meta">
+              <span>Pro Pack</span>
+              <img class="sep" src="assets/icons/dot-sep-white.svg" alt="">
+              <span class="dim">23 min</span>
+            </div>
+          </div>
+          <span class="hero-btn" style="--btn:#8A1A00;">View Now
+            <img src="assets/icons/btn-arrow-sm-right.svg" alt=""></span>
+        </a>
+      </div>
+    </div>
+  </div>
+  </div>
+  <div class="vig"></div>
+</div>
+<script>
+// The stage is authored at 1920x1080 and only ever scaled — so what a screen recording of
+// this window captures is the same composition at any window size.
+var fit = function () {
+  document.documentElement.style.setProperty('--fit',
+    Math.min(innerWidth / 1920, innerHeight / 1080).toFixed(4));
+};
+addEventListener('resize', fit); fit();
+</script>
+</body>
+</html>
