@@ -66,6 +66,13 @@
      bottom edge at a visible angle instead of running into it. `round` on the inset draws
      the same r40 card, antialiased as a shape, and the corner arrives flat. */
   clip-path: inset(0 0 var(--edge) 0 round 0 0 var(--fillet) var(--fillet));
+  /* The fold's first frame was the expensive one: at rest nothing here has been painted
+     for a while, and the moment the drag starts the whole header — photograph, video,
+     blur — is invalidated and rasterised again inside one frame. Measured at 6x CPU
+     throttling: a 141ms frame at the start of the pull and 8ms after it. Declaring what
+     moves keeps the layer alive across the rest, so that first frame has something to
+     work from. */
+  will-change: clip-path, top;
 }
 .dj-photo {
   position: absolute;
@@ -215,7 +222,11 @@
 /* ── What rises into the gap ──────────────────────────────────────────────── */
 /* LIFT: they come up faster than the scroll, which is what makes the top area read as
    shrinking rather than merely scrolling away. */
-.dj-explore, .dj-sheet { transform: translateY(calc(-9px - var(--p, 0) * 240px)); }
+.dj-explore, /* The explore bar gives its height back to the flow as the fold runs, which relaid the
+   whole sheet under it on every frame. The sheet's own contents never change while that
+   happens, so its layout is contained and only its position moves. */
+.dj-sheet { contain: layout style; }
+.dj-sheet { transform: translateY(calc(-9px - var(--p, 0) * 240px)); }
 
 /* Height, not opacity: it has to give its 100px back to the flow by the time the sheet
    reaches the folded header, or the sheet lands 100px too low. Holds full size well past

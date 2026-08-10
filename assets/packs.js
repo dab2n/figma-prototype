@@ -400,7 +400,9 @@
   function fill(a, key, imgSel, titleSel) {
     var t = PACKS[key];
     if (!a || !t) return;
-    a.setAttribute('href', 'pyeongso.html?pack=' + key);
+    // Carry the feed. Without it a card opened from "More Packs from …" landed on a page
+    // that had no idea where it came from, and Back fell through to the fixed destination.
+    a.setAttribute('href', 'pyeongso.html?pack=' + key + (from ? '&from=' + from : ''));
     var img = a.querySelector(imgSel);
     if (img) { img.src = 'assets/photos/' + t.photo; img.alt = ''; }
     var title = a.querySelector(titleSel);
@@ -423,25 +425,20 @@
   }
 })();
 
-// Back goes back to the feed the card was tapped in.
+// Back goes back the way you came.
 //
-// It used to read document.referrer, which works in a browser and not in the app: the
-// shell re-issues every navigation itself, so the page arrives with an empty referrer and
-// every pack fell back to Packs — including the ones opened from Home. The feed now rides
-// on the URL (&from=home|packs), stamped by the card that was tapped, and survives every
-// hop the pack screen makes into its own sub-pages.
-//
-// history.back() where it can be: that restores the feed's SCROLL as well, so you come
-// back to the card you tapped rather than to the top of the list.
+// Every hop this screen makes is a real navigation — another pack from "More Packs from
+// …", the 올릴때 sheet, the setup flow — so the browser's own history IS the path, and
+// walking it one step is what "back" means everywhere else in the app. The fixed link in
+// the markup is only the fallback for a page opened cold, with nothing behind it.
 (function () {
-  var from;
-  try { from = new URLSearchParams(location.search).get('from'); } catch (e) { from = null; }
-  if (from !== 'home' && from !== 'packs') return;
   var back = document.querySelector('.dj-hero .app-bar-transparent a.icon-btn, .creator-nav a.icon-btn');
   if (!back) return;
-  back.setAttribute('href', from + '.html');
+  var from;
+  try { from = new URLSearchParams(location.search).get('from'); } catch (e) { from = null; }
+  if (from === 'home' || from === 'packs') back.setAttribute('href', from + '.html');
   back.addEventListener('click', function (e) {
-    if (history.length < 2) return;                 // no history to walk: follow the href
+    if (history.length < 2) return;          // nothing behind us: follow the href
     e.preventDefault();
     history.back();
   });

@@ -113,6 +113,16 @@
   else paint();
 })();
 
+// theme-color is not a constant on every screen: a pack screen samples its own hero and
+// rewrites it once the picture has decoded. Anything that reads the tag has to keep
+// reading it, so both of the things below register here rather than each growing its own
+// observer.
+function watchTheme(fn) {
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (!meta || !window.MutationObserver) return;
+  new MutationObserver(fn).observe(meta, { attributes: true, attributeFilter: ['content'] });
+}
+
 // Inside the Android shell the real status bar is transparent and the page is what shows
 // through it — so the system's own glyphs have to stay readable against whatever this
 // screen puts up there. The page is the only side that knows: theme-color IS its top, so
@@ -124,17 +134,25 @@
   function tell() {
     var meta = document.querySelector('meta[name="theme-color"]');
     var c = (meta && meta.getAttribute('content') || '#ffffff').trim();
-    var m = c.match(/^#?([0-9a-f]{6})$/i);
-    var lum = 1;
-    if (m) {
-      var n = parseInt(m[1], 16);
-      // Rec. 709, the same weighting the rest of this project measures luminance with.
-      lum = (0.2126 * (n >> 16 & 255) + 0.7152 * (n >> 8 & 255) + 0.0722 * (n & 255)) / 255;
+    var lum = 1, r, g, b;
+    var hex = c.match(/^#?([0-9a-f]{6})$/i);
+    // rgb() as well as hex: a pack writes its sampled colour in the functional form, and
+    // reading only hex meant every pack fell through to lum 1 — dark glyphs on a dark
+    // strip, which is a clock nobody can see on most of them.
+    var fn = c.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+    if (hex) {
+      var n = parseInt(hex[1], 16);
+      r = n >> 16 & 255; g = n >> 8 & 255; b = n & 255;
+    } else if (fn) {
+      r = +fn[1]; g = +fn[2]; b = +fn[3];
     }
+    // Rec. 709, the same weighting the rest of this project measures luminance with.
+    if (r != null) lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
     try { shell.topIsLight(lum > 0.6); } catch (e) {}
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', tell);
   else tell();
+  watchTheme(tell);
 })();
 
 // The strip under the phone's own status bar, painted to match the screen.
@@ -158,6 +176,11 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', paint);
   else paint();
+  // A pack samples its own hero and rewrites theme-color when the picture decodes, which is
+  // well after this first ran — so the strip kept the colour the MARKUP declared, which is
+  // Sean's, whichever card had been opened. It follows the tag now instead of reading it
+  // once, and the same watcher serves the shell's glyph choice above.
+  watchTheme(paint);
 })();
 
 // The clock in our status bar, wherever ours is the one on screen.
