@@ -50,13 +50,13 @@
     curry: {
       mins: 11,
       week: '496', crew: ['packs-avatar1.png', 'joined-avatar-swim.png', 'packsx-avatar-d.png'],
-      clip: 'clip-curry.mp4',
+      clip: 'curry-step.mp4',
       type: 'Creator', sub: 'Skills Creator · 318K subscribers',
       sport: 'Basketball', joined: '1,146', rec: ['Balance'],
       total: 20, bars: [['6min', 'WARM'], ['11min', 'DRILL'], ['You Can Choose', 'SHOOT!']],
       info: ['Basics Recommended', 'Balance · Footwork', 'Indoor Court', 'Creator'],
       also: ['basketball', 'ladder'], more: ['boxing', 'basketball', 'ladder'],
-      photo: 'rec-curry.webp', author: 'Janghoon', avatar: 'packs-avatar1.png',
+      photo: 'curry-step-poster.jpg', author: 'Janghoon', avatar: 'packs-avatar1.png',
       title: "Curry's Step Back",
       desc: 'Create the half metre you need to get the shot off. Footwork into the step back, then the balance to land square and rise without drifting sideways.'
     },
