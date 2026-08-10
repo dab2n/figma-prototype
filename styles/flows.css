@@ -1,48 +1,59 @@
-/* ── Entry hub ─────────────────────────────────────────────────────────────────
-   The four flows, as a way in. Nothing new is designed here: the frame is the
-   onboarding one (.ob-screen grey, same status bar), the heading is the .ob-title
-   scale, and the cards are .ob-card — 20px radius, 16px padding, 20px/-1px bold
-   title, silhouette bottom-anchored and multiplied. It should read as a screen of
-   the app, not as a menu bolted onto it. */
+/* ── Entry hub (node 2780:1724) ────────────────────────────────────────────────
+   The way in. Nothing new is designed here: the frame is the onboarding one (.ob-screen
+   grey, same status bar), the heading is the .ob-title scale, and the sections below are
+   the setup screen's label + control pair. It should read as a screen of the app, not as
+   a menu bolted onto it. */
 .fl-screen { display: flex; flex-direction: column; }
 
-.fl-head { padding: 56px 16px 28px; }
+/* 87 from the frame's top, which is 40 below the status bar. */
+.fl-head { padding: 40px 16px 38px; }
 .fl-head h1 { margin: 0; font-family: var(--font-supreme-bold); font-size: 32px; line-height: 1.2; letter-spacing: -1.5px; color: var(--color-black); }
 .fl-head p { margin: 12px 0 0; font-family: var(--font-supreme); font-size: 15px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-500); }
 
-.fl-body { flex: 1; overflow-y: auto; scrollbar-width: none; padding: 0 12px 24px; }
+.fl-body { flex: 1; overflow-y: auto; scrollbar-width: none; padding: 0 12px 24px; display: flex; flex-direction: column; gap: 32px; }
 .fl-body::-webkit-scrollbar { display: none; }
 
-/* Two up, near square. No artwork — the sport silhouettes said nothing about which
-   flow a card opens, and a title plus the screens it walks through says all of it. */
-.fl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.fl-sec { display: flex; flex-direction: column; gap: 8px; }
+.fl-label { margin: 0; padding: 0 12px; font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px; color: var(--color-neutral-700); }
+
+/* Two halves in one white tray; the live one is the tray's own grey, so the switch reads
+   as a piece moving rather than as a colour arriving. */
+.fl-lang {
+  display: flex; gap: 4px; height: 56px; padding: 4px; box-sizing: border-box;
+  background: #fff; border-radius: 20px;
+}
+.fl-lang button {
+  flex: 1; min-width: 0; border: 0; cursor: pointer; background: none;
+  border-radius: 16px;
+  font-family: var(--font-supreme-bold); font-size: 20px; line-height: 26px;
+  color: var(--color-neutral-300);
+  transition: background .2s ease, color .2s ease;
+}
+.fl-lang button.on { background: var(--color-neutral-100); color: var(--color-black); }
+
+/* Two up, square. No artwork — the sport silhouettes said nothing about which flow a card
+   opens, and a title plus a line about it says all of it. */
+.fl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
 .fl-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-direction: column; gap: 8px;
   box-sizing: border-box;
   aspect-ratio: 1;
-  padding: 16px;
+  padding: 12px;
   border-radius: 20px;
   background: #fff;
+  overflow: hidden;
   text-decoration: none;
   cursor: pointer;
 }
-.fl-step {
-  font-family: var(--font-supreme-bold); font-size: 12px; line-height: 1.2; letter-spacing: -0.5px;
-  color: var(--color-red);
-}
 .fl-t {
-  margin: 8px 0 0;
+  margin: 0;
   font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px;
   color: var(--color-black);
 }
-/* Pinned to the foot so all four captions line up whether the title takes one line
-   or two. */
 .fl-sub {
-  margin-top: auto;
-  font-family: var(--font-supreme); font-size: 12px; line-height: 1.3; letter-spacing: -0.5px;
+  margin: 0;
+  font-family: var(--font-supreme); font-size: 13px; line-height: 1.3; letter-spacing: -0.5px;
   color: var(--color-neutral-500);
 }
 .fl-card:active { background: var(--color-neutral-50); }

@@ -18,8 +18,9 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1069"></script>
-<script defer src="assets/flows.js?v=1069"></script>
+<script defer src="assets/openext.js?v=1070"></script>
+<script defer src="assets/i18n.js?v=1070"></script>
+<script defer src="assets/flows.js?v=1070"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -27,9 +28,9 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Try the flows</title>
-<link rel="stylesheet" href="styles/main.css?v=1069">
-<link rel="stylesheet" href="styles/onboarding.css?v=1069">
-<link rel="stylesheet" href="styles/flows.css?v=1069">
+<link rel="stylesheet" href="styles/main.css?v=1070">
+<link rel="stylesheet" href="styles/onboarding.css?v=1070">
+<link rel="stylesheet" href="styles/flows.css?v=1070">
 </head>
 <body>
 <div class="phone">
@@ -37,38 +38,44 @@
     <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
 
     <div class="fl-head">
-      <h1>Try Newton</h1>
-      <p>Four flows. Pick one and walk it end to end.</p>
+      <h1>Explore Newton</h1>
+      <p>See how Newton moves, from setup to report.</p>
     </div>
 
     <div class="fl-body">
-      <!-- The step tag is the flow's place in the product, not a menu index: setup happens
-           once, the other three are the loop you come back to. -->
-      <div class="fl-grid">
-        <a class="fl-card" href="index.html">
-          <span class="fl-step">01</span>
-          <p class="fl-t">First<br>Setup</p>
-          <span class="fl-sub">Onboarding<br>Body scan</span>
-        </a>
-        <a class="fl-card" href="home.html">
-          <span class="fl-step">02</span>
-          <p class="fl-t">Explore<br>Home</p>
-          <span class="fl-sub">Home · Packs<br>Pack detail</span>
-        </a>
-        <a class="fl-card" href="setup-location.html">
-          <span class="fl-step">03</span>
-          <p class="fl-t">Start a<br>Workout</p>
-          <span class="fl-sub">Setup · Devices<br>Ready</span>
-        </a>
-        <!-- Home is where this flow starts, but only with the strip: home.html's own inline
-             script reveals it 1.8s after landing when notifNow is set, which is the same
-             door 프로토타입 2 walks through. Set on the click rather than carried in the URL
-             so a reload of Home is an ordinary Home again. -->
-        <a class="fl-card" href="home.html" data-notif>
-          <span class="fl-step">04</span>
-          <p class="fl-t">Session<br>Report</p>
-          <span class="fl-sub">New on Home<br>Recap · Report</span>
-        </a>
+      <div class="fl-sec">
+        <p class="fl-label">Language</p>
+        <!-- The one control on the app that is not translated: it is the thing you use when
+             you cannot read the rest. -->
+        <div class="fl-lang no-i18n" role="group" aria-label="Language">
+          <button type="button" data-lang="ko">KOR</button>
+          <button type="button" data-lang="en">ENG</button>
+        </div>
+      </div>
+
+      <div class="fl-sec">
+        <p class="fl-label">Flow</p>
+        <div class="fl-grid">
+          <a class="fl-card" href="index.html">
+            <p class="fl-t">First Setup</p>
+            <p class="fl-sub">Fit Newton and get ready to move.</p>
+          </a>
+          <a class="fl-card" href="home.html">
+            <p class="fl-t">Explore Home</p>
+            <p class="fl-sub">Find movements, packs, and recent activity.</p>
+          </a>
+          <a class="fl-card" href="setup-location.html">
+            <p class="fl-t">Start a Workout</p>
+            <p class="fl-sub">Set the session and start moving.</p>
+          </a>
+          <!-- Home is where this flow starts, but only with the strip: home.html's own
+               inline script reveals it 1.8s after landing when notifNow is set. Set on the
+               click rather than carried in the URL, so a reload of Home is Home again. -->
+          <a class="fl-card" href="home.html" data-notif>
+            <p class="fl-t">Check Your Report</p>
+            <p class="fl-sub">See how the movement turned out.</p>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -77,6 +84,25 @@
   document.querySelector('[data-notif]').addEventListener('click', function () {
     try { sessionStorage.setItem('notifNow', '1'); } catch (e) {}
   });
+  // The toggle writes the choice and re-renders in place — every other screen reads the
+  // same key on the way in, so the language is chosen once and holds for the whole walk.
+  (function () {
+    var box = document.querySelector('.fl-lang');
+    function paint() {
+      var cur = (window.__lang && window.__lang()) || 'en';
+      [].forEach.call(box.children, function (b) {
+        b.classList.toggle('on', b.getAttribute('data-lang') === cur);
+      });
+    }
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-lang]');
+      if (!b || !window.__setLang) return;
+      window.__setLang(b.getAttribute('data-lang'));
+      paint();
+    });
+    addEventListener('DOMContentLoaded', paint);
+    paint();
+  })();
 </script>
 </body>
 </html>
