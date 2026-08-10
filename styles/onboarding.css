@@ -92,22 +92,27 @@
 
 /* ── "What do you want to do most?" list ─────────────────────────────────────── */
 .ob-list { display: flex; flex-direction: column; gap: 4px; }
-.ob-row { position: relative; display: flex; align-items: center; height: 85px; box-sizing: border-box; border-radius: 20px; overflow: hidden; cursor: pointer; background: #fff; }
+.ob-row { position: relative; display: flex; align-items: center; height: 85.2px; box-sizing: border-box; border-radius: 20px; overflow: hidden; cursor: pointer; background: #fff; }
 .ob-row .t { position: relative; z-index: 2; margin: 0; padding: 0 20px; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); }
-/* Built exactly like the sport cards, because the design builds them the same way: a
-   greyscale cutout with the red laid over it in plus-lighter. Each row's artwork is
-   exported already at the row's size, with the figure where the design puts it and NOTHING
-   cropped — the old exports had it scaled up until the head and the trailing foot ran off
-   the edges. The photograph sits on ::before so a filter there cannot isolate the gradient
-   from the card behind it. */
-.ob-row .img { position: absolute; inset: 0; }
+/* The figure does NOT span the row. In the design (node 43:6432) every one of these sits
+   in a 122x152 box at left 180, top -33 — taller than the 85.2 row, so the row's own
+   overflow crops the head and the feet, which is the crop the design intends. The old
+   version stretched the picture across the whole 336x85 row instead, and a standing figure
+   pulled into a 4:1 box is what came out looking squashed.
+   The gradient is over the BOX, not the row: plus-lighter over the white card leaves the
+   card white and only the figure turns red.
+   NOTE the ../ in each row's --art: a url() inside a custom property is resolved against
+   the sheet that USES it, not the document that declared it, and this sheet is in styles/. */
+.ob-row .img { position: absolute; left: 180px; top: -33px; width: var(--iw, 122px); height: 152px; }
 .ob-row .img::before { content: ""; position: absolute; inset: 0;
   background: var(--art) center / 100% 100% no-repeat;
+  /* Only where the design's own fill is exposed down from the photograph — measured per
+     row against Figma's render, so most rows carry no --dim at all. */
   filter: brightness(var(--dim, 1)); }
 .ob-row .img::after { content: ""; position: absolute; inset: 0; mix-blend-mode: plus-lighter;
   background: var(--grad, linear-gradient(180deg, #FA3030, #FD9562)); }
 /* Selected, the row IS the gradient and the picture is what lightens it. */
-.ob-row.sel .img::before { filter: brightness(calc(var(--dim, 1) * var(--sel-lift, 5.3))); mix-blend-mode: plus-lighter; }
+.ob-row.sel .img::before { filter: none; mix-blend-mode: plus-lighter; }
 .ob-row.sel .img::after { content: none; }
 /* 직사각형_Selected, as the style is registered (node 2774:1124): the ramp runs DOWN the
    row, not across it, and the two effects are the drop shadow and the inner white glow. */
@@ -127,9 +132,24 @@
 .ob-wcard.full { height: 442px; }
 .ob-wcard .t { margin: 0; font-family: var(--font-supreme-bold); font-size: 20px; line-height: 1.2; letter-spacing: -1px; color: var(--color-black); position: relative; z-index: 2; }
 .ob-wcard .s { margin: 2px 0 0; font-family: var(--font-supreme); font-size: 13px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-500); position: relative; z-index: 2; }
-.ob-wcard .img { position: absolute; inset: 0; background-position: center; background-repeat: no-repeat; background-size: 100% 100%; mix-blend-mode: multiply; }
-.ob-wcard.sel { background: linear-gradient(180deg, #FA3030 48%, #FE6E3C 77.6%, #FEC389 100.5%, #D1FEFF 107.5%);
+/* Same build as the goal rows, and the same reason: in the design (nodes I246:16630;43:6892
+   and 246:16637) the picture is a box pinned to the CARD'S BOTTOM — 166 tall on the short
+   pair, 266 on Both — not a fill of the whole card. Spreading it over the card is what
+   pulled Outdoors' runner up into the text and cut his head off.
+   Selected, the picture goes over the card's gradient in plus-lighter, which is what makes
+   the figure read as light on red; multiply, which is what it used to do, made it dark. */
+.ob-wcard .img { position: absolute; left: 0; bottom: 0; width: 166px; height: 166px; overflow: hidden; }
+.ob-wcard.full .img { height: 266px; }
+.ob-wcard .img::before { content: ""; position: absolute; inset: 0;
+  background: var(--art) center / 100% 100% no-repeat; }
+.ob-wcard .img::after { content: ""; position: absolute; inset: 0; mix-blend-mode: plus-lighter;
+  background: var(--grad, linear-gradient(180deg, #FA3030 28.508%, #FD9562 80.191%)); }
+.ob-wcard.sel .img::before { mix-blend-mode: plus-lighter; }
+.ob-wcard.sel .img::after { content: none; }
+/* 직사각형_Selected + the registered `selected` effect pair. */
+.ob-wcard.sel { background: linear-gradient(180deg, #FA3030 53.869%, #FE6E3C 85.083%, #FEC389 104.71%, #D1FEFF 104.72%);
   box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 16px 6px rgba(255,255,255,0.6); }
+.ob-wcard.full.sel { box-shadow: 0 15px 58.32px 10px rgba(0,0,0,0.05), inset 0 0 14px 10px rgba(255,255,255,0.45); }
 .ob-wcard.sel .t { color: #fff; }
 .ob-wcard.sel .s { color: var(--color-neutral-100); }
 
@@ -180,7 +200,8 @@
 /* Only where the body actually scrolls. On the two short pages the list ends well above
    the foot, so a fade under the heading is a gradient over nothing. */
 .ob-screen:has(.ob-list) .ob-title::after,
-.ob-screen:has(.ob-where) .ob-title::after { content: none; }
+.ob-screen:has(.ob-where) .ob-title::after,
+.ob-screen:has(.sc-list) .ob-title::after { content: none; }
 .ob-title::after {
   content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 26px;
   pointer-events: none;
