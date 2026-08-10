@@ -33,6 +33,8 @@ const HTTP  = +(process.env.HTTP || 8817);
 const ROOT  = new URL('.', import.meta.url).pathname;
 const TMP   = process.env.TMP_DIR || '/tmp/hero3d-frames';
 const OUT   = ROOT + 'out';
+const NAME  = process.env.NAME || 'hero-3d-2k';   // NAME=hero-3d-2k-v2 to keep the old one
+const PAGE  = process.env.PAGE || 'hero-3d.html';
 const CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
@@ -94,7 +96,7 @@ await send('Page.addScriptToEvaluateOnNewDocument', { source: `
   }, 250);
 ` });
 
-await send('Page.navigate', { url: `http://127.0.0.1:${HTTP}/hero-3d.html` });
+await send('Page.navigate', { url: `http://127.0.0.1:${HTTP}/${PAGE}` });
 await once('Page.loadEventFired');
 await send('Animation.setPlaybackRate', { playbackRate: 1 / SLOW });
 
@@ -114,7 +116,7 @@ for (let f = 0; f < total; f++) {
 console.log(`frames: ${readdirSync(TMP).length}, late ${late}/${total}`);
 // The poster still is worth a real PNG — it is one frame, so the 810ms does not matter.
 const still = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false });
-writeFileSync(`${OUT}/hero-3d-2k.png`, Buffer.from(still.data, 'base64'));
+writeFileSync(`${OUT}/${NAME}.png`, Buffer.from(still.data, 'base64'));
 ws.close(); chrome.kill(); server.kill();
 
 const run = (cmd, args) => new Promise((res, rej) => {
@@ -123,11 +125,11 @@ const run = (cmd, args) => new Promise((res, rej) => {
 });
 // Fade to black over the last 1.6s. The clip opens on black with nothing in the field yet,
 // so a black tail is what makes a loop join without a cut.
-const FADE = +(process.env.FADE || 1.6);
+const FADE = process.env.FADE === undefined ? 1.6 : +process.env.FADE;
 await run('ffmpeg', ['-v', 'error', '-y', '-framerate', String(FPS), '-i', `${TMP}/f%05d.jpg`,
-  '-vf', `fade=t=out:st=${(SECS - FADE).toFixed(2)}:d=${FADE}`,
+  ...(FADE > 0 ? ['-vf', `fade=t=out:st=${(SECS - FADE).toFixed(2)}:d=${FADE}`] : []),
   '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p',
-  '-movflags', '+faststart', `${OUT}/hero-3d-2k.mp4`]);
+  '-movflags', '+faststart', `${OUT}/${NAME}.mp4`]);
 rmSync(TMP, { recursive: true, force: true });
 rmSync(TMP + '-profile', { recursive: true, force: true });
-console.log('→ ' + OUT + '/hero-3d-2k.mp4');
+console.log('→ ' + OUT + '/' + NAME + '.mp4');

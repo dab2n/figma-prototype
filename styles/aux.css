@@ -1,0 +1,327 @@
+/* ── Auxiliary surfaces ───────────────────────────────────────────────────────
+   The screens and panels the app's own icons ask for but the Figma file never
+   drew: the bell's list, the magnifier's search, the funnel's sheet, the share
+   sheet. Nothing new is invented here — every block is one of the design
+   system's existing pieces reused:
+
+     grey ground + sticky status bar   .set-screen (settings.css)
+     back-only app bar                 .set-appbar
+     grey group label over a white card .set-glabel / .set-card / .set-row
+     pill chips                        .chip / .chip-selected (packs.css)
+     row with thumb, title, meta       .recent-item (home.css)
+
+   The one genuinely new thing is the bottom sheet, and it is built out of the
+   same numbers the rest of the app uses: r40 like .phone and .pack-card, the
+   red for the live state, Neutral for everything at rest. */
+
+/* ── Press feedback for controls that lead nowhere ────────────────────────────
+   Some icons in this UI name an action the design never specified — a kebab is
+   "more", but more WHAT was never drawn. Rather than route them somewhere
+   invented, they answer: they take the selected look for a beat and let go.
+   The screen stays put, which is the honest reading — the control is live, and
+   there is nothing behind it yet. */
+[data-inert] { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+[data-inert].pressing {
+  /* Whatever the control's own resting look is, this is the same shift the
+     selected chips and cards take: it fills in and pulls in slightly. */
+  background-color: var(--color-neutral-200);
+  transform: scale(0.94);
+  transition: background-color .12s ease, transform .12s ease, filter .12s ease;
+}
+[data-inert] { transition: background-color .35s ease, transform .35s ease, filter .35s ease; }
+/* On the dark hero bars there is no background to fill, so the mark brightens. */
+.app-bar-transparent [data-inert].pressing,
+.dj-hero [data-inert].pressing {
+  background-color: rgba(255,255,255,0.22);
+  border-radius: 80px;
+}
+/* A card's kebab is three dots with no box of its own. */
+.lib-kebab[data-inert].pressing { background-color: transparent; filter: brightness(0.55); }
+/* A full-width settings row pulling in would read as the whole card moving. */
+.set-row[data-inert].pressing { transform: none; background-color: var(--color-neutral-100); }
+
+/* Home's bell carries the same red dot the tab bar uses, for exactly as long as
+   the notification list has something unread in it. The white ring is the app
+   bar's own ground, so the dot reads as sitting on the icon rather than behind it. */
+.app-bar .actions .bell { position: relative; display: block; }
+.app-bar .actions .bell.has-new::after {
+  content: "";
+  position: absolute; right: -1px; top: 0;
+  width: 7px; height: 7px; border-radius: 80px;
+  background: var(--color-red);
+  box-shadow: 0 0 0 2px var(--color-white);
+}
+
+/* ── Bottom sheet ─────────────────────────────────────────────────────────────
+   A child of .phone, not of .screen: it has to cover the tab bar (z 30) and it
+   must not scroll with the page under it. */
+.sheet {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+}
+.sheet[hidden] { display: none; }
+.sheet-scrim {
+  position: absolute; inset: 0;
+  background: rgba(5, 10, 10, 0.45);
+  opacity: 0;
+  transition: opacity .32s ease;
+}
+.sheet.open .sheet-scrim { opacity: 1; }
+.sheet-card {
+  position: relative;
+  width: 100%;
+  max-height: 78%;
+  overflow: hidden auto;
+  scrollbar-width: none;
+  background: var(--color-white);
+  border-radius: 40px 40px 0 0;
+  padding: 10px 16px calc(20px + var(--sab, 0px));
+  transform: translateY(100%);
+  transition: transform .38s cubic-bezier(.2,.85,.25,1);
+}
+.sheet-card::-webkit-scrollbar { display: none; }
+.sheet.open .sheet-card { transform: translateY(0); }
+.sheet-grab {
+  display: block; width: 36px; height: 4px; margin: 0 auto 14px;
+  border-radius: 2px; background: var(--color-neutral-200);
+}
+.sheet-title {
+  margin: 0 0 4px; padding: 0 4px;
+  font-family: var(--font-supreme-bold); font-size: 18px; line-height: 1.2; letter-spacing: -0.54px;
+}
+.sheet-sub {
+  margin: 0 0 12px; padding: 0 4px;
+  font-family: var(--font-supreme); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px;
+  color: var(--color-neutral-400);
+}
+.sheet-group { padding: 12px 4px 0; }
+.sheet-label {
+  margin: 0 0 8px;
+  font-family: var(--font-supreme); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px;
+  color: var(--color-neutral-400);
+}
+.sheet-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+/* The chip, restated so a page that never loads packs.css still gets it. */
+.sh-chip {
+  border: none; cursor: pointer;
+  padding: 7px 13px; border-radius: 80px;
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+  font-family: var(--font-supreme); font-size: 14px; line-height: 1.4; letter-spacing: -0.42px;
+  white-space: nowrap;
+  transition: background .18s ease, color .18s ease;
+}
+.sh-chip.on {
+  background: linear-gradient(180deg, #FA3030 54%, #FE6E3C 85%, #FEC389 105%, #D1FEFF 105%);
+  color: var(--color-white);
+  font-family: var(--font-supreme-medium);
+}
+.sheet-foot { display: flex; gap: 8px; padding: 22px 4px 0; }
+.sheet-btn {
+  flex: 1; height: 46px; border: none; border-radius: 80px; cursor: pointer;
+  font-family: var(--font-supreme-bold); font-size: 15px; letter-spacing: -0.5px;
+}
+.sheet-btn.ghost { flex: 0 0 108px; background: var(--color-neutral-100); color: var(--color-neutral-600); }
+.sheet-btn.primary { background: var(--color-red); color: var(--color-white); }
+.sheet-btn.primary:active { filter: brightness(0.92); }
+/* What the filter is currently down to, so Apply is never a guess. */
+.sheet-count {
+  margin: 14px 4px 0; text-align: center;
+  font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.5px;
+  color: var(--color-neutral-400);
+}
+.sheet-count b { font-family: var(--font-offbit); color: var(--color-black); }
+
+/* Three controls in the pack screens were <div>s and <img>s that only looked
+   tappable; wiring them made them <button>s. A button carries the UA's own border,
+   padding and font, and all three of these sit in a fixed box — so the mark inside
+   would shrink. Reset here rather than in detail.css/creator.css, which describe
+   the design and should not have to know which tag ended up carrying it. */
+button.action-pill, button.icon-circle {
+  border: none; padding: 0; font: inherit; cursor: pointer;
+}
+
+/* Every glyph in the notification list reads as one family, whatever tone the
+   source SVG happened to be exported in. Photographs of people are left alone. */
+.nt-row .av.ic img { filter: brightness(0) invert(0.45); }
+
+/* ── Saved ────────────────────────────────────────────────────────────────────
+   The bookmark icons in this project are stroked outlines with no filled cut, so
+   "saved" is said with the app's own red behind the mark rather than with a
+   second asset that would have to be drawn and kept in step. The pop is the only
+   feedback a toggle that changes no screen can give. */
+[data-save] { cursor: pointer; transition: background-color .22s ease; }
+[data-save].saved { background-color: var(--color-red) !important; }
+img[data-save].saved { border-radius: 80px; }
+[data-save].pop { animation: aux-pop .36s cubic-bezier(.3,1.4,.5,1); }
+@keyframes aux-pop { 0%, 100% { transform: scale(1); } 45% { transform: scale(1.16); } }
+@media (prefers-reduced-motion: reduce) { [data-save].pop { animation: none; } }
+
+/* Share — one item, one action that actually happens. */
+.sh-item { display: flex; align-items: center; gap: 12px; padding: 14px 4px 4px; }
+.sh-item .th {
+  flex: none; width: 52px; height: 52px; border-radius: 16px;
+  background: var(--color-neutral-100) center / cover no-repeat;
+}
+.sh-item .tx { min-width: 0; }
+.sh-item .tx p { margin: 0; }
+.sh-item .nm { font-family: var(--font-supreme-bold); font-size: 15px; line-height: 1.4; letter-spacing: -0.5px; }
+.sh-item .ln {
+  font-family: var(--font-supreme); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px;
+  color: var(--color-neutral-400); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.sheet-btn.primary.done { background: var(--color-neutral-900); }
+
+/* ── Notifications ────────────────────────────────────────────────────────── */
+.nt-screen { background: var(--color-neutral-100); }
+.nt-screen .status-bar { background: var(--color-neutral-100); }
+.nt-screen .statusbar-svg { mix-blend-mode: multiply; }
+.nt-appbar { display: flex; align-items: center; gap: 8px; padding: 8px 16px 4px; }
+.nt-appbar .icon-btn img { filter: brightness(0) invert(0.09); }
+.nt-appbar h1 {
+  margin: 0; font-family: var(--font-supreme-bold); font-size: 20px;
+  line-height: 1.2; letter-spacing: -0.6px;
+}
+/* Marks every unread one read; greys itself out once there is nothing left. */
+.nt-read {
+  margin-left: auto; border: none; background: none; cursor: pointer; padding: 4px;
+  font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.5px;
+  color: var(--color-red);
+}
+.nt-read:disabled { color: var(--color-neutral-300); cursor: default; }
+
+.nt-list { display: flex; flex-direction: column; gap: 20px; padding: 10px 12px 24px; }
+.nt-group { display: flex; flex-direction: column; gap: 8px; }
+.nt-glabel {
+  margin: 0; padding: 4px 12px;
+  font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px;
+  color: var(--color-neutral-400);
+}
+.nt-card { background: #fff; border-radius: 28px; padding: 4px 16px; }
+.nt-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 0; text-decoration: none; color: inherit;
+  border-bottom: 1px solid var(--color-neutral-100);
+}
+.nt-card .nt-row:last-child { border-bottom: none; }
+.nt-row .av {
+  flex: none; width: 38px; height: 38px; border-radius: 80px;
+  background: var(--color-neutral-100) center / cover no-repeat;
+  display: flex; align-items: center; justify-content: center;
+}
+.nt-row .av img { width: 38px; height: 38px; border-radius: 80px; display: block; object-fit: cover; }
+.nt-row .av.ic img { width: 18px; height: 18px; border-radius: 0; }
+.nt-row .bd { flex: 1; min-width: 0; }
+.nt-row .bd p { margin: 0; }
+.nt-row .ttl {
+  font-family: var(--font-supreme-bold); font-size: 15px; line-height: 1.4; letter-spacing: -0.5px;
+  color: var(--color-neutral-700);
+}
+.nt-row .msg {
+  margin-top: 2px !important;
+  font-family: var(--font-supreme); font-size: 13px; line-height: 1.35; letter-spacing: -0.5px;
+  color: var(--color-neutral-500);
+}
+.nt-row .tm {
+  margin-top: 6px !important;
+  font-family: var(--font-supreme); font-size: 12px; line-height: 1.2; letter-spacing: -0.5px;
+  color: var(--color-neutral-400);
+}
+/* Unread: the same red dot the tab bar and the report pill use. */
+.nt-row .nd {
+  flex: none; width: 7px; height: 7px; margin-top: 6px; border-radius: 80px;
+  background: var(--color-red);
+  transition: opacity .3s ease;
+}
+.nt-row.read .nd { opacity: 0; }
+.nt-row.read .ttl { color: var(--color-neutral-500); font-family: var(--font-supreme-medium); }
+.nt-empty {
+  margin: 40px 0 0; text-align: center;
+  font-family: var(--font-supreme); font-size: 14px; letter-spacing: -0.42px;
+  color: var(--color-neutral-400);
+}
+
+/* ── Search ───────────────────────────────────────────────────────────────── */
+.sr-screen { background: var(--color-neutral-100); }
+.sr-screen .status-bar { background: var(--color-neutral-100); }
+.sr-screen .statusbar-svg { mix-blend-mode: multiply; }
+.sr-appbar { display: flex; align-items: center; gap: 10px; padding: 8px 16px; }
+.sr-appbar .icon-btn img { filter: brightness(0) invert(0.09); }
+.sr-field {
+  flex: 1; display: flex; align-items: center; gap: 8px;
+  height: 40px; padding: 0 14px; border-radius: 80px; background: #fff;
+  box-shadow: 0 0 5px rgba(0,0,0,0.04);
+}
+.sr-field img { width: 18px; height: 18px; display: block; opacity: .45; flex: none; }
+.sr-field input {
+  flex: 1; min-width: 0; border: none; outline: none; background: none; padding: 0;
+  font-family: var(--font-supreme); font-size: 15px; letter-spacing: -0.5px; color: var(--color-black);
+  -webkit-appearance: none;
+}
+.sr-field input::placeholder { color: var(--color-neutral-400); }
+.sr-field input::-webkit-search-cancel-button { display: none; }
+.sr-clear {
+  flex: none; width: 20px; height: 20px; border: none; border-radius: 80px; cursor: pointer;
+  background: var(--color-neutral-200); color: var(--color-neutral-600);
+  font-size: 13px; line-height: 1; padding: 0;
+  display: none; align-items: center; justify-content: center;
+}
+.sr-field.has .sr-clear { display: flex; }
+
+.sr-body { padding: 6px 12px 24px; }
+.sr-sec { margin-bottom: 18px; }
+.sr-sec[hidden] { display: none; }
+.sr-slabel {
+  display: flex; align-items: center; margin: 0 0 8px; padding: 4px 12px;
+  font-family: var(--font-supreme); font-size: 16px; line-height: 1.5; letter-spacing: -0.5px;
+  color: var(--color-neutral-400);
+}
+.sr-slabel button {
+  margin-left: auto; border: none; background: none; cursor: pointer; padding: 0;
+  font-family: var(--font-supreme); font-size: 13px; letter-spacing: -0.5px; color: var(--color-neutral-400);
+}
+.sr-recent { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 4px; }
+/* A recent term is a chip that runs the search; its × drops it from the list. */
+.sr-term {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+  padding: 7px 10px 7px 13px; border: none; border-radius: 80px; background: #fff;
+  box-shadow: 0 0 2px rgba(0,0,0,0.10);
+  font-family: var(--font-supreme); font-size: 14px; letter-spacing: -0.42px; color: var(--color-neutral-600);
+}
+.sr-term i {
+  font-style: normal; width: 15px; height: 15px; border-radius: 80px;
+  background: var(--color-neutral-100); color: var(--color-neutral-500);
+  font-size: 11px; line-height: 15px; text-align: center;
+}
+
+.sr-list { display: flex; flex-direction: column; gap: 8px; }
+.sr-item {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+  background: #fff; border-radius: 24px; text-decoration: none; color: inherit;
+}
+.sr-item .th {
+  flex: none; width: 56px; height: 56px; border-radius: 18px;
+  background: var(--color-neutral-100) center / cover no-repeat;
+}
+.sr-item .tx { min-width: 0; flex: 1; }
+.sr-item .tx p { margin: 0; }
+.sr-item .nm {
+  font-family: var(--font-supreme-bold); font-size: 15px; line-height: 1.4; letter-spacing: -0.5px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.sr-item .mt {
+  margin-top: 3px !important;
+  font-family: var(--font-supreme); font-size: 13px; line-height: 1.2; letter-spacing: -0.5px;
+  color: var(--color-neutral-400);
+}
+/* What matched, picked out of the title rather than the whole row turning red. */
+.sr-item .nm mark { background: none; color: var(--color-red); font: inherit; }
+.sr-item .go { flex: none; width: 8px; height: 8px; margin-right: 6px;
+  border-top: 2px solid #c8c8c8; border-right: 2px solid #c8c8c8; transform: rotate(45deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-card, .sheet-scrim, [data-inert] { transition: none; }
+}

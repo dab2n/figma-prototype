@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true||/ NewtonShell/.test(navigator.userAgent);if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/424,h/844).toFixed(4));};window.__box();try{var S=window.NewtonShell;if(S&&S.insetTop){var st=S.insetTop(),sb=S.insetBottom();if(st)r.style.setProperty("--sat",st+"px");if(sb)r.style.setProperty("--sab",sb+"px");}}catch(e){}try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Regular.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Bold.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Medium.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#F2F2F2">
+<script defer src="assets/openext.js?v=1083"></script>
+<script defer src="assets/i18n.js?v=1083"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="NEWTON">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<title>Newton — Notifications</title>
+<link rel="stylesheet" href="styles/freesentation.css?v=1083">
+<link rel="stylesheet" href="styles/main.css?v=1083">
+<link rel="stylesheet" href="styles/aux.css?v=1083">
+<script defer src="assets/idle.js?v=1083"></script>
+<script defer src="assets/aux.js?v=1083"></script>
+<script defer src="assets/flows.js?v=1083"></script>
+</head>
+<body>
+<div class="phone">
+  <div class="screen nt-screen">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <!-- Opened from Home's bell, so back returns there rather than into history:
+         the same fixed destination every other back button in this app uses. -->
+    <div class="nt-appbar">
+      <a class="icon-btn" href="home.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
+      <h1>Notifications</h1>
+      <button class="nt-read" id="ntReadAll">Mark all read</button>
+    </div>
+
+    <!-- Every row goes somewhere that already exists — a report, a schedule, a
+         pack, the scan. A notification that opened nothing would be the same
+         dead icon this screen was built to answer. -->
+    <div class="nt-list" id="ntList">
+      <div class="nt-group">
+        <p class="nt-glabel">Today</p>
+        <div class="nt-card">
+          <a class="nt-row" href="recap.html" data-nt="report-sean">
+            <span class="av"><img src="assets/icons/avatar-ellipse-sean.png?v=1083" alt=""></span>
+            <span class="bd">
+              <p class="ttl">Your report is ready</p>
+              <p class="msg">Sean's Pace Strategy — Match Rate 78%</p>
+              <p class="tm">2 min ago</p>
+            </span>
+            <span class="nd"></span>
+          </a>
+          <a class="nt-row" href="schedule.html" data-nt="sched-interval">
+            <span class="av ic"><img src="assets/icons/clock-schedule.svg?v=1083" alt=""></span>
+            <span class="bd">
+              <p class="ttl">Tomorrow, 7:00 AM</p>
+              <p class="msg">Easy Interval Run is on your schedule</p>
+              <p class="tm">1 hour ago</p>
+            </span>
+            <span class="nd"></span>
+          </a>
+          <a class="nt-row" href="ollilttae.html" data-nt="sean-new">
+            <span class="av"><img src="assets/photos/creator-profile-sean.webp?v=1083" alt=""></span>
+            <span class="bd">
+              <p class="ttl">Sean posted a new move</p>
+              <p class="msg">Holding tempo when the last kilometre falls apart</p>
+              <p class="tm">3 hours ago</p>
+            </span>
+            <span class="nd"></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="nt-group">
+        <p class="nt-glabel">This Week</p>
+        <div class="nt-card">
+          <a class="nt-row" href="progress.html" data-nt="weekly">
+            <span class="av ic"><img src="assets/icons/nav-stats.svg?v=1083" alt=""></span>
+            <span class="bd">
+              <p class="ttl">Your week is in</p>
+              <p class="msg">Landing Balance is up 6% on last week</p>
+              <p class="tm">Yesterday</p>
+            </span>
+            <span class="nd"></span>
+          </a>
+          <a class="nt-row" href="scan-intro.html" data-nt="scan-due">
+            <span class="av"><img src="assets/icons/body-ring.png?v=1083" alt=""></span>
+            <span class="bd">
+              <p class="ttl">Time to scan again</p>
+              <p class="msg">It has been four weeks since your last body scan</p>
+              <p class="tm">2 days ago</p>
+            </span>
+            <span class="nd"></span>
+          </a>
+          <a class="nt-row" href="pyeongso.html?pack=curry" data-nt="pack-curry">
+            <span class="av"><img src="assets/photos/rec-curry-step.webp?v=1083" alt=""></span>
+            <span class="bd">
+              <p class="ttl">A new pack for you</p>
+              <p class="msg">Curry's Step Back — picked from your Basketball sessions</p>
+              <p class="tm">3 days ago</p>
+            </span>
+            <span class="nd"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="tabbar">
+    <div class="tabs">
+      <a href="home.html" class="active"><img src="assets/icons/nav-home.svg" alt="홈"><span class="dot"></span></a>
+      <a href="packs.html"><img src="assets/icons/nav-packs.svg" alt="팩"></a>
+      <a href="progress.html"><img src="assets/icons/nav-stats.svg" alt="통계"></a>
+      <a href="my.html"><img src="assets/icons/nav-profile.svg" alt="프로필"></a>
+    </div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
+</div>
+<script>
+// Read state, kept where Home's bell can see it: opening a row marks it, and the
+// dot on the bell is simply "is anything still unmarked".
+//
+// On DOMContentLoaded, not inline: this block is parsed BEFORE the deferred
+// scripts run, so Aux does not exist yet at this point in the document.
+document.addEventListener('DOMContentLoaded', function () {
+  var list = document.getElementById('ntList');
+  var all = document.getElementById('ntReadAll');
+  var rows = [].slice.call(list.querySelectorAll('.nt-row'));
+
+  function paint() {
+    var read = Aux.get('ntRead', {});
+    var left = 0;
+    rows.forEach(function (r) {
+      var on = !!read[r.getAttribute('data-nt')];
+      r.classList.toggle('read', on);
+      if (!on) left++;
+    });
+    all.disabled = left === 0;
+  }
+
+  // Marked on the way out, not on the way back — the row is being opened, which
+  // is what "read" means here.
+  list.addEventListener('click', function (e) {
+    var row = e.target.closest('.nt-row');
+    if (!row) return;
+    var read = Aux.get('ntRead', {});
+    read[row.getAttribute('data-nt')] = true;
+    Aux.set('ntRead', read);
+  });
+
+  all.addEventListener('click', function () {
+    var read = Aux.get('ntRead', {});
+    rows.forEach(function (r) { read[r.getAttribute('data-nt')] = true; });
+    Aux.set('ntRead', read);
+    paint();
+  });
+
+  paint();
+  // Coming back from a row that was just opened has to show it read.
+  addEventListener('pageshow', paint);
+});
+</script>
+</body>
+</html>

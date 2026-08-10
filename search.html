@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="cache-control" content="no-cache">
+<meta name="viewport" content="width=360, viewport-fit=cover">
+<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true||/ NewtonShell/.test(navigator.userAgent);if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/424,h/844).toFixed(4));};window.__box();try{var S=window.NewtonShell;if(S&&S.insetTop){var st=S.insetTop(),sb=S.insetBottom();if(st)r.style.setProperty("--sat",st+"px");if(sb)r.style.setProperty("--sab",sb+"px");}}catch(e){}try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Regular.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Bold.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Medium.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#F2F2F2">
+<script defer src="assets/openext.js?v=1083"></script>
+<script defer src="assets/i18n.js?v=1083"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="NEWTON">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<title>Newton — Search</title>
+<link rel="stylesheet" href="styles/freesentation.css?v=1083">
+<link rel="stylesheet" href="styles/main.css?v=1083">
+<link rel="stylesheet" href="styles/aux.css?v=1083">
+<script defer src="assets/idle.js?v=1083"></script>
+<!-- The results ARE the pack table. Loading it here rather than copying a dozen
+     titles into this file is what keeps search from promising a pack that has
+     since been renamed — the same reason the Home cards read from it. -->
+<script defer src="assets/packs.js?v=1083"></script>
+<script defer src="assets/aux.js?v=1083"></script>
+<script defer src="assets/flows.js?v=1083"></script>
+</head>
+<body>
+<div class="phone">
+  <div class="screen sr-screen">
+    <div class="status-bar"><img class="statusbar-svg" src="assets/icons/statusbar-full.svg" alt="9:41"></div>
+
+    <div class="sr-appbar">
+      <a class="icon-btn" href="home.html" aria-label="뒤로"><img src="assets/icons/appbar-back.svg" alt="뒤로"></a>
+      <div class="sr-field" id="srField">
+        <img src="assets/icons/icon-search-black.svg" alt="">
+        <input type="search" id="srInput" inputmode="search" autocomplete="off" enterkeyhint="search"
+               placeholder="Search packs, creators, sports">
+        <button class="sr-clear" id="srClear" aria-label="지우기">&#215;</button>
+      </div>
+    </div>
+
+    <div class="sr-body">
+      <section class="sr-sec" id="srRecentSec" hidden>
+        <p class="sr-slabel">Recent<button id="srClearAll">Clear</button></p>
+        <div class="sr-recent" id="srRecent"></div>
+      </section>
+
+      <section class="sr-sec">
+        <p class="sr-slabel" id="srListLabel">Suggested</p>
+        <div class="sr-list" id="srList"></div>
+        <p class="nt-empty" id="srEmpty" hidden>Nothing matches that yet.</p>
+      </section>
+    </div>
+  </div>
+  <nav class="tabbar">
+    <div class="tabs">
+      <a href="home.html" class="active"><img src="assets/icons/nav-home.svg" alt="홈"><span class="dot"></span></a>
+      <a href="packs.html"><img src="assets/icons/nav-packs.svg" alt="팩"></a>
+      <a href="progress.html"><img src="assets/icons/nav-stats.svg" alt="통계"></a>
+      <a href="my.html"><img src="assets/icons/nav-profile.svg" alt="프로필"></a>
+    </div>
+    <div class="home-indicator"><span></span></div>
+  </nav>
+</div>
+<script>
+// On DOMContentLoaded, not inline: this block is parsed BEFORE the deferred
+// scripts run, so neither window.PACKS nor Aux exists yet at this point.
+document.addEventListener('DOMContentLoaded', function () {
+  var input = document.getElementById('srInput');
+  var field = document.getElementById('srField');
+  var listEl = document.getElementById('srList');
+  var label = document.getElementById('srListLabel');
+  var empty = document.getElementById('srEmpty');
+  var recentSec = document.getElementById('srRecentSec');
+  var recentEl = document.getElementById('srRecent');
+
+  // Built from the pack table, so a pack that is added or renamed there is
+  // searchable here without this file being touched.
+  var ITEMS = Object.keys(window.PACKS || {}).map(function (k) {
+    var p = window.PACKS[k];
+    return {
+      key: k,
+      title: p.title,
+      meta: [p.type, p.sport, p.mins + 'm'].filter(Boolean).join(' · '),
+      thumb: 'assets/photos/' + p.photo,
+      href: 'pyeongso.html?pack=' + k,
+      hay: [p.title, p.author, p.type, p.sport].join(' ').toLowerCase()
+    };
+  });
+
+  // The matched run picked out inside the title, rather than the whole row
+  // changing colour — the same way the report marks the number it is talking about.
+  function mark(text, q) {
+    if (!q) return document.createTextNode(text);
+    var i = text.toLowerCase().indexOf(q);
+    if (i < 0) return document.createTextNode(text);
+    var f = document.createDocumentFragment();
+    f.appendChild(document.createTextNode(text.slice(0, i)));
+    var m = document.createElement('mark');
+    m.textContent = text.slice(i, i + q.length);
+    f.appendChild(m);
+    f.appendChild(document.createTextNode(text.slice(i + q.length)));
+    return f;
+  }
+
+  function row(it, q) {
+    var a = document.createElement('a');
+    a.className = 'sr-item';
+    a.href = it.href;
+    a.setAttribute('data-term', it.title);
+    var th = document.createElement('span');
+    th.className = 'th';
+    th.style.backgroundImage = "url('" + it.thumb + "')";
+    var tx = document.createElement('span');
+    tx.className = 'tx';
+    var nm = document.createElement('p');
+    nm.className = 'nm';
+    nm.appendChild(mark(it.title, q));
+    var mt = document.createElement('p');
+    mt.className = 'mt';
+    mt.textContent = it.meta;
+    tx.appendChild(nm); tx.appendChild(mt);
+    var go = document.createElement('span');
+    go.className = 'go';
+    a.appendChild(th); a.appendChild(tx); a.appendChild(go);
+    return a;
+  }
+
+  function render(q) {
+    var hits = q ? ITEMS.filter(function (i) { return i.hay.indexOf(q) > -1; }) : ITEMS.slice(0, 6);
+    listEl.innerHTML = '';
+    hits.forEach(function (i) { listEl.appendChild(row(i, q)); });
+    label.textContent = q ? 'Results' : 'Suggested';
+    empty.hidden = hits.length > 0;
+    field.classList.toggle('has', !!input.value);
+    recentSec.hidden = !!q || !recent().length;
+  }
+
+  function recent() { return Aux.get('srRecent', []); }
+  function remember(term) {
+    var r = recent().filter(function (t) { return t !== term; });
+    r.unshift(term);
+    Aux.set('srRecent', r.slice(0, 8));
+  }
+
+  function paintRecent() {
+    var r = recent();
+    recentEl.innerHTML = '';
+    r.forEach(function (t) {
+      var b = document.createElement('button');
+      b.className = 'sr-term';
+      b.type = 'button';
+      b.appendChild(document.createTextNode(t));
+      var x = document.createElement('i');
+      x.textContent = '×';
+      x.setAttribute('data-drop', '');
+      b.appendChild(x);
+      b.addEventListener('click', function (e) {
+        if (e.target.hasAttribute('data-drop')) {
+          Aux.set('srRecent', recent().filter(function (v) { return v !== t; }));
+          paintRecent();
+          render(input.value.trim().toLowerCase());
+          return;
+        }
+        input.value = t;
+        render(t.toLowerCase());
+      });
+      recentEl.appendChild(b);
+    });
+    recentSec.hidden = !r.length || !!input.value.trim();
+  }
+
+  var t;
+  input.addEventListener('input', function () {
+    clearTimeout(t);
+    t = setTimeout(function () { render(input.value.trim().toLowerCase()); }, 120);
+  });
+  // A term is only worth remembering once it has been acted on — typed and
+  // submitted, or followed into a pack. Keystrokes are not searches.
+  input.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter') return;
+    var v = input.value.trim();
+    if (v) { remember(v); paintRecent(); }
+    input.blur();
+  });
+  listEl.addEventListener('click', function (e) {
+    var a = e.target.closest('.sr-item');
+    if (a) { remember(input.value.trim() || a.getAttribute('data-term')); }
+  });
+
+  document.getElementById('srClear').addEventListener('click', function () {
+    input.value = '';
+    render('');
+    paintRecent();
+    input.focus();
+  });
+  document.getElementById('srClearAll').addEventListener('click', function () {
+    Aux.set('srRecent', []);
+    paintRecent();
+  });
+
+  paintRecent();
+  render('');
+});
+</script>
+</body>
+</html>

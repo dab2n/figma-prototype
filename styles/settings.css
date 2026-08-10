@@ -22,6 +22,8 @@
   border-bottom: 1px solid var(--color-neutral-100);
 }
 .set-card .set-row:last-child { border-bottom: none; padding-bottom: 4px; }
+/* The rows that go somewhere are anchors now; they must not look like links. */
+a.set-row { text-decoration: none; color: inherit; cursor: pointer; }
 .set-k { font-family: var(--font-supreme-bold); font-size: 15px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-700); white-space: nowrap; }
 .set-v { margin-left: auto; max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-supreme); font-size: 15px; line-height: 1.4; letter-spacing: -0.5px; color: var(--color-neutral-400); }
 /* Right chevron drawn from a rotated corner (24px tap slot) */

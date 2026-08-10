@@ -260,7 +260,40 @@
     'Backhand Slice Control': '백핸드 슬라이스 컨트롤',
     'Taekwondo Footwork': '태권도 풋워크', 'Five-Minute Leg Burn': '5분 하체 번',
     'More Packs from Sean': '션의 다른 Pack',
-    'Running Creator · 240K subscribers': '러닝 크리에이터 · 구독자 24만'
+    'Running Creator · 240K subscribers': '러닝 크리에이터 · 구독자 24만',
+
+    /* ── the screens behind the app bar icons (notifications / search / sheets) ── */
+    'Notifications': '알림', 'Mark all read': '모두 읽음', 'This Week': '이번 주',
+    'Your report is ready': '리포트가 도착했어요',
+    "Sean's Pace Strategy — Match Rate 78%": '션의 페이스 전략 — 일치도 78%',
+    'Tomorrow, 7:00 AM': '내일 오전 7:00',
+    'Easy Interval Run is on your schedule': 'Easy Interval Run이 일정에 있어요',
+    'Sean posted a new move': '션이 새 동작을 올렸어요',
+    'Holding tempo when the last kilometre falls apart': '마지막 1km에서 무너지는 템포를 잡는 법',
+    'Your week is in': '이번 주 기록이 나왔어요',
+    'Landing Balance is up 6% on last week': '착지 균형이 지난주보다 6% 올랐어요',
+    'Yesterday': '어제',
+    'Time to scan again': '다시 스캔할 때예요',
+    'It has been four weeks since your last body scan': '마지막 신체 스캔 이후 4주가 지났어요',
+    'A new pack for you': '새로 온 추천 Pack',
+    "Curry's Step Back — picked from your Basketball sessions": '커리의 스텝백 — 농구 세션을 보고 골랐어요',
+    '2 min ago': '2분 전', '1 hour ago': '1시간 전', '3 hours ago': '3시간 전',
+    '2 days ago': '2일 전', '3 days ago': '3일 전',
+
+    'Recent': '최근 검색', 'Suggested': '추천', 'Results': '검색 결과', 'Clear': '지우기',
+    'Nothing matches that yet.': '아직 검색 결과가 없어요.',
+
+    'Filter': '필터', 'Apply': '적용', 'Reset': '초기화',
+    'Tap a live chip again to clear that row.': '선택된 칩을 다시 누르면 해제돼요.',
+    'Where': '장소', 'Made by': '만든 사람', 'Length': '길이',
+    'Under 30 min': '30분 미만', '30–45 min': '30–45분', 'Over 45 min': '45분 초과',
+    'Under 60%': '60% 미만', '60–69%': '60–69%', '70% and up': '70% 이상',
+    /* The count under the sheet's buttons is "<b>3</b> results" — the numeral is its
+       own node, so only the unit is translated. */
+    'results': '개', 'result': '개',
+    'No sessions match these filters.': '조건에 맞는 세션이 없어요.',
+
+    'Share': '공유', 'Copy link': '링크 복사', 'Link copied': '링크를 복사했어요', 'Close': '닫기'
   };
 
   // What cannot be listed: the strings that carry a number. First match wins.

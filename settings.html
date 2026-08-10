@@ -20,8 +20,8 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1082"></script>
-<script defer src="assets/i18n.js?v=1082"></script>
+<script defer src="assets/openext.js?v=1083"></script>
+<script defer src="assets/i18n.js?v=1083"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,11 +29,13 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Settings</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1082">
-<link rel="stylesheet" href="styles/main.css?v=1082">
-<link rel="stylesheet" href="styles/settings.css?v=1082">
-<script defer src="assets/idle.js?v=1082"></script>
-<script defer src="assets/flows.js?v=1082"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1083">
+<link rel="stylesheet" href="styles/main.css?v=1083">
+<link rel="stylesheet" href="styles/settings.css?v=1083">
+<link rel="stylesheet" href="styles/aux.css?v=1083">
+<script defer src="assets/idle.js?v=1083"></script>
+<script defer src="assets/aux.js?v=1083"></script>
+<script defer src="assets/flows.js?v=1083"></script>
 </head>
 <body>
 <div class="phone">
@@ -48,41 +50,41 @@
       <div class="set-group">
         <p class="set-glabel">Workout Settings</p>
         <div class="set-card">
-          <div class="set-row"><span class="set-k">Preferred Sports</span><span class="set-v">Running, Basketball, Boxing</span><i class="chv"></i></div>
-          <div class="set-row"><span class="set-k">Goal</span><span class="set-v">Follow cool moves</span><i class="chv"></i></div>
-          <div class="set-row"><span class="set-k">Workout Location</span><span class="set-v">Indoors + Outdoors</span><i class="chv"></i></div>
-          <div class="set-row"><span class="set-k">Body Recalibrate</span><i class="chv"></i></div>
+          <a class="set-row" href="onboarding-sport.html"><span class="set-k">Preferred Sports</span><span class="set-v">Running, Basketball, Boxing</span><i class="chv"></i></a>
+          <a class="set-row" href="onboarding-goal.html"><span class="set-k">Goal</span><span class="set-v">Follow cool moves</span><i class="chv"></i></a>
+          <a class="set-row" href="onboarding-where.html"><span class="set-k">Workout Location</span><span class="set-v">Indoors + Outdoors</span><i class="chv"></i></a>
+          <a class="set-row" href="scan-intro.html"><span class="set-k">Body Recalibrate</span><i class="chv"></i></a>
         </div>
       </div>
 
       <div class="set-group">
         <p class="set-glabel">Devices</p>
         <div class="set-card">
-          <div class="set-row"><span class="set-k">Wearable</span><span class="set-v">Connected</span><i class="chv"></i></div>
-          <div class="set-row"><span class="set-k">Station</span><span class="set-v">Connected</span><i class="chv"></i></div>
-          <div class="set-row"><span class="set-k">Projection Unit</span><span class="set-v">Connected</span><i class="chv"></i></div>
-          <div class="set-row"><span class="set-k">Device Connections</span><i class="chv"></i></div>
+          <a class="set-row" href="device-connection.html"><span class="set-k">Wearable</span><span class="set-v">Connected</span><i class="chv"></i></a>
+          <a class="set-row" href="device-connection.html"><span class="set-k">Station</span><span class="set-v">Connected</span><i class="chv"></i></a>
+          <a class="set-row" href="device-connection.html"><span class="set-k">Projection Unit</span><span class="set-v">Connected</span><i class="chv"></i></a>
+          <a class="set-row" href="device-connection.html"><span class="set-k">Device Connections</span><i class="chv"></i></a>
         </div>
       </div>
 
       <div class="set-group">
         <p class="set-glabel">Account &amp; APP</p>
         <div class="set-card">
-          <div class="set-row"><span class="set-k">Subscription</span><i class="chv"></i></div>
-          <div class="set-row"><span class="set-k">Friends</span><i class="chv"></i></div>
-          <div class="set-row"><span class="set-k">Notifications</span><i class="chv"></i></div>
-          <div class="set-row"><span class="set-k">Accessibility</span><i class="chv"></i></div>
-          <div class="set-row"><span class="set-k">Privacy</span><i class="chv"></i></div>
+          <div class="set-row" data-inert role="button"><span class="set-k">Subscription</span><i class="chv"></i></div>
+          <div class="set-row" data-inert role="button"><span class="set-k">Friends</span><i class="chv"></i></div>
+          <div class="set-row" data-inert role="button"><span class="set-k">Notifications</span><i class="chv"></i></div>
+          <div class="set-row" data-inert role="button"><span class="set-k">Accessibility</span><i class="chv"></i></div>
+          <div class="set-row" data-inert role="button"><span class="set-k">Privacy</span><i class="chv"></i></div>
         </div>
       </div>
 
       <div class="set-group">
         <p class="set-glabel">Support</p>
         <div class="set-card">
-          <div class="set-row"><span class="set-k">Help &amp; Support</span><i class="chv"></i></div>
+          <div class="set-row" data-inert role="button"><span class="set-k">Help &amp; Support</span><i class="chv"></i></div>
           <!-- The build the phone is actually running. Bumped with every ?v= so an
                installed PWA showing an old number is a stale cache, not a bad deploy. -->
-          <div class="set-row"><span class="set-k">Build</span><span class="set-v" id="buildNo">1082</span></div>
+          <div class="set-row"><span class="set-k">Build</span><span class="set-v" id="buildNo">1083</span></div>
           <!-- What the phone actually reports, so a layout that comes out short can be read
                off the device instead of guessed at: visualViewport / innerHeight / 100dvh /
                100lvh / the box the page was given / the frame's height, then the safe-area

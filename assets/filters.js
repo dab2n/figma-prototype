@@ -197,4 +197,35 @@
     });
     field.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
   }
+
+  // ── What the funnel drives ────────────────────────────────────────────────
+  // The filter sheet sets all three axes at once instead of one drawer at a time.
+  // It moves THIS state rather than keeping its own — two things hiding the same
+  // cards is exactly how they end up disagreeing about what is on screen — so the
+  // chips repaint from the sheet's choice and the sheet opens on the chips'.
+  window.__packFilter = {
+    values: function (attr) { return values(attr); },
+    get: function () {
+      return { env: state.env === 'all' ? '' : state.env, sport: state.sport, type: state.type };
+    },
+    set: function (sel) {
+      state.env = sel.env || 'all';
+      state.sport = sel.sport || '';
+      state.type = sel.type || '';
+      setDrawer('');
+      paintChips();
+      apply();
+    },
+    // How many cards a selection would leave, WITHOUT applying it — so Apply is
+    // never a guess. The live search term still counts: the sheet narrows what
+    // the field has already found rather than replacing it.
+    count: function (sel) {
+      return cards.filter(function (c) {
+        return (!sel.env || c.getAttribute('data-env') === sel.env) &&
+               (!sel.sport || c.getAttribute('data-sport') === sel.sport) &&
+               (!sel.type || c.getAttribute('data-type') === sel.type) &&
+               (!state.q || haystack(c).indexOf(state.q) > -1);
+      }).length;
+    }
+  };
 })();
