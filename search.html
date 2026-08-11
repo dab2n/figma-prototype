@@ -2,6 +2,10 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<!-- The page ships in English and swaps to Korean in assets/i18n.js. Chrome offering to
+     translate it as well put a machine Korean on top of ours, in syllables the Korean face
+     is not subset for, and re-ran itself on every mutation our own observer made. -->
+<meta name="google" content="notranslate">
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=navigator.standalone===true||/ NewtonShell/.test(navigator.userAgent);if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1.6,w/424,h/844).toFixed(4));};window.__box();try{var S=window.NewtonShell;if(S&&S.insetTop){var st=S.insetTop(),sb=S.insetBottom();if(st)r.style.setProperty("--sat",st+"px");if(sb)r.style.setProperty("--sab",sb+"px");}}catch(e){}if(!i)r.className+=" clay";})(document);</script>
@@ -11,9 +15,9 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1089"></script>
-<script defer src="assets/trail.js?v=1089"></script>
-<script defer src="assets/i18n.js?v=1089"></script>
+<script defer src="assets/openext.js?v=1090"></script>
+<script defer src="assets/trail.js?v=1090"></script>
+<script defer src="assets/i18n.js?v=1090"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,16 +25,16 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Search</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1089">
-<link rel="stylesheet" href="styles/main.css?v=1089">
-<link rel="stylesheet" href="styles/aux.css?v=1089">
-<script defer src="assets/idle.js?v=1089"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1090">
+<link rel="stylesheet" href="styles/main.css?v=1090">
+<link rel="stylesheet" href="styles/aux.css?v=1090">
+<script defer src="assets/idle.js?v=1090"></script>
 <!-- The results ARE the pack table. Loading it here rather than copying a dozen
      titles into this file is what keeps search from promising a pack that has
      since been renamed — the same reason the Home cards read from it. -->
-<script defer src="assets/packs.js?v=1089"></script>
-<script defer src="assets/aux.js?v=1089"></script>
-<script defer src="assets/flows.js?v=1089"></script>
+<script defer src="assets/packs.js?v=1090"></script>
+<script defer src="assets/aux.js?v=1090"></script>
+<script defer src="assets/flows.js?v=1090"></script>
 </head>
 <body>
 <div class="phone">
@@ -89,7 +93,9 @@ document.addEventListener('DOMContentLoaded', function () {
     return {
       key: k,
       title: p.title,
-      meta: [p.type, p.sport, p.mins + 'm'].filter(Boolean).join(' · '),
+      // Joined here, so each part is asked for in the reader's language rather than
+      // handed to the observer as one English line it has no single entry for.
+      meta: [p.type, p.sport, p.mins + 'm'].filter(Boolean).map(window.__t || String).join(' · '),
       thumb: 'assets/photos/' + p.photo,
       href: 'pyeongso.html?pack=' + k,
       hay: [p.title, p.author, p.type, p.sport].join(' ').toLowerCase()

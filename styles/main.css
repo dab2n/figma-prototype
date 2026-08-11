@@ -688,3 +688,22 @@ html.installed .phone { box-sizing: border-box; padding-top: var(--sat, env(safe
 @media (prefers-reduced-motion: reduce) {
   .ob-check-disc, .ob-check-tick { animation-duration: 1ms; animation-delay: 0s; }
 }
+
+/* ── The language switch must not resize the page ────────────────────────────
+   Korean says the same thing in fewer line boxes: "Check Your Report" takes two
+   lines on a hub card, 리포트 확인하기 takes one. Every card, row and cell built
+   around that text then changed height on the toggle, which is what "the UI keeps
+   moving when I switch" was — the hub relaying itself under the finger, and the
+   version dots at the foot walking up the screen.
+
+   So the line box is reserved rather than the copy padded out to fill it. `lh` is
+   the element's own line box, so these follow whatever type each screen sets and
+   nothing here has to be re-tuned when a size changes. Reserved to the ENGLISH
+   line count, since English is the longer of the two everywhere.
+
+   Not on body paragraphs (.desc, .dj-desc): a paragraph is allowed to be as long
+   as it is, and none of them is on screen while the toggle is being pressed. */
+.fl-t, .fl-sub,
+.movement-card .t-body-bold, .more-card .t-body-bold, .rec-title,
+.nt-row .msg, .mc-desc, .info-grid .cell .value,
+.coach-s { min-height: 2lh; }

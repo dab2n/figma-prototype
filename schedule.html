@@ -2,6 +2,10 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<!-- The page ships in English and swaps to Korean in assets/i18n.js. Chrome offering to
+     translate it as well put a machine Korean on top of ours, in syllables the Korean face
+     is not subset for, and re-ran itself on every mutation our own observer made. -->
+<meta name="google" content="notranslate">
 <meta http-equiv="cache-control" content="no-cache">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- Which of the two the page is: INSTALLED, where the app owns the screen and fills it,
@@ -20,9 +24,9 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1089"></script>
-<script defer src="assets/trail.js?v=1089"></script>
-<script defer src="assets/i18n.js?v=1089"></script>
+<script defer src="assets/openext.js?v=1090"></script>
+<script defer src="assets/trail.js?v=1090"></script>
+<script defer src="assets/i18n.js?v=1090"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -30,12 +34,12 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Schedule</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1089">
-<link rel="stylesheet" href="styles/main.css?v=1089">
-<link rel="stylesheet" href="styles/setup.css?v=1089">
-<link rel="stylesheet" href="styles/mainworkout.css?v=1089">
-<script defer src="assets/idle.js?v=1089"></script>
-<script defer src="assets/flows.js?v=1089"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1090">
+<link rel="stylesheet" href="styles/main.css?v=1090">
+<link rel="stylesheet" href="styles/setup.css?v=1090">
+<link rel="stylesheet" href="styles/mainworkout.css?v=1090">
+<script defer src="assets/idle.js?v=1090"></script>
+<script defer src="assets/flows.js?v=1090"></script>
 </head>
 <body>
 <div class="phone">
@@ -56,7 +60,9 @@
 
     <div class="setup-body">
       <div class="setup-sec">
-        <p class="setup-sec-label">Day</p>
+        <!-- "Date", not "Day": Records already spends "Day" on its Day/Week/Month tabs,
+             and one English word cannot carry two different Korean ones. -->
+        <p class="setup-sec-label">Date</p>
         <div class="chip-rows">
           <div class="chip-row" id="schDays" data-single></div>
         </div>
@@ -105,7 +111,7 @@
     </div>
   </div>
 </div>
-<script defer src="assets/setup.js?v=1089"></script>
+<script defer src="assets/setup.js?v=1090"></script>
 <script>
 // The day chips are built rather than typed: seven days from today, so the page is never
 // offering a date that has gone. Everything else is the setup flow's own machinery —
@@ -166,7 +172,10 @@
     var day = days.querySelector('.sel');
     var h = val(wheels.h), m = val(wheels.m);
     var ap = Math.round(wheels.a.scrollTop / ROW) === 1 ? 'pm' : 'am';
-    return (day ? day.textContent : 'Today') + ' · ' + h + ':' + (m < 10 ? '0' + m : m) + ' ' + ap;
+    // The day chip is already in the reader's language; the clock is assembled here, so it
+    // asks for its own words rather than leaving English in the DOM to be corrected later.
+    var t = window.__t || function (x) { return x; };
+    return (day ? day.textContent : t('Today')) + ' · ' + t(h + ':' + (m < 10 ? '0' + m : m) + ' ' + ap);
   }
   function paint() {}
   document.addEventListener('click', function (e) { if (e.target.closest('[data-toggle]')) setTimeout(paint, 0); });
@@ -183,8 +192,11 @@
     e.preventDefault();
     noteWhen.textContent = label();
     var pick = document.querySelector('#schWhen .sel .cs-title');
-    document.querySelector('#schNote .idle-h').textContent =
-      pick ? "We'll message you " + pick.textContent.toLowerCase() + '.' : "We'll message you.";
+    var when = pick ? pick.textContent.trim() : '';
+    var ko = window.__lang && window.__lang() === 'ko';
+    document.querySelector('#schNote .idle-h').textContent = ko
+      ? (when ? when + ' 알려드릴게요.' : '시간이 되면 알려드릴게요.')
+      : (when ? "We'll message you " + when.toLowerCase() + '.' : "We'll message you.");
     note.hidden = false;
     setTimeout(function () { location.href = 'home.html'; }, 1800);
   });

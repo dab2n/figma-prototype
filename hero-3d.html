@@ -2,6 +2,10 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<!-- The page ships in English and swaps to Korean in assets/i18n.js. Chrome offering to
+     translate it as well put a machine Korean on top of ours, in syllables the Korean face
+     is not subset for, and re-ran itself on every mutation our own observer made. -->
+<meta name="google" content="notranslate">
 <title>Hero Cards — 3D Space</title>
 <link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Regular.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="fonts/supreme/Supreme-Bold.woff2" crossorigin>
