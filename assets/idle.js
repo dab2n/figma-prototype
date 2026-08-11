@@ -12,15 +12,20 @@
 // prototype (the hero carousel, the pack feed, the report) fires on its own element,
 // and only a capturing listener on window sees those.
 (function () {
-  // Where a walked-away prototype goes back to. Home is the app's own front door and
-  // it opens on Sean's card, so the fullscreen clip is one tap away rather than
-  // something a person is dropped into with no idea how they got there.
-  var HOME = 'home.html';
+  // Where a walked-away prototype goes back to.
+  // Version 1 goes back to Home — the app's front door, which opens on Sean's card.
+  // Version 2 goes back to the splash, so the next person meets the slogan and the logo
+  // first. Chosen per device from the hub (flows.html); see the note there.
+  var V2 = false;
+  try { V2 = localStorage.getItem('nw.ver') === '2'; } catch (e) {}
+  var HOME = V2 ? 'index.html' : 'home.html';
   var TOTAL = 20000;      // stillness before it goes, in full
   var GRACE = 3;          // …the last seconds of which are spent warning
 
   var here = location.pathname.split('/').pop() || 'index.html';
   // The hub is where this sends people, and the splash is on its way there by itself.
+  // Never bounce the screen it bounces TO, nor the hub, nor — in version 2 — Home,
+  // which is a stop on the way rather than the place it returns to.
   if (here === HOME || here === 'flows.html') return;
   try {
     // An escape hatch for reviewing on a desktop, where being bounced every twenty

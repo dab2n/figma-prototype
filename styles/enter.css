@@ -73,6 +73,10 @@
      moves keeps the layer alive across the rest, so that first frame has something to
      work from. */
   will-change: clip-path, top;
+  /* The fold is driven by the handler in enter.js for the finger as well as the mouse,
+     so the browser must not ALSO scroll this — that would move the fold twice. Same
+     reason .dj-bar opts out below. */
+  touch-action: none;
 }
 .dj-photo {
   position: absolute;

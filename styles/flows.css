@@ -57,3 +57,18 @@
   color: var(--color-neutral-500);
 }
 .fl-card:active { background: var(--color-neutral-50); }
+
+/* ── Attract-mode switch (assets/idle.js, index.html) ─────────────────────────
+   For the person running the exhibition, not for the people looking at it. Two
+   hairline dots at the foot of the hub: no label, no colour, and the live one is
+   only a shade darker than the other. Anybody who does not know it is there reads
+   it as punctuation. */
+.fl-ver { display: flex; gap: 10px; justify-content: center; padding: 26px 0 6px; }
+.fl-ver button {
+  width: 7px; height: 7px; padding: 0; border: none; border-radius: 999px;
+  background: var(--color-neutral-200);
+  cursor: pointer;
+  transition: background .2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.fl-ver button.on { background: var(--color-neutral-400); }

@@ -18,10 +18,10 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="light">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1088"></script>
-<script defer src="assets/trail.js?v=1088"></script>
-<script defer src="assets/i18n.js?v=1088"></script>
-<script defer src="assets/flows.js?v=1088"></script>
+<script defer src="assets/openext.js?v=1089"></script>
+<script defer src="assets/trail.js?v=1089"></script>
+<script defer src="assets/i18n.js?v=1089"></script>
+<script defer src="assets/flows.js?v=1089"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -29,10 +29,10 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Try the flows</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1088">
-<link rel="stylesheet" href="styles/main.css?v=1088">
-<link rel="stylesheet" href="styles/onboarding.css?v=1088">
-<link rel="stylesheet" href="styles/flows.css?v=1088">
+<link rel="stylesheet" href="styles/freesentation.css?v=1089">
+<link rel="stylesheet" href="styles/main.css?v=1089">
+<link rel="stylesheet" href="styles/onboarding.css?v=1089">
+<link rel="stylesheet" href="styles/flows.css?v=1089">
 </head>
 <body>
 <div class="phone">
@@ -79,6 +79,16 @@
           </a>
         </div>
       </div>
+
+      <!-- Two devices, one build. Which attract loop this machine runs, kept per
+           BROWSER (localStorage) so each device holds its own answer and a walk
+           through the app never changes it. Deliberately quiet: a hairline row of
+           two dots at the foot of the hub, no label, no colour — the exhibitor
+           knows what it is and nobody else has any reason to notice it. -->
+      <div class="fl-ver no-i18n" id="flVer" role="group" aria-label="Attract mode">
+        <button type="button" data-ver="1" aria-label="Version 1"></button>
+        <button type="button" data-ver="2" aria-label="Version 2"></button>
+      </div>
     </div>
   </div>
 </div>
@@ -86,6 +96,26 @@
   document.querySelector('[data-notif]').addEventListener('click', function () {
     try { sessionStorage.setItem('notifNow', '1'); } catch (e) {}
   });
+  // Version 1 — 20s of stillness goes back to Home.
+  // Version 2 — it goes back to the splash (slogan + logo), and Get Started there opens
+  // the flow list instead of the first setup. Read by assets/idle.js and by index.html.
+  (function () {
+    var box = document.getElementById("flVer");
+    function cur() { try { return localStorage.getItem("nw.ver") === "2" ? "2" : "1"; } catch (e) { return "1"; } }
+    function paint() {
+      [].forEach.call(box.children, function (b) {
+        b.classList.toggle("on", b.getAttribute("data-ver") === cur());
+      });
+    }
+    box.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-ver]");
+      if (!b) return;
+      try { localStorage.setItem("nw.ver", b.getAttribute("data-ver")); } catch (err) {}
+      paint();
+    });
+    paint();
+  })();
+
   // The toggle writes the choice and re-renders in place — every other screen reads the
   // same key on the way in, so the language is chosen once and holds for the whole walk.
   (function () {

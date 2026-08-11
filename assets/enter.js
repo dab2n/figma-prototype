@@ -18,6 +18,7 @@
   // swallowing the creator line and the tag.
   var OPEN = TRAVEL;           // where a committed fold settles
   var HINT = STOP * TRAVEL;    // 64px — the 1회 진입 stop, in scroll
+  var bar = document.getElementById('djGrab');
   var raf = 0, holding = false, idle = 0, snapping = 0;
   var lastY = 0, dir = 0;      // which way the last scroll went; settle() reads it
 
@@ -36,13 +37,19 @@
     var p = progress();
     var s = Math.min(1, p / STOP);                             // 평소 → 1회 진입
     var q = Math.max(0, (p - STOP) / (1 - STOP));              // 1회 진입 → 올릴때
+
     // How far the sheet has been read PAST the fold. The folded header is sticky, which
     // is what stops the sheet slicing it — but sticky forever meant it sat pinned over
     // the content for the rest of the page. It rides this back up and out instead, so
     // header and sheet scroll away together once the fold is done with.
     var over = Math.max(0, screen.scrollTop - OPEN);
-    var root = document.documentElement;          // the bottom bar sits outside the scroller
-    [screen, root].forEach(function (el) {
+    var root = document.documentElement;
+    // The bottom bar is the ONLY thing outside the scroller that reads these (enter.css
+    // 265-330), and it gets them directly. They used to go on :root — and a custom
+    // property written on the root invalidates style for the whole document, every
+    // frame of the fold, on a phone. The class toggles below stay on the root because a
+    // class only costs anything on the frame it actually changes.
+    [screen, bar || root].forEach(function (el) {
       el.style.setProperty('--p', p.toFixed(4));
       el.style.setProperty('--s', s.toFixed(4));
       el.style.setProperty('--q', q.toFixed(4));
@@ -189,6 +196,16 @@
   function handle(el, mouseOnly) {
     if (!el) return;
     var id = null, y0 = 0, top0 = 0, moved = 0, captured = 0;
+    // Applied in a frame, not on the event. A pointermove arrives up to 120 times a
+    // second and writing scrollTop inside it forces a synchronous layout on each one;
+    // the fold then lands a few frames behind the finger, which is the stutter.
+    var want = null, pending = 0;
+    function apply() {
+      pending = 0;
+      if (want === null) return;
+      screen.scrollTop = want;
+      want = null;
+    }
     el.addEventListener('pointerdown', function (e) {
       // A finger on something INSIDE the scroller already drags the fold, natively and
       // better; taking it over here would move it twice. Only the mouse needs help.
@@ -217,7 +234,8 @@
         y0 = e.clientY; dy = 0;                     // re-baseline so it does not jump
         if (el.setPointerCapture) { try { el.setPointerCapture(id); } catch (err) {} }
       }
-      screen.scrollTop = Math.max(0, top0 + dy);
+      want = Math.max(0, top0 + dy);
+      if (!pending) pending = requestAnimationFrame(apply);
     });
     ['pointerup', 'pointercancel'].forEach(function (t) {
       el.addEventListener(t, function (e) {
@@ -225,6 +243,7 @@
         var wasDrag = captured;
         if (captured && el.releasePointerCapture) { try { el.releasePointerCapture(id); } catch (err) {} }
         id = null; captured = 0;
+        if (pending) { cancelAnimationFrame(pending); apply(); }   // land the last move
         holding = false;
         if (wasDrag) setTimeout(settle, 20);       // a drag: land on the nearest stop
       });
@@ -234,11 +253,22 @@
       if (moved > SLOP) { e.preventDefault(); e.stopPropagation(); moved = 0; }
     }, true);
   }
-  handle(document.getElementById('djGrab'));
-  // The other end of the same gesture: the folded header is a handle too, so 올릴때 comes
-  // back down by grabbing the blurred profile area — the mirror of grabbing the black
-  // strip to go up. A finger already does this through the scroller; this is the mouse.
-  handle(document.querySelector('.dj-hero'), true);
+  handle(bar);
+  // The other end of the same gesture: the whole hero is a handle — the photograph, the
+  // profile row, the title, the description — so 올릴때 comes back down by grabbing
+  // anywhere up there, the mirror of grabbing the black strip to go up.
+  //
+  // For the FINGER too, not just the mouse. Leaving touch to the scroller meant the pull
+  // down from the folded header was a native scroll that had to chain out of whatever it
+  // started on, and it arrived in two goes with a catch between them. The handler drives
+  // the fold directly, in one motion, from the first pixel past the slop — and .dj-hero
+  // is touch-action: none (enter.css) so the browser does not also scroll it, which would
+  // move the fold twice.
+  //
+  // The hero is clipped to the card by clip-path, and clip-path clips hit-testing too, so
+  // this is exactly the area that LOOKS like the header at any point in the fold: the
+  // whole picture at rest, the folded bar once it is open, and nothing below either.
+  handle(document.querySelector('.dj-hero'));
   // Tap the picture itself to hold the clip, tap again to let it run. A tap only —
   // anything with movement in it is a fold gesture and must not also toggle playback.
   // data-held tells assets/clips.js to leave it alone when it next comes on screen.
