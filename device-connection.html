@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="cache-control" content="no-cache">
-<meta name="viewport" content="width=360, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!-- Which of the two the page is: INSTALLED, where the app owns the screen and fills it,
      or a BROWSER, where it is the 360x780 frame on a white page. Decided here rather than
      in a media query so nothing depends on a browser reporting a width it was asked for.
      392/812 are the frame plus 16px of air; --fit scales it to whatever is actually there.
      Inline and parser-blocking ON PURPOSE: --fit falls back to 1, so any frame painted
      before it is set shows the phone at FULL size and then snaps down. -->
-<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true||/ NewtonShell/.test(navigator.userAgent);if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/424,h/844).toFixed(4));};window.__box();try{var S=window.NewtonShell;if(S&&S.insetTop){var st=S.insetTop(),sb=S.insetBottom();if(st)r.style.setProperty("--sat",st+"px");if(sb)r.style.setProperty("--sab",sb+"px");}}catch(e){}if(!i)r.className+=" clay";})(document);</script>
+<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true||/ NewtonShell/.test(navigator.userAgent);if(ios)r.className+=" ios";if(i)r.className+=" installed";try{var vp=d.querySelector('meta[name=viewport]');if(vp&&Math.min(screen.width,screen.height)<600)vp.setAttribute("content","width=360, viewport-fit=cover");}catch(e){}window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1.6,w/424,h/844).toFixed(4));};window.__box();try{var S=window.NewtonShell;if(S&&S.insetTop){var st=S.insetTop(),sb=S.insetBottom();if(st)r.style.setProperty("--sat",st+"px");if(sb)r.style.setProperty("--sab",sb+"px");}}catch(e){}if(!i)r.className+=" clay";})(document);</script>
 <!-- The four faces every screen actually renders in. Preloaded because font-display:swap
      draws the fallback first and re-lays the text out when the real one lands — on the
      phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
@@ -20,9 +20,9 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1086"></script>
-<script defer src="assets/trail.js?v=1086"></script>
-<script defer src="assets/i18n.js?v=1086"></script>
+<script defer src="assets/openext.js?v=1087"></script>
+<script defer src="assets/trail.js?v=1087"></script>
+<script defer src="assets/i18n.js?v=1087"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -30,12 +30,12 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Check your devices</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1086">
-<link rel="stylesheet" href="styles/main.css?v=1086">
-<link rel="stylesheet" href="styles/setup.css?v=1086">
-<link rel="stylesheet" href="styles/ready.css?v=1086">
-<script defer src="assets/idle.js?v=1086"></script>
-<script defer src="assets/flows.js?v=1086"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1087">
+<link rel="stylesheet" href="styles/main.css?v=1087">
+<link rel="stylesheet" href="styles/setup.css?v=1087">
+<link rel="stylesheet" href="styles/ready.css?v=1087">
+<script defer src="assets/idle.js?v=1087"></script>
+<script defer src="assets/flows.js?v=1087"></script>
 </head>
 <body>
 <div class="phone">

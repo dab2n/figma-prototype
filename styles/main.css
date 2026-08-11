@@ -96,6 +96,11 @@ html.clay .phone {
   outline: 10px solid #3B3B3B;
   outline-offset: 0;
 }
+/* And the page it sits on is grey, so the mockup reads as an object ON something
+   rather than as a white app bleeding into a white page. It is the ground, not a
+   surface: darker than every screen in the app (the palest is Neutral/50) so the
+   frame's own white edge is the boundary. */
+html.clay body { background: #DEDEDE; }
 
 
 /* A browser — any browser, a laptop or a phone — shows the frame as a frame: 360x780 on
@@ -191,6 +196,7 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
      which spills past the scroller by design and came back cut off. The junction is drawn
      over the frame now (see .tabbar's fillets), so nothing needs the clip to hold. */
 }
+.screen { border-radius: 40px 40px 0 0; }
 .screen::-webkit-scrollbar { display: none; }
 .screen { scrollbar-width: none; }
 
@@ -227,6 +233,7 @@ video::-internal-media-controls-overlay-cast-button {
   z-index: 30;
   width: 360px;
   height: 44px;
+  border-radius: 40px 40px 0 0;
 }
 .status-bar .statusbar-svg { display: block; width: 360px; height: 44px; }
 
@@ -411,7 +418,9 @@ button { font-family: inherit; }
 /* Desktop: the frame is a device sitting still, not a page. The document does not scroll
    at all — an 860px-tall layout in a shorter window used to slide up and down and cut the
    bottom off whatever screen was being looked at (or recorded) — and the phone shrinks to
-   fit instead of being clipped. --fit is measured in assets/openext.js; 1 until then. */
+   fit instead of being clipped. --fit is worked out ONCE, in the boot script in every
+   page head, and openext.js only re-runs that same function on resize — there is not a
+   second formula anywhere. Above 1 on a tablet, where there is room to spare. */
 
 
 /* Installed (standalone): the OS DOES draw its own status bar, and viewport-fit=cover puts
@@ -564,6 +573,9 @@ html:not(.installed) .flow-exit { top: 11px; }
    is the white under the navbar. */
 html.installed, html.installed body { height: 100%; height: 100lvh; background: var(--color-black); overscroll-behavior: none; }
 html.installed body { padding: 0; align-items: stretch; justify-content: flex-start; }
+/* Installed, the frame IS the window and has no corners of its own — so neither do
+   the two layers that carry them in a browser. */
+html.installed .screen, html.installed .status-bar { border-radius: 0; }
 html.installed .phone {
   width: 100%;
   height: 100%;

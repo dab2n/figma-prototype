@@ -37,33 +37,20 @@
     } catch (e) {}
   })();
 
-  // Desktop only: scale the phone down until it fits the window, so the document never
-  // needs to scroll (main.css turns document scrolling off above 400px). Set --fit to 1
-  // first and read back, so each resize measures the unscaled frame — the detail screens
-  // are not all 780 tall.
-  (function () {
-    if (!matchMedia('(min-width: 401px)').matches) return;
-    var phone = document.querySelector('.phone');
-    if (!phone) return;
-    var root = document.documentElement;
-    // Measured ONCE, on the first call, while --fit is still its initial 1 — offsetHeight
-    // is reported in the zoomed coordinate space, so a later re-read would need --fit
-    // reset to 1 first, and that reset is what made the viewport flinch: every re-fit
-    // pushed the frame to full size for one layout. The frame is a fixed 360x780 device;
-    // nothing in the page can change its height, so one measurement holds for the session.
-    // 812, the same constant the inline <head> setter uses — they must not disagree, or
-    // the frame would change size the moment this file arrived. The frame is a fixed
-    // 360x780 device; offsetHeight is only read as a check that it still is.
-    var need = phone.offsetHeight + 32;                       // 16px of air top and bottom
-    function fit() {
-      root.style.setProperty('--fit', Math.min(1, innerHeight / need).toFixed(4));
-    }
-    fit();
-    addEventListener('resize', fit);
-    // No 'load' / 'animationend' re-fit: those fired on every intro animation (8 pack
-    // cards, the whole Home cascade), and each one forced a synchronous relayout of the
-    // zoomed frame mid-animation — the stutter on the way into Packs.
-  })();
+  // Keep the frame fitted as the window changes — a rotation, a split view, a resized
+  // browser.
+  //
+  // This used to work out its own --fit, from its own constants, capped at 1. Two
+  // formulas for one number is two chances to disagree, and they did: the moment the
+  // tablet layout was corrected this one ran (it fires above 401px, which a tablet now
+  // genuinely is) and overwrote the head's 1.4 with 1, so the frame sat at 360x780 in
+  // the middle of a 1366-tall screen. There is one formula now, in the boot script,
+  // and this simply re-runs it.
+  //
+  // No 'load' / 'animationend' re-fit: those fired on every intro animation (8 pack
+  // cards, the whole Home cascade), and each one forced a synchronous relayout of the
+  // zoomed frame mid-animation — the stutter on the way into Packs.
+  if (window.__box) addEventListener('resize', window.__box);
 
   var open = target();
   if (!open) return;
