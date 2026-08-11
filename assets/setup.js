@@ -113,13 +113,26 @@
     try { sessionStorage.setItem('setupFrom', hereHref); } catch (err) {}
   });
 
+  function off(b) { b.classList.remove('sel'); mark(b, false); }
+
   toggles.forEach(function (btn) {
     btn.addEventListener('click', function () {
       var on = btn.classList.contains('sel');
       var group = btn.closest('[data-single]');
-      if (group && !on) group.querySelectorAll('[data-toggle].sel').forEach(function (b) {
-        b.classList.remove('sel'); mark(b, false);
-      });
+      if (group && !on) group.querySelectorAll('[data-toggle].sel').forEach(off);
+
+      // "None" and "somewhere hurts" cannot both be true. In a [data-group] several
+      // answers stand together, but one of them can be marked [data-exclusive], and
+      // then it is either that one or the others — never both. Turning None on
+      // clears the areas; naming an area clears None.
+      var multi = btn.closest('[data-group]');
+      if (multi && !on) {
+        var mine = btn.hasAttribute('data-exclusive');
+        multi.querySelectorAll('[data-toggle].sel').forEach(function (b) {
+          if (b !== btn && (mine || b.hasAttribute('data-exclusive'))) off(b);
+        });
+      }
+
       btn.classList.toggle('sel', !on);
       mark(btn, !on);
       save();
@@ -128,23 +141,59 @@
     });
   });
 
-  // Tapping a region on the body figure is the same as tapping its chip.
+  // ── The body figure ───────────────────────────────────────────────────────
+  // Tapping the clip is the same answer as tapping a chip, and it can be tapped
+  // ANYWHERE: the five .body-hot are no longer five small targets to find, they
+  // are the reference points for what a tap means. Whichever is nearest names the
+  // area, its chip is toggled, and the ring moves to where the finger actually
+  // landed — so what is marked on the body is the spot the person pointed at, not
+  // an approximation of it a few pixels away.
   function chipFor(name) {
     for (var i = 0; i < toggles.length; i++) if (toggles[i].textContent.trim() === name) return toggles[i];
     return null;
   }
+  // Where each ring belongs when nobody has pointed at it — the position the
+  // markup gives it, kept so a chip picked from the row still lands correctly.
+  hots.forEach(function (h) { h.__home = [h.style.left, h.style.top]; });
+
   function syncHots() {
     hots.forEach(function (h) {
       var chip = chipFor(h.getAttribute('data-region'));
-      h.classList.toggle('sel', !!(chip && chip.classList.contains('sel')));
+      var on = !!(chip && chip.classList.contains('sel'));
+      h.classList.toggle('sel', on);
+      // Back to its own place once it is let go, so the next tap on that area
+      // does not start from wherever the last one left it.
+      if (!on && h.__home) { h.style.left = h.__home[0]; h.style.top = h.__home[1]; }
     });
   }
-  hots.forEach(function (h) {
-    h.addEventListener('click', function () {
-      var chip = chipFor(h.getAttribute('data-region'));
-      if (chip) chip.click();
+
+  var map = document.querySelector('.injury-map');
+  if (map && hots.length) {
+    map.addEventListener('click', function (e) {
+      var r = map.getBoundingClientRect();
+      // The map is inside .phone, which is scaled by `zoom` in a browser; the
+      // ratio of the painted box to the laid-out one converts a screen point back
+      // into the coordinates the rings are positioned in.
+      var k = r.width / map.offsetWidth || 1;
+      var x = (e.clientX - r.left) / k, y = (e.clientY - r.top) / k;
+      var best = null, bestD = Infinity;
+      hots.forEach(function (h) {
+        var dx = parseFloat(h.style.left) - x, dy = parseFloat(h.style.top) - y;
+        var d = dx * dx + dy * dy;
+        if (d < bestD) { bestD = d; best = h; }
+      });
+      if (!best) return;
+      var chip = chipFor(best.getAttribute('data-region'));
+      if (!chip) return;
+      // Move it BEFORE the toggle, so the ring fades in where it was asked for
+      // rather than travelling there afterwards.
+      if (!chip.classList.contains('sel')) {
+        best.style.left = Math.round(x) + 'px';
+        best.style.top = Math.round(y) + 'px';
+      }
+      chip.click();
     });
-  });
+  }
 
   restore();
   syncHots();

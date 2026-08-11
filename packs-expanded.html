@@ -10,7 +10,7 @@
      392/812 are the frame plus 16px of air; --fit scales it to whatever is actually there.
      Inline and parser-blocking ON PURPOSE: --fit falls back to 1, so any frame painted
      before it is set shows the phone at FULL size and then snaps down. -->
-<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true||/ NewtonShell/.test(navigator.userAgent);if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/424,h/844).toFixed(4));};window.__box();try{var S=window.NewtonShell;if(S&&S.insetTop){var st=S.insetTop(),sb=S.insetBottom();if(st)r.style.setProperty("--sat",st+"px");if(sb)r.style.setProperty("--sab",sb+"px");}}catch(e){}try{if(localStorage.getItem("clay"))r.className+=" clay";}catch(e){}})(document);</script>
+<script>(function(d){var r=d.documentElement,m=window.matchMedia,ios=/iP(hone|od|ad)/.test(navigator.platform)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform))||navigator.standalone===true,i=(m&&(m("(display-mode: standalone)").matches||m("(display-mode: fullscreen)").matches))||navigator.standalone===true||/ NewtonShell/.test(navigator.userAgent);if(ios)r.className+=" ios";if(i)r.className+=" installed";window.__box=function(){var v=window.visualViewport;var w=innerWidth,h=innerHeight;if(v){w=Math.min(w,v.width);h=Math.min(h,v.height);}r.style.setProperty("--vpw",Math.round(w)+"px");r.style.setProperty("--vph",Math.round(h)+"px");if(!r.classList.contains("installed"))r.style.setProperty("--fit",Math.min(1,w/424,h/844).toFixed(4));};window.__box();try{var S=window.NewtonShell;if(S&&S.insetTop){var st=S.insetTop(),sb=S.insetBottom();if(st)r.style.setProperty("--sat",st+"px");if(sb)r.style.setProperty("--sab",sb+"px");}}catch(e){}if(!i)r.className+=" clay";})(document);</script>
 <!-- The four faces every screen actually renders in. Preloaded because font-display:swap
      draws the fallback first and re-lays the text out when the real one lands — on the
      phone that swap is what came out looking like broken type mid-transition. 64KB all in. -->
@@ -20,10 +20,10 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#FAFAFA">
-<script defer src="assets/openext.js?v=1085"></script>
-<script defer src="assets/trail.js?v=1085"></script>
-<script defer src="assets/i18n.js?v=1085"></script>
-<script defer src="assets/filters.js?v=1085"></script>
+<script defer src="assets/openext.js?v=1086"></script>
+<script defer src="assets/trail.js?v=1086"></script>
+<script defer src="assets/i18n.js?v=1086"></script>
+<script defer src="assets/filters.js?v=1086"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,14 +31,14 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Packs (Expanded)</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1085">
-<link rel="stylesheet" href="styles/main.css?v=1085">
-<link rel="stylesheet" href="styles/packs.css?v=1085">
-<link rel="stylesheet" href="styles/aux.css?v=1085">
-<script defer src="assets/idle.js?v=1085"></script>
-<script defer src="assets/packs.js?v=1085"></script>
-<script defer src="assets/aux.js?v=1085"></script>
-<script defer src="assets/flows.js?v=1085"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1086">
+<link rel="stylesheet" href="styles/main.css?v=1086">
+<link rel="stylesheet" href="styles/packs.css?v=1086">
+<link rel="stylesheet" href="styles/aux.css?v=1086">
+<script defer src="assets/idle.js?v=1086"></script>
+<script defer src="assets/packs.js?v=1086"></script>
+<script defer src="assets/aux.js?v=1086"></script>
+<script defer src="assets/flows.js?v=1086"></script>
 </head>
 <body>
 <div class="phone">
@@ -82,17 +82,17 @@
 
     <div class="pack-list">
       <a class="pack-card" href="pyeongso.html?pack=sprint" data-env="indoor" data-sport="Sprint" data-type="Creator">
-        <div class="pack-thumb" style="background-image:url('assets/photos/packs-card1-thumb.webp?v=1085'); height:189px;">
+        <div class="pack-thumb" style="background-image:url('assets/photos/packs-card1-thumb.webp?v=1086'); height:189px;">
           <div class="pack-thumb-top">
             <div class="pack-person">
-              <img class="pack-avatar-sm" src="assets/photos/packs-profile-kanni.png?v=1085" alt="">
+              <img class="pack-avatar-sm" src="assets/photos/packs-profile-kanni.png?v=1086" alt="">
               <span class="t-caption-bold" style="color:#fff;">Kanni</span>
             </div>
             <span class="badge">NEW</span>
           </div>
           <div class="pack-stack">
-            <img src="assets/photos/packsx-avatar-a.png?v=1085" alt="">
-            <img src="assets/photos/packsx-avatar-b.png?v=1085" alt="">
+            <img src="assets/photos/packsx-avatar-a.png?v=1086" alt="">
+            <img src="assets/photos/packsx-avatar-b.png?v=1086" alt="">
           </div>
         </div>
         <div class="pack-info">
@@ -102,18 +102,18 @@
       </a>
 
       <a class="pack-card" href="pyeongso.html" data-env="outdoor" data-sport="Running" data-type="Creator">
-        <div class="pack-thumb" style="background-image:url('assets/photos/packs-card2-thumb.jpg?v=1085'); height:517px; background-position: bottom;">
+        <div class="pack-thumb" style="background-image:url('assets/photos/packs-card2-thumb.jpg?v=1086'); height:517px; background-position: bottom;">
           <div class="pack-thumb-top">
             <div class="pack-person">
-              <img class="pack-avatar-sm" src="assets/photos/packs-profile-sean.png?v=1085" alt="">
+              <img class="pack-avatar-sm" src="assets/photos/packs-profile-sean.png?v=1086" alt="">
               <span class="t-caption-bold" style="color:#fff;">Sean</span>
             </div>
             <span class="badge badge-dark">5m ago</span>
           </div>
           <div class="pack-stack">
-            <img src="assets/photos/packs-avatar3.png?v=1085" alt="">
-            <img src="assets/photos/packs-avatar4.png?v=1085" alt="">
-            <img src="assets/photos/packsx-avatar-d.png?v=1085" alt="">
+            <img src="assets/photos/packs-avatar3.png?v=1086" alt="">
+            <img src="assets/photos/packs-avatar4.png?v=1086" alt="">
+            <img src="assets/photos/packsx-avatar-d.png?v=1086" alt="">
           </div>
         </div>
         <div class="pack-info">
@@ -123,16 +123,16 @@
       </a>
 
       <a class="pack-card" href="pyeongso.html?pack=bolt" data-env="outdoor" data-sport="Sprint" data-type="Pro">
-        <div class="pack-thumb pack-thumb-dark" style="background-image:url('assets/photos/packs-card3-thumb.webp?v=1085'); height:189px;">
+        <div class="pack-thumb pack-thumb-dark" style="background-image:url('assets/photos/packs-card3-thumb.webp?v=1086'); height:189px;">
           <div class="pack-thumb-top">
             <div class="pack-person">
-              <img class="pack-avatar-sm" src="assets/photos/packs-avatar-usainbolt.png?v=1085" alt="">
+              <img class="pack-avatar-sm" src="assets/photos/packs-avatar-usainbolt.png?v=1086" alt="">
               <span class="t-caption-bold" style="color:#fff;">Usain Bolt</span>
             </div>
           </div>
           <div class="pack-stack">
-            <img src="assets/photos/packs-avatar1.png?v=1085" alt="">
-            <img src="assets/photos/packs-avatar2.png?v=1085" alt="">
+            <img src="assets/photos/packs-avatar1.png?v=1086" alt="">
+            <img src="assets/photos/packs-avatar2.png?v=1086" alt="">
           </div>
         </div>
         <div class="pack-info">

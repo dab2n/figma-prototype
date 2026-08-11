@@ -99,7 +99,7 @@
     'See how the movement turned out.': '움직임이 어땠는지 확인해요.',
 
     /* ── splash ─────────────────────────────────────────────────────────── */
-    'Now, Your Turn!': '뉴턴과 함께 운동할 차례!',
+    'Now, Your Turn!': '이제, 당신의 차례',
     'Get Started': 'NEWTON 시작하기',
     'Already have an account': '이미 계정이 있어요',
 
@@ -293,6 +293,10 @@
     'results': '개', 'result': '개',
     'No sessions match these filters.': '조건에 맞는 세션이 없어요.',
 
+    'Pull down from the top': '위에서 아래로 내려보세요',
+    'Grab the middle of the top edge and drag down.': '화면 위쪽 가운데를 잡고 아래로 끌어요.',
+    'Then tap the red pill to pick a flow.': '그다음 빨간 버튼을 누르면 플로우를 고를 수 있어요.',
+
     'Share': '공유', 'Copy link': '링크 복사', 'Link copied': '링크를 복사했어요', 'Close': '닫기'
   };
 
@@ -370,10 +374,39 @@
   else apply();
 
   // Screens write their own text after this runs — a pack fills its cards from the table,
-  // the score counts up, the fold swaps a title. A debounced re-pass catches all of it
-  // without any of them having to know this exists.
+  // the score counts up, the fold swaps a title.
+  //
+  // What arrives is swapped SYNCHRONOUSLY, in the observer callback itself. Deferring it
+  // to the next animation frame is what made Korean flicker: packs.js stamps the card
+  // titles from its own table, and if that landed after the frame's callbacks had already
+  // run, the English it wrote was painted and only corrected a frame later. Measured on
+  // Home in Korean: "Akiyama's Ghost Step" and "Curry's Step Back" were on screen in
+  // English at 24ms while everything around them was already Korean.
+  //
+  // A MutationObserver callback is a microtask — it runs before the browser paints — so
+  // doing the swap there means the English is never drawn at all. Only what changed is
+  // touched, so this is a handful of nodes rather than the whole document.
+  //
+  // It cannot loop: swap() writes the same value it recorded, so the record its own write
+  // produces finds nothing left to change.
+  function swapTree(node) {
+    if (node.nodeType === 3) return swap(node);
+    if (node.nodeType !== 1) return;
+    var w = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, null), n;
+    while ((n = w.nextNode())) swap(n);
+  }
+
+  // The whole-document pass is still wanted for ATTRIBUTES (placeholder, aria-label),
+  // which no single record points at usefully — but it can stay debounced, because an
+  // attribute is not something anybody watches flicker.
   var pending = 0;
-  new MutationObserver(function () {
+  new MutationObserver(function (records) {
+    if (lang() === 'ko') {
+      records.forEach(function (r) {
+        if (r.type === 'characterData') swap(r.target);
+        else if (r.type === 'childList') [].forEach.call(r.addedNodes, swapTree);
+      });
+    }
     if (pending) return;
     pending = requestAnimationFrame(function () { pending = 0; apply(); });
   }).observe(document.documentElement, { childList: true, subtree: true, characterData: true });

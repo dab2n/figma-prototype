@@ -40,6 +40,93 @@
 /* A full-width settings row pulling in would read as the whole card moving. */
 .set-row[data-inert].pressing { transform: none; background-color: var(--color-neutral-100); }
 
+/* ── First-arrival coach mark (assets/coach.js) ───────────────────────────────
+   Home performs the pull-down gesture once for somebody who has just followed the
+   link, then puts itself back. Below .flow-exit's z-index 900 on purpose: the red
+   pill that lands is the real one, and it has to sit ON the blur, sharp, as the
+   thing being pointed at. */
+.coach { position: absolute; inset: 0; z-index: 880; pointer-events: none; }
+/* Slight, as asked: enough that the screen reads as held back, not so much that it
+   stops being recognisable as Home. 2px over a 360-wide layout is about the most
+   that still leaves the hero card readable underneath. */
+.coach-veil {
+  position: absolute; inset: 0;
+  background: rgba(255, 255, 255, 0.34);
+  -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px);
+  opacity: 0; transition: opacity .45s ease;
+}
+.coach.in .coach-veil { opacity: 1; }
+.coach.out .coach-veil { opacity: 0; transition-duration: .6s; }
+
+.coach-body {
+  position: absolute; left: 0; right: 0; top: 0;
+  text-align: center;
+  opacity: 0; transition: opacity .45s ease;
+}
+.coach.in .coach-body { opacity: 1; }
+.coach.out .coach-body { opacity: 0; transition-duration: .55s; }
+
+/* The app's own arrow (the one in every Next), turned to point the way the finger
+   goes. It travels the distance the gesture actually needs — flows.js wants 28px
+   of downward travel — so what is shown is the real move, not a bigger mime of it. */
+.coach-arrow {
+  position: absolute; left: 50%; top: 56px;
+  width: 26px; height: 24px;
+  transform: translate(-50%, 0) rotate(90deg);
+  filter: brightness(0) invert(0.18);
+  animation: coach-pull 1.35s cubic-bezier(.4,0,.3,1) infinite;
+}
+/* Visible for most of the cycle rather than fading through the middle of it — a
+   sample taken at any moment should find an arrow, not a ghost. */
+@keyframes coach-pull {
+  0%   { transform: translate(-50%, -4px) rotate(90deg); opacity: 0; }
+  12%  { opacity: 1; }
+  78%  { transform: translate(-50%, 30px) rotate(90deg); opacity: 1; }
+  100% { transform: translate(-50%, 40px) rotate(90deg); opacity: 0; }
+}
+/* Once the pill is down the arrow has said its piece. */
+.coach.landed .coach-arrow { animation: none; opacity: 0; transition: opacity .35s ease; }
+
+/* The copy carries its own ground. Home is a white page with a full-bleed red card
+   across the middle of it, and 2px of blur does not make dark type on that red
+   readable — the card is exactly where this lands. A plate in the app's own card
+   language (white, r24, the .pack-card shadow) so it reads wherever it sits. */
+.coach-plate {
+  position: absolute; left: 24px; right: 24px; top: 116px;
+  padding: 18px 20px 20px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.94);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.14);
+  text-align: center;
+}
+.coach-t, .coach-s, .coach-then { margin: 0; }
+.coach-t {
+  font-family: var(--font-supreme-bold); font-size: 19px; line-height: 1.25; letter-spacing: -0.6px;
+  color: var(--color-black);
+}
+.coach-s {
+  margin-top: 6px;
+  font-family: var(--font-supreme); font-size: 14px; line-height: 1.45; letter-spacing: -0.42px;
+  color: var(--color-neutral-600);
+}
+/* Arrives with the pill, so the two halves of the instruction are said in the order
+   they are performed. Its height is held from the start, or the plate would grow
+   under the reader mid-sentence. */
+.coach-then {
+  margin-top: 12px;
+  font-family: var(--font-supreme-medium); font-size: 14px; line-height: 1.45; letter-spacing: -0.42px;
+  color: var(--color-red);
+  opacity: 0; transform: translateY(5px);
+  transition: opacity .4s ease, transform .4s cubic-bezier(.2,.85,.25,1);
+}
+.coach.landed .coach-then { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .coach-arrow { animation: none; transform: translate(-50%, 20px) rotate(90deg); }
+  .coach-then { transition: opacity .4s ease; transform: none; }
+}
+
 /* Home's bell carries the same red dot the tab bar uses, for exactly as long as
    the notification list has something unread in it. The white ring is the app
    bar's own ground, so the dot reads as sitting on the icon rather than behind it. */
