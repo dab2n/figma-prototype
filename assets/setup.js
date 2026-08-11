@@ -10,7 +10,42 @@
 
   var toggles = [].slice.call(document.querySelectorAll('[data-toggle]'));
   var hots    = [].slice.call(document.querySelectorAll('.body-hot'));
-  var KEY = 'nw_setup_' + location.pathname;
+
+  // ── Where a run begins ────────────────────────────────────────────────────
+  // The two runs a person makes through this app. Coming into one from anywhere
+  // OUTSIDE it is a new run and starts with nothing chosen; moving inside it —
+  // forward or back — keeps the answers already given, because losing an answer
+  // by looking at the previous question is not a fresh start, it is a bug.
+  //
+  // Picks were surviving per step, per tab, with no notion of a run at all: open
+  // a pack, set it up, leave, open another pack, and the second setup arrived
+  // already answered with the first one's choices.
+  var FLOWS = [
+    ['onboarding-sport.html', 'onboarding-goal.html', 'onboarding-where.html',
+     'scan-intro.html', 'scan-front.html', 'scan-side.html', 'scan-ready.html'],
+    ['setup-location.html', 'setup-condition.html', 'setup-injury.html',
+     'setup-level.html', 'setup-main.html', 'setup-complete.html',
+     'device-connection.html', 'schedule.html', 'ready-to-start.html'],
+    // A form, not a flow, but the same rule: opening it again is a new pack, not
+    // the last one's answers.
+    ['pack-new.html']
+  ];
+  var here = location.pathname.split('/').pop() || 'index.html';
+  var dir  = location.pathname.slice(0, location.pathname.length - here.length);
+  function keyFor(page) { return 'nw_setup_' + dir + page; }
+  var KEY = keyFor(here);
+
+  (function startOfRun() {
+    var flow = null;
+    FLOWS.forEach(function (f) { if (f.indexOf(here) > -1) flow = f; });
+    if (!flow) return;
+    // A step reached by going BACK is inside the run by definition, whatever is
+    // below it on the trail.
+    if (window.Trail && Trail.move() === 'pop') return;
+    var prev = window.Trail && Trail.prev();
+    if (prev && flow.indexOf(Trail.file(prev)) > -1) return;
+    flow.forEach(function (p) { try { sessionStorage.removeItem(keyFor(p)); } catch (e) {} });
+  })();
 
   // Picks survive a back-navigation to this step (per-step, per-tab).
   function save() {

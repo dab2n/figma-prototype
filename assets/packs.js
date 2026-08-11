@@ -478,10 +478,17 @@
 
 // Back goes back the way you came.
 //
-// Every hop this screen makes is a real navigation — another pack from "More Packs from
-// …", the 올릴때 sheet, the setup flow — so the browser's own history IS the path, and
-// walking it one step is what "back" means everywhere else in the app. The fixed link in
-// the markup is only the fallback for a page opened cold, with nothing behind it.
+// This used to walk the browser's history one step, on the reasoning that every hop
+// the screen makes — another pack from "More Packs from …", the 올릴때 sheet, the
+// setup flow — is a real navigation, so history IS the path. It is not: the setup
+// flow's own back button is a plain link BACK to this page, which is a forward
+// navigation, so history's previous entry was the setup step just left and back
+// walked straight into it. Measured: packs → pack → setup-location → back → pack →
+// back → setup-location.
+//
+// assets/trail.js keeps the path itself and knows the difference, so ask it. The
+// fixed link in the markup is still the fallback for a page opened cold with
+// nothing behind it.
 (function () {
   var back = document.querySelector('.dj-hero .app-bar-transparent a.icon-btn, .creator-nav a.icon-btn');
   if (!back) return;
@@ -489,8 +496,9 @@
   try { from = new URLSearchParams(location.search).get('from'); } catch (e) { from = null; }
   if (from === 'home' || from === 'packs') back.setAttribute('href', from + '.html');
   back.addEventListener('click', function (e) {
-    if (history.length < 2) return;          // nothing behind us: follow the href
+    var to = window.Trail && Trail.prev();
+    if (!to) return;                         // nothing behind us: follow the href
     e.preventDefault();
-    history.back();
+    location.href = to;
   });
 })();
