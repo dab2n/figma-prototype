@@ -19,6 +19,10 @@
   var OPEN = TRAVEL;           // where a committed fold settles
   var HINT = STOP * TRAVEL;    // 64px — the 1회 진입 stop, in scroll
   var bar = document.getElementById('djGrab');
+  // Every element the fold drives that is NOT inside .screen. Kept next to the selector
+  // list in enter.css that reads --p/--s/--q/--over: .dj-bar and its rows, .dj-start,
+  // .dj-blur. Anything added out there has to be added here too.
+  var outside = [screen].concat([].slice.call(document.querySelectorAll('.dj-bar, .dj-start, .dj-blur')));
   var raf = 0, holding = false, idle = 0, snapping = 0;
   var lastY = 0, dir = 0;      // which way the last scroll went; settle() reads it
 
@@ -44,12 +48,16 @@
     // header and sheet scroll away together once the fold is done with.
     var over = Math.max(0, screen.scrollTop - OPEN);
     var root = document.documentElement;
-    // The bottom bar is the ONLY thing outside the scroller that reads these (enter.css
-    // 265-330), and it gets them directly. They used to go on :root — and a custom
-    // property written on the root invalidates style for the whole document, every
-    // frame of the fold, on a phone. The class toggles below stay on the root because a
-    // class only costs anything on the frame it actually changes.
-    [screen, bar || root].forEach(function (el) {
+    // These used to go on :root — and a custom property written on the root invalidates
+    // style for the whole document, every frame of the fold, on a phone. Everything that
+    // reads them and lives INSIDE the scroller inherits from .screen; everything outside
+    // it is a sibling, not a descendant, so it needs its own copy. `outside` is that
+    // list, and it is the whole list: an element out there reading var(--q) without
+    // being in it gets the fallback 0 silently. That is what hid Start — .dj-start and
+    // .dj-blur sit outside the scroller on purpose (a transformed ancestor would have
+    // pinned the button to the sheet) and were left off when this moved off the root.
+    // reg.mjs asserts Start is opaque on an open sheet, so it cannot go quiet again.
+    outside.forEach(function (el) {
       el.style.setProperty('--p', p.toFixed(4));
       el.style.setProperty('--s', s.toFixed(4));
       el.style.setProperty('--q', q.toFixed(4));

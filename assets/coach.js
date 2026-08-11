@@ -51,7 +51,7 @@
     box.innerHTML =
       '<div class="coach-veil"></div>' +
       '<div class="coach-body">' +
-        '<img class="coach-arrow" src="assets/icons/arrow-right-lg.svg?v=1090" alt="">' +
+        '<img class="coach-arrow" src="assets/icons/arrow-right-lg.svg?v=1091" alt="">' +
         '<div class="coach-plate">' +
           '<p class="coach-t">Pull down from the top</p>' +
           '<p class="coach-s">Grab the middle of the top edge and drag down.</p>' +
