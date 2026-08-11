@@ -92,13 +92,11 @@
 // screen that is white at the top and black at the bottom. The tag is left alone, saying
 // what the top of the page is, and the canvas is painted to match the foot instead.
 (function () {
-  var standalone = false;
-  try {
-    standalone = matchMedia('(display-mode: standalone)').matches ||
-                 matchMedia('(display-mode: fullscreen)').matches ||
-                 navigator.standalone === true;
-  } catch (e) {}
-  if (!standalone) return;
+  // The boot script in every page head has already decided this, from signals a host
+  // browser cannot fake. Asking display-mode again here is what painted the canvas
+  // BLACK inside a Chrome Custom Tab — which reports standalone — so the frame sat on
+  // the app's ground in what was really just a browser. One answer, decided once.
+  if (!document.documentElement.classList.contains('installed')) return;
   function paint() {
     // Only where there IS a bar at the foot. A full-bleed screen ends in whatever its own
     // artwork ends in — a gradient, a photograph — and there is no single colour to copy;

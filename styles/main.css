@@ -96,11 +96,8 @@ html.clay .phone {
   outline: 10px solid #3B3B3B;
   outline-offset: 0;
 }
-/* And the page it sits on is grey, so the mockup reads as an object ON something
-   rather than as a white app bleeding into a white page. It is the ground, not a
-   surface: darker than every screen in the app (the palest is Neutral/50) so the
-   frame's own white edge is the boundary. */
-html.clay body { background: #DEDEDE; }
+/* The grey it sits on is set with the centring box above (html:not(.installed)),
+   which is the honest condition for "this is a page in a browser". */
 
 
 /* A browser — any browser, a laptop or a phone — shows the frame as a frame: 360x780 on
@@ -111,6 +108,32 @@ html.clay body { background: #DEDEDE; }
    below does that, and leaves the body free to grow if anything ever overflows, which is
    what makes the page scrollable instead of cutting the rest off. */
 html { height: 100%; }
+
+/* ── In a browser, the page IS the centring box ───────────────────────────────
+   The frame used to be centred by a body that had to be tall enough first —
+   min-height off 100dvh, or off a --vph measured in JS. That works until a host
+   disagrees about its own height: an in-app browser with its own header, a phone
+   whose address bar is mid-collapse, a window that reports one height and paints
+   another. Then the frame is centred in a box that is not the one being looked at.
+
+   So the body is simply pinned to the visual viewport and centres its one child in
+   it. Nothing to measure, nothing to agree about, and no dependence on the document
+   having a height at all. It cannot scroll, and it never needs to: --fit is capped
+   by h/844, so the frame is always shorter than the window that sized it.
+
+   The ground goes on html AS WELL, because that is what paints past the edges while
+   a phone's address bar is moving. */
+html:not(.installed) { background: #DEDEDE; }
+html:not(.installed) body {
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #DEDEDE;
+}
 body {
   display: flex;
   justify-content: center;
