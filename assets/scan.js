@@ -49,10 +49,25 @@
     }).join(',') + ')';
   }
 
+  // One value, three places: the OS status bar (theme-color), the strip the frame
+  // paints under it, and the bar at the foot. The top of this screen is the picture
+  // under the band; giving the foot the same colour is what makes the two ends read
+  // as one material rather than a warm band above a grey slab.
   function paintTop() {
     var c = camTone();
-    if (c && meta) meta.setAttribute('content', c);
-    return !!c;
+    if (!c) return false;
+    if (meta) meta.setAttribute('content', c);
+    // On .phone, not on the screen: custom properties inherit DOWNWARD, and both the
+    // bar at the foot and the frame's own fillet colour sit outside .scan-screen.
+    var phone = scr.closest('.phone') || document.documentElement;
+    phone.style.setProperty('--scan-tint', c);
+    // Rec. 709, the same weighting everything else here measures luminance with.
+    var n = c.match(/(\d+)\D+(\d+)\D+(\d+)/);
+    if (n) {
+      var lum = (0.2126 * +n[1] + 0.7152 * +n[2] + 0.0722 * +n[3]) / 255;
+      phone.classList.toggle('tint-dark', lum < 0.6);
+    }
+    return true;
   }
 
   // `after` is how long the card takes to reach the top of the screen. Until it does,

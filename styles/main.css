@@ -203,9 +203,15 @@ a, button, [role="button"], .cell, .card-sel, .toggle-btn, .diff-seg,
    on the frames where autoplay is refused (Low Power Mode). assets/clips.js asks for
    play() when the card is actually met; if that is refused too, the poster stays. */
 video::-webkit-media-controls,
-video::-webkit-media-controls-start-playback-button {
+video::-webkit-media-controls-enclosure,
+video::-webkit-media-controls-panel,
+video::-webkit-media-controls-overlay-play-button,
+video::-webkit-media-controls-start-playback-button,
+video::-internal-media-controls-overlay-cast-button {
   display: none !important;
   -webkit-appearance: none;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Status bar — rendered from the reference Figma "Status Bar" SVG (light + dark) */

@@ -1,33 +1,31 @@
-// Attract loop: fifteen seconds with nobody touching the phone puts a notice on screen, and
-// three seconds after that the prototype goes back to flows.html — so the next person
-// meets the four flows rather than wherever the last person stopped. The hub is the start
-// now; the splash is the first screen OF a flow, not the way in, so it goes back too.
+// Attract loop: somebody uses the prototype, walks off mid-screen, and twenty seconds
+// later it puts itself back at the start so the next person meets the app rather than
+// wherever the last one stopped.
 //
-// The notice is a warning, not a countdown you have to sit through: touching anything
-// cancels it and starts the fifteen over. Somebody who is still reading taps once and
-// stays where they are.
+// Armed by USE, not by arrival. A screen that has only been landed on is being read —
+// the report is a long page and Packs is a feed — and bouncing a reader who has not
+// touched anything yet is the behaviour that got this switched off before. The clock
+// starts on the first thing a person actually does (a scroll counts) and restarts on
+// every one after it, so what it measures is somebody who was here and stopped.
 //
-// The timer is armed on load and re-armed by anything a person can actually do. Capture
-// phase because `scroll` does not bubble: every inner scroller on this prototype (the hero
-// carousel, the pack feed, the report) fires on its own element, and only a capturing
-// listener on window sees those.
+// Capture phase because `scroll` does not bubble: every inner scroller on this
+// prototype (the hero carousel, the pack feed, the report) fires on its own element,
+// and only a capturing listener on window sees those.
 (function () {
-  var HOME = 'flows.html';
-  var WAIT = 15000;      // stillness before the notice
-  var GRACE = 3;         // seconds the notice counts down before it goes
-
-  // PAUSED. Being sent back to the hub every fifteen seconds while a layout is being
-  // chased on a real phone is not help. Flip this to false to have it back — nothing else
-  // about it changed.
-  var PAUSED = true;
-  if (PAUSED) return;
+  // Where a walked-away prototype goes back to. Home is the app's own front door and
+  // it opens on Sean's card, so the fullscreen clip is one tap away rather than
+  // something a person is dropped into with no idea how they got there.
+  var HOME = 'home.html';
+  var TOTAL = 20000;      // stillness before it goes, in full
+  var GRACE = 3;          // …the last seconds of which are spent warning
 
   var here = location.pathname.split('/').pop() || 'index.html';
-  if (here === HOME) return;
+  // The hub is where this sends people, and the splash is on its way there by itself.
+  if (here === HOME || here === 'flows.html') return;
   try {
-    // An escape hatch for reviewing on a desktop, where being bounced back every fifteen
-    // seconds while reading a screen is not help. ?idle=off for one visit, the localStorage
-    // key for the machine.
+    // An escape hatch for reviewing on a desktop, where being bounced every twenty
+    // seconds while reading a screen is not help. ?idle=off for one visit, the
+    // localStorage key for the machine.
     if (localStorage.getItem('idleOff') || /(?:\?|&)idle=off/.test(location.search)) return;
   } catch (e) {}
 
@@ -41,7 +39,7 @@
   function arm() {
     clearTimeout(t);
     close();
-    t = setTimeout(warn, WAIT);
+    t = setTimeout(warn, TOTAL - GRACE * 1000);
   }
 
   function open() {
@@ -71,9 +69,11 @@
     })();
   }
 
+  // Nothing is running until somebody does something. `scroll` is in the list, so
+  // "scrolled down and then stopped" is exactly what starts the twenty seconds.
   ['pointerdown', 'pointerup', 'touchstart', 'keydown', 'wheel', 'scroll', 'click', 'input']
     .forEach(function (e) { addEventListener(e, arm, { capture: true, passive: true }); });
-  document.addEventListener('visibilitychange', arm);
-
-  arm();
+  // Coming back to a tab that was left open is not an interaction; it only cancels a
+  // countdown that was already running.
+  document.addEventListener('visibilitychange', function () { if (t) arm(); });
 })();

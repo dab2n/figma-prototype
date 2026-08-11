@@ -140,6 +140,37 @@
 .scan-done-mark .ob-check { width: 64px; height: 64px; left: -32px; top: -32px; }
 
 /* ── Bottom bar: step pips on the left, Next on the right ─────────────────── */
+/* The two ends of the screen read as ONE material.
+   The top of this screen is the picture under the band, and assets/scan.js already
+   works out what colour that lands on — it is what the OS status bar is told. The
+   bar at the foot is given the same value, so the strip above the clock and the
+   frame below the camera are literally the same colour instead of a warm band at
+   one end and a grey slab at the other. --scan-tint arrives once the clip has
+   decoded a frame; until then this is the grey it always was. */
+.scan-bottom {
+  background: var(--scan-tint, var(--color-neutral-100));
+  transition: background-color .6s ease;
+}
+/* The concave fillet where the camera's rounded foot meets the flat-topped bar is
+   painted with the bar's colour (main.css), so it has to follow it too. */
+.phone:has(> .tabbar.scan-bottom) { --bar-fill: var(--scan-tint, var(--color-neutral-100)); }
+/* Dark footage puts a dark bar at the foot, and Neutral/300 pips on it are a label
+   nobody can read. scan.js measures the tone it just wrote and says which way. */
+.phone.tint-dark .scan-bottom .scan-steps .st { color: rgba(255,255,255,.58); }
+.phone.tint-dark .scan-bottom .scan-steps .st i { background: rgba(255,255,255,.42); color: #1B1B1B; }
+/* The step being scanned keeps the red the whole app uses for "this one" — it only
+   moves to the pip, because red type on a mid-warm ground is the one pairing here
+   that stops being legible. Restated at this weight because the rules above are more
+   specific than .scan-steps .st.on and would otherwise grey out the live step. */
+.phone.tint-dark .scan-bottom .scan-steps .st.on { color: #fff; }
+.phone.tint-dark .scan-bottom .scan-steps .st.on i { background: var(--color-red); color: #fff; }
+/* Next is still shut while the count runs, and has to keep looking shut. */
+.phone.tint-dark .scan-bottom .ob-next { color: rgba(255,255,255,.5); }
+.phone.tint-dark .scan-bottom .ob-next img { filter: brightness(0) invert(1); opacity: .5; }
+.phone.tint-dark .scan-bottom .ob-next.ready { color: #fff; }
+.phone.tint-dark .scan-bottom .ob-next.ready img { opacity: 1; }
+.phone.tint-dark .scan-bottom .home-indicator span { background: rgba(255,255,255,.55); }
+
 .scan-bottom .sb-row { justify-content: space-between; }
 .scan-steps { display: flex; align-items: center; gap: 10px; }
 .scan-steps .st { display: flex; align-items: center; gap: 6px;

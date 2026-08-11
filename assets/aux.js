@@ -9,6 +9,16 @@
 (function () {
   var Aux = window.Aux = window.Aux || {};
 
+  // Delegated handlers hang off document, so their target is whatever the page hands
+  // them — a text node, an SVG element, document itself — and only Elements carry
+  // .closest(). Measured: a pointerdown dispatched on document threw here and killed
+  // the rest of that listener.
+  function near(e, sel) {
+    var t = e && e.target;
+    if (t && t.nodeType === 3) t = t.parentNode;          // a text node: ask its element
+    return t && t.closest ? t.closest(sel) : null;
+  }
+
   // ── Small persistent store ────────────────────────────────────────────────
   // Everything here is prototype state: which notifications have been read, what
   // has been searched, what is bookmarked. localStorage can throw (private mode,
@@ -26,7 +36,7 @@
   // Marked in the markup with data-inert. They take the selected look for a beat
   // and release it; nothing navigates. Delegated, so markup added later is covered.
   document.addEventListener('pointerdown', function (e) {
-    var el = e.target.closest('[data-inert]');
+    var el = near(e, '[data-inert]');
     if (!el) return;
     el.classList.add('pressing');
     clearTimeout(el.__t);
@@ -34,7 +44,7 @@
   }, { passive: true });
   // A real <button> would submit or scroll-jump; nothing behind it should happen.
   document.addEventListener('click', function (e) {
-    var el = e.target.closest('[data-inert]');
+    var el = near(e, '[data-inert]');
     if (el) e.preventDefault();
   });
 
@@ -60,9 +70,9 @@
   // The scrim and anything marked data-close dismiss it; a tap inside the card
   // does not.
   document.addEventListener('click', function (e) {
-    var sheet = e.target.closest('.sheet');
+    var sheet = near(e, '.sheet');
     if (!sheet) return;
-    if (e.target.closest('.sheet-scrim') || e.target.closest('[data-close]')) closeSheet(sheet);
+    if (near(e, '.sheet-scrim') || near(e, '[data-close]')) closeSheet(sheet);
   });
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
@@ -124,7 +134,7 @@
     }
 
     body.addEventListener('click', function (e) {
-      var c = e.target.closest('.sh-chip');
+      var c = near(e, '.sh-chip');
       if (!c) return;
       var k = c.dataset.axis;
       // Tapping the live one clears that axis — every axis is optional, so there
@@ -228,7 +238,7 @@
     return BASE_SAVED + n;
   };
   document.addEventListener('click', function (e) {
-    var el = e.target.closest('[data-save]');
+    var el = near(e, '[data-save]');
     if (!el) return;
     e.preventDefault();
     var key = el.getAttribute('data-save');
