@@ -56,7 +56,12 @@
       total: 20, bars: [['6min', 'HANDLE'], ['11min', 'STEP BACK'], ['You Can Choose', 'SHOOT!']],
       info: ['Basics Recommended', 'Balance · Footwork', 'Indoor Court', 'Creator'],
       also: ['basketball', 'ladder'], more: ['basketball', 'ladder', 'sprinter'],
-      photo: 'curry-stepback-poster.jpg', author: 'Janghoon', avatar: 'packsx-avatar-a.png',
+      // The pack IS his — the clip, the poster and the card art are all him — so the
+      // name and the face on it have to be his too. It carried a made-up creator and
+      // packsx-avatar-a, which is the same photograph as packs-profile-sean: Curry's
+      // Step Back opened on Sean's face under somebody else's name. Avatar cropped
+      // from this pack's own poster rather than sourced.
+      photo: 'curry-stepback-poster.jpg', author: 'Stephen Curry', avatar: 'packs-profile-curry.png',
       title: "Curry's Step Back",
       desc: 'The half metre that decides the shot. Keep the ball low through the setup, push off the front foot to create the gap, then land square and rise — no drift, no fade. Drilled slowly first, then at the speed a defender actually closes.'
     },
@@ -134,7 +139,7 @@
       total: 26, bars: [['6min', 'SHADOW'], ['14min', 'COMBOS'], ['You Can Choose', 'SPAR!']],
       info: ['Basics Recommended', 'Timing · Angles', 'Indoor', 'Pro'],
       also: ['ladder', 'strength'], more: ['curry', 'basketball', 'ladder'],
-      photo: 'movement-boxing.webp', author: 'Janghoon', avatar: 'packsx-avatar-a.png',
+      photo: 'movement-boxing.webp', author: 'Janghoon', avatar: 'packs-avatar1.png',
       title: 'Southpaw Drill',
       desc: 'Working against the other stance without reaching. Angle out of the lead hand, keep the rear foot loaded, and land the counter on the way past.'
     },

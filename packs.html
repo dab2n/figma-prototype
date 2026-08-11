@@ -24,12 +24,12 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/offbit/OffBitTrial-DotBold.woff2" crossorigin>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#FAFAFA">
-<script defer src="assets/openext.js?v=1091"></script>
-<script defer src="assets/trail.js?v=1091"></script>
-<script defer src="assets/i18n.js?v=1091"></script>
-<script defer src="assets/filters.js?v=1091"></script>
-<script defer src="assets/clips.js?v=1091"></script>
-<script defer src="assets/tour.js?v=1091"></script>
+<script defer src="assets/openext.js?v=1092"></script>
+<script defer src="assets/trail.js?v=1092"></script>
+<script defer src="assets/i18n.js?v=1092"></script>
+<script defer src="assets/filters.js?v=1092"></script>
+<script defer src="assets/clips.js?v=1092"></script>
+<script defer src="assets/tour.js?v=1092"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -37,14 +37,14 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Packs</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1091">
-<link rel="stylesheet" href="styles/main.css?v=1091">
-<link rel="stylesheet" href="styles/packs.css?v=1091">
-<link rel="stylesheet" href="styles/aux.css?v=1091">
-<script defer src="assets/idle.js?v=1091"></script>
-<script defer src="assets/packs.js?v=1091"></script>
-<script defer src="assets/aux.js?v=1091"></script>
-<script defer src="assets/flows.js?v=1091"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1092">
+<link rel="stylesheet" href="styles/main.css?v=1092">
+<link rel="stylesheet" href="styles/packs.css?v=1092">
+<link rel="stylesheet" href="styles/aux.css?v=1092">
+<script defer src="assets/idle.js?v=1092"></script>
+<script defer src="assets/packs.js?v=1092"></script>
+<script defer src="assets/aux.js?v=1092"></script>
+<script defer src="assets/flows.js?v=1092"></script>
 </head>
 <body>
 <div class="phone">
@@ -71,12 +71,14 @@
 
     <div class="filter-row">
       <button class="filter-btn"><img src="assets/icons/icon-filter.svg" alt="필터"></button>
+      <!-- data-chip, not the words: assets/filters.js used to decide what a chip does by
+           reading its label, so in Korean every branch missed and the row went dead. -->
       <div class="chips">
-        <span class="chip chip-selected">All</span>
-        <span class="chip">Outdoor</span>
-        <span class="chip">Indoor</span>
-        <span class="chip">Sports <img src="assets/icons/icon-chip-chevron.svg" alt=""></span>
-        <span class="chip">Pack Type <img src="assets/icons/icon-chip-chevron.svg" alt=""></span>
+        <span class="chip chip-selected" data-chip="all">All</span>
+        <span class="chip" data-chip="outdoor">Outdoor</span>
+        <span class="chip" data-chip="indoor">Indoor</span>
+        <span class="chip" data-chip="sport">Sports <img src="assets/icons/icon-chip-chevron.svg" alt=""></span>
+        <span class="chip" data-chip="type">Pack Type <img src="assets/icons/icon-chip-chevron.svg" alt=""></span>
       </div>
     </div>
 
@@ -88,11 +90,11 @@
 
     <div class="pack-list">
       <a class="pack-card" href="pyeongso.html?pack=sprint" data-env="indoor" data-sport="Sprint" data-type="Creator">
-        <div class="pack-thumb" style="background-image:url('assets/photos/packs-card1-thumb.webp?v=1091'); height:189px;">
-          <video src="assets/photos/clip-sprint.mp4?v=1091" poster="assets/photos/packs-card1-thumb.webp?v=1091" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <div class="pack-thumb" style="background-image:url('assets/photos/packs-card1-thumb.webp?v=1092'); height:189px;">
+          <video src="assets/photos/clip-sprint.mp4?v=1092" poster="assets/photos/packs-card1-thumb.webp?v=1092" muted loop playsinline preload="none" disablepictureinpicture></video>
           <div class="pack-thumb-top">
             <div class="pack-person">
-              <img class="pack-avatar-sm" src="assets/photos/packs-profile-kanni.png?v=1091" alt="">
+              <img class="pack-avatar-sm" src="assets/photos/packs-profile-kanni.png?v=1092" alt="">
               <!-- Dark, not white: this card's artwork is a bright interior and the label
                    zone measures 229 of 255, so white had nothing to sit on. #282828 is the
                    poster's OWN type colour, measured off it — the label reads as part of
@@ -103,8 +105,8 @@
             <span class="badge">NEW</span>
           </div>
           <div class="pack-stack">
-            <img src="assets/photos/packs-avatar1.png?v=1091" alt="">
-            <img src="assets/photos/packs-avatar2.png?v=1091" alt="">
+            <img src="assets/photos/packs-avatar1.png?v=1092" alt="">
+            <img src="assets/photos/packs-avatar2.png?v=1092" alt="">
           </div>
         </div>
         <div class="pack-info">
@@ -114,19 +116,19 @@
       </a>
 
       <a class="pack-card" href="pyeongso.html" data-env="outdoor" data-sport="Running" data-type="Creator">
-        <div class="pack-thumb" style="background-image:url('assets/photos/packs-card2-thumb.jpg?v=1091'); height:517px; background-position: bottom;">
-          <video src="assets/photos/sean-running.mp4?v=1091" poster="assets/photos/packs-card2-thumb.jpg?v=1091" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <div class="pack-thumb" style="background-image:url('assets/photos/packs-card2-thumb.jpg?v=1092'); height:517px; background-position: bottom;">
+          <video src="assets/photos/sean-running.mp4?v=1092" poster="assets/photos/packs-card2-thumb.jpg?v=1092" muted loop playsinline preload="none" disablepictureinpicture></video>
           <div class="pack-thumb-top">
             <div class="pack-person">
-              <img class="pack-avatar-sm" src="assets/photos/packs-profile-sean.png?v=1091" alt="">
+              <img class="pack-avatar-sm" src="assets/photos/packs-profile-sean.png?v=1092" alt="">
               <span class="t-caption-bold" style="color:#fff;">Sean</span>
             </div>
             <span class="badge badge-dark badge-hot"><img src="assets/icons/fire-sharp.svg" alt="">HOT</span>
           </div>
           <div class="pack-stack">
-            <img src="assets/photos/packs-avatar3.png?v=1091" alt="">
-            <img src="assets/photos/packs-avatar4.png?v=1091" alt="">
-            <img src="assets/photos/packsx-avatar-d.png?v=1091" alt="">
+            <img src="assets/photos/packs-avatar3.png?v=1092" alt="">
+            <img src="assets/photos/packs-avatar4.png?v=1092" alt="">
+            <img src="assets/photos/packsx-avatar-d.png?v=1092" alt="">
           </div>
         </div>
         <div class="pack-info">
@@ -136,11 +138,11 @@
       </a>
 
       <a class="pack-card" href="packs-expanded.html" data-env="outdoor" data-sport="Sprint" data-type="Pro">
-        <div class="pack-thumb pack-thumb-dark" style="background-image:url('assets/photos/packs-card3-thumb.webp?v=1091'); height:189px;">
-          <video src="assets/photos/clip-bolt.mp4?v=1091" poster="assets/photos/packs-card3-thumb.webp?v=1091" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <div class="pack-thumb pack-thumb-dark" style="background-image:url('assets/photos/packs-card3-thumb.webp?v=1092'); height:189px;">
+          <video src="assets/photos/clip-bolt.mp4?v=1092" poster="assets/photos/packs-card3-thumb.webp?v=1092" muted loop playsinline preload="none" disablepictureinpicture></video>
           <div class="pack-thumb-top">
             <div class="pack-person">
-              <img class="pack-avatar-sm" src="assets/photos/packs-avatar-usainbolt.png?v=1091" alt="">
+              <img class="pack-avatar-sm" src="assets/photos/packs-avatar-usainbolt.png?v=1092" alt="">
               <span class="t-caption-bold" style="color:#fff;">Usain Bolt</span>
             </div>
           </div>
@@ -155,17 +157,17 @@
       <!-- Two card sizes only: 189px thumb (wide content, 275 total) and 517px
            (tall content, 603). Everything else is the same component. -->
       <a class="pack-card" href="pyeongso.html?pack=curry" data-env="indoor" data-sport="Basketball" data-type="Creator">
-        <div class="pack-thumb" style="background-image:url('assets/photos/rec-curry.webp?v=1091'); height:189px;">
-          <video src="assets/photos/clip-curry.mp4?v=1091" poster="assets/photos/rec-curry.webp?v=1091" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <div class="pack-thumb" style="background-image:url('assets/photos/rec-curry.webp?v=1092'); height:189px;">
+          <video src="assets/photos/clip-curry.mp4?v=1092" poster="assets/photos/rec-curry.webp?v=1092" muted loop playsinline preload="none" disablepictureinpicture></video>
           <div class="pack-thumb-top">
             <div class="pack-person">
-              <img class="pack-avatar-sm" src="assets/photos/packs-avatar1.png?v=1091" alt="">
-              <span class="t-caption-bold" style="color:#fff;">Janghoon</span>
+              <img class="pack-avatar-sm" src="assets/photos/packs-profile-curry.png?v=1092" alt="">
+              <span class="t-caption-bold" style="color:#fff;">Stephen Curry</span>
             </div>
           </div>
           <div class="pack-stack">
-            <img src="assets/photos/packsx-avatar-b.png?v=1091" alt="">
-            <img src="assets/photos/packsx-avatar-c.png?v=1091" alt="">
+            <img src="assets/photos/packsx-avatar-b.png?v=1092" alt="">
+            <img src="assets/photos/packsx-avatar-c.png?v=1092" alt="">
           </div>
         </div>
         <div class="pack-info">
@@ -175,19 +177,19 @@
       </a>
 
       <a class="pack-card" href="pyeongso.html?pack=tennis" data-env="indoor" data-sport="Tennis" data-type="Creator">
-        <div class="pack-thumb" style="background-image:url('assets/photos/recent-tennis.webp?v=1091'); height:517px;">
-          <video src="assets/photos/clip-tennis.mp4?v=1091" poster="assets/photos/recent-tennis.webp?v=1091" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <div class="pack-thumb" style="background-image:url('assets/photos/recent-tennis.webp?v=1092'); height:517px;">
+          <video src="assets/photos/clip-tennis.mp4?v=1092" poster="assets/photos/recent-tennis.webp?v=1092" muted loop playsinline preload="none" disablepictureinpicture></video>
           <div class="pack-thumb-top">
             <div class="pack-person">
-              <img class="pack-avatar-sm" src="assets/photos/packs-avatar3.png?v=1091" alt="">
+              <img class="pack-avatar-sm" src="assets/photos/packs-avatar3.png?v=1092" alt="">
               <span class="t-caption-bold" style="color:#fff;">Sojin</span>
             </div>
             <span class="badge">NEW</span>
           </div>
           <div class="pack-stack">
-            <img src="assets/photos/packsx-avatar-d.png?v=1091" alt="">
-            <img src="assets/photos/joined-avatar-jiwoo.png?v=1091" alt="">
-            <img src="assets/photos/joined-avatar-swim.png?v=1091" alt="">
+            <img src="assets/photos/packsx-avatar-d.png?v=1092" alt="">
+            <img src="assets/photos/joined-avatar-jiwoo.png?v=1092" alt="">
+            <img src="assets/photos/joined-avatar-swim.png?v=1092" alt="">
           </div>
         </div>
         <div class="pack-info">
@@ -197,17 +199,17 @@
       </a>
 
       <a class="pack-card" href="pyeongso.html?pack=strength" data-env="outdoor" data-sport="Strength" data-type="Skilled User">
-        <div class="pack-thumb" style="background-image:url('assets/photos/rec-strength.jpg?v=1091'); height:189px; background-position: 50% 12%;">
-          <video src="assets/photos/clip-strength.mp4?v=1091" poster="assets/photos/rec-strength.jpg?v=1091" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <div class="pack-thumb" style="background-image:url('assets/photos/rec-strength.jpg?v=1092'); height:189px; background-position: 50% 12%;">
+          <video src="assets/photos/clip-strength.mp4?v=1092" poster="assets/photos/rec-strength.jpg?v=1092" muted loop playsinline preload="none" disablepictureinpicture></video>
           <div class="pack-thumb-top">
             <div class="pack-person">
-              <img class="pack-avatar-sm" src="assets/photos/packs-avatar2.png?v=1091" alt="">
+              <img class="pack-avatar-sm" src="assets/photos/packs-avatar2.png?v=1092" alt="">
               <span class="t-caption-bold" style="color:#fff;">Daniel</span>
             </div>
           </div>
           <div class="pack-stack">
-            <img src="assets/photos/packs-avatar1.png?v=1091" alt="">
-            <img src="assets/photos/packs-profile-kanni.png?v=1091" alt="">
+            <img src="assets/photos/packs-avatar1.png?v=1092" alt="">
+            <img src="assets/photos/packs-profile-kanni.png?v=1092" alt="">
           </div>
         </div>
         <div class="pack-info">
@@ -217,18 +219,18 @@
       </a>
 
       <a class="pack-card" href="pyeongso.html?pack=legburn" data-env="outdoor" data-sport="Legs" data-type="Creator">
-        <div class="pack-thumb" style="background-image:url('assets/photos/pack-legburn.jpg?v=1091'); height:189px; background-position: 50% 35%;">
-          <video src="assets/photos/clip-legburn.mp4?v=1091" poster="assets/photos/pack-legburn.jpg?v=1091" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <div class="pack-thumb" style="background-image:url('assets/photos/pack-legburn.jpg?v=1092'); height:189px; background-position: 50% 35%;">
+          <video src="assets/photos/clip-legburn.mp4?v=1092" poster="assets/photos/pack-legburn.jpg?v=1092" muted loop playsinline preload="none" disablepictureinpicture></video>
           <div class="pack-thumb-top">
             <div class="pack-person">
-              <img class="pack-avatar-sm" src="assets/photos/packs-avatar4.png?v=1091" alt="">
+              <img class="pack-avatar-sm" src="assets/photos/packs-avatar4.png?v=1092" alt="">
               <span class="t-caption-bold" style="color:#fff;">Jiwoo</span>
             </div>
             <span class="badge badge-dark badge-hot"><img src="assets/icons/fire-sharp.svg" alt="">HOT</span>
           </div>
           <div class="pack-stack">
-            <img src="assets/photos/packs-avatar2.png?v=1091" alt="">
-            <img src="assets/photos/packs-avatar3.png?v=1091" alt="">
+            <img src="assets/photos/packs-avatar2.png?v=1092" alt="">
+            <img src="assets/photos/packs-avatar3.png?v=1092" alt="">
           </div>
         </div>
         <div class="pack-info">
@@ -238,18 +240,18 @@
       </a>
 
       <a class="pack-card" href="pyeongso.html?pack=interval" data-env="outdoor" data-sport="Running" data-type="Skilled User">
-        <div class="pack-thumb" style="background-image:url('assets/photos/pack-interval.jpg?v=1091'); height:517px;">
-          <video src="assets/photos/clip-interval.mp4?v=1091" poster="assets/photos/pack-interval.jpg?v=1091" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <div class="pack-thumb" style="background-image:url('assets/photos/pack-interval.jpg?v=1092'); height:517px;">
+          <video src="assets/photos/clip-interval.mp4?v=1092" poster="assets/photos/pack-interval.jpg?v=1092" muted loop playsinline preload="none" disablepictureinpicture></video>
           <div class="pack-thumb-top">
             <div class="pack-person">
-              <img class="pack-avatar-sm" src="assets/photos/packs-avatar2.png?v=1091" alt="">
+              <img class="pack-avatar-sm" src="assets/photos/packs-avatar2.png?v=1092" alt="">
               <span class="t-caption-bold" style="color:#fff;">Daniel</span>
             </div>
           </div>
           <div class="pack-stack">
-            <img src="assets/photos/packs-avatar4.png?v=1091" alt="">
-            <img src="assets/photos/packsx-avatar-a.png?v=1091" alt="">
-            <img src="assets/photos/packsx-avatar-c.png?v=1091" alt="">
+            <img src="assets/photos/packs-avatar4.png?v=1092" alt="">
+            <img src="assets/photos/packsx-avatar-a.png?v=1092" alt="">
+            <img src="assets/photos/packsx-avatar-c.png?v=1092" alt="">
           </div>
         </div>
         <div class="pack-info">
@@ -259,11 +261,11 @@
       </a>
 
       <a class="pack-card" href="pyeongso.html?pack=boxing" data-env="indoor" data-sport="Boxing" data-type="Pro">
-        <div class="pack-thumb pack-thumb-dark" style="background-image:url('assets/photos/movement-boxing.webp?v=1091'); height:189px; background-position: 50% 25%;">
-          <video src="assets/photos/clip-boxing.mp4?v=1091" poster="assets/photos/movement-boxing.webp?v=1091" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <div class="pack-thumb pack-thumb-dark" style="background-image:url('assets/photos/movement-boxing.webp?v=1092'); height:189px; background-position: 50% 25%;">
+          <video src="assets/photos/clip-boxing.mp4?v=1092" poster="assets/photos/movement-boxing.webp?v=1092" muted loop playsinline preload="none" disablepictureinpicture></video>
           <div class="pack-thumb-top">
             <div class="pack-person">
-              <img class="pack-avatar-sm" src="assets/photos/packs-avatar1.png?v=1091" alt="">
+              <img class="pack-avatar-sm" src="assets/photos/packs-avatar1.png?v=1092" alt="">
               <span class="t-caption-bold" style="color:#fff;">Janghoon</span>
             </div>
           </div>
@@ -276,18 +278,18 @@
       </a>
 
       <a class="pack-card" href="pyeongso.html?pack=ladder" data-env="outdoor" data-sport="Agility" data-type="Creator">
-        <div class="pack-thumb" style="background-image:url('assets/photos/rec-ladder.webp?v=1091'); height:189px; background-position: 50% 22%;">
-          <video src="assets/photos/clip-ladder.mp4?v=1091" poster="assets/photos/rec-ladder.webp?v=1091" muted loop playsinline preload="none" disablepictureinpicture></video>
+        <div class="pack-thumb" style="background-image:url('assets/photos/rec-ladder.webp?v=1092'); height:189px; background-position: 50% 22%;">
+          <video src="assets/photos/clip-ladder.mp4?v=1092" poster="assets/photos/rec-ladder.webp?v=1092" muted loop playsinline preload="none" disablepictureinpicture></video>
           <div class="pack-thumb-top">
             <div class="pack-person">
-              <img class="pack-avatar-sm" src="assets/photos/packs-avatar3.png?v=1091" alt="">
+              <img class="pack-avatar-sm" src="assets/photos/packs-avatar3.png?v=1092" alt="">
               <span class="t-caption-bold" style="color:#fff;">Sojin</span>
             </div>
             <span class="badge">NEW</span>
           </div>
           <div class="pack-stack">
-            <img src="assets/photos/packsx-avatar-c.png?v=1091" alt="">
-            <img src="assets/photos/packsx-avatar-d.png?v=1091" alt="">
+            <img src="assets/photos/packsx-avatar-c.png?v=1092" alt="">
+            <img src="assets/photos/packsx-avatar-d.png?v=1092" alt="">
           </div>
         </div>
         <div class="pack-info">

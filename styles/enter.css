@@ -119,7 +119,15 @@
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: linear-gradient(180deg, rgba(120,105,72,0.5) 0%, rgba(168,147,101,0.56) 55%, rgba(214,188,138,0.72) 100%);
+  /* The same sample as the band above it. This was the one surface on the page still
+     wearing the hand-picked tan: the band at the foot of the clip took the pack's own
+     colour, and then the fold completed and dropped a fixed gold over the whole header,
+     so every pack ended up the same warm screen at 올릴때 no matter what the clip was.
+     Sean's pair stays as the fallback so the markup's own pack is unchanged if the
+     sample never lands. */
+  background: linear-gradient(180deg,
+              var(--pack-wash-a, rgba(120,105,72,0.5)) 0%,
+              var(--pack-wash-b, rgba(214,188,138,0.72)) 100%);
   opacity: calc(var(--q, 0) * 2.2 - 1.2);
   pointer-events: none;
 }

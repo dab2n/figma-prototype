@@ -26,9 +26,9 @@
      112KB arriving on the first tap is the blink; preloading it makes the tap instant. -->
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#F2F2F2">
-<script defer src="assets/openext.js?v=1091"></script>
-<script defer src="assets/trail.js?v=1091"></script>
-<script defer src="assets/i18n.js?v=1091"></script>
+<script defer src="assets/openext.js?v=1092"></script>
+<script defer src="assets/trail.js?v=1092"></script>
+<script defer src="assets/i18n.js?v=1092"></script>
 <link rel="manifest" href="manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -36,12 +36,12 @@
 <meta name="apple-mobile-web-app-title" content="NEWTON">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <title>Newton — Setup · Main Workout</title>
-<link rel="stylesheet" href="styles/freesentation.css?v=1091">
-<link rel="stylesheet" href="styles/main.css?v=1091">
-<link rel="stylesheet" href="styles/setup.css?v=1091">
-<link rel="stylesheet" href="styles/mainworkout.css?v=1091">
-<script defer src="assets/idle.js?v=1091"></script>
-<script defer src="assets/flows.js?v=1091"></script>
+<link rel="stylesheet" href="styles/freesentation.css?v=1092">
+<link rel="stylesheet" href="styles/main.css?v=1092">
+<link rel="stylesheet" href="styles/setup.css?v=1092">
+<link rel="stylesheet" href="styles/mainworkout.css?v=1092">
+<script defer src="assets/idle.js?v=1092"></script>
+<script defer src="assets/flows.js?v=1092"></script>
 </head>
 <body>
 <div class="phone">
@@ -115,7 +115,7 @@
     <div class="home-indicator"><span></span></div>
   </nav>
 </div>
-<script defer src="assets/setup.js?v=1091"></script>
+<script defer src="assets/setup.js?v=1092"></script>
 <script>
 (function () {
   var STRETCH = 8, LEARN = 10;   // fixed pack minutes (node 338:19949/19953)
@@ -286,9 +286,39 @@
   });
 
   // ── Init ───────────────────────────────────────────────────────────────────
-  track.scrollLeft = scrollFor(Math.round((5.0 - DMIN) / DSTEP));   // centre on 5.0
+  var HOME = scrollFor(Math.round((5.0 - DMIN) / DSTEP));
+  track.scrollLeft = HOME;                                          // centre on 5.0
   // Two seconds of "For you", then it goes and 4.0 becomes an ordinary notch.
   setTimeout(function () { ticks.classList.add('rec-done'); }, 2000);
+
+  // The ruler shows one number and no handle, so nothing about it says it can be dragged.
+  // On arrival it takes itself out and back — right, through the middle, left, home — and
+  // the number over the pointer moves with it, which is the part that reads as "this is
+  // yours to set". One sine sweep rather than a scripted path, so it eases at both turns
+  // on its own. It ends exactly where it started, on 5.0.
+  //
+  // A hint, not a mode: the first finger on the track kills it mid-flight and hands over,
+  // and the run bar stays "You Can Choose" because `interacted` only answers to a real
+  // pointer — this never sets it.
+  (function hint() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var A = 0.8 / DSTEP * GAP;        // ±0.8km, in pixels of track
+    var MS = 2200, t0 = 0, live = true;
+    function stop() { live = false; }
+    ['pointerdown', 'touchstart', 'wheel', 'keydown'].forEach(function (ev) {
+      track.addEventListener(ev, stop, { passive: true, once: true });
+    });
+    function frame(now) {
+      if (!live) return;
+      if (!t0) t0 = now;
+      var t = Math.min(1, (now - t0) / MS);
+      track.scrollLeft = HOME + A * Math.sin(t * 2 * Math.PI);
+      if (t < 1) requestAnimationFrame(frame);
+      else { track.scrollLeft = HOME; setDistFromScroll(); }
+    }
+    // After the entrance has settled, so the sweep is the only thing moving.
+    setTimeout(function () { if (live) requestAnimationFrame(frame); }, 900);
+  })();
   setWheel(runMin);
   intro();
 })();

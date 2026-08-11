@@ -7,13 +7,15 @@
 // The wording follows the app's own Korean writing (Figma 5004:10461): 해요체 throughout,
 // questions as "무엇을 하고 싶나요?" rather than the flatter "무엇을 하시겠습니까?".
 //
-// One word, one Korean word, everywhere. The vocabulary used to be half-translated — the
-// tab said 팩 while the filter said "Pack Type", the creator's own line said 크리에이터
-// while the card under it said "Creator" — so the same thing was named twice on one
-// screen. Pack is 팩, Creator is 크리에이터, Pro is 프로, Skilled User is 숙련자, and they
-// are those words in every place they appear. What stays in Latin is what is a NAME
-// rather than a word: Newton, and the four assist modes the design itself writes as
-// Quiet On / Pace On / Load On / Boost On.
+// What stays in Latin is what a Korean reader of this product reads in Latin anyway:
+// the creator names, the tab titles (Home / Packs / Records / My), the roles under a
+// card (Pro / Creator / Skilled User), the badges (New / HOT), the units (pts, km), the
+// buttons that are one product word (Start, Next, Run!), and the assist modes the design
+// itself writes as Quiet On / Pace On / Load On / Boost On. The one name that IS Korean
+// is Akiyama, who is 추성훈 — the same person's name, not a translation of it.
+//
+// Everything else is Korean, and the same Korean everywhere: one English word never gets
+// two Korean ones, and no Korean word is used for two English ones.
 //
 // Length is part of the copy, not an afterthought: Korean says the same thing in fewer
 // characters, and a line that drops from two lines to one moves every card built around
@@ -24,9 +26,10 @@
     'Goal': '목표', 'Setup': '세팅', 'Build': '구성', 'Viewport': '뷰포트',
     'Landing Balance': '착지 균형', 'Rhythm Retention': '리듬 유지력',
     'Running, Basketball, Boxing': '러닝, 농구, 복싱',
-    'Sean': '션', 'Kanni': '칸니', 'Sojin': '소진', 'Jiwoo': '지우',
-    'Janghoon': '장훈', 'Daniel': '다니엘', 'Usain Bolt': '우사인 볼트',
-    'Juwon Park': '박주원', 'Akiyama': '아키야마',
+    /* Creator names are names — they stay as they are written. The one exception is
+       Akiyama, who is 추성훈 to a Korean reader; that is the same person's name, not a
+       translation of it. */
+    'Akiyama': '추성훈',
     'Movement Coach · 512K subscribers': '무브먼트 코치 · 구독자 51.2만',
     'Sprint Coach · 96K subscribers': '스프린트 코치 · 구독자 9.6만',
     'Olympic Sprinter · 2.1M subscribers': '올림픽 스프린터 · 구독자 210만',
@@ -38,9 +41,9 @@
 
     /* ── pack descriptions (assets/packs.js) ────────────────────────────── */
     "How to hold your pace when it falls apart in the last 1km of a run. Learn Sean's breathing rhythm and footfall tempo, then apply them to real runs with Pace On and Boost On modes.":
-      '러닝 마지막 1km에서 무너지는 페이스를 붙잡는 법이에요. 션의 호흡 리듬과 발 구르는 템포를 먼저 익힌 다음, Pace On·Boost On 모드를 켜고 실제 러닝에 그대로 옮겨 봐요.',
+      '러닝 마지막 1km에서 무너지는 페이스를 붙잡는 법이에요. Sean의 호흡 리듬과 발 구르는 템포를 먼저 익힌 다음, Pace On·Boost On 모드를 켜고 실제 러닝에 그대로 옮겨 봐요.',
     "How to hold your pace when it falls apart in the last 1km of a run. Learn Sean’s breathing rhythm and footfall tempo, then apply them to real runs with Pace On and Boost On modes.":
-      '러닝 마지막 1km에서 무너지는 페이스를 붙잡는 법이에요. 션의 호흡 리듬과 발 구르는 템포를 먼저 익힌 다음, Pace On·Boost On 모드를 켜고 실제 러닝에 그대로 옮겨 봐요.',
+      '러닝 마지막 1km에서 무너지는 페이스를 붙잡는 법이에요. Sean의 호흡 리듬과 발 구르는 템포를 먼저 익힌 다음, Pace On·Boost On 모드를 켜고 실제 러닝에 그대로 옮겨 봐요.',
     'The step that leaves a defender reading the wrong hip. Weight shift first, then the tempo change that sells it, drilled slowly before it is run at speed.':
       '수비가 반대쪽 골반을 읽게 만드는 스텝이에요. 체중 이동을 먼저 잡고 그 위에 속도 변화를 얹어요. 천천히 익힌 다음 실제 속도로 올려요.',
     'Break the ceiling you keep hitting at top speed. Kanni rebuilds your drive phase and arm carriage first, then holds that form under fatigue so the last 20m stops falling apart.':
@@ -77,7 +80,7 @@
     'REPS': '반복', 'COOL!': '정리!', 'PREP': '준비', 'BURN': '번',
     'FINISH!': '완주!', 'COMBOS': '콤보', 'SPAR!': '스파링!', 'RALLY IN': '랠리',
     'DEPTH': '깊이', 'POINT!': '포인트!', 'SLIDE': '슬라이드', 'CLOSEOUT': '클로즈아웃',
-    'RUN IT!': '실전!',
+    'RUN IT!': 'Run!',
 
     /* ── schedule ───────────────────────────────────────────────────────── */
     'Set a time for this pack?': '이 팩을 언제 할까요?',
@@ -97,18 +100,21 @@
     "We'll message you 10 minutes before.": '10분 전에 알려드릴게요.',
 
     /* ── tabs, chrome ───────────────────────────────────────────────────── */
-    'Home': '홈', 'Packs': '팩', 'Records': '기록', 'My': '마이',
-    'Next': '다음', 'Skip': '건너뛰기', 'Done': '완료', 'Cancel': '취소',
-    'Start': '시작', 'Start now': '지금 시작하기', 'Start Now': '지금 시작하기',
+    'Home': 'Home', 'Packs': 'Packs', 'Records': 'Records', 'My': 'My',
+    'Next': 'Next', 'Skip': '건너뛰기', 'Done': '완료', 'Cancel': '취소',
+    'Start': 'Start', 'Start now': 'Start now', 'Start Now': 'Start Now',
     'Later': '나중에', 'Open': '열기', 'Create': '만들기', 'Saved': '저장한 팩',
     'Friends': '친구', 'Created': '만든 팩', 'All': '전체',
-    'New': '신규', 'NEW': '신규', 'HOT': '인기',
+    'New': 'New', 'NEW': 'NEW', 'HOT': 'HOT',
     'Total': '총 시간', 'Set up': '설정', 'Pack': '팩',
     'Back to the flow list': '경로 목록으로',
 
-    /* ── the roles under a card, one word each, the same word everywhere ── */
-    'Pro': '프로', 'Creator': '크리에이터', 'Skilled User': '숙련자',
-    '# Skilled User': '# 숙련자',
+    /* The roles, the badges and the tab titles stay in Latin on purpose: they are the
+       product's own labels, and a Korean reader of this app reads them as such. Listed
+       here as themselves rather than left out, so it is visible that the decision was
+       made and not forgotten. */
+    'Pro': 'Pro', 'Creator': 'Creator', 'Skilled User': 'Skilled User',
+    '# Skilled User': '# Skilled User',
 
     /* ── hub ────────────────────────────────────────────────────────────── */
     'Explore Newton': 'Newton 둘러보기',
@@ -146,7 +152,10 @@
     'Running': '러닝', 'Marathon': '마라톤', 'Basketball': '농구', 'Dance': '댄스',
     'Golf': '골프', 'Tennis': '테니스', 'Boxing': '복싱', 'Soccer': '축구',
     'Hiking': '등산', 'Badminton': '배드민턴', 'Sprint': '단거리', 'Strength': '근력',
-    'Legs': '하체', 'Agility': '민첩성', 'Workout': '홈트',
+    'Legs': '하체', 'Agility': '민첩성',
+    /* One card, one string: it used to be "Home<br>Workout", and once Home became a
+       tab title that stays in Latin the card read "Home홈트". */
+    'Home Workout': '홈 트레이닝',
     'Sports': '운동군', 'Sport': '운동군',
 
     /* ── body scan ──────────────────────────────────────────────────────── */
@@ -207,7 +216,7 @@
     /* ── devices ────────────────────────────────────────────────────────── */
     'Check your devices': '기기 연결을 확인해요',
     'Make sure your devices are connected and ready.': '기기가 연결되어 준비됐는지 확인해 주세요.',
-    'Lower-Body Wearable': '하체 웨어러블', 'Battery 87%': '배터리 87%',
+    'Newton': '뉴턴', 'Battery 87%': '배터리 87%',
     'Station': '스테이션', 'Projection ready': '프로젝션 준비됨',
     'Watch·External Device': '워치 / 외부 기기', 'Not Connected': '미연결',
     'Connected': '연결됨', 'Optional': '선택', 'Please': '준비 중',
@@ -227,7 +236,17 @@
     'Next Focus': '다음 과제', 'Improve early reaction': '초반 반응 속도 개선',
     'Performance Scores': '수행 점수', 'Endurance': '지속력', 'Rhythm': '리듬 유지력',
     'Stability': '반복 안정성', 'Recommendation for you': '다음 세션 추천',
-    'From yesterday': '어제 대비', 'Day': '일', 'Week': '주',
+    /* Records' period switch rewrites the whole screen from JS, and every string it
+       writes has to be here or the page half-changes language on a tap. */
+    'From yesterday': '어제 대비', 'From the day before': '전날 대비',
+    'Daily average': '일 평균',
+    'Daily average, this week': '이번 주 일 평균', 'Daily average, this month': '이번 달 일 평균',
+    'Daily average, 6 months': '최근 6개월 일 평균',
+    /* Notifications writes "This Week", Records writes "This week" — same words, and
+       a dictionary is case-sensitive, so both are here. */
+    'This week': '이번 주', 'This month': '이번 달', 'Last 6 months': '최근 6개월',
+    'Boosts Speed': '스피드 향상', 'Boosts Rhythm': '리듬 향상', 'Boosts Balance': '균형 향상',
+    'Day': '일', 'Week': '주',
     'Month': '월', '6 Month': '6개월', 'Steps': '걸음', 'Active Time': '활동 시간',
 
     /* ── home / packs ───────────────────────────────────────────────────── */
@@ -240,8 +259,8 @@
     'Entry Level': '진입 레벨', 'Basics Recommended': '기본기 있으면 좋아요',
     'Sensory Focus': '감각 성격', 'Rhythm · Endurance': '리듬 · 지속력',
     'You might also like': '이런 팩도 있어요',
-    'STRETCH': '스트레칭', 'LEARN': '익히기', 'RUN!': '달려!',
-    'You Can Choose': '설정 가능', 'Boosts Agility': '반응 민첩성',
+    'STRETCH': '스트레칭', 'LEARN': '익히기', 'RUN!': 'Run!',
+    'You Can Choose': '설정 가능', 'Boosts Agility': '민첩성 향상',
     'Search packs, creators, sports': '팩, 크리에이터, 종목 검색',
     'Make a pack': '나만의 팩을', 'of your own': '만들어 보세요',
     'Four things, and it is ready to share.': '네 가지만 정하면 바로 공유할 수 있어요.',
@@ -258,40 +277,45 @@
     'Privacy': '개인정보', 'Support': '고객 지원', 'Help &amp; Support': '도움말', 'Help & Support': '도움말',
     'Profile': '프로필', 'My Pack': '만든 팩',
 
-    /* ── pack titles ────────────────────────────────────────────────────── */
-    'Sean’s Pace Strategy': '션의 페이스 전략', "Sean's Pace Strategy": '션의 페이스 전략',
-    'Sean’s Pace': '션의', 'Sean\'s Pace': '션의', 'Strategy': '페이스 전략',
-    'Sean’s Steady': '션의 일정한', 'Pace': '페이스',
-    "Curry's Step Back": '스테판 커리 스텝백',
-    "Akiyama's Ghost Step": '아키야마의 고스트 스텝',
-    "Usain Bolt's Sprint Masterclass": '우사인 볼트 스프린트 마스터클래스',
-    'Sprint Without Limits': '한계 없는 스프린트',
-    'Agility Strength': '민첩성 근력',
-    'Ladder Footwork': '래더 풋워크', 'Sprint Starts': '스타트 대시',
-    'Interval Push': '러닝 인터벌 훈련', 'Leg Burn Set': '하체 번 세트',
-    'Southpaw Drill': '사우스포 드릴', 'Baseline Rally': '베이스라인 랠리',
-    'Court Footwork': '코트 풋워크',
-    'Basketball Basic Dribble': '농구 기본 드리블', 'Running Intervals': '러닝 인터벌 훈련',
-    'The Tennis Skill': '테니스 스킬', 'Basketball Highlight': '농구 하이라이트',
-    'Boxing Basic Jab Combo': '복싱 기본 잽 콤보', 'Basic Steps For Beginner': '입문자 기본 스텝',
-    'Sprinter’s First Step': '스프린터의 첫 스텝', "Sprinter's First Step": '스프린터의 첫 스텝',
-    'Easy Interval Run': '가벼운 인터벌 러닝', 'Boxing Beginner Challenge': '복싱 고수의 입문 챌린지',
-    'Running Form Correction Routine': '러닝 자세 교정 루틴',
-    'Everyday Running Crew': '매일 러닝 크루',
-    'Sean’s 5km Finish Strategy': '션의 5km 완주 전략', "Sean's 5km Finish Strategy": '션의 5km 완주 전략',
-    'Ladder Footwork Drills': '래더 풋워크 드릴',
-    'Southpaw Switch Drill': '사우스포 스위치 드릴', 'Tennis Forehand Basics': '테니스 포핸드 기초 루틴',
-    'Jab-Cross Combo': '잽-크로스 콤보', 'Crossover Handles': '크로스오버 핸들링',
-    'Backhand Slice Control': '백핸드 슬라이스 컨트롤',
-    'Taekwondo Footwork': '태권도 풋워크', 'Five-Minute Leg Burn': '5분 하체 번',
-    'More Packs from Sean': '션의 다른 팩',
+    /* ── pack titles ──────────────────────────────────────────────────────
+       A title on a card is a thumbnail, not a label: it has to make somebody want to
+       open it. So these are written, not translated — no romanised English standing in
+       for Korean (사우스포 드릴), no word-for-word carry-over. The creator's name is
+       already on the card, which frees the title to say what the pack DOES. Set to the
+       English line's own width so a card is the same size in either language. */
+    'Sean’s Pace Strategy': '무너지지 않는 페이스', "Sean's Pace Strategy": '무너지지 않는 페이스',
+    'Sean’s Pace': '무너지지 않는', 'Sean\'s Pace': '무너지지 않는', 'Strategy': '페이스',
+    'Sean’s Steady': '흔들리지 않는', 'Pace': '페이스',
+    "Curry's Step Back": '반 걸음이 만드는 3점',
+    "Akiyama's Ghost Step": '허를 찌르는 고스트 스텝',
+    "Usain Bolt's Sprint Masterclass": '세계기록 보유자의 스프린트 수업',
+    'Sprint Without Limits': '끝을 모르는 스피드',
+    'Agility Strength': '버티는 다리 만들기',
+    'Ladder Footwork': '빨라지는 발놀림', 'Sprint Starts': '출발이 승부다',
+    'Interval Push': '몰아붙이는 인터벌', 'Leg Burn Set': '하체가 타오른다',
+    'Southpaw Drill': '왼손잡이 공략법', 'Baseline Rally': '지지 않는 랠리',
+    'Court Footwork': '코트를 지배하는 발',
+    'Basketball Basic Dribble': '농구, 드리블부터 제대로', 'Running Intervals': '숨이 트이는 인터벌',
+    'The Tennis Skill': '한 수 위의 테니스', 'Basketball Highlight': '경기를 바꾸는 한 장면',
+    'Boxing Basic Jab Combo': '잽부터 시작하는 복싱', 'Basic Steps For Beginner': '처음이라면 이 스텝부터',
+    'Sprinter’s First Step': '출발선에서 갈리는 승부', "Sprinter's First Step": '출발선에서 갈리는 승부',
+    'Easy Interval Run': '가볍게 끊어 달리기', 'Boxing Beginner Challenge': '고수가 알려주는 복싱 입문',
+    'Running Form Correction Routine': '자세만 고쳐도 달라지는 러닝',
+    'Everyday Running Crew': '매일 달리는 사람들',
+    'Sean’s 5km Finish Strategy': '5km, 끝까지 살아남기', "Sean's 5km Finish Strategy": '5km, 끝까지 살아남기',
+    'Ladder Footwork Drills': '발이 꼬이지 않는 훈련',
+    'Southpaw Switch Drill': '스탠스를 바꿔 싸운다', 'Tennis Forehand Basics': '포핸드, 기본부터 다시',
+    'Jab-Cross Combo': '잽에서 크로스까지', 'Crossover Handles': '제치는 드리블',
+    'Backhand Slice Control': '백핸드를 낮게 깎다',
+    'Taekwondo Footwork': '태권도 스텝의 기본', 'Five-Minute Leg Burn': '5분이면 충분한 하체',
+    'More Packs from Sean': 'Sean의 다른 팩',
 
     /* ── the screens behind the app bar icons (notifications / search / sheets) ── */
     'Notifications': '알림', 'Mark all read': '모두 읽음', 'This Week': '이번 주',
     'Your report is ready': '리포트가 도착했어요',
-    "Sean's Pace Strategy — Match Rate 78%": '션의 페이스 전략 — 일치도 78%',
+    "Sean's Pace Strategy — Match Rate 78%": '무너지지 않는 페이스 — 일치도 78%',
     'Tomorrow, 7:00 AM': '내일 오전 7:00',
-    'Easy Interval Run is on your schedule': '가벼운 인터벌 러닝이 일정에 있어요',
+    'Easy Interval Run is on your schedule': '가볍게 끊어 달리기가 일정에 있어요',
     'Sean posted a new move': '션이 새 동작을 올렸어요',
     'Holding tempo when the last kilometre falls apart': '마지막 1km에서 무너지는 템포를 붙잡는 법',
     'Your week is in': '이번 주 기록이 나왔어요',
@@ -300,7 +324,7 @@
     'Time to scan again': '다시 스캔할 때예요',
     'It has been four weeks since your last body scan': '마지막 신체 스캔에서 4주가 지났어요',
     'A new pack for you': '새로 도착한 추천 팩',
-    "Curry's Step Back — picked from your Basketball sessions": '스테판 커리 스텝백 — 농구 세션을 보고 골랐어요',
+    "Curry's Step Back — picked from your Basketball sessions": '반 걸음이 만드는 3점 — 농구 세션을 보고 골랐어요',
     '2 min ago': '2분 전', '1 hour ago': '1시간 전', '3 hours ago': '3시간 전',
     '2 days ago': '2일 전', '3 days ago': '3일 전',
 
@@ -335,7 +359,6 @@
     [/^min$/, '분'],
     [/^m$/, '분'],
     [/^h$/, '시간'],
-    [/^pts$/, '점'],
     [/^(\d+)m ago$/, '$1분 전'],
     [/^([\d,]+) joined this week$/, '이번 주 $1명 참여'],
     // The meta line under a card — "Pro · Sprint · 7m" — is joined from the pack table,

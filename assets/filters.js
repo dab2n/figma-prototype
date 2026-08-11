@@ -74,7 +74,10 @@
   var state = { env: 'all', sport: '', type: '', q: '' };
   var open = '';                      // which drawer is showing: '', 'sport' or 'type'
 
-  function label(chip) { return (chip.childNodes[0].textContent || '').trim(); }
+  // What a chip DOES comes from its data-chip, never from the words on it. Reading the
+  // label meant every branch below compared against English, so in Korean the chip row
+  // took the taps and did nothing at all.
+  function kindOf(chip) { return chip.getAttribute('data-chip') || ''; }
 
   // What a search matches: the pack's name, whose it is, and its sport and type — the
   // same four things the card already shows, so nothing matches on data nobody can see.
@@ -118,12 +121,12 @@
 
   function paintChips() {
     chips.forEach(function (chip) {
-      var name = label(chip);
-      var on = (name === 'All' && state.env === 'all' && !state.sport && !state.type) ||
-               (name === 'Outdoor' && state.env === 'outdoor') ||
-               (name === 'Indoor' && state.env === 'indoor') ||
-               (name === 'Sports' && !!state.sport) ||
-               (name === 'Pack Type' && !!state.type);
+      var k = kindOf(chip);
+      var on = (k === 'all' && state.env === 'all' && !state.sport && !state.type) ||
+               (k === 'outdoor' && state.env === 'outdoor') ||
+               (k === 'indoor' && state.env === 'indoor') ||
+               (k === 'sport' && !!state.sport) ||
+               (k === 'type' && !!state.type);
       chip.classList.toggle('chip-selected', on);
     });
   }
@@ -153,12 +156,12 @@
 
   chips.forEach(function (chip) {
     chip.addEventListener('click', function () {
-      var name = label(chip);
-      if (name === 'All')          { state = { env: 'all', sport: '', type: '' }; setDrawer(''); }
-      else if (name === 'Outdoor') { state.env = state.env === 'outdoor' ? 'all' : 'outdoor'; }
-      else if (name === 'Indoor')  { state.env = state.env === 'indoor'  ? 'all' : 'indoor'; }
-      else if (name === 'Sports')     { setDrawer('sport'); }
-      else if (name === 'Pack Type')  { setDrawer('type'); }
+      var k = kindOf(chip);
+      if (k === 'all')          { state = { env: 'all', sport: '', type: '' }; setDrawer(''); }
+      else if (k === 'outdoor') { state.env = state.env === 'outdoor' ? 'all' : 'outdoor'; }
+      else if (k === 'indoor')  { state.env = state.env === 'indoor'  ? 'all' : 'indoor'; }
+      else if (k === 'sport')   { setDrawer('sport'); }
+      else if (k === 'type')    { setDrawer('type'); }
       paintChips();
       apply();
     });
