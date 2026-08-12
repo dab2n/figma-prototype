@@ -87,7 +87,7 @@
       total: 15, bars: [['4min', 'LOOSEN'], ['9min', 'PATTERN'], ['You Can Choose', 'PLAY!']],
       info: ['Anyone', 'Rhythm · Coordination', 'Outdoor', 'Creator'],
       also: ['basketball', 'tennis'], more: ['tennis', 'basketball', 'curry'],
-      photo: 'rec-ladder.webp', author: 'Sojin', avatar: 'packs-avatar3.png',
+      photo: 'rec-ladder.webp', author: 'Sojin', avatar: 'packs-avatar1.png',
       title: 'Ladder Footwork',
       desc: 'Quick feet that survive contact with a real game. Ladder patterns first, then the same patterns with a ball and a defender in front of you.'
     },
@@ -139,7 +139,7 @@
       total: 26, bars: [['6min', 'SHADOW'], ['14min', 'COMBOS'], ['You Can Choose', 'SPAR!']],
       info: ['Basics Recommended', 'Timing · Angles', 'Indoor', 'Pro'],
       also: ['ladder', 'strength'], more: ['curry', 'basketball', 'ladder'],
-      photo: 'movement-boxing.webp', author: 'Janghoon', avatar: 'packs-avatar1.png',
+      photo: 'movement-boxing.webp', author: 'Janghoon', avatar: 'packs-avatar3.png',
       title: 'Southpaw Drill',
       desc: 'Working against the other stance without reaching. Angle out of the lead hand, keep the rear foot loaded, and land the counter on the way past.'
     },
@@ -152,7 +152,7 @@
       total: 27, bars: [['7min', 'RALLY IN'], ['16min', 'DEPTH'], ['You Can Choose', 'POINT!']],
       info: ['Some Experience', 'Depth · Recovery', 'Indoor Court', 'Creator'],
       also: ['ladder', 'basketball'], more: ['ladder', 'curry', 'basketball'],
-      photo: 'recent-tennis.webp', author: 'Sojin', avatar: 'packsx-avatar-b.png',
+      photo: 'recent-tennis.webp', author: 'Sojin', avatar: 'packs-avatar1.png',
       title: 'Baseline Rally',
       desc: 'Depth before power. Recover to the middle every ball, take the high one early, and hold the rally until the short one you can actually attack shows up.'
     },

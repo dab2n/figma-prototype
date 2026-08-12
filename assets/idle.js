@@ -76,7 +76,10 @@
   function open() {
     var phone = document.querySelector('.phone') || document.body;
     box = document.createElement('div');
-    box.className = 'idle-note';
+    // .idle-away as well as the shared shell: two other screens borrow .idle-note for a
+    // card that HAS buttons (setup-complete's "set a time?", schedule's confirmation),
+    // and only this one — which nobody is meant to press — steps out of the hit path.
+    box.className = 'idle-note idle-away';
     box.innerHTML = '<div class="idle-card">' +
       '<p class="idle-t">Back to the start</p>' +
       '<p class="idle-s">No one has touched this for a while. Returning in <b>' + GRACE + '</b>s.</p>' +

@@ -533,6 +533,15 @@ html:not(.installed) .flow-exit { top: 11px; }
   background: rgba(5, 10, 10, 0.42);
   animation: idle-in .22s ease both;
 }
+/* "Tap anywhere to stay" — and the tap should also do whatever it was aimed at. The
+   warning covered the frame and took the hit, so somebody who paused long enough to read
+   a screen (which is the whole reason it appears) had their next tap swallowed and had to
+   press twice. idle.js listens on the window in the capture phase, so the countdown is
+   still cancelled with the sheet out of the hit path — the tap lands on the button
+   underneath and the warning goes at the same time.
+   Only the countdown: setup-complete and schedule borrow this same shell for cards that
+   have buttons of their own, and those have to stay pressable. */
+.idle-note.idle-away, .idle-note.idle-away .idle-card { pointer-events: none; }
 @keyframes idle-in { from { opacity: 0; } }
 .idle-card {
   box-sizing: border-box;
