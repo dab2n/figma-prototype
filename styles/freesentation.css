@@ -22,19 +22,19 @@
  */
 @font-face {
   font-family: 'Freesentation';
-  src: url('../fonts/freesentation/Freesentation-Regular.woff2?v=1092') format('woff2');
+  src: url('../fonts/freesentation/Freesentation-Regular.woff2?v=1093') format('woff2');
   font-weight: 400; font-style: normal; font-display: swap;
   size-adjust: 92%;
 }
 @font-face {
   font-family: 'Freesentation-Medium';
-  src: url('../fonts/freesentation/Freesentation-Medium.woff2?v=1092') format('woff2');
+  src: url('../fonts/freesentation/Freesentation-Medium.woff2?v=1093') format('woff2');
   font-weight: 500; font-style: normal; font-display: swap;
   size-adjust: 92%;
 }
 @font-face {
   font-family: 'Freesentation-Bold';
-  src: url('../fonts/freesentation/Freesentation-Bold.woff2?v=1092') format('woff2');
+  src: url('../fonts/freesentation/Freesentation-Bold.woff2?v=1093') format('woff2');
   font-weight: 700; font-style: normal; font-display: swap;
   size-adjust: 92%;
 }

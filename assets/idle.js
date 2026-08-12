@@ -36,6 +36,32 @@
 
   var t, tick, box, num;
 
+  // Going back to the start means going back to the start. Whatever the last person
+  // chose — the chips on every setup step, what they searched, what they bookmarked,
+  // which notifications they opened, the path their back button would walk — is theirs,
+  // not the next person's, and a setup that opens already half-answered is the exact
+  // thing this loop exists to prevent.
+  //
+  // sessionStorage holds nothing else: the setup answers (nw_setup_*), the trail, the
+  // coach mark's "already seen", the recording flag. It goes in full.
+  //
+  // localStorage is where the EXHIBITOR's own settings live alongside the visitor's, so
+  // it is cleared by exception rather than emptied — language, which attract version
+  // this device runs, and the desktop escape hatch all survive; everything else (Aux's
+  // nw.* — saved packs, recent searches, read notifications) does not.
+  var KEEP = { 'lang': 1, 'nw.ver': 1, 'idleOff': 1 };
+  function forget() {
+    try { sessionStorage.clear(); } catch (e) {}
+    try {
+      var drop = [], i;
+      for (i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (!KEEP[k]) drop.push(k);
+      }
+      for (i = 0; i < drop.length; i++) localStorage.removeItem(drop[i]);
+    } catch (e) {}
+  }
+
   function close() {
     clearTimeout(tick);
     if (box) { box.parentNode.removeChild(box); box = null; }
@@ -67,7 +93,7 @@
     open();
     var left = GRACE;
     (function step() {
-      if (left <= 0) { location.replace(HOME); return; }
+      if (left <= 0) { forget(); location.replace(HOME); return; }
       num.textContent = left;
       left--;
       tick = setTimeout(step, 1000);
